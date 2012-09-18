@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Domo</string>
+    
+    <string name="menu_settings">Settings</string>
+    <string name="menu_edit">Edit controllers</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_add_controller">Add a controller</string>
+    <string name="menu_add_label">Add a label</string>
+    
+    <string name="title_settings">Settings</string>
+    <string name="title_labels">List of labels</string>
+    <string name="title_controllers">List of controllers</string>
+    
+    <string name="label_ip">Server IP</string>
+    <string name="label_where">Where (controller IP)</string>
+    <string name="label_title">Title (controller name)</string>
+    <string name="label_labels">Labels</string>
+    <string name="label_label_count_empty">No label</string>
+    <string name="label_controller_type">Controller type</string>
+    <string name="label_choose_controller_type">Choose controller type</string>
+    
+    <string name="ip_separator">:</string>
+    
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    
+   
+</resources>

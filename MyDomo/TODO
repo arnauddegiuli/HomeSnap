@@ -1,0 +1,18 @@
+Activity
+    Runtime
+    Configuration
+    
+    
+    Le model objet loadé est ici!
+
+
+Content
+   Permet de sauvegarder et restaurer!
+
+Service: 
+   Server: permet d'envoyer des requetes
+         : permet d'écouter le server et mettre à jour!
+         
+         
+
+
