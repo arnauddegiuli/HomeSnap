@@ -63,6 +63,7 @@ public class SettingsActivity extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(getResources().getText(R.string.title_settings));
 		setContentView(R.layout.settings);
 
 		/* Restore old values */

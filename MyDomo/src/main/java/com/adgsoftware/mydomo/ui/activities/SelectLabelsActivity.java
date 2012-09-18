@@ -37,6 +37,7 @@ public class SelectLabelsActivity extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(getResources().getText(R.string.title_labels));
 		setContentView(R.layout.list_labels);
 
 		ListView listLabels = (ListView) findViewById(R.id.listLabels);

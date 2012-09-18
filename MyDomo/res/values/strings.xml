@@ -12,6 +12,8 @@
     <string name="title_labels">List of labels</string>
     <string name="title_controllers">List of controllers</string>
     <string name="title_controllers_without_label">Controllers without label</string>
+    <string name="title_edit_label">Edit a label</string>
+    <string name="title_edit_controller">Edit a controller</string>
     
     <string name="label_ip">Server IP</string>
     <string name="label_where">Where (controller IP)</string>
