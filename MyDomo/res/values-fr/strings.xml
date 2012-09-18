@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Domo</string>
+    
+    <string name="menu_settings">Réglages</string>
+    <string name="menu_edit">Editer les contrôleurs</string>
+    <string name="menu_refresh">Rafrachir</string>
+    <string name="menu_add_controller">Ajouter un contrôleur</string>
+    <string name="menu_add_label">Ajouter un label</string>
+    
+    <string name="title_settings">Réglages</string>
+    <string name="title_labels">Liste des labels</string>
+    <string name="title_controllers">Liste des contrôleurs</string>
+    
+    <string name="label_ip">IP du serveur</string>
+    <string name="label_where">Adresse (IP du contrôleur)</string>
+    <string name="label_title">Titre (nom du contrôleur)</string>
+    <string name="label_labels">Labels</string>
+    <string name="label_label_count_empty">Aucun label</string>
+    <string name="label_controller_type">Type du contrôleur</string>
+    <string name="label_choose_controller_type">Choisissez le type du contrôleur</string>
+    
+    <string name="ip_separator">:</string>
+    
+    <string name="button_save">Sauver</string>
+    <string name="button_cancel">Annuler</string>
+    
+   
+</resources>
