@@ -17,7 +17,7 @@ import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.PersistenceService;
 import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
 import com.adgsoftware.mydomo.engine.services.impl.PersistenceServiceImpl;
-import com.adgsoftware.mydomo.ui.SettingsActivity;
+import com.adgsoftware.mydomo.ui.activities.SettingsActivity;
 
 public class MyDomoBinder 
 extends Binder 

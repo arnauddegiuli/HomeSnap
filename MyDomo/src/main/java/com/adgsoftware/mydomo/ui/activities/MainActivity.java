@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.ui;
+package com.adgsoftware.mydomo.ui.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.ui.AbstractActivity;
 import com.adgsoftware.mydomo.ui.adapters.LabelListAdapter;
 
 /**

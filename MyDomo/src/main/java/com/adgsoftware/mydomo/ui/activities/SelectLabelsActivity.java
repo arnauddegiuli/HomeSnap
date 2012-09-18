@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.ui;
+package com.adgsoftware.mydomo.ui.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 
 import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.ui.AbstractActivity;
 
 /**
  * Labels selection screen.
