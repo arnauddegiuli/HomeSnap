@@ -15,8 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.adgsoftware.mydomo.R;
-
 /**
  * Scenario screen.
  * Allows to use pre-defined scenarios.

@@ -17,8 +17,8 @@ import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.OpenWebMonitor;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
+import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
 public class OpenWebMonitorImpl extends Thread 
