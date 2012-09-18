@@ -37,7 +37,7 @@ import com.adgsoftware.mydomo.ui.adapters.LabelListAdapter;
 /**
  * Main screen. Display a list of labels which group the controllers together.
  */
-public class MainActivity extends AbstractActivity {
+public class LabelsActivity extends AbstractActivity {
 
 	private static final int RENAME = 0;
 	private static final int DELETE = 1;
@@ -203,7 +203,7 @@ public class MainActivity extends AbstractActivity {
 					Log.i("Item selected", labelEnum.toString());
 					try {
 						// Select Label
-						Intent intent = new Intent(MainActivity.this,
+						Intent intent = new Intent(LabelsActivity.this,
 								EditLabelActivity.class);
 						intent.putExtra("selectedLabelId", labelEnum.getId());
 						intent.putExtra("selectedLabelTitle", labelEnum.getTitle());
@@ -286,8 +286,6 @@ public class MainActivity extends AbstractActivity {
 	private void refreshList() {
 		Log.d("Label", "Refresh list");
 		ListView listLabels = (ListView) findViewById(R.id.listLabels);
- 
-        //On attribut à notre listView l'adapter que l'on vient de créer
         listLabels.setAdapter(
         	new LabelListAdapter(this.getBaseContext(), getHouse().getLabels())
         );
