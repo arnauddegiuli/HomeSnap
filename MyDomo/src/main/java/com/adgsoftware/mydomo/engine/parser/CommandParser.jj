@@ -1,0 +1,121 @@
+options
+{
+    LOOKAHEAD=2;
+    STATIC=false;
+}
+PARSER_BEGIN(CommandParser)
+package com.adgsoftware.mydomo.engine.parser;
+
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.adgsoftware.mydomo.engine.CommandEnum;
+
+public class CommandParser
+{
+	private String who;
+	private String what;
+	private String where;
+	private String dimension;
+	private CommandEnum type;
+	private List<String> dimensionList = new ArrayList<String>();
+	
+    public static CommandParser parse(String command) throws ParseException 
+    {
+    	CommandParser parser = new CommandParser(new ByteArrayInputStream(command.getBytes()));
+        parser.parseOneLine();
+            
+        return parser;
+    }
+    
+    public String getWho() {
+	 return who;
+	}
+	
+	public String getWhat() {
+	 return what;
+	}
+	
+	public String getWhere() {
+	 return where;
+	}
+	
+	public String getDimension() {
+	 return dimension;
+	}
+	
+	public CommandEnum getType() {
+	 return type;
+	}
+	
+	public List<String> getDimensionList() {
+	 return dimensionList;
+	}
+}
+
+PARSER_END(CommandParser)
+SKIP :
+{
+    " "
+|   "\r"
+|   "\t"
+}
+TOKEN:
+{
+
+	< VAL: (["0"-"9"])+ >
+|   < EOL: "\n" >
+}
+private void parseOneLine():
+{
+}
+{
+		// Standard          *WHO*WHAT*WHERE##
+		// Status request    *#WHO*WHERE##
+		// Dimension request *#WHO*WHERE*DIMENSION##
+		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
+		               
+
+
+ "*#" other() {return;}
+ | "*" action() {return;}
+ | <EOF> {return;}
+
+}
+
+void action():
+{
+    Token who;
+    Token what;
+    Token where;
+}
+{
+	who=<VAL> "*" what=<VAL> "*" where=<VAL> "##" {this.type=CommandEnum.STANDARD_COMMAND; this.who = who.toString(); this.what=what.toString(); this.where = where.toString();}
+}
+
+void other():
+{
+    Token who;
+    Token where;
+}
+{
+	 who=<VAL> "*" where=<VAL> {this.who = who.toString(); this.where=where.toString();}
+	 ( "##" {this.type=CommandEnum.STANDARD_STATUS;}
+	  | dimension() {}
+	  )
+}
+
+void dimension():
+{
+Token dimension;
+Token val;
+}
+{
+	  "*" dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();} 
+	| "*#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 
+      ("*" val=<VAL> {this.dimensionList.add(val.toString());}
+      )*
+      "##" {String str =""; for (int i = 0; i < dimensionList.size(); i++) {str = str + ";" + dimensionList.get(i);} }
+
+}
