@@ -33,6 +33,9 @@ import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.house.Label;
 import com.adgsoftware.mydomo.ui.adapters.LabelListAdapter;
 
+/**
+ * Main screen. Display a list of labels which group the controllers together.
+ */
 public class MainActivity extends AbstractActivity {
 
 	private static final int RENAME = 0;

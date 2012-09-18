@@ -122,7 +122,7 @@ public class EditLabelActivity extends AbstractActivity {
 		SimpleAdapter controllersWithoutLabelAdapter = createControllersWithNoLabelAdapter();
 		
 		if (controllersWithoutLabel.isEmpty()) {
-			alertDialog = new AlertDialog.Builder(this).setMessage("There are no controllers without label.\nYou can create them in the settings screen.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			alertDialog = new AlertDialog.Builder(this).setMessage(getResources().getText(R.string.message_no_controller_without_label)).setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					showSettingsScreen();
@@ -130,7 +130,7 @@ public class EditLabelActivity extends AbstractActivity {
 			});	
 		} else {
 			alertDialog = new AlertDialog.Builder(this).setTitle(
-				"Controllers without label").setAdapter(
+					getResources().getText(R.string.title_controllers_without_label)).setAdapter(
 				controllersWithoutLabelAdapter,
 				new DialogInterface.OnClickListener() {
 
