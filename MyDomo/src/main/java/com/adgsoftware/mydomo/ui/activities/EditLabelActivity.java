@@ -60,7 +60,6 @@ public class EditLabelActivity extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(getResources().getText(R.string.title_edit_label));
 		setContentView(R.layout.edit_label);
 		popUp = new PopupWindow(this);
 
@@ -70,6 +69,7 @@ public class EditLabelActivity extends AbstractActivity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			selectedLabelId = String.valueOf(extras.get("selectedLabelId"));
+			setTitle(String.valueOf(extras.get("selectedLabelTitle")));
 		} else {
 			Log.e("Edit label", "You must call the activity with a label ID");
 		}

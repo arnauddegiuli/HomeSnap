@@ -206,6 +206,7 @@ public class MainActivity extends AbstractActivity {
 						Intent intent = new Intent(MainActivity.this,
 								EditLabelActivity.class);
 						intent.putExtra("selectedLabelId", labelEnum.getId());
+						intent.putExtra("selectedLabelTitle", labelEnum.getTitle());
 						startActivity(intent);
 						// Open the label and display controllers
 					} catch (Exception e) {
