@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Version: 0.1
+Bundle-SymbolicName: MyDomoEngine
+Export-Package: com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light
