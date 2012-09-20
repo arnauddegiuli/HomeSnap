@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.ui;
+package com.adgsoftware.mydomo.ui.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 
 import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.ui.AbstractActivity;
 
 /**
  * Labels selection screen.
@@ -36,6 +37,7 @@ public class SelectLabelsActivity extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(getResources().getText(R.string.title_labels));
 		setContentView(R.layout.list_labels);
 
 		ListView listLabels = (ListView) findViewById(R.id.listLabels);

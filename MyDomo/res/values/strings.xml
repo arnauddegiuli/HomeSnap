@@ -11,6 +11,9 @@
     <string name="title_settings">Settings</string>
     <string name="title_labels">List of labels</string>
     <string name="title_controllers">List of controllers</string>
+    <string name="title_controllers_without_label">Controllers without label</string>
+    <string name="title_edit_label">Edit a label</string>
+    <string name="title_edit_controller">Edit a controller</string>
     
     <string name="label_ip">Server IP</string>
     <string name="label_where">Where (controller IP)</string>
@@ -19,6 +22,8 @@
     <string name="label_label_count_empty">No label</string>
     <string name="label_controller_type">Controller type</string>
     <string name="label_choose_controller_type">Choose controller type</string>
+
+    <string name="message_no_controller_without_label">There are no controllers without label.\nYou can create them in the settings screen.</string>
     
     <string name="ip_separator">:</string>
     

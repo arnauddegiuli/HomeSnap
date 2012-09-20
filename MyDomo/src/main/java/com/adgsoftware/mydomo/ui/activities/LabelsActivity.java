@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.ui;
+package com.adgsoftware.mydomo.ui.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,9 +31,13 @@ import android.widget.TextView;
 
 import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.ui.AbstractActivity;
 import com.adgsoftware.mydomo.ui.adapters.LabelListAdapter;
 
-public class MainActivity extends AbstractActivity {
+/**
+ * Main screen. Display a list of labels which group the controllers together.
+ */
+public class LabelsActivity extends AbstractActivity {
 
 	private static final int RENAME = 0;
 	private static final int DELETE = 1;
@@ -199,9 +203,10 @@ public class MainActivity extends AbstractActivity {
 					Log.i("Item selected", labelEnum.toString());
 					try {
 						// Select Label
-						Intent intent = new Intent(MainActivity.this,
+						Intent intent = new Intent(LabelsActivity.this,
 								EditLabelActivity.class);
 						intent.putExtra("selectedLabelId", labelEnum.getId());
+						intent.putExtra("selectedLabelTitle", labelEnum.getTitle());
 						startActivity(intent);
 						// Open the label and display controllers
 					} catch (Exception e) {
@@ -281,8 +286,6 @@ public class MainActivity extends AbstractActivity {
 	private void refreshList() {
 		Log.d("Label", "Refresh list");
 		ListView listLabels = (ListView) findViewById(R.id.listLabels);
- 
-        //On attribut à notre listView l'adapter que l'on vient de créer
         listLabels.setAdapter(
         	new LabelListAdapter(this.getBaseContext(), getHouse().getLabels())
         );

@@ -9,20 +9,18 @@
 	
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:label="@string/app_name"
-			android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:name=".ui.MainActivity">
+			android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:name=".ui.activities.LabelsActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:theme="@android:style/Theme.NoTitleBar" android:name=".ui.SimpleActivity"></activity>
-		<activity android:theme="@android:style/Theme.NoTitleBar" android:name=".ui.ScenarioActivity"></activity>
-		<activity android:theme="@android:style/Theme.NoTitleBar" android:name=".ui.ReportActivity"></activity>
-		<activity android:theme="@android:style/Theme.NoTitleBar" android:name=".ui.SettingsActivity"></activity>
-		<activity android:name=".ui.ControllersActivity"></activity>
-		<activity android:name=".ui.EditControllerActivity"></activity>
-		<activity android:name=".ui.SelectLabelsActivity"></activity>
-		<activity android:name=".ui.EditLabelActivity"></activity>
+		<activity android:name=".ui.activities.ControllersActivity"></activity>
+		<activity android:name=".ui.activities.EditControllerActivity"></activity>
+		<activity android:name=".ui.activities.EditLabelActivity"></activity>
+		<activity android:name=".ui.activities.SelectLabelsActivity"></activity>
+		<activity android:name=".ui.activities.SettingsActivity"></activity>
+		<activity android:name=".ui.activities.todo.ScenarioActivity"></activity>
 		<service android:name=".ui.service.MyDomoServiceImpl"/>
 	</application>
 </manifest>
