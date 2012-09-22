@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Version: 0.1
-Bundle-SymbolicName: MyDomoServer;singleton:=true
-Import-Package: com.adgsoftware.mydomo.engine,
+Bundle-SymbolicName: MyDomoEngine
+Export-Package: com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engine.controller",
  com.adgsoftware.mydomo.engine.connector,
  com.adgsoftware.mydomo.engine.connector.impl,
  com.adgsoftware.mydomo.engine.controller,
@@ -10,13 +10,9 @@ Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller.gateway,
  com.adgsoftware.mydomo.engine.controller.gateway.dimension,
  com.adgsoftware.mydomo.engine.controller.heating,
- com.adgsoftware.mydomo.engine.controller.light,
+ com.adgsoftware.mydomo.engine.controller.light;uses:="com.adgsoftware.mydomo.engine.controller",
  com.adgsoftware.mydomo.engine.controller.outlet,
  com.adgsoftware.mydomo.engine.house,
  com.adgsoftware.mydomo.engine.parser,
  com.adgsoftware.mydomo.engine.script,
- com.adgsoftware.mydomo.engine.services,
- org.osgi.framework
-Bundle-Activator: com.adgsoftware.mydomo.test.MyDomoServerActivator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ActivationPolicy: lazy
+ com.adgsoftware.mydomo.engine.services

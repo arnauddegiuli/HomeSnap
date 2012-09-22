@@ -1,42 +1,44 @@
 package com.adgsoftware.mydomo.test;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Enumeration;
-import java.util.Properties;
 
 import com.adgsoftware.mydomo.engine.Command;
 
-public class Server {
+public class Server implements Runnable {
 
-	static int port;
+	private int port = 1234;
+	private volatile Thread blinker;
+	
+    public void stop() {
+        blinker = null;
+    }
 
-	public static void main(String args[]) {
+    public void start() {
+        blinker = new Thread(this);
+        blinker.start();
+    }
+    
+    public void run() {
 		ServerSocket serveur;
-		// définition du port
-		try {
-			port = Integer.parseInt(args[0]);
-		} catch (Exception e) {
-			port = 1234; // valeur par défaut
-		}
+		Thread thisThread = Thread.currentThread();
 		// installation
 		try {
 			serveur = new ServerSocket(port);
-			System.out.println("Possible Monitor Command:");
-			Properties p = new Properties();
-			p.load(new FileInputStream("MonitorDictionnary.properties"));
-			for (Enumeration<Object> enume = p.keys(); enume.hasMoreElements();) {
-				System.out.println(enume.nextElement());
+//			System.out.println("Possible Monitor Command:");
+//			Properties p = new Properties();
+//			p.load(new FileInputStream("/MonitorDictionnary.properties"));
+//			for (Enumeration<Object> enume = p.keys(); enume.hasMoreElements();) {
+//				System.out.println(enume.nextElement());
+//
+//			} TODO add help about command from plugin for monitor!
 
-			}
-
-			while (true) {
+			while (blinker == thisThread) {
 
 				System.out
 						.println("Waiting connection for Monitor/Command on port ["
@@ -88,14 +90,28 @@ public class Server {
 			System.exit(1);
 		}
 	}
+	
+	public static void main(String args[]) {
 
-	private static void write(String msg, PrintWriter versClient) {
+		Server s = new Server();
+		
+		// définition du port
+		try {
+			s.port = Integer.parseInt(args[0]);
+		} catch (Exception e) {
+			s.port = 1234; // valeur par défaut
+		}
+
+		s.run();
+	}
+
+	private void write(String msg, PrintWriter versClient) {
 		versClient.print(msg);
 		versClient.flush();
 		System.out.println("SERVER WRITE:[" + msg + "]");
 	}
 
-	private static String read(Socket client, BufferedReader depuisClient) {
+	private String read(Socket client, BufferedReader depuisClient) {
 		int indice = 0;
 		boolean exit = false;
 		char respond[] = new char[1024];

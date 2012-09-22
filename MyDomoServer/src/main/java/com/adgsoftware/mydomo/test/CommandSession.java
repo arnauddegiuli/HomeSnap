@@ -68,38 +68,23 @@ public class CommandSession implements Runnable {
 	
 	public void run() {
 		boolean fini = false; // drapeau
-//		try {
-			String lue; // la requête
-			while (!fini) {
-				lue = read();
-				if (lue == null) {
-					fini = true;
-				}
-				else {
-//					Properties p = new Properties();
-//					p.load(new FileInputStream("CommandDictionnary.properties"));
-					String result = Command.NACK;
-					
-					if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
-						result = ControllerStateManagement.getCommandResult(lue);
-					} else {
-						result = ControllerStateManagement.getStatus(lue);
-					}
-					
-					
-//					for (Enumeration<Object> enume = p.keys(); enume.hasMoreElements();) {
-//						String s = (String) enume.nextElement();
-//						if (lue.equalsIgnoreCase(s)) {
-//							result = p.getProperty(s);
-//						}
-//					}
-					
-					write(result);
-				}
+		String lue; // la requête
+		while (!fini) {
+			lue = read();
+			if (lue == null) {
+				fini = true;
 			}
-//		} catch (IOException e) {
-//			System.out.println("Exception entrée/sortie : " + e.getMessage());
-//		}
+			else {
+				String result = Command.NACK;
+				
+				if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
+					result = ControllerStateManagement.getCommandResult(lue);
+				} else {
+					result = ControllerStateManagement.getStatus(lue);
+				}					
+				write(result);
+			}
+		}
 		// fermeture de la connexion
 		stop();
 	}
