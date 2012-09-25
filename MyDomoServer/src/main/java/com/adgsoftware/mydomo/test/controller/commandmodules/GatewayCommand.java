@@ -15,9 +15,10 @@ import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersio
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Time;
 
-public class GatewayCommand {
+public class GatewayCommand implements ControllerDimensionCommand {
 
-	public final static String execute(String command,
+	@Override
+	public String execute(String command,
 			Hashtable<String, List<DimensionValue>> dimensionCache) {
 		DimensionValue what = Command.getDimensionFromCommand(command);
 
@@ -49,7 +50,8 @@ public class GatewayCommand {
 		}
 	}
 
-	public final static String status(String command,
+	@Override
+	public String status(String command,
 			Hashtable<String, List<DimensionValue>> dimensionCache) {
 
 		String where = Command.getWhereFromCommand(command);
@@ -105,5 +107,10 @@ public class GatewayCommand {
 		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {
 				Command.WHO_GATEWAY, where, dimensionStr, sb.toString() })
 				+ Command.ACK;
+	}
+
+	@Override
+	public String getWho() {
+		return Command.WHO_GATEWAY;
 	}
 }

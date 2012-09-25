@@ -6,9 +6,10 @@ import java.util.Hashtable;
 import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 
-public class LightCommand {
+public class LightCommand implements ControllerCommand {
 
-	public final static String execute(String command, Hashtable<String, String> statusList) {
+	@Override
+	public String execute(String command, Hashtable<String, String> statusList) {
 		String what = Command.getWhatFromCommand(command);
 		String where = Command.getWhereFromCommand(command);
 		if (Light.LightStatus.LIGHT_OFF.getCode().equals(what)
@@ -21,7 +22,8 @@ public class LightCommand {
 		}
 	}
 	
-	public final static String status(String command, Hashtable<String, String> statusList) {
+	@Override
+	public String status(String command, Hashtable<String, String> statusList) {
 		String where = Command.getWhereFromCommand(command);
 		String what = statusList.get(where);
 		if (what == null) {
@@ -31,5 +33,10 @@ public class LightCommand {
 
 		return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, what, where} ) + Command.ACK;
 
+	}
+
+	@Override
+	public String getWho() {
+		return Command.WHO_LIGHTING;
 	}
 }
