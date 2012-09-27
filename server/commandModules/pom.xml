@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	    <modelVersion>4.0.0</modelVersion>
+	    <groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
+	    <artifactId>commandModules</artifactId>
+	    <packaging>bundle</packaging>
+	    <name>MyDomoServerDeviceModuleInterface</name>
+	    <description>My Home virtual server pluggin interfaces</description>
+	     
+		<parent>
+			<groupId>com.adgsoftware.mydomo.server</groupId>
+			<artifactId>simulationServer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</parent>
+
+	    <!-- Build Configuration -->
+	    <build>
+	        <plugins>
+	            <plugin>
+	                <groupId>org.apache.felix</groupId>
+	                <artifactId>maven-bundle-plugin</artifactId>
+	                <extensions>true</extensions>
+	                <configuration>
+	                    <instructions>
+	                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+	                        <Bundle-Name>${project.name}</Bundle-Name>
+	                        <Bundle-Description>${project.description}</Bundle-Description>
+	                        <Bundle-Vendor>ADG Software</Bundle-Vendor>
+	                        <Bundle-Version>${project.version}</Bundle-Version>
+	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, org.osgi.framework</Import-Package>
+	                        <Export-Package>com.adgsoftware.mydomo.server.commandmodules</Export-Package>
+	                    </instructions>
+	                </configuration>
+	            </plugin>
+	            <plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>2.5.1</version>
+        		<configuration>
+          			<source>1.6</source>
+				    <target>1.6</target>
+        		</configuration>
+      			</plugin>
+	        </plugins>
+	    </build>
+	    
+	    <!-- Dependecies Management -->
+	    <dependencies>
+	        <dependency>
+				<groupId>com.adgsoftware.mydomo</groupId>
+				<artifactId>engine</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+	        <dependency>
+	            <groupId>org.apache.felix</groupId>
+	            <artifactId>org.apache.felix.framework</artifactId>
+	            <version>2.0.4</version>
+	        </dependency>
+	    </dependencies>
+	</project>
