@@ -46,7 +46,7 @@
 	    <!-- Dependecies Management -->
 	    <dependencies>
 	        <dependency>
-				<groupId>com.adgsoftware.mydomo</groupId>
+				<groupId>com.adgsoftware.mydomo.engine</groupId>
 				<artifactId>engine</artifactId>
 				<version>${project.version}</version>
 			</dependency>
