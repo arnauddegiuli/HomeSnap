@@ -4,3 +4,8 @@ MyDomoServer/bin*
 MyDomo/bin/*
 MyDomo/gen/*
 MyDomoServer/bin/*
+android/bin*
+engine/target*
+android/gen*
+*/target*
+*target*
