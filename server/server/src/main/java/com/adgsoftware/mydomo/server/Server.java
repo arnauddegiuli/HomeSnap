@@ -9,8 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.adgsoftware.mydomo.engine.Command;
-import com.adgsoftware.mydomo.server.commandmodules.gateway.GatewayCommand;
-import com.adgsoftware.mydomo.server.commandmodules.light.LightCommand;
 
 public class Server implements Runnable {
 
@@ -104,8 +102,8 @@ public class Server implements Runnable {
 			s.port = 1234; // valeur par défaut
 		}
 
-		ControllerStateManagement.registerControllerCommand(new LightCommand());
-		ControllerStateManagement.registerControllerDimensionCommand(new GatewayCommand());
+//		ControllerStateManagement.registerControllerCommand(new LightCommand());
+//		ControllerStateManagement.registerControllerDimensionCommand(new GatewayCommand());
 		
 		s.start();
 	}

@@ -8,6 +8,7 @@ Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller.gateway,
  com.adgsoftware.mydomo.engine.controller.gateway.dimension,
  com.adgsoftware.mydomo.server.commandmodules,
+ com.adgsoftware.mydomo.server,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

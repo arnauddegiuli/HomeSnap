@@ -26,7 +26,7 @@
 	                        <Bundle-Description>${project.description}</Bundle-Description>
 	                        <Bundle-Vendor>ADG Software</Bundle-Vendor>
 	                        <Bundle-Version>${project.version}</Bundle-Version>
-	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light, org.osgi.framework</Import-Package>
+	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light,  com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
 	                        <Export-Package></Export-Package>
 	                    </instructions>
 	                </configuration>
@@ -53,6 +53,11 @@
 			<dependency>
 				<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
 				<artifactId>commandModules</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.adgsoftware.mydomo.server</groupId>
+				<artifactId>server</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 	        <dependency>

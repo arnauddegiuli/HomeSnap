@@ -78,12 +78,12 @@ public class CommandSession implements Runnable {
 				String result = Command.NACK;
 				
 				if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
-					result = ControllerStateManagement.getCommandResult(lue);
+					result = ControllerStateManagement.executeCommand(lue);
 					if (!Command.NACK.equals(result)) {
 						// TODO call MonitorSession (by listener way?)
 					}
 				} else {
-					result = ControllerStateManagement.getStatus(lue);
+					result = ControllerStateManagement.executeStatus(lue);
 				}					
 				write(result);
 			}

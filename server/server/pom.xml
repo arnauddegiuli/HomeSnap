@@ -28,7 +28,7 @@
 	                        <Bundle-Version>${project.version}</Bundle-Version>
 	                        <Bundle-Activator>com.adgsoftware.mydomo.test.MyDomoServerActivator</Bundle-Activator>
 	                        <Import-Package>com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light, com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.engine.controller.gateway, com.adgsoftware.mydomo.engine.controller.gateway.dimension, com.adgsoftware.mydomo.engine.parser,
-com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.server.commandmodules.gateway, com.adgsoftware.mydomo.server.commandmodules.light, com.adgsoftware.mydomo.test, org.osgi.framework</Import-Package>
+com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.test, org.osgi.framework</Import-Package>
 	                    </instructions>
 	                </configuration>
 	            </plugin>
@@ -61,17 +61,5 @@ com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.server.comm
 	            <artifactId>org.apache.felix.framework</artifactId>
 	            <version>2.0.4</version>
 	        </dependency>
-	        
-	        <!-- To remove later when OSGi will be fully functionnal and used -->
-	        <dependency>
-				<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
-				<artifactId>light</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
-				<artifactId>gateway</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 	    </dependencies>
 	</project>
