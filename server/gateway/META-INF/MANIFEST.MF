@@ -1,15 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoServerGatewayModule
-Bundle-SymbolicName: com.adgsoftware.mydomo.server.commandmodule.gateway
+Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodule.gateway
 Bundle-Version: 0.1
 Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller,
  com.adgsoftware.mydomo.engine.controller.gateway,
  com.adgsoftware.mydomo.engine.controller.gateway.dimension,
- com.adgsoftware.mydomo.server.commandmodules,
+ com.adgsoftware.mydomo.server.controllermodules,
  com.adgsoftware.mydomo.server,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.adgsoftware.mydomo.server.commandmodules.gateway
+Export-Package: com.adgsoftware.mydomo.server.controllermodules.gateway

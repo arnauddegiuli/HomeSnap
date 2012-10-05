@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.server.commandmodules.gateway;
+package com.adgsoftware.mydomo.server.controllermodules.gateway;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersion;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Time;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionSimulator;
+import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 
 public class GatewaySimulator implements ControllerDimensionSimulator {
 

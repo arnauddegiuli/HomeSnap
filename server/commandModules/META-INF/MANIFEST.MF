@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoServerDeviceModuleInterface
-Bundle-SymbolicName: com.adgsoftware.mydomo.server.commandmodules
+Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodules
 Bundle-Version: 0.1
-Export-Package: com.adgsoftware.mydomo.server.commandmodules
+Export-Package: com.adgsoftware.mydomo.server.controllermodules
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.adgsoftware.mydomo.engine.controller,

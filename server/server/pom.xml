@@ -28,7 +28,7 @@
 	                        <Bundle-Version>${project.version}</Bundle-Version>
 	                        <Bundle-Activator>com.adgsoftware.mydomo.test.MyDomoServerActivator</Bundle-Activator>
 	                        <Import-Package>com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light, com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.engine.controller.gateway, com.adgsoftware.mydomo.engine.controller.gateway.dimension, com.adgsoftware.mydomo.engine.parser,
-com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.test, org.osgi.framework</Import-Package>
+com.adgsoftware.mydomo.server.controllermodules, com.adgsoftware.mydomo.test, org.osgi.framework</Import-Package>
 	                    </instructions>
 	                </configuration>
 	            </plugin>
@@ -52,8 +52,8 @@ com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.test, org.o
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
-				<artifactId>commandModules</artifactId>
+				<groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
+				<artifactId>controllerModules</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 	        <dependency>

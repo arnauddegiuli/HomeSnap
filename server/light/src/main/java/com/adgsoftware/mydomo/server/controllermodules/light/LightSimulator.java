@@ -1,11 +1,11 @@
-package com.adgsoftware.mydomo.server.commandmodules.light;
+package com.adgsoftware.mydomo.server.controllermodules.light;
 
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
 import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerSimulator;
+import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
 public class LightSimulator implements ControllerSimulator {
 	

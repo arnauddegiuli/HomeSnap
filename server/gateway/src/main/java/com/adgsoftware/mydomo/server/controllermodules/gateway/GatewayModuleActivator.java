@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.server.commandmodules.gateway;
+package com.adgsoftware.mydomo.server.controllermodules.gateway;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	    <modelVersion>4.0.0</modelVersion>
-	    <groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
+	    <groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
 	    <artifactId>gateway</artifactId>
 	    <packaging>bundle</packaging>
 	    <name>MyDomoServerGatewayModule</name>
@@ -26,7 +26,7 @@
 	                        <Bundle-Description>${project.description}</Bundle-Description>
 	                        <Bundle-Vendor>ADG Software</Bundle-Vendor>
 	                        <Bundle-Version>${project.version}</Bundle-Version>
-	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.gateway, com.adgsoftware.mydomo.engine.controller.gateway.dimension,  com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
+	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.controllermodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.gateway, com.adgsoftware.mydomo.engine.controller.gateway.dimension,  com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
 	                        <Export-Package></Export-Package>
 	                    </instructions>
 	                </configuration>
@@ -51,8 +51,8 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
-				<artifactId>commandModules</artifactId>
+				<groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
+				<artifactId>controllerModules</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

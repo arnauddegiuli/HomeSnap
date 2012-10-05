@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.server.commandmodules.light;
+package com.adgsoftware.mydomo.server.controllermodules.light;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

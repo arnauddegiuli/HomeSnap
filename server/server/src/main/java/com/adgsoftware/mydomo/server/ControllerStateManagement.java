@@ -5,8 +5,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Command;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerSimulator;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionSimulator;
+import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
+import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
 public class ControllerStateManagement {
 	
