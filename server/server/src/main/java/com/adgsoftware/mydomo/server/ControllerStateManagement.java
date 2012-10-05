@@ -1,29 +1,25 @@
 package com.adgsoftware.mydomo.server;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Command;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerCommand;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionCommand;
+import com.adgsoftware.mydomo.server.commandmodules.ControllerSimulator;
+import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionSimulator;
 
 public class ControllerStateManagement {
-
-	/**
-	 * TODO: nice to have but should be better to use OSGi service registry than static way... 
-	 */
-	private static Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
-	private static Hashtable<String, List<DimensionValue>> dimensionList = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
 	
-	private static Hashtable<String, ControllerCommand> controllerCommandList = new Hashtable<String, ControllerCommand>();
-	private static Hashtable<String, ControllerDimensionCommand> controllerDimensionCommandList = new Hashtable<String, ControllerDimensionCommand>();
+	private static Hashtable<String, ControllerSimulator> controllerCommandList = new Hashtable<String, ControllerSimulator>();
+	private static Hashtable<String, ControllerDimensionSimulator> controllerDimensionCommandList = new Hashtable<String, ControllerDimensionSimulator>();
+	
+	private static List<MonitorSession> monitorList = new ArrayList<MonitorSession>();
 	
 	/**
 	 * Register a new ControllerCommand. Call by a module (for example light module) to register it to the server.
 	 * @param controllerCommand controller to register
 	 */
-	public static void registerControllerCommand(ControllerCommand controllerCommand) {
+	public static void registerControllerCommand(ControllerSimulator controllerCommand) {
 		controllerCommandList.put(controllerCommand.getWho(), controllerCommand);
 	}
 	
@@ -31,39 +27,55 @@ public class ControllerStateManagement {
 	 * Unregister a controller. Call by a module (for example light module) when user stop the module.
 	 * @param controllerCommand controller to unregister
 	 */
-	public static void unRegisterControllerCommand(ControllerCommand controllerCommand) {
+	public static void unRegisterControllerCommand(ControllerSimulator controllerCommand) {
 		controllerCommandList.remove(controllerCommand.getWho());
 	}
 	
-	public static void registerControllerDimensionCommand(ControllerDimensionCommand controllerDimensionCommand) {
+	public static void registerControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
 		controllerDimensionCommandList.put(controllerDimensionCommand.getWho(), controllerDimensionCommand);
 	}
 	
-	public static void unRegisterControllerDimensionCommand(ControllerDimensionCommand controllerDimensionCommand) {
+	public static void unRegisterControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
 		controllerDimensionCommandList.remove(controllerDimensionCommand.getWho());
 	}
+
+	public static void registerMonitorSession(MonitorSession monitor) {
+		monitorList.add(monitor);
+	}
+	
+	public static void unRegisterMonitorSession(MonitorSession monitor) {
+		monitorList.remove(monitor);
+	}	
 	
 	/**
 	 * Simulate the execution of the command.
 	 * @param command command to execute
 	 * @return the result of the command
 	 */
-	protected static String executeCommand(String command) {
+	public static String executeCommand(String command) {
 		
 		String who = Command.getWhoFromCommand(command);
-		
-		ControllerCommand cc = controllerCommandList.get(who);
+		String result;
+		ControllerSimulator cc = controllerCommandList.get(who);
 		if (cc != null) {
-			return cc.execute(command, statusList);
+			result = cc.execute(command);
 		} else {
-			ControllerDimensionCommand cdc = controllerDimensionCommandList.get(who);
+			ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
 			if (cdc != null) {
-				return cdc.execute(command, dimensionList);
+				result = cdc.execute(command);
 			} else {
 				System.out.println("Command not supported [" + command + "]");
-				return Command.NACK;
+				result = Command.NACK;
 			}
 		}
+		
+		if (!Command.NACK.equalsIgnoreCase(result)) {
+			for (MonitorSession monitor : monitorList) {
+				monitor.monitor(command); // TODO transform run into a command to write the command
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -71,16 +83,16 @@ public class ControllerStateManagement {
 	 * @param command the status request to execute
 	 * @return the status
 	 */
-	protected static String executeStatus(String command) {
+	public static String executeStatus(String command) {
 		String who = Command.getWhoFromCommand(command);
 		
-		ControllerCommand cc = controllerCommandList.get(who);
+		ControllerSimulator cc = controllerCommandList.get(who);
 		if (cc != null) {
-			return cc.status(command, statusList);
+			return cc.status(command);
 		} else {
-			ControllerDimensionCommand cdc = controllerDimensionCommandList.get(who);
+			ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
 			if (cdc != null) {
-				return cdc.status(command, dimensionList);
+				return cdc.status(command);
 			} else {
 				System.out.println("Command not supported [" + command + "]");
 				return Command.NACK;

@@ -26,7 +26,8 @@
 	                        <Bundle-Description>${project.description}</Bundle-Description>
 	                        <Bundle-Vendor>ADG Software</Bundle-Vendor>
 	                        <Bundle-Version>${project.version}</Bundle-Version>
-	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light,  com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
+	                        <Bundle-Activator>com.adgsoftware.mydomo.server.commandmodules.light.LightModuleActivator</Bundle-Activator>
+	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.commandmodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.light, com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
 	                        <Export-Package></Export-Package>
 	                    </instructions>
 	                </configuration>

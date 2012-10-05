@@ -62,8 +62,12 @@ public class Server implements Runnable {
 						write(Command.ACK, versClient);
 						// mise en route du processus par appel de la méthode
 						// run
-						new Thread(new MonitorSession(s, depuisClient,
-								versClient)).start();
+//						new Thread(new MonitorSession(s, depuisClient,
+//								versClient)).start();
+						ControllerStateManagement.registerMonitorSession(
+						new MonitorSession(s, depuisClient,
+								versClient)
+						);
 
 					} else if (Command.COMMAND_SESSION
 							.equalsIgnoreCase(sessionType)) {

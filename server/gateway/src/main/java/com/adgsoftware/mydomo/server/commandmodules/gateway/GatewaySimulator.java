@@ -14,13 +14,14 @@ import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersion;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Time;
-import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionCommand;
+import com.adgsoftware.mydomo.server.commandmodules.ControllerDimensionSimulator;
 
-public class GatewayCommand implements ControllerDimensionCommand {
+public class GatewaySimulator implements ControllerDimensionSimulator {
 
+	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
+	
 	@Override
-	public String execute(String command,
-			Hashtable<String, List<DimensionValue>> dimensionCache) {
+	public String execute(String command) {
 		DimensionValue what = Command.getDimensionFromCommand(command);
 
 		if (Gateway.GatewayDimension.TIME.getCode().equals(what.getValue())) {
@@ -52,8 +53,7 @@ public class GatewayCommand implements ControllerDimensionCommand {
 	}
 
 	@Override
-	public String status(String command,
-			Hashtable<String, List<DimensionValue>> dimensionCache) {
+	public String status(String command) {
 
 		String where = Command.getWhereFromCommand(command);
 		String dimensionStr = Command.getDimensionFromCommand(command)

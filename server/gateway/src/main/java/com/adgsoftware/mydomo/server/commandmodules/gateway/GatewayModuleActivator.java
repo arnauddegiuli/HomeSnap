@@ -7,7 +7,7 @@ import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class GatewayModuleActivator implements BundleActivator {
 
-	private GatewayCommand gatewayModule = new GatewayCommand();
+	private GatewaySimulator gatewayModule = new GatewaySimulator();
 	
 	@Override
 	public void start(BundleContext arg0) throws Exception {

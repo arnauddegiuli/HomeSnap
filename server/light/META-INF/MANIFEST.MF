@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoServerLightModule
 Bundle-SymbolicName: com.adgsoftware.mydomo.server.commandmodules.light
 Bundle-Version: 0.1
+Bundle-Activator: com.adgsoftware.mydomo.server.commandmodules.light.LightModuleActivator
 Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller,
  com.adgsoftware.mydomo.engine.controller.light,

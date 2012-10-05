@@ -79,9 +79,9 @@ public class CommandSession implements Runnable {
 				
 				if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
 					result = ControllerStateManagement.executeCommand(lue);
-					if (!Command.NACK.equals(result)) {
-						// TODO call MonitorSession (by listener way?)
-					}
+//					if (!Command.NACK.equals(result)) {
+//						TODO call monitor session: it is done in executeCommand... maybe shoud be moved here no?
+//					}
 				} else {
 					result = ControllerStateManagement.executeStatus(lue);
 				}					
