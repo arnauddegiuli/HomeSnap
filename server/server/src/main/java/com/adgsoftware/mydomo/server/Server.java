@@ -30,13 +30,6 @@ public class Server implements Runnable {
 		// installation
 		try {
 			serveur = new ServerSocket(port);
-//			System.out.println("Possible Monitor Command:");
-//			Properties p = new Properties();
-//			p.load(new FileInputStream("/MonitorDictionnary.properties"));
-//			for (Enumeration<Object> enume = p.keys(); enume.hasMoreElements();) {
-//				System.out.println(enume.nextElement());
-//
-//			} TODO add help about command from plugin for monitor!
 
 			while (blinker == thisThread) {
 
@@ -60,13 +53,9 @@ public class Server implements Runnable {
 					if (Command.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
 						System.out.println("Start Monitor Session...");
 						write(Command.ACK, versClient);
-						// mise en route du processus par appel de la méthode
-						// run
-//						new Thread(new MonitorSession(s, depuisClient,
-//								versClient)).start();
 						ControllerStateManagement.registerMonitorSession(
-						new MonitorSession(s, depuisClient,
-								versClient)
+								new MonitorSession(s, depuisClient,
+										versClient)
 						);
 
 					} else if (Command.COMMAND_SESSION

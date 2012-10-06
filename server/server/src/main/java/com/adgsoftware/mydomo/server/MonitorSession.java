@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class MonitorSession implements Runnable {
+public class MonitorSession {
 	Socket client; // liaison avec client
 	BufferedReader depuisClient; // réception de requête
 	PrintWriter versClient; // envoi des réponses
@@ -25,36 +25,6 @@ public class MonitorSession implements Runnable {
 			System.out.println("MONITOR SERVER WRITE:[" + msg + "]");
 		}
 	}
-	
-	public void run() {
-		// TODO if doing nothing stop? => if the case transform with service!
-	}
-	
-//	public void run() {
-//		boolean fini = false; // drapeau
-//		try {
-//			// TODO get command from pluggin!
-//			while (!fini) {
-//				LineNumberReader ln = new LineNumberReader(new InputStreamReader(System.in));
-//				String s = ln.readLine();
-//				if ("exit".equalsIgnoreCase(s)) {
-//					fini = true;
-//					System.out.println("Exit!");
-//				} else if ("lightoff".equalsIgnoreCase(s)){
-//						write("*1*0*12##");
-//				} else if ("lighton".equalsIgnoreCase(s)){
-//					write("*1*1*12##");
-//
-//				} else {
-//					System.out.println("Command unknown [" + s +"]");
-//				}
-//			}
-//		} catch (IOException e) {
-//			System.out.println("Exception entrée/sortie : " + e.getMessage());
-//		}
-//		// fermeture de la connexion
-//		stop();
-//	}
 
 	public void monitor(String command) {
 		try {
