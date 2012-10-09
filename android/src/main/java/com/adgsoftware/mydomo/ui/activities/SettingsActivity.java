@@ -20,6 +20,7 @@ import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.heating.Heating;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
@@ -170,6 +171,10 @@ public class SettingsActivity extends AbstractActivity {
 						if (controller instanceof Light) {
 							final AbstractComponent light = createLight((Light) controller, getApplicationContext());
 							layout.addView(light);
+						}
+						if (controller instanceof Gateway) {
+							final AbstractComponent gateway = createGateway((Gateway) controller, getApplicationContext());
+							layout.addView(gateway);
 						}
 						if (controller instanceof Automation) {
 							final AutomationComponent automation = createAutomation((Automation) controller, getApplicationContext());

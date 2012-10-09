@@ -14,6 +14,7 @@ import android.util.Log;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.heating.Heating;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
@@ -25,6 +26,7 @@ import com.adgsoftware.mydomo.ui.activities.SelectLabelsActivity;
 import com.adgsoftware.mydomo.ui.activities.SettingsActivity;
 import com.adgsoftware.mydomo.ui.components.AbstractComponent;
 import com.adgsoftware.mydomo.ui.components.AutomationComponent;
+import com.adgsoftware.mydomo.ui.components.GatewayComponent;
 import com.adgsoftware.mydomo.ui.components.HeatingComponent;
 import com.adgsoftware.mydomo.ui.components.LightComponent;
 import com.adgsoftware.mydomo.ui.components.OutletComponent;
@@ -119,6 +121,20 @@ public abstract class AbstractActivity extends Activity {
 
 	}
 
+	/**
+	 * Create a gateway controller and set its title.
+	 * @param gateway
+	 * @param context
+	 * @return
+	 */
+	protected AbstractComponent createGateway(final Gateway gateway, Context context) {
+
+		GatewayComponent gatewayComponent = new GatewayComponent(context, gateway);
+		gatewayComponent.setTitle(gateway.getTitle());
+		return gatewayComponent;
+
+	}	
+	
 	/**
 	 * Create an automation controller and set its title.
 	 * @param automation

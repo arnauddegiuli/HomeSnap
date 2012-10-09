@@ -13,6 +13,7 @@ import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersion;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
+import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Model;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Time;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 
@@ -89,6 +90,11 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			version.setRelease(05);
 			version.setVersion(78);
 			f.setVersion(version);
+			dimensionList = f.getValueList();
+		} else if (Gateway.GatewayDimension.MODEL.getCode().equals(
+				dimensionStr)) {
+			Model f = new Model();
+			f.setModel(Model.ADGTESTSERVER);
 			dimensionList = f.getValueList();
 		} else {
 			return Command.NACK;

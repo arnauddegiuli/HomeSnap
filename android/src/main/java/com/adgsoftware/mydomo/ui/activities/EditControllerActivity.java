@@ -44,7 +44,8 @@ public class EditControllerActivity extends AbstractActivity {
 	String initialWhere = null;
 
 	private static enum Controllers {
-		Light(com.adgsoftware.mydomo.engine.controller.light.Light.class), 
+		Light(com.adgsoftware.mydomo.engine.controller.light.Light.class),
+		Gateway(com.adgsoftware.mydomo.engine.controller.gateway.Gateway.class),
 		Automation(com.adgsoftware.mydomo.engine.controller.automation.Automation.class),
 		Heating(com.adgsoftware.mydomo.engine.controller.heating.Heating.class),
 		Outlet(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.class);

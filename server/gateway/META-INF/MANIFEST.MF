@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoServerGatewayModule
 Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodule.gateway
 Bundle-Version: 0.1
+Bundle-Activator: com.adgsoftware.mydomo.server.controllermodules.gateway.GatewayModuleActivator
 Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller,
  com.adgsoftware.mydomo.engine.controller.gateway,
