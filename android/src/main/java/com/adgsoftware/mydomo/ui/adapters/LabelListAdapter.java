@@ -19,10 +19,7 @@ public class LabelListAdapter extends BaseAdapter {
 	private List<Label> labelList;
 	private LayoutInflater mInflater;
 	private List<View> cacheView = new ArrayList<View>();
-	
-	
-	
-	// le constructeur
+
 	public LabelListAdapter(Context context,
 			List<Label> labelList) {
 		super();

@@ -7,7 +7,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,43 +25,56 @@ import com.adgsoftware.mydomo.ui.components.HeatingComponent;
 import com.adgsoftware.mydomo.ui.components.LightComponent;
 import com.adgsoftware.mydomo.ui.components.OutletComponent;
 
-public class ControllerAdapter extends ArrayAdapter<Controller<? extends Status>> {
+public class ControllerAdapter extends BaseAdapter {
 
-	List<Controller<? extends Status>> mControllers = new ArrayList<Controller<? extends Status>>();
+	List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private LayoutInflater mInflater;
+	private List<View> cacheView = new ArrayList<View>();
 
 	public ControllerAdapter(Context context,
 			List<Controller<? extends Status>> controllers) {
-		super(context, R.layout.item_controller, controllers);
-		this.mControllers = controllers;
+		super();
+		
+		this.controllerList = controllers;
+		
 		mInflater = LayoutInflater.from(context);
+
+		View v;
+		
+		for (Controller<? extends Status> controller : controllerList) {
+			v = mInflater.inflate(R.layout.item_controller, null);
+
+			TextView nameView = (TextView) v.findViewById(R.id.titre);
+			nameView.setText(controller.getTitle());
+	
+			TextView sizeView = (TextView) v.findViewById(R.id.description);
+			sizeView.setText("Addresse: " + String.valueOf(controller.getWhere()));
+	
+			LinearLayout controllerView = (LinearLayout) v.findViewById(R.id.controller);
+			if (controller instanceof Light) {
+				controllerView.addView(createLight((Light) controller, context));
+			} else if (controller instanceof Automation) {
+				controllerView.addView(createAutomation((Automation) controller, context));
+			} else if (controller instanceof Outlet) {
+				controllerView.addView(createOutlet((Outlet) controller, context));
+			} else if (controller instanceof Heating) {
+				controllerView.addView(createHeating((Heating) controller, context));
+			}
+			
+			cacheView.add(v);
+		}
+		
+		// Add button
+		ImageView btnPlus = new ImageView(context);
+		btnPlus.setImageResource(android.R.drawable.btn_plus);
+		btnPlus.setPadding(0, 10, 0, 5);
+		
+		cacheView.add(btnPlus);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View rowView = mInflater.inflate(R.layout.item_controller, null);
-
-		Controller<? extends Status> controller = mControllers.get(position);
-
-		TextView nameView = (TextView) rowView.findViewById(R.id.titre);
-		nameView.setText(controller.getTitle());
-
-		TextView sizeView = (TextView) rowView.findViewById(R.id.description);
-		sizeView.setText("Addresse: " + String.valueOf(controller.getWhere()));
-
-		LinearLayout controllerView = (LinearLayout) rowView
-				.findViewById(R.id.controller);
-		if (controller instanceof Light) {
-			controllerView.addView(createLight((Light) controller, getContext()));
-		} else if (controller instanceof Automation) {
-			controllerView.addView(createAutomation((Automation) controller, getContext()));
-		} else if (controller instanceof Outlet) {
-			controllerView.addView(createOutlet((Outlet) controller, getContext()));
-		} else if (controller instanceof Heating) {
-			controllerView.addView(createHeating((Heating) controller, getContext()));
-		} 
-
-		return rowView;
+		return cacheView.get(position);
 	}
 
 	/**
@@ -121,6 +135,28 @@ public class ControllerAdapter extends ArrayAdapter<Controller<? extends Status>
 		OutletComponent outletComponent = new OutletComponent(context, outlet);
 		return outletComponent;
 
+	}
+
+	@Override
+	public int getCount() {
+		return cacheView.size();
+	}
+
+
+	@Override
+	public Object getItem(int position) {
+		if (position == controllerList.size()) {
+			return "add";
+		}
+		else {
+			return controllerList.get(position);
+		}
+	}
+
+
+	@Override
+	public long getItemId(int position) {
+		return cacheView.get(position).getId();
 	}
 
 }

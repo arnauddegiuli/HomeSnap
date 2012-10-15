@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
@@ -39,7 +41,11 @@ public class EditLabelActivity extends AbstractActivity {
 	List<Controller<? extends Status>> controllersWithoutLabel = new ArrayList<Controller<? extends Status>>();
 	private static final int MENU_EDIT_CONTROLLER = 0;
 	private static final int MENU_DELETE_CONTROLLER = 1;
-
+	// Dialog box to select action (rename/delete)
+	private Builder contextualDialog;
+	private int itemPositionForAlertAction;
+	SimpleAdapter controllersWithoutLabelAdapter;
+		
 	Label selectedLabel;
 	PopupWindow popUp;
 	Builder alertDialog;
@@ -63,8 +69,6 @@ public class EditLabelActivity extends AbstractActivity {
 		setContentView(R.layout.edit_label);
 		popUp = new PopupWindow(this);
 
-		// controllersWithoutLabelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
 		// Set selected label
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -81,8 +85,64 @@ public class EditLabelActivity extends AbstractActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if (position == parent.getChildCount()-1) {
+					// Add new Label
+					showLabelsPopup(controllersWithoutLabelAdapter);
+					alertDialog.show();
+				}
 			}
 		});
+		
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (position == parent.getChildCount()-1) {
+					// Add new Label
+//					showAddLabelPopup(parent.getWidth(), null);
+				
+					return false;
+				} else {
+					Label labelEnum = (Label) parent.getItemAtPosition(position);
+					Log.i("Item Long selected", labelEnum.toString());
+					try {
+						itemPositionForAlertAction = position;
+						alertDialog.show();
+						return true;
+						// Open the label and display controllers
+					} catch (Exception e) {
+						Log.e("Error when selecting Label", null, e);
+						return false;
+					}
+				}
+			}
+			
+		});
+		
+		contextualDialog = new AlertDialog.Builder(this).setTitle(
+				"Select action").setAdapter(
+						createControllersWithNoLabelAdapter(),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int position) {
+						switch (position) {
+						case MENU_EDIT_CONTROLLER:
+//							Controller<Status> controller = (Controller<Status>) dialog.getItemAtPosition(position);
+							Intent intent = new Intent(EditLabelActivity.this,
+									EditControllerActivity.class);
+//							intent.putExtra("selectedControllerId", controller.getWhere());
+							startActivity(intent);
+							break;
+						case MENU_DELETE_CONTROLLER:
+							break;
+						default:
+							break;
+						}
+						refreshList();
+					}
+				});
 
 	}
 
@@ -121,7 +181,7 @@ public class EditLabelActivity extends AbstractActivity {
 		listView.setAdapter(createLabelControllersAdapter());
 
 		// Create the adapter according to the list of controllers without label
-		SimpleAdapter controllersWithoutLabelAdapter = createControllersWithNoLabelAdapter();
+		controllersWithoutLabelAdapter = createControllersWithNoLabelAdapter();
 		
 		if (controllersWithoutLabel.isEmpty()) {
 			alertDialog = new AlertDialog.Builder(this).setMessage(getResources().getText(R.string.message_no_controller_without_label)).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -131,22 +191,26 @@ public class EditLabelActivity extends AbstractActivity {
 				}
 			});	
 		} else {
-			alertDialog = new AlertDialog.Builder(this).setTitle(
-					getResources().getText(R.string.title_controllers_without_label)).setAdapter(
-				controllersWithoutLabelAdapter,
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int position) {
-						Log.d("Edit label dialog", String.valueOf(position));
-						Controller<? extends Status> selectedController = controllersWithoutLabel.get(position);
-						selectedLabel.add(selectedController);
-						saveHouse(getHouse());
-						refreshControllers();
-						refreshList();
-					}
-				});
+			showLabelsPopup(controllersWithoutLabelAdapter);
 		}
+	}
+
+	private void showLabelsPopup(SimpleAdapter controllersWithoutLabelAdapter) {
+		alertDialog = new AlertDialog.Builder(this).setTitle(
+				getResources().getText(R.string.title_controllers_without_label)).setAdapter(
+			controllersWithoutLabelAdapter,
+			new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int position) {
+					Log.d("Edit label dialog", String.valueOf(position));
+					Controller<? extends Status> selectedController = controllersWithoutLabel.get(position);
+					selectedLabel.add(selectedController);
+					saveHouse(getHouse());
+					refreshControllers();
+					refreshList();
+				}
+			});
 	}
 	
 	private ControllerAdapter createLabelControllersAdapter() {
@@ -241,5 +305,5 @@ public class EditLabelActivity extends AbstractActivity {
 			labelControllers.add(controller);
 		}
 	}
-
+	
 }

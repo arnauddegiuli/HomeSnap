@@ -21,7 +21,7 @@ import com.adgsoftware.mydomo.ui.AbstractActivity;
 
 /**
  * Labels selection screen.
- * Used when to add labels to controllers.
+ * Used to add labels to controllers.
  */
 public class SelectLabelsActivity extends AbstractActivity {
 
