@@ -127,9 +127,9 @@ public abstract class AbstractActivity extends Activity {
 	 * @param context
 	 * @return
 	 */
-	protected AbstractComponent createGateway(final Gateway gateway, Context context) {
+	protected AbstractComponent createGateway(final Gateway gateway) {
 
-		GatewayComponent gatewayComponent = new GatewayComponent(context, gateway);
+		GatewayComponent gatewayComponent = new GatewayComponent(gateway, this);
 		gatewayComponent.setTitle(gateway.getTitle());
 		return gatewayComponent;
 

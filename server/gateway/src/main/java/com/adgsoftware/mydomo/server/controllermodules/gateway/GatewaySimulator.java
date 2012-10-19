@@ -19,6 +19,8 @@ import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimula
 
 public class GatewaySimulator implements ControllerDimensionSimulator {
 
+	
+	private static final String GATEWAY_ADDRESS = "1";
 	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
 	
 	@Override
@@ -41,7 +43,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			return Command.ACK;
 		} else if (Gateway.GatewayDimension.IP_ADDRESS.getCode().equals(
 				what.getValue())) {
-			String where = Command.getWhereFromCommand(command);
+			String where = GATEWAY_ADDRESS; // Gateway has no address! => can only manage connected gateway
 			String dimension = Command.getDimensionFromCommand(command)
 					.getValue();
 
@@ -56,7 +58,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	@Override
 	public String status(String command) {
 
-		String where = Command.getWhereFromCommand(command);
+		String where = GATEWAY_ADDRESS;
 		String dimensionStr = Command.getDimensionFromCommand(command)
 				.getValue();
 		List<DimensionValue> dimensionList;
@@ -82,7 +84,34 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 				i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});
 				dimensionList = i.getValueList();
 			}
+		} else if (Gateway.GatewayDimension.NETMASK.getCode().equals(
+				dimensionStr)) {
+			dimensionList = dimensionCache.get(where
+					+ "-" + dimensionStr);
+			if (dimensionList == null) {
+				IpAddress i = new IpAddress();
+				i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});
+				dimensionList = i.getValueList();
+			}
 		} else if (Gateway.GatewayDimension.FIRMWARE_VERSION.getCode().equals(
+				dimensionStr)) {
+			FirmwareVersion f = new FirmwareVersion();
+			Version version = new Version();
+			version.setBuild(19);
+			version.setRelease(05);
+			version.setVersion(78);
+			f.setVersion(version);
+			dimensionList = f.getValueList();
+		} else if (Gateway.GatewayDimension.DISTRIBUTION_VERSION.getCode().equals(
+				dimensionStr)) {
+			FirmwareVersion f = new FirmwareVersion();
+			Version version = new Version();
+			version.setBuild(19);
+			version.setRelease(05);
+			version.setVersion(78);
+			f.setVersion(version);
+			dimensionList = f.getValueList();
+		} else if (Gateway.GatewayDimension.KERNEL_VERSION.getCode().equals(
 				dimensionStr)) {
 			FirmwareVersion f = new FirmwareVersion();
 			Version version = new Version();
@@ -96,7 +125,12 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			Model f = new Model();
 			f.setModel(Model.ADGTESTSERVER);
 			dimensionList = f.getValueList();
-		} else {
+		} else if (Gateway.GatewayDimension.UPTIME.getCode().equals(
+				dimensionStr)) {
+			DateTime dt = new DateTime();
+			dt.setTime(new Date());
+			dimensionList = dt.getValueList();
+		}  else {
 			return Command.NACK;
 		}
 

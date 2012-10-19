@@ -61,13 +61,9 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	 * @param newValue address of the device
 	 */
 	public void setWhere(String newValue) {
-		super.setWhere(newValue);
-		if (newValue == null) { // Manage null value because we create the controller with no address
-			// TODO reset dimnesion!
-		} else {
-			changeDimensionStatus(getDimensionStatus(Time.class));
-			changeDimensionStatus(getDimensionStatus(Date.class));
-		}
+		super.setWhere(""); // Gateway has no address since we are directly connected to it!
+		changeDimensionStatus(getDimensionStatus(Time.class));
+		changeDimensionStatus(getDimensionStatus(Date.class));
 	}
 	
 	// GATEWAY

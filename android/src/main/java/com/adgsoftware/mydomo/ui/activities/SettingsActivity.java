@@ -173,7 +173,7 @@ public class SettingsActivity extends AbstractActivity {
 							layout.addView(light);
 						}
 						if (controller instanceof Gateway) {
-							final AbstractComponent gateway = createGateway((Gateway) controller, getApplicationContext());
+							final AbstractComponent gateway = createGateway((Gateway) controller); // TODO check to do the same (remove context and put it later)
 							layout.addView(gateway);
 						}
 						if (controller instanceof Automation) {
