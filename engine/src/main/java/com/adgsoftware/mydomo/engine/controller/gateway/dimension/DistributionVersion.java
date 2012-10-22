@@ -9,8 +9,8 @@ import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 public class DistributionVersion extends DimensionStatusImpl {
 	
 	private int VERSION_POS = 0;
-	private int RELEASE_POS = 0;
-	private int BUILD_POS = 0;
+	private int RELEASE_POS = 1;
+	private int BUILD_POS = 2;
 	
 	public DistributionVersion() {
 		super(new DimensionValue[] { 
@@ -35,5 +35,12 @@ public class DistributionVersion extends DimensionStatusImpl {
 		
 		return ver;
 		
+	}
+	
+	public void setVersion(Version version) {
+		
+		setIntValue(version.getVersion(), VERSION_POS, 2);
+		setIntValue(version.getRelease(), RELEASE_POS, 2);
+		setIntValue(version.getBuild(), BUILD_POS, 2);
 	}
 }

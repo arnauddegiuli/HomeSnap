@@ -9,8 +9,8 @@ import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 public class KernelVersion extends DimensionStatusImpl {
 	
 	private int VERSION_POS = 0;
-	private int RELEASE_POS = 0;
-	private int BUILD_POS = 0;
+	private int RELEASE_POS = 1;
+	private int BUILD_POS = 2;
 	
 	public KernelVersion() {
 		super(new DimensionValue[] { 

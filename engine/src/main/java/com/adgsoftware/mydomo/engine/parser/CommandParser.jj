@@ -79,12 +79,12 @@ private void parseOneLine():
 
 
  "*#" other() {return;}
- | "*" action() {return;}
+ | "*" standard() {return;}
  | <EOF> {return;}
 
 }
 
-void action():
+void standard():
 {
     Token who;
     Token what;
@@ -98,12 +98,23 @@ void other():
 {
     Token who;
     Token where;
+    Token dimension;
+    Token val;
 }
 {
-	 who=<VAL> "*" where=<VAL> {this.who = who.toString(); this.where=where.toString();}
-	 ( "##" {this.type=CommandEnum.STANDARD_STATUS;}
-	  | dimension() {}
-	  )
+	 (who=<VAL> "*" where=<VAL> {this.who = who.toString(); this.where=where.toString();}
+	 	( "##" {this.type=CommandEnum.STANDARD_STATUS;}
+	 	| dimension() {}
+	 	)
+	 ) |
+	 // Gateway special case => no where
+	 (who=<VAL> "**" {this.who = who.toString();  this.where=""; /* Gateway case */}
+	  dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();} 
+	  | "#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 
+	      ("*" val=<VAL> {this.dimensionList.add(val.toString());}
+	      )*
+	      "##" {String str =""; for (int i = 0; i < dimensionList.size(); i++) {str = str + ";" + dimensionList.get(i);} }
+	 )
 }
 
 void dimension():

@@ -54,8 +54,8 @@ public class CommandParser implements CommandParserConstants {
                {if (true) return;}
     } else if (jj_2_2(2)) {
       jj_consume_token(7);
-      action();
-                 {if (true) return;}
+      standard();
+                   {if (true) return;}
     } else if (jj_2_3(2)) {
       jj_consume_token(0);
           {if (true) return;}
@@ -65,7 +65,7 @@ public class CommandParser implements CommandParserConstants {
     }
   }
 
-  final public void action() throws ParseException {
+  final public void standard() throws ParseException {
     Token who;
     Token what;
     Token where;
@@ -81,16 +81,51 @@ public class CommandParser implements CommandParserConstants {
   final public void other() throws ParseException {
     Token who;
     Token where;
-    who = jj_consume_token(VAL);
-    jj_consume_token(7);
-    where = jj_consume_token(VAL);
-                                    this.who = who.toString(); this.where=where.toString();
-    if (jj_2_4(2)) {
-      jj_consume_token(8);
-                 this.type=CommandEnum.STANDARD_STATUS;
-    } else if (jj_2_5(2)) {
-      dimension();
+    Token dimension;
+    Token val;
+    if (jj_2_9(2)) {
+      who = jj_consume_token(VAL);
+      jj_consume_token(7);
+      where = jj_consume_token(VAL);
+                                     this.who = who.toString(); this.where=where.toString();
+      if (jj_2_4(2)) {
+        jj_consume_token(8);
+                        this.type=CommandEnum.STANDARD_STATUS;
+      } else if (jj_2_5(2)) {
+        dimension();
 
+      } else {
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    } else if (jj_2_10(2)) {
+      if (jj_2_7(2)) {
+        who = jj_consume_token(VAL);
+        jj_consume_token(9);
+                          this.who = who.toString();  this.where=""; /* Gateway case */
+        dimension = jj_consume_token(VAL);
+                           this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();
+      } else if (jj_2_8(2)) {
+        jj_consume_token(10);
+        dimension = jj_consume_token(VAL);
+                                 this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();
+        label_1:
+        while (true) {
+          if (jj_2_6(2)) {
+            ;
+          } else {
+            break label_1;
+          }
+          jj_consume_token(7);
+          val = jj_consume_token(VAL);
+                              this.dimensionList.add(val.toString());
+        }
+        jj_consume_token(8);
+                    String str =""; for (int i = 0; i < dimensionList.size(); i++) {str = str + ";" + dimensionList.get(i);}
+      } else {
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
     } else {
       jj_consume_token(-1);
       throw new ParseException();
@@ -100,20 +135,20 @@ public class CommandParser implements CommandParserConstants {
   final public void dimension() throws ParseException {
 Token dimension;
 Token val;
-    if (jj_2_7(2)) {
+    if (jj_2_12(2)) {
       jj_consume_token(7);
       dimension = jj_consume_token(VAL);
                                this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();
-    } else if (jj_2_8(2)) {
+    } else if (jj_2_13(2)) {
       jj_consume_token(6);
       dimension = jj_consume_token(VAL);
                                 this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();
-      label_1:
+      label_2:
       while (true) {
-        if (jj_2_6(2)) {
+        if (jj_2_11(2)) {
           ;
         } else {
-          break label_1;
+          break label_2;
         }
         jj_consume_token(7);
         val = jj_consume_token(VAL);
@@ -183,7 +218,59 @@ Token val;
     finally { jj_save(7, xla); }
   }
 
-  private boolean jj_3R_2() {
+  private boolean jj_2_9(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_9(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(8, xla); }
+  }
+
+  private boolean jj_2_10(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_10(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(9, xla); }
+  }
+
+  private boolean jj_2_11(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_11(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(10, xla); }
+  }
+
+  private boolean jj_2_12(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_12(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(11, xla); }
+  }
+
+  private boolean jj_2_13(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_13(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(12, xla); }
+  }
+
+  private boolean jj_3R_5() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_12()) {
+    jj_scanpos = xsp;
+    if (jj_3_13()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_12() {
+    if (jj_scan_token(7)) return true;
+    if (jj_scan_token(VAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_11() {
+    if (jj_scan_token(7)) return true;
     if (jj_scan_token(VAL)) return true;
     return false;
   }
@@ -195,23 +282,50 @@ Token val;
 
   private boolean jj_3_2() {
     if (jj_scan_token(7)) return true;
-    if (jj_3R_3()) return true;
+    if (jj_3R_4()) return true;
+    return false;
+  }
+
+  private boolean jj_3_6() {
+    if (jj_scan_token(7)) return true;
+    if (jj_scan_token(VAL)) return true;
     return false;
   }
 
   private boolean jj_3_1() {
     if (jj_scan_token(6)) return true;
-    if (jj_3R_2()) return true;
-    return false;
-  }
-
-  private boolean jj_3_8() {
-    if (jj_scan_token(6)) return true;
-    if (jj_scan_token(VAL)) return true;
+    if (jj_3R_3()) return true;
     return false;
   }
 
   private boolean jj_3R_4() {
+    if (jj_scan_token(VAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_5() {
+    if (jj_3R_5()) return true;
+    return false;
+  }
+
+  private boolean jj_3_8() {
+    if (jj_scan_token(10)) return true;
+    if (jj_scan_token(VAL)) return true;
+    return false;
+  }
+
+  private boolean jj_3_4() {
+    if (jj_scan_token(8)) return true;
+    return false;
+  }
+
+  private boolean jj_3_7() {
+    if (jj_scan_token(VAL)) return true;
+    if (jj_scan_token(9)) return true;
+    return false;
+  }
+
+  private boolean jj_3_10() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_7()) {
@@ -222,29 +336,24 @@ Token val;
   }
 
   private boolean jj_3R_3() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_9()) {
+    jj_scanpos = xsp;
+    if (jj_3_10()) return true;
+    }
+    return false;
+  }
+
+  private boolean jj_3_13() {
+    if (jj_scan_token(6)) return true;
     if (jj_scan_token(VAL)) return true;
     return false;
   }
 
-  private boolean jj_3_7() {
+  private boolean jj_3_9() {
+    if (jj_scan_token(VAL)) return true;
     if (jj_scan_token(7)) return true;
-    if (jj_scan_token(VAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_6() {
-    if (jj_scan_token(7)) return true;
-    if (jj_scan_token(VAL)) return true;
-    return false;
-  }
-
-  private boolean jj_3_5() {
-    if (jj_3R_4()) return true;
-    return false;
-  }
-
-  private boolean jj_3_4() {
-    if (jj_scan_token(8)) return true;
     return false;
   }
 
@@ -266,7 +375,7 @@ Token val;
    private static void jj_la1_init_0() {
       jj_la1_0 = new int[] {};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[8];
+  final private JJCalls[] jj_2_rtns = new JJCalls[13];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
@@ -364,7 +473,7 @@ Token val;
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4437723291893490278L; }
+	private static final long serialVersionUID = 1L; }
   final private LookaheadSuccess jj_ls = new LookaheadSuccess();
   private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
@@ -405,7 +514,7 @@ Token val;
     }
     return t;
   }
-
+  
   private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   private int[] jj_expentry;
   private int jj_kind = -1;
@@ -440,7 +549,7 @@ Token val;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[9];
+    boolean[] la1tokens = new boolean[11];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -454,7 +563,7 @@ Token val;
         }
       }
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 11; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
@@ -481,7 +590,7 @@ Token val;
 
   private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 13; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -496,6 +605,11 @@ Token val;
             case 5: jj_3_6(); break;
             case 6: jj_3_7(); break;
             case 7: jj_3_8(); break;
+            case 8: jj_3_9(); break;
+            case 9: jj_3_10(); break;
+            case 10: jj_3_11(); break;
+            case 11: jj_3_12(); break;
+            case 12: jj_3_13(); break;
           }
         }
         p = p.next;

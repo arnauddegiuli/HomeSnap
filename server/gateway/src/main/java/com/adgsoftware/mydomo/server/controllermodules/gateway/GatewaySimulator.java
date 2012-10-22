@@ -1,8 +1,12 @@
 package com.adgsoftware.mydomo.server.controllermodules.gateway;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -11,6 +15,7 @@ import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
+import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DistributionVersion;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersion;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Model;
@@ -81,7 +86,12 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 					+ "-" + dimensionStr);
 			if (dimensionList == null) {
 				IpAddress i = new IpAddress();
-				i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});
+				InetAddress a = getIp();
+				if (a!=null) { 
+					i.setIpAddress(a.getAddress());
+				} else {
+					i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});		
+				}
 				dimensionList = i.getValueList();
 			}
 		} else if (Gateway.GatewayDimension.NETMASK.getCode().equals(
@@ -90,7 +100,12 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 					+ "-" + dimensionStr);
 			if (dimensionList == null) {
 				IpAddress i = new IpAddress();
-				i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});
+				byte[] a = getNetmask();
+				if (a!=null) { 
+					i.setIpAddress(a);
+				} else {
+					i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});		
+				}
 				dimensionList = i.getValueList();
 			}
 		} else if (Gateway.GatewayDimension.FIRMWARE_VERSION.getCode().equals(
@@ -104,7 +119,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			dimensionList = f.getValueList();
 		} else if (Gateway.GatewayDimension.DISTRIBUTION_VERSION.getCode().equals(
 				dimensionStr)) {
-			FirmwareVersion f = new FirmwareVersion();
+			DistributionVersion f = new DistributionVersion();
 			Version version = new Version();
 			version.setBuild(19);
 			version.setRelease(05);
@@ -154,4 +169,61 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	public String getWho() {
 		return Command.WHO_GATEWAY;
 	}
+	
+	private InetAddress getIp() {
+		
+		InetAddress result = null;
+		
+		try {
+			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); 
+			while (e.hasMoreElements()){ 
+			  Enumeration<InetAddress> i = e.nextElement().getInetAddresses(); 
+			  while (i.hasMoreElements()){ 
+			    InetAddress a = i.nextElement(); 
+			    if (a.isLoopbackAddress()) {
+			    	result = a;
+			    } else if (a.getAddress().length == 4) {
+			    	return a;
+			    }
+			  } 
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+	    
+	    return result;
+	}
+	
+	private byte[] getNetmask() {
+		
+		short prefix = 24;
+		try {
+			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); 
+			while (e.hasMoreElements()){ 
+			  Enumeration<InetAddress> i = e.nextElement().getInetAddresses(); 
+			  while (i.hasMoreElements()){ 
+			    InetAddress a = i.nextElement(); 
+			    if (a.isLoopbackAddress()) {
+			    	prefix = NetworkInterface.getByInetAddress(a).getInterfaceAddresses().get(0).getNetworkPrefixLength();
+			    } else {
+			    	prefix = NetworkInterface.getByInetAddress(a).getInterfaceAddresses().get(0).getNetworkPrefixLength();
+			    	break;
+			    }
+			  } 
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+	    
+		if (prefix == 8) {
+			return new byte[] {Byte.parseByte("-1"), Byte.parseByte("0"), Byte.parseByte("0"), Byte.parseByte("0")};
+		} else if (prefix == 16) {
+			return new byte[] {Byte.parseByte("-1"), Byte.parseByte("-1"), Byte.parseByte("0"), Byte.parseByte("0")};
+		} else /*if (prefix == 24)*/ {
+			return new byte[] {Byte.parseByte("-1"), Byte.parseByte("-1"), Byte.parseByte("-1"), Byte.parseByte("0")};
+		}
+		
+	}
+	
+	
 }

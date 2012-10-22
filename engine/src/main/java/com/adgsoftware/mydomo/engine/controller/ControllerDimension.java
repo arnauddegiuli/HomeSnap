@@ -19,6 +19,16 @@ implements Serializable {
 	protected Hashtable<String, DimensionStatus> list = new Hashtable<String, DimensionStatus>(); // Cache of dimension status => avoid to call the bus each time
 
 	
+	/**
+	 * Define the address of the device to control
+	 * @param newValue address of the device
+	 */
+	@Override
+	public void setWhere(String newValue) {
+		// It is override since for dimension we dont manage a specific status but some
+		this.where = newValue;
+	}
+	
 	protected String createDimensionActionMessage(DimensionStatus dimensionStatus) {
 		if (where == null) {
 			throw new IllegalArgumentException("Controller must contain a where.");

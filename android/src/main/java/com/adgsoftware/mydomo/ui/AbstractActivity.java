@@ -208,7 +208,11 @@ public abstract class AbstractActivity extends Activity {
 	}
 	
 	public String computeGroupFromAddress(String where) {
-		// TODO manage it smarter
+		if (where == null)
+			return "";
+		else if (where.length() <= 1)
+			return "0";
+		
 		return where.substring(0, 1);
 	}
 

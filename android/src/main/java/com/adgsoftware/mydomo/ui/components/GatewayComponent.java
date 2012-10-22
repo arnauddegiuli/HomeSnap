@@ -34,7 +34,7 @@ private TextView gatewayTxt;
 		this.addView(title);
 		this.addView(gatewayTxt);
 		this.setOrientation(LinearLayout.HORIZONTAL);
-		gatewayTxt.setId(Integer.valueOf(gateway.getWhere()));
+		gatewayTxt.setId(1);
 		gatewayTxt.setText(gateway.getDeviceType());
 
 		final Button b = new Button(context);

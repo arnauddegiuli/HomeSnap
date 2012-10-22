@@ -49,15 +49,17 @@ public abstract class DimensionStatusImpl implements DimensionStatus {
 	}
 	
 	protected byte getByteValue(int pos) {
-		return Byte.parseByte(dimensionList.get(pos).getValue());
+		Integer unsignedByte = Integer.parseInt(dimensionList.get(pos).getValue());
+		return unsignedByte.byteValue();
 	}
 	
 	protected void setByteValue(byte value, int pos, int padding) {
-		String val = Byte.toString(value);
+		int unsignedByte = value & 0xff;
+		String val = Integer.toString(unsignedByte);
 		for(int i = val.length();i<padding;i++) {
 			val = "0" + val;
 		}
-		dimensionList.get(pos).setValue(val); // TODO test it
+		dimensionList.get(pos).setValue(val);
 	}
 	
 	protected TimeZone getTimeZoneValue(int pos) {
