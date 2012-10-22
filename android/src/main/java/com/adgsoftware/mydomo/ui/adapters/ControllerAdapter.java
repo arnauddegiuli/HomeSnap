@@ -3,6 +3,7 @@ package com.adgsoftware.mydomo.ui.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,13 @@ import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.heating.Heating;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
 import com.adgsoftware.mydomo.ui.components.AbstractComponent;
 import com.adgsoftware.mydomo.ui.components.AutomationComponent;
+import com.adgsoftware.mydomo.ui.components.GatewayComponent;
 import com.adgsoftware.mydomo.ui.components.HeatingComponent;
 import com.adgsoftware.mydomo.ui.components.LightComponent;
 import com.adgsoftware.mydomo.ui.components.OutletComponent;
@@ -59,6 +62,8 @@ public class ControllerAdapter extends BaseAdapter {
 				controllerView.addView(createOutlet((Outlet) controller, context));
 			} else if (controller instanceof Heating) {
 				controllerView.addView(createHeating((Heating) controller, context));
+			} else if (controller instanceof Gateway) {
+				controllerView.addView(createGateway((Gateway) controller, context));
 			}
 			
 			cacheView.add(v);
@@ -134,6 +139,20 @@ public class ControllerAdapter extends BaseAdapter {
 
 		OutletComponent outletComponent = new OutletComponent(context, outlet);
 		return outletComponent;
+
+	}
+	
+	/**
+	 * Create a gateway controller and set its title.
+	 * 
+	 * @param gateway
+	 * @param context
+	 * @return
+	 */
+	protected GatewayComponent createGateway(final Gateway gateway, Context context) {
+
+		GatewayComponent gatewayComponent = new GatewayComponent(gateway, (Activity) context);
+		return gatewayComponent;
 
 	}
 
