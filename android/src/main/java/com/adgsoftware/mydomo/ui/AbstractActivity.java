@@ -1,6 +1,7 @@
 package com.adgsoftware.mydomo.ui;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -24,6 +25,7 @@ import com.adgsoftware.mydomo.engine.house.Label;
 import com.adgsoftware.mydomo.ui.activities.EditControllerActivity;
 import com.adgsoftware.mydomo.ui.activities.SelectLabelsActivity;
 import com.adgsoftware.mydomo.ui.activities.SettingsActivity;
+import com.adgsoftware.mydomo.ui.adapters.ControllerAdapter;
 import com.adgsoftware.mydomo.ui.components.AbstractComponent;
 import com.adgsoftware.mydomo.ui.components.AutomationComponent;
 import com.adgsoftware.mydomo.ui.components.GatewayComponent;
@@ -241,6 +243,12 @@ public abstract class AbstractActivity extends Activity {
 			intent.putExtra("selectedControllerId", where);
 		}
 		startActivity(intent);
+	}
+
+	protected ControllerAdapter createControllerAdapter(List<Controller<? extends Status>> controllers) {
+		// fill in the grid_item layout
+		ControllerAdapter adapter = new ControllerAdapter(this, controllers);
+		return adapter;
 	}
 
 }

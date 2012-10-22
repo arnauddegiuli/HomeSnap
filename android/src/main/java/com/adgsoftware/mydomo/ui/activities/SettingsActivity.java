@@ -1,7 +1,9 @@
 package com.adgsoftware.mydomo.ui.activities;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,27 +12,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup.LayoutParams;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.automation.Automation;
-import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
-import com.adgsoftware.mydomo.engine.controller.heating.Heating;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
+import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.Group;
-import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.ui.AbstractActivity;
-import com.adgsoftware.mydomo.ui.components.AbstractComponent;
-import com.adgsoftware.mydomo.ui.components.AutomationComponent;
-import com.adgsoftware.mydomo.ui.components.HeatingComponent;
-import com.adgsoftware.mydomo.ui.components.OutletComponent;
 
 /**
  * Settings screen. Allows to add/edit/delete controls & rooms, scenarios, etc.
@@ -38,14 +34,15 @@ import com.adgsoftware.mydomo.ui.components.OutletComponent;
 public class SettingsActivity extends AbstractActivity {
 
 	public static final String PREFS_NAME = "myDomo.settings";
-	
-	private House house = new House();
-	protected LinearLayout layout; // layout containing controllers
+	LinearLayout settingsLayout;
+	TextView textView;
+	Handler handler;
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		refresh();
+		refreshList();
 	}
 
 	@Override
@@ -61,9 +58,20 @@ public class SettingsActivity extends AbstractActivity {
 		return true;
 	}
 	
+	@SuppressLint("HandlerLeak")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		handler = new Handler() {
+	        public void handleMessage(Message msg) {
+	        	textView.setText(getConnectedStatusMessage());
+	        	textView.invalidate();
+	        }
+	    };
+	    
+		settingsLayout = (LinearLayout) findViewById(R.id.settingsLayout);
+		
 		setTitle(getResources().getText(R.string.title_settings));
 		setContentView(R.layout.settings);
 
@@ -76,21 +84,9 @@ public class SettingsActivity extends AbstractActivity {
 		txtServerIP.setText(serverIP);
 		txtServerPort.setText(serverPort);
 		
-		
 		super.onCreate(savedInstanceState);
 		
-        layout = (LinearLayout) this.findViewById(R.id.rowControllerList);
         createLayout();
-		
-//		/* Bind the save button */
-//		Button btnSave = (Button) this.findViewById(R.id.btnSettingsControllers);
-//		btnSave.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				showControllersScreen();
-//			}
-//		});
-		
 	}
 	
 	
@@ -110,7 +106,6 @@ public class SettingsActivity extends AbstractActivity {
 	}
 	
 	protected void refresh() {
-		layout.removeAllViews();
 		bindService();
 	}
 	
@@ -141,61 +136,7 @@ public class SettingsActivity extends AbstractActivity {
 		}
 		
 		editor.commit();
-//		finish();
 	}
-	
-	/**
-	 * Create the main layout with all the nested components.
-	 */
-	protected void createLayout() {
-    	layout.removeAllViews();
-//    	setContentView(layout);
-		if (myDomoService != null) {
-			try {
-				house = myDomoService.retrieve();
-			} catch (IOException e) {
-				house = new House(); // TODO manage better
-			}
-        }
-		
-		addComponentsToLayout();
-		
-	}
-
-	private void addComponentsToLayout() {
-		if (myDomoService != null) {
-			createConnectedStatusViewer();
-			if (house.getGroups() != null) {
-				for (Group room : house.getGroups()) {
-					for (@SuppressWarnings("rawtypes") Controller controller : room.getControllerList()) {
-						if (controller instanceof Light) {
-							final AbstractComponent light = createLight((Light) controller, getApplicationContext());
-							layout.addView(light);
-						}
-						if (controller instanceof Gateway) {
-							final AbstractComponent gateway = createGateway((Gateway) controller); // TODO check to do the same (remove context and put it later)
-							layout.addView(gateway);
-						}
-						if (controller instanceof Automation) {
-							final AutomationComponent automation = createAutomation((Automation) controller, getApplicationContext());
-							layout.addView(automation);
-						}
-						if (controller instanceof Heating) {
-							final HeatingComponent heating = createHeating((Heating) controller, getApplicationContext());
-							LayoutParams params = new LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-							heating.setLayoutParams(params);
-							layout.addView(heating);
-						}
-						if (controller instanceof Outlet) {
-							final OutletComponent outlet = createOutlet((Outlet) controller, getApplicationContext());
-							layout.addView(outlet);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	
 	private static String COMMAND_OFFLINE = "Command[OFFLINE]";
 	private static String COMMAND_ONLINE = "Command[ON]";
@@ -209,18 +150,9 @@ public class SettingsActivity extends AbstractActivity {
 		return commandState + " | " + monitorState;
 	}
 	
-	TextView textView;
-	
-	
-	private Handler handler = new Handler() {
-        public void  handleMessage(Message msg) {
-        	textView.setText(getConnectedStatusMessage());
-        	textView.invalidate();
-        }
-    };
 	
 	private void createConnectedStatusViewer() {
-		textView = new TextView(getApplicationContext());
+		textView = (TextView) findViewById(R.id.connectedStatusViewer);
 		
 		if (myDomoService.isCommanderConnected()) {
 			commandState = COMMAND_ONLINE;
@@ -230,7 +162,6 @@ public class SettingsActivity extends AbstractActivity {
 		}
 		
 		textView.setText(getConnectedStatusMessage());
-		layout.addView(textView);
 		
 		myDomoService.addCommanderConnectionListener(
 				new OpenWebConnectionListener() {
@@ -272,4 +203,33 @@ public class SettingsActivity extends AbstractActivity {
 		
 	}
 
+	/**
+	 * Load the controllers, then bind to the list view.
+	 */
+	private void refreshList() {
+		Log.d("Controllers", "Refresh list");
+		createConnectedStatusViewer();
+		
+		ListView listView = (ListView) findViewById(R.id.listviewSettings);
+		List<Controller<? extends Status>> controllers = new ArrayList<Controller<? extends Status>>();
+		if (getHouse().getGroups() != null) {
+			for (Group room : getHouse().getGroups()) {
+				for (Controller<? extends Status> controller : room.getControllerList()) {
+					controllers.add(controller);
+				}
+			}
+		}
+		listView.setAdapter(createControllerAdapter(controllers));
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				if (position == parent.getChildCount()+1) {
+					showEditControllerScreen(null);
+				}
+			}
+		});
+	}
+	
 }

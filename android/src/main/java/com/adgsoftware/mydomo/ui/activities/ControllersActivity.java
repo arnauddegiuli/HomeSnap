@@ -26,11 +26,10 @@ import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.Label;
 import com.adgsoftware.mydomo.ui.AbstractActivity;
-import com.adgsoftware.mydomo.ui.adapters.ControllerAdapter;
 
 public class ControllersActivity extends AbstractActivity {
 
-	List<Controller<? extends Status>> controllers = new ArrayList<Controller<? extends Status>>();
+	public List<Controller<? extends Status>> controllers = new ArrayList<Controller<? extends Status>>();
 	private static final int MENU_EDIT_CONTROLLER = 0;
 	private static final int MENU_DELETE_CONTROLLER = 1;
 	private static final int MENU_EDIT_LABELS = 2;
@@ -77,12 +76,6 @@ public class ControllersActivity extends AbstractActivity {
 		String selectedLabelId = String.valueOf(extras.get("selectedLabelId"));
 		selectedLabel = getLabel(getHouse(), selectedLabelId);
 		
-	}
-
-	private ControllerAdapter createAdapter() {
-		// fill in the grid_item layout
-		ControllerAdapter adapter = new ControllerAdapter(this, controllers);
-		return adapter;
 	}
 
 	@Override
@@ -181,30 +174,12 @@ public class ControllersActivity extends AbstractActivity {
 	}
 
 	/**
-	 * Load the rooms and their nested controllers, then bind to the list view.
+	 * Load the controllers, then bind to the list view.
 	 */
 	private void refreshList() {
 		Log.d("Controllers", "Refresh list");
 		ListView listView = (ListView) findViewById(R.id.listview);
-		listView.setAdapter(createAdapter());
+		listView.setAdapter(createControllerAdapter(controllers));
 	}
-
-//	public void addLightController(Group room, String where) {
-//		Light light = myDomoService.createController(Light.class, where);
-//		room.add(light);
-//		createLight(light, getApplicationContext());
-//	}
-//
-//	public void addHeating(Group room, String where) {
-//		Heating heating = myDomoService.createController(Heating.class, where);
-//		room.add(heating);
-//		createHeating(heating, getApplicationContext());
-//	}
-//
-//	public void addAutomation(Group room, String where) {
-//		Automation automation = myDomoService.createController(
-//				Automation.class, where);
-//		room.add(automation);
-//		createAutomation(automation, getApplicationContext());
-//	}
+	
 }

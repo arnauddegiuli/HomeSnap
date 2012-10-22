@@ -1,59 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
     <LinearLayout
-        android:id="@+id/LinearLayout1"
+        android:id="@+id/rowServerIP"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp" >
+        android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:id="@+id/rowServerIP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_ip" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rowTxtServerIP"
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <EditText
-                android:id="@+id/txtServerIP"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:inputType="textNoSuggestions" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ip_separator" />
-
-            <EditText
-                android:id="@+id/txtServerPort"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/rowControllerList"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-        </LinearLayout>
-
+            android:text="@string/label_ip" />
     </LinearLayout>
 
-</ScrollView>
+    <LinearLayout
+        android:id="@+id/rowTxtServerIP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/txtServerIP"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ip_separator" />
+
+        <EditText
+            android:id="@+id/txtServerPort"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/connectedStatusViewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connected status" />
+
+    <ListView
+        android:id="@+id/listviewSettings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>
