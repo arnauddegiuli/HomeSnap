@@ -37,9 +37,9 @@ public class CommandSession implements Runnable {
 	    		if(client != null && !client.isInputShutdown()) {
 	    			ci = depuisClient.read();		    		
 		    		if (ci == -1) {
-//		    			System.out.println("End of read from socket.");
-//			  			client = null;
-//			  			break;
+		    			System.out.println("End of read from socket.");
+			  			client = null;
+			  			break;
 			        } else { 
 			        	c = (char) ci;			        				        
 					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
@@ -79,16 +79,12 @@ public class CommandSession implements Runnable {
 				
 				if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
 					result = ControllerStateManagement.executeCommand(lue);
-//					if (!Command.NACK.equals(result)) {
-//						TODO call monitor session: it is done in executeCommand... maybe shoud be moved here no?
-//					}
 				} else {
 					result = ControllerStateManagement.executeStatus(lue);
 				}					
 				write(result);
 			}
 		}
-		// fermeture de la connexion
 		stop();
 	}
 

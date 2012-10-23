@@ -36,18 +36,19 @@ public class Server implements Runnable {
 				System.out
 						.println("Waiting connection for Monitor/Command on port ["
 								+ port + "]...");
-				// création de nouvelles connexions
-				Socket s = serveur.accept();
+				
+				Socket s = serveur.accept(); // création de nouvelles connexions
 				BufferedReader depuisClient; // réception de requête
-				PrintWriter versClient; // envoi des réponses
+				PrintWriter versClient; 	 // envoi des réponses
 
 				try {
-					// création des flots de/vers le client
+					// Read from client
 					depuisClient = new BufferedReader(new InputStreamReader(
 							s.getInputStream()));
+					// Write to client
 					versClient = new PrintWriter(new OutputStreamWriter(
 							s.getOutputStream()), true);
-					// message d'accueil
+					// Welcome ack
 					write(Command.ACK, versClient);
 					String sessionType = read(s, depuisClient);
 					if (Command.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
@@ -62,8 +63,6 @@ public class Server implements Runnable {
 							.equalsIgnoreCase(sessionType)) {
 						System.out.println("Start Command Session...");
 						write(Command.ACK, versClient);
-						// mise en route du processus par appel de la méthode
-						// run
 						new Thread(new CommandSession(s, depuisClient,
 								versClient)).start();
 

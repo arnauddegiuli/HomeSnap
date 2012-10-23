@@ -52,7 +52,7 @@ public class ControllerStateManagement {
 	 * @param command command to execute
 	 * @return the result of the command
 	 */
-	public static String executeCommand(String command) {
+	public static synchronized String executeCommand(String command) {
 		
 		String who = Command.getWhoFromCommand(command);
 		String result;
@@ -71,7 +71,7 @@ public class ControllerStateManagement {
 		
 		if (!Command.NACK.equalsIgnoreCase(result)) {
 			for (MonitorSession monitor : monitorList) {
-				monitor.monitor(command); // TODO transform run into a command to write the command
+				monitor.monitor(command);
 			}
 		}
 		
@@ -83,7 +83,7 @@ public class ControllerStateManagement {
 	 * @param command the status request to execute
 	 * @return the status
 	 */
-	public static String executeStatus(String command) {
+	public static synchronized String executeStatus(String command) {
 		String who = Command.getWhoFromCommand(command);
 		
 		ControllerSimulator cc = controllerCommandList.get(who);
