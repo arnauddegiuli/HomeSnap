@@ -20,7 +20,9 @@
 		<activity android:name=".ui.activities.EditLabelActivity"></activity>
 		<activity android:name=".ui.activities.SelectLabelsActivity"></activity>
 		<activity android:name=".ui.activities.SettingsActivity"></activity>
+		<activity android:name=".ui.activities.StreamActivity"></activity>
 		<activity android:name=".ui.activities.todo.ScenarioActivity"></activity>
+		
 		<service android:name=".ui.service.MyDomoServiceImpl"/>
 	</application>
 </manifest>

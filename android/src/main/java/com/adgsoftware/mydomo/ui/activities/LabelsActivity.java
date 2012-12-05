@@ -41,6 +41,7 @@ public class LabelsActivity extends AbstractActivity {
 
 	private static final int RENAME = 0;
 	private static final int DELETE = 1;
+	private static final int CAMERA = 2;
 	
 	// Label edition/creation var
 	private PopupWindow popUp;
@@ -138,7 +139,6 @@ public class LabelsActivity extends AbstractActivity {
 		});
 
 		
-		
 		alertDialog = new AlertDialog.Builder(this).setTitle(
 				"Select action").setAdapter(
 						createControllersWithNoLabelAdapter(),
@@ -154,6 +154,16 @@ public class LabelsActivity extends AbstractActivity {
 							getHouse().getLabels().get(itemPositionForAlertAction).clear(); // TODO add a method when remove a label => detach all controllers
 							getHouse().getLabels().remove(itemPositionForAlertAction);
 							saveHouse(getHouse());
+							break;
+						case CAMERA:
+							try {
+								// Select Label
+								Intent intent = new Intent(LabelsActivity.this,
+										StreamActivity.class);
+								startActivity(intent);
+							} catch (Exception e) {
+								Log.e("Error when launch streaming", null, e);
+							}
 							break;
 						default:
 							break;
@@ -234,6 +244,11 @@ public class LabelsActivity extends AbstractActivity {
 
 		map = new HashMap<String, String>();
 		title = "Delete";
+		map.put("text1", title);
+		fillMaps.add(map);
+		
+		map = new HashMap<String, String>();
+		title = "Streaming";
 		map.put("text1", title);
 		fillMaps.add(map);
 		
