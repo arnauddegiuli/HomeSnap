@@ -1,8 +1,8 @@
 package com.adgsoftware.mydomo.engine.services.impl;
 
-import com.adgsoftware.mydomo.engine.connector.OpenWebCommander;
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
-import com.adgsoftware.mydomo.engine.connector.OpenWebMonitor;
+import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebCommanderImpl;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebMonitorImpl;
 import com.adgsoftware.mydomo.engine.controller.Controller;
@@ -11,8 +11,8 @@ import com.adgsoftware.mydomo.engine.services.ControllerService;
 
 public class ControllerServiceImpl implements ControllerService {
 
-	private OpenWebMonitor monitor;
-	private OpenWebCommander commander;
+	private Monitor monitor;
+	private Commander commander;
 	private String host;
 	private int port;
 	private long passwordOpen = 0L;
@@ -39,11 +39,11 @@ public class ControllerServiceImpl implements ControllerService {
 		
 		try {
 			controller = (T) clazz.newInstance();
-			OpenWebMonitor mon = getOpenWebMonitor();
+			Monitor mon = getOpenWebMonitor();
 			if (mon != null) {
 			 mon.addControllerToMonitor(controller);
 			}
-			OpenWebCommander com = getOpenWebCommand();
+			Commander com = getOpenWebCommand();
 			if ( com != null )  {
 				com.addControllerToExecute(controller);
 			}
@@ -57,7 +57,7 @@ public class ControllerServiceImpl implements ControllerService {
 		return controller;
 	}
 	
-	private OpenWebMonitor getOpenWebMonitor() {
+	private Monitor getOpenWebMonitor() {
 		if (monitor == null) {
 			monitor = new OpenWebMonitorImpl(host, port, passwordOpen);
 		}
@@ -65,7 +65,7 @@ public class ControllerServiceImpl implements ControllerService {
 		return monitor;
 	}
 	
-	private OpenWebCommander getOpenWebCommand() {
+	private Commander getOpenWebCommand() {
 		if (commander == null) {
 			commander = new OpenWebCommanderImpl(host, port, passwordOpen);
 		}
@@ -106,13 +106,14 @@ public class ControllerServiceImpl implements ControllerService {
 	}
 
 	@Override
-	public void addMonitorConnectionListener(OpenWebConnectionListener listener) {
-		this.getOpenWebMonitor().addConnectionListener(listener);
+	public void addCommanderConnectionListener(ConnectionListener listener) {
+		this.getOpenWebCommand().addConnectionListener(listener);
+		
 	}
 
 	@Override
-	public void addCommanderConnectionListener(
-			OpenWebConnectionListener listener) {
-		this.getOpenWebCommand().addConnectionListener(listener);
+	public void addMonitorConnectionListener(ConnectionListener listener) {
+		this.getOpenWebMonitor().addConnectionListener(listener);
+		
 	}
 }

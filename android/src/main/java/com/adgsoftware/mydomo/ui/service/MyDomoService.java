@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import android.os.IInterface;
 
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.House;
@@ -26,7 +26,7 @@ public interface MyDomoService extends IInterface {
 	
 	public void setServerPort(int port);
 	
-	public void addMonitorConnectionListener(OpenWebConnectionListener listener);
+	public void addMonitorConnectionListener(ConnectionListener listener);
 	
-	public void addCommanderConnectionListener(OpenWebConnectionListener listener);
+	public void addCommanderConnectionListener(ConnectionListener listener);
 }

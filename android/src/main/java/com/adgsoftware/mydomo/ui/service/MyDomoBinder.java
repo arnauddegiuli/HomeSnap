@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.util.Log;
 
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.House;
@@ -115,13 +115,13 @@ implements MyDomoService {
 	}
 
 	@Override
-	public void addMonitorConnectionListener(OpenWebConnectionListener listener) {
+	public void addMonitorConnectionListener(ConnectionListener listener) {
 		controller.addMonitorConnectionListener(listener);
 	}
 
 	@Override
 	public void addCommanderConnectionListener(
-			OpenWebConnectionListener listener) {
+			ConnectionListener listener) {
 		controller.addCommanderConnectionListener(listener);
 	}
 	

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="MyDomoTextView" parent="@android:style/Widget.TextView">
+		<item name="android:textSize">14sp</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">#CCC</item>
+		<item name="android:background">@android:color/transparent</item>
+		<item name="android:padding">5dip</item>
+	</style>
+</resources>
+

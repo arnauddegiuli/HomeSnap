@@ -14,15 +14,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.adgsoftware.mydomo.R;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.Group;
@@ -164,7 +164,7 @@ public class SettingsActivity extends AbstractActivity {
 		textView.setText(getConnectedStatusMessage());
 		
 		myDomoService.addCommanderConnectionListener(
-				new OpenWebConnectionListener() {
+				new ConnectionListener() {
 					
 					@Override
 					public void onConnect(ConnectionStatusEnum connectionStatus) {
@@ -183,7 +183,7 @@ public class SettingsActivity extends AbstractActivity {
 		);
 		
 		myDomoService.addMonitorConnectionListener(
-				new OpenWebConnectionListener() {
+				new ConnectionListener() {
 					
 					@Override
 					public void onConnect(ConnectionStatusEnum connectionStatus) {

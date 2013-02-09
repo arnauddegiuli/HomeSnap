@@ -155,16 +155,16 @@ public class LabelsActivity extends AbstractActivity {
 							getHouse().getLabels().remove(itemPositionForAlertAction);
 							saveHouse(getHouse());
 							break;
-						case CAMERA:
-							try {
-								// Select Label
-								Intent intent = new Intent(LabelsActivity.this,
-										StreamActivity.class);
-								startActivity(intent);
-							} catch (Exception e) {
-								Log.e("Error when launch streaming", null, e);
-							}
-							break;
+//						case CAMERA:
+//							try {
+//								// Select Label
+//								Intent intent = new Intent(LabelsActivity.this,
+//										StreamActivity.class);
+//								startActivity(intent);
+//							} catch (Exception e) {
+//								Log.e("Error when launch streaming", null, e);
+//							}
+//							break;
 						default:
 							break;
 						}

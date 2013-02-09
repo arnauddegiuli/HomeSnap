@@ -1,8 +1,8 @@
 package com.adgsoftware.mydomo.test;
 
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.connector.OpenWebCommander;
-import com.adgsoftware.mydomo.engine.connector.OpenWebMonitor;
+import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebCommanderImpl;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebMonitorImpl;
 import com.adgsoftware.mydomo.engine.controller.Controller;
@@ -14,8 +14,8 @@ import com.adgsoftware.mydomo.test.Constants.Light1;
 public class CommandSessionClient {
 	
 	public static void main(String[] args) {
-		OpenWebCommander server = new OpenWebCommanderImpl("localhost", 1234, 0L);
-		OpenWebMonitor monitor = new OpenWebMonitorImpl("localhost", 1235, 0L);
+		Commander server = new OpenWebCommanderImpl("localhost", 1234, 0L);
+		Monitor monitor = new OpenWebMonitorImpl("localhost", 1235, 0L);
 		server.connect();
 		monitor.connect();
 		

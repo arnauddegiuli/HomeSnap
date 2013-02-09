@@ -13,7 +13,7 @@
 	   	android:layout_gravity="center_vertical"
 	    android:layout_weight="0.5"
 	    >
- 
+	    	    
 	    <TextView android:id="@+id/titre"
 	         android:layout_width="fill_parent"
 	         android:layout_height="fill_parent"
