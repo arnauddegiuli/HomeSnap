@@ -12,9 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
-import com.adgsoftware.mydomo.engine.connector.OpenWebMonitor;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
@@ -22,7 +23,7 @@ import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
 public class OpenWebMonitorImpl extends Thread 
-implements OpenWebMonitor {
+implements Monitor {
 
 //	GestionePassword gestPassword = null;
 	Logger log = Logger.getLogger(OpenWebMonitorImpl.class.getName());
@@ -30,12 +31,11 @@ implements OpenWebMonitor {
 	private Socket socket = null;	
 	private BufferedReader depuisClient = null;
 	private PrintWriter versClient = null;
-	private boolean usePassword = false;
 	private String ip;
 	private int port;
 	private int timeout = 5000;
-//	private long passwordOpen;
-	private List<OpenWebConnectionListener> connectionListenerList = new ArrayList<OpenWebConnectionListener>();
+	private List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
+	private List<CommandListener> commandListenerList = new ArrayList<CommandListener>();
 	
 	
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
@@ -44,29 +44,32 @@ implements OpenWebMonitor {
 	 * 
 	 * @param ip the ip or dns name of the open server
 	 * @param port the port number of the open server
-	 * @param passwordOpen 
+	 * @param passwordOpen not supported actually
 	 */
 	public OpenWebMonitorImpl(String ip, int port, long passwordOpen){ 
-//		gestPassword = new GestionePassword();
 		this.ip = ip;
 		this.port = port;
 //		this.passwordOpen = passwordOpen;
 		this.start();
 	}
 	
+	@Override
 	public String getIp() {
 		return ip;
 	}
 
+	@Override
 	public void setIp(String ip) {
 		this.ip = ip;
 		close();
 	}
 
+	@Override
 	public int getPort() {
 		return port;
 	}
 
+	@Override
 	public void setPort(int port) {
 		this.port = port;
 		close();
@@ -82,6 +85,9 @@ implements OpenWebMonitor {
 		String what = Command.getWhatFromCommand(message);
 		if (what != null) {
 			// Manage what command
+			
+			// TODO raise the event commandListenerList
+			
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWhere().equals(where)) {
 					changeWhat(controller, what);
@@ -89,6 +95,7 @@ implements OpenWebMonitor {
 			}
 		} else {
 			// Manage dimension command
+			// TODO raise the event commandListenerList
 			List<DimensionValue> dimensionList = Command.getDimensionListFromCommand(message);
 			String code=null; // TODO get code from commande
 			for (Controller<? extends Status> controller : controllerList) {
@@ -184,16 +191,16 @@ implements OpenWebMonitor {
             	log.finest("Tx: " + Command.MONITOR_SESSION);
             	write(Command.MONITOR_SESSION);
 
-    			if(usePassword){
-    				msg = read();
-    				log.finest("\n----- Step authentification -----");
-    	            log.finest("Rx: " + msg);
-    	            
-    		    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
-    		    	String passwordMsg = "*#"+password+"##"; 
-    		    	log.finest("Tx: " + passwordMsg);
-    		    	write(passwordMsg);		    	
-            	}
+//    			if(usePassword){
+//    				msg = read();
+//    				log.finest("\n----- Step authentification -----");
+//    	            log.finest("Rx: " + msg);
+//    	            
+//    		    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
+//    		    	String passwordMsg = "*#"+password+"##"; 
+//    		    	log.finest("Tx: " + passwordMsg);
+//    		    	write(passwordMsg);		    	
+//            	}
     	    	msg = read();
     	    	log.finest("\n----- Step Final -----");
     	    	log.finest("Rx: " + msg);
@@ -215,7 +222,7 @@ implements OpenWebMonitor {
 	}
 	
 	private void callOpenWebConnectionListenerConnect(ConnectionStatusEnum connection) {
-		for (OpenWebConnectionListener connectionListener : connectionListenerList) {
+		for (ConnectionListener connectionListener : connectionListenerList) {
 			try {
 				connectionListener.onConnect(connection);
 			} catch (Exception e) {
@@ -228,7 +235,7 @@ implements OpenWebMonitor {
 	public void close(){
 		if(socket != null){
 			try {
-				for (OpenWebConnectionListener connectionListener : connectionListenerList) {
+				for (ConnectionListener connectionListener : connectionListenerList) {
 					try {
 						connectionListener.onClose();
 					} catch (Exception e) {
@@ -311,7 +318,7 @@ implements OpenWebMonitor {
 
 	@Override
 	public void addConnectionListener(
-			OpenWebConnectionListener connectionListener) {
+			ConnectionListener connectionListener) {
 		connectionListenerList.add(connectionListener);
 	}
 	
@@ -323,5 +330,10 @@ implements OpenWebMonitor {
 	@Override
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
+	}
+
+	@Override
+	public void addControllerStatusListener(CommandListener commandListener) {
+		commandListenerList.add(commandListener);
 	}
 }

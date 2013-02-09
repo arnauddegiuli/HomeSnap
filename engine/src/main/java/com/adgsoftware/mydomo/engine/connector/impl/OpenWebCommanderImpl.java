@@ -2,9 +2,7 @@ package com.adgsoftware.mydomo.engine.connector.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +12,24 @@ import java.util.logging.Logger;
 import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
-import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
-import com.adgsoftware.mydomo.engine.connector.OpenWebCommander;
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.CommandListener;
+import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
-public class OpenWebCommanderImpl implements OpenWebCommander {
+public class OpenWebCommanderImpl implements Commander {
 	
-	private Socket socket;
+	Socket socket;
 	Logger log = Logger.getLogger(OpenWebCommanderImpl.class.getName());
-	private BufferedReader input = null;
-	private PrintWriter output = null;
+	BufferedReader input = null;
+	PrintWriter output = null;
 	private String ip;
 	private int port;
 	private int timeout = 5000;
 //	private long passwordOpen;
-	private boolean usePassword = false; // TODO manage password
-	private List<OpenWebConnectionListener> connectionListenerList = new ArrayList<OpenWebConnectionListener>();
+	boolean usePassword = false; // TODO manage password
+	List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
 	
 	
 	/**
@@ -64,101 +62,21 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 		close();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.adgsoftware.mydomo.engine.connector.OpenWebCommand#connect(java.lang.String, int, long)
+	/**
+	 * Asynchrone connection
 	 */
-	@Override
-	public boolean connect() { 
-		try{
-			log.finest("Connect to the web open server socket ["+ ip +":"+ port+"]");
-			if (ip == null || port == 0) {
-				return false;
-			}
-			socket = new Socket();
-			InetSocketAddress address = new InetSocketAddress(ip, port);
-			socket.connect(address, getTimeout());
-			input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			log.finest("InputReader created.");
-			output = new PrintWriter(socket.getOutputStream(),true);
-			log.finest("PrintWriter created.");
-		} catch (Exception e){
-			log.log(Level.FINER, "Impossible to connect to the server ["+ ip +":"+ port+"]", e);
-			if (socket!=null && socket.isConnected()) {
-				this.close();
-			}
-			return false;
-		}
+	public void connect() { 
+		new Thread(new OpenWebConnectThread(this, null, null)).start(); // Make connection in thread to avoid blocking the user!
 		
-		if(socket != null) {
-				
-			String msg = readMessage();
-				
-        	log.finest(" ----- Step Connection ----- ");
-        	log.finest("Rx: " + msg);
-            if (!Command.ACK.equals(msg)) {
-            	// Bad return message
-                log.log(Level.SEVERE, "Bad message [" + msg + "] received from [" + ip + "]");
-                callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-                this.close();
-                return false;
-            }
-			
-            log.finest("\n----- Step Identification -----");
-        	log.finest("Tx: " + Command.COMMAND_SESSION);
-        	writeMessage(Command.COMMAND_SESSION);
-            
-			if(usePassword){
-				msg = readMessage();
-				log.finest("\n----- Step authentification -----");
-	            log.finest("Rx: " + msg);
-	            
-		    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
-		    	String passwordMsg = "*#"+password+"##"; 
-		    	log.finest("Tx: " + passwordMsg);
-		    	writeMessage(passwordMsg);		    	
-        	} 
-			
-	    	msg = readMessage();
-	    	log.finest("\n----- Step Final -----");
-	    	log.finest("Rx: " + msg);
-			if (!Command.ACK.equals(msg)) {		       	
-		        log.finest("Problem during connection to [" + ip + "] with message [" + msg + "]");
-		        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-		        this.close();
-		        return false;
-		    }
-			
-			log.finest("Connection OK");
-			callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
-	        return true;
-
-		} else {
-			log.finest("No socket... Impossible to connect");
-			callOpenWebConnectionListenerConnect(ConnectionStatusEnum.NoSocket);
-			return false;
-		}
 	}
 	
-	private void callOpenWebConnectionListenerConnect(ConnectionStatusEnum connection) {
-		for (OpenWebConnectionListener connectionListener : connectionListenerList) {
-			try {
-				connectionListener.onConnect(connection);
-			} catch (Exception e) {
-				log.log(Level.SEVERE, "ConnectionListener raise an error", e);
-			}
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.adgsoftware.mydomo.engine.connector.OpenWebCommand#close()
-	 */
 	@Override
 	public void close() {
 		if(socket != null){
 			try {
 				socket.close();
 				socket = null;
-				for (OpenWebConnectionListener connectionListener : connectionListenerList) {
+				for (ConnectionListener connectionListener : connectionListenerList) {
 					try {
 						connectionListener.onClose();
 					} catch (Exception e) {
@@ -172,11 +90,8 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.adgsoftware.mydomo.engine.connector.OpenWebCommand#sendCommand(java.lang.String)
-	 */
 	@Override
-	public CommandResult sendCommand(String command){
+	public void sendCommand(String command, CommandListener resultListener){
 
 //		try { TODO check command!!!!
 //			openWebNet = new OpenWebNet(comandoOpen);
@@ -192,10 +107,8 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 //		}
 
 		if (!isConnected()) {
-			connect();
-		}
-		
-		if (isConnected()) {
+			new Thread(new OpenWebConnectThread(this, command, resultListener)).start(); // Make connection and lunch command in thread to avoid block the user!
+		} else { // FIXME here too lunch the command in a thread! => refactor code here
 			log.finest("Tx: " + command);
 			writeMessage(command);
 			
@@ -205,33 +118,46 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 			
 	    	if(msg == null){
 	    		log.finest("Command failed.");
-	    		return new CommandResult(null, CommandResultStatus.error);
+	    		if (resultListener != null) {
+	    			resultListener.onCommand(new CommandResult(null, CommandResultStatus.error));
+	    		}
+	    		return;
 	    	}
 	
 	    	if (Command.ACK.equals(msg)){
 	    		log.finest("Command sent.");
-	    		return new CommandResult(Command.ACK, CommandResultStatus.ok);
+	    		if (resultListener != null) {
+	    			resultListener.onCommand(new CommandResult(Command.ACK, CommandResultStatus.ok));
+	    		}
+	    		return;
 	    	} else if (Command.NACK.equals(msg)){
 	    		log.finest("Command failed.");
-	    		return new CommandResult(Command.NACK, CommandResultStatus.nok);
+	    		if (resultListener != null) {
+	    			resultListener.onCommand(new CommandResult(Command.NACK, CommandResultStatus.nok));
+	    		}
+	    		return;
 	    	} else { // First return was information. The next should be acknowledgment
 	    		String actionReturn = msg;
 	    		msg = readMessage();
 	    		log.finest("Rx: " + msg);
 	    		if(Command.ACK.equals(msg)){
 	    			log.finest("Command sent.");
-	    			return new CommandResult(actionReturn, CommandResultStatus.ok);
+	    			if (resultListener != null) {
+	    				resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.ok));
+	    			}
+	    			return;
 	    		} 
 	
 				log.finest("Command failed.");
-	    		return new CommandResult(actionReturn, CommandResultStatus.error);
+				if (resultListener != null) {
+					resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.error));
+				}
+				return;
 	    	}
-		} else {
-			return new CommandResult(null, CommandResultStatus.error);
-		}
+		} 
 	}
 
-	private void writeMessage(String message) {
+	void writeMessage(String message) {
 		if (output != null) { // No output can mean no server is responding
 			output.write(message);
 			output.flush();
@@ -239,7 +165,7 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 		}
 	}
 	
-    private String readMessage(){
+    String readMessage(){
 	    int indice = 0;
 	    boolean exit = false;
 	    char respond[] = new char[1024];
@@ -304,7 +230,7 @@ public class OpenWebCommanderImpl implements OpenWebCommander {
 
 	@Override
 	public void addConnectionListener(
-			OpenWebConnectionListener connectionListener) {
+			ConnectionListener connectionListener) {
 		connectionListenerList.add(connectionListener);
 	}
 

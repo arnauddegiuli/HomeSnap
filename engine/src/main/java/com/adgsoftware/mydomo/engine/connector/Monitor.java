@@ -10,7 +10,7 @@ import com.adgsoftware.mydomo.engine.controller.Status;
  * OpenWebMonitor raise this event to concern controller registered.
  *
  */
-public interface OpenWebMonitor {
+public interface Monitor {
 
 	/**
 	 * Connect to the open server.
@@ -29,7 +29,9 @@ public interface OpenWebMonitor {
 	 */
 	public abstract void addControllerToMonitor(Controller<? extends Status> controller);
 	
-	public abstract void addConnectionListener(OpenWebConnectionListener connectionListener);
+	public abstract void addConnectionListener(ConnectionListener connectionListener);
+	
+	public abstract void addControllerStatusListener(CommandListener commandListener);
 	
 	/**
 	 * Return true if connected to the open server.

@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 
@@ -51,32 +52,33 @@ implements Serializable {
 		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {getWho(), getWhere(), dimension.getCode()}); 
 	}
 	
-	protected CommandResult executeAction(DimensionStatus dimensionStatus) {
-		CommandResult result;
+	protected void executeAction(DimensionStatus dimensionStatus, CommandListener commandListener) {
 		if (server == null) {
-			result = new CommandResult("", CommandResultStatus.nok);
+			commandListener.onCommand( new CommandResult("", CommandResultStatus.nok));
 		} else {
-			result = server.sendCommand(createDimensionActionMessage(dimensionStatus));
+			server.sendCommand(createDimensionActionMessage(dimensionStatus), commandListener);
 		}
-		return result;
 	}
 		
-	protected <D extends DimensionStatus> D executeStatus(D dimensionStatus) {
-		
-		CommandResult result;
+	protected <D extends DimensionStatus> void executeStatus(final D dimensionStatus, final DimensionStatusListener<D> listener) {
 		if (server == null) {
-			result = new CommandResult("", CommandResultStatus.nok);
+			listener.onDimensionStatus(null, new CommandResult("", CommandResultStatus.nok));
 		} else {
-			result = server.sendCommand(createDimensionStatusMessage(dimensionStatus));
+			server.sendCommand(createDimensionStatusMessage(dimensionStatus), new CommandListener() {
+				@Override
+				public void onCommand(CommandResult result) {
+					if (CommandResultStatus.ok.equals(result.status)) {
+						List<DimensionValue> dimensionListResult = Command.getDimensionListFromCommand(result.commandResult);
+						dimensionStatus.setValueList(dimensionListResult);
+						listener.onDimensionStatus(dimensionStatus, result); 
+					} else {
+						listener.onDimensionStatus(null, result);
+					}					
+				}
+			});
 		}
 		
-		if (CommandResultStatus.ok.equals(result.status)) {
-			List<DimensionValue> dimensionListResult = Command.getDimensionListFromCommand(result.commandResult);
-			dimensionStatus.setValueList(dimensionListResult);
-			return dimensionStatus;
-		} else {
-			return null;
-		}
+		
 	}
 	
     protected void notifyDimensionChange(DimensionStatus newStatus) {
@@ -97,16 +99,16 @@ implements Serializable {
 	 * @param clazz class of the dimensionStatus of the device.
 	 * @return the dimension status
 	 */
-	protected <D extends DimensionStatus> D  getDimensionStatus(Class<D> clazz) {
+	protected <D extends DimensionStatus> void getDimensionStatus(Class<D> clazz, DimensionStatusListener<D> listener) {
 		try {
 			D result = clazz.newInstance();
-			return executeStatus(result);
+			executeStatus(result, listener);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
-			return null;
+			listener.onDimensionStatus(null, new CommandResult(null, CommandResultStatus.error));
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-			return null;
+			e.printStackTrace(); // FIXME log and not stacktrace
+			listener.onDimensionStatus(null, new CommandResult(null, CommandResultStatus.error));
 		}
 	}
 	
@@ -114,15 +116,20 @@ implements Serializable {
 	 * Define the {@link Status} of the device.
 	 * @param what {@link Status} of the device.
 	 */
-	protected void setDimensionStatus(DimensionStatus dimensionStatus) {
-		CommandResult result = executeAction(dimensionStatus);
-		if (CommandResultStatus.ok.equals(result.status)) {
-			notifyDimensionChange(dimensionStatus);
-			list.put(dimensionStatus.getCode(), dimensionStatus);
-		} else {
-			// Error...
-			notifyDimensionChangeError(dimensionStatus, result);
-		}
+	protected void setDimensionStatus(final DimensionStatus dimensionStatus) {
+		executeAction(dimensionStatus, new CommandListener() {
+			@Override
+			public void onCommand(CommandResult result) {
+				if (CommandResultStatus.ok.equals(result.status)) {
+					notifyDimensionChange(dimensionStatus);
+					list.put(dimensionStatus.getCode(), dimensionStatus);
+				} else {
+					// Error...
+					notifyDimensionChangeError(dimensionStatus, result);
+				}
+			}
+		});
+		
 	}
 	
 	/**

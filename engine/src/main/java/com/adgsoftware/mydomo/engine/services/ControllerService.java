@@ -1,6 +1,6 @@
 package com.adgsoftware.mydomo.engine.services;
 
-import com.adgsoftware.mydomo.engine.connector.OpenWebConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -32,7 +32,7 @@ public interface ControllerService {
 
 	public void onDestroy();
 	
-	public void addMonitorConnectionListener(OpenWebConnectionListener listener);
+	public void addMonitorConnectionListener(ConnectionListener listener);
 	
-	public void addCommanderConnectionListener(OpenWebConnectionListener listener);
+	public void addCommanderConnectionListener(ConnectionListener listener);
 }

@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
-import com.adgsoftware.mydomo.engine.connector.OpenWebCommander;
+import com.adgsoftware.mydomo.engine.connector.Commander;
 
 /**
  * Controller represents a controller for a device.
@@ -25,7 +26,7 @@ implements Serializable {
 	private T what;
 	protected String where;
 	private String title;
-	protected transient OpenWebCommander server;
+	protected transient Commander server;
     private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
     private LabelList labelList = new LabelList(this);
     
@@ -46,7 +47,12 @@ implements Serializable {
 		if (newValue == null) { // Manage null value because we create the controller with no address
 			what = null;
 		} else {
-			what = executeStatus();
+			executeStatus(new StatusListener<T>() {
+				@Override
+				public void onStatus(T status, CommandResult result) {
+					what = status;
+				}
+			});
 		}
 	}
 	
@@ -62,19 +68,23 @@ implements Serializable {
 	 * Define the new {@link Status} of the device.
 	 * @param newWhat {@link Status} of the device.
 	 */
-	public void setWhat(T newWhat) {
-		T oldStatus = what;
-		this.what = newWhat;
-		CommandResult result = executeAction();
-		if (CommandResultStatus.ok.equals(result.status)) {
-			// Status has been changed
-			notifyWhatChange(this.what, newWhat);
-			
-		} else {
-			// Error
-			this.what = oldStatus;
-			notifyWhatChangeError(this.what, newWhat, result);
-		}
+	public void setWhat(final T newWhat) {
+		final T oldStatus = what;
+		what = newWhat;
+		executeAction( new CommandListener() {
+			@Override
+			public void onCommand(CommandResult result) {
+				if (CommandResultStatus.ok.equals(result.status)) {
+					// Status has been changed
+					notifyWhatChange(what, newWhat);
+				} else {
+					// Error
+					what = oldStatus;
+					notifyWhatChangeError(what, newWhat, result);
+				}
+			}
+		});
+		
 	}
 	
 	/**
@@ -113,36 +123,44 @@ implements Serializable {
 	 * Execute an action
 	 * @return result of action execution.
 	 */
-	protected CommandResult executeAction() {
-		CommandResult result;
+	protected void executeAction(CommandListener commandListener) {
 		if (server == null || getWhat() == null) {
-			result = new CommandResult("", CommandResultStatus.nok);
+			commandListener.onCommand(new CommandResult("", CommandResultStatus.nok));
 		} else {
-			result = server.sendCommand(createActionMessage());
+			server.sendCommand(createActionMessage(), commandListener);
 		}
-		return result;
+
 	}
 	
 	/**
 	 * Get the status of the controller.
 	 * @return status of the controller.
 	 */
-	protected T executeStatus() {
+	protected void executeStatus(final StatusListener<T> statusListener) {
 		
-		CommandResult result;
 		if (server == null) {
-			result = new CommandResult("", CommandResultStatus.nok);
+			statusListener.onStatus(what, new CommandResult("", CommandResultStatus.nok));
 		} else {
-			result = server.sendCommand(createStatusMessage());
+			server.sendCommand(createStatusMessage(), new CommandListener() {
+				@Override
+				public void onCommand(CommandResult result) {
+					if (CommandResultStatus.ok.equals(result.status)) {
+						// Return the status of the controller from the server
+						statusListener.onStatus(getStatus(Command.getWhatFromCommand(result.commandResult)), result);
+					} else {
+						// ERROR: message not sent on Bus or error return... we keep the last value
+						statusListener.onStatus(what, result);
+					}
+					
+				}
+			});
 		}
 		
-		if (CommandResultStatus.ok.equals(result.status)) {
-			// Return the status of the controller from the server
-			return getStatus(Command.getWhatFromCommand(result.commandResult));
-		} else {
-			// ERROR: message not sent on Bus or error return... we keep the last value
-			return what;
-		}
+		
+		
+		
+		
+		
 	}
 		
 	protected abstract String getWho();
@@ -153,7 +171,7 @@ implements Serializable {
 	 * Define the gateway to connect on.
 	 * @param server
 	 */
-	public void setServer(OpenWebCommander server) {	
+	public void setServer(Commander server) {	
 		this.server= server ;
 	}
 	

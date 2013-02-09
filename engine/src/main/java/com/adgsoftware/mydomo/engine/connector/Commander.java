@@ -3,13 +3,13 @@ package com.adgsoftware.mydomo.engine.connector;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
-public interface OpenWebCommander {
+public interface Commander {
 
 	/**
 	 * Connect to the open server.
 	 * @return true if connected to the open server
 	 */
-	public abstract boolean connect();
+	public abstract void connect();
 	
 	/**
 	 * Return true if connected to the open server.
@@ -27,11 +27,21 @@ public interface OpenWebCommander {
 	 * @param command the command to send
 	 * @return the result of the command
 	 */
-	public abstract CommandResult sendCommand(String command);
+	public abstract void sendCommand(String command, CommandListener resultListener);
 
+	// FIXME remove controller and connection listener?
+	
+	/**
+	 * Add a controller which will be able to use this commander.
+	 * @param controller
+	 */
 	public abstract void addControllerToExecute(Controller<? extends Status> controller);
 	
-	public abstract void addConnectionListener(OpenWebConnectionListener connectionListener);
+	/**
+	 * Add a connectionListener.
+	 * @param connectionListener
+	 */
+	public abstract void addConnectionListener(ConnectionListener connectionListener);
 	
 	/**
 	 * Return the ip of the open server.

@@ -9,7 +9,7 @@ import com.adgsoftware.mydomo.engine.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.parser.ParseException;
 
 public class Command {
-
+// TODO refactor this class to move it to connector.impl... and remove dependencies in other package. to be able to manage connection to xpl or knx
 	// Standard          *WHO*WHAT*WHERE##
 	// Status request    *#WHO*WHERE##
 	// Dimension request *#WHO*WHERE*DIMENSION##

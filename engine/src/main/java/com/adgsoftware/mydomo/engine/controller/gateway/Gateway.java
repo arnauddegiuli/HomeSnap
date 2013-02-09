@@ -1,7 +1,9 @@
 package com.adgsoftware.mydomo.engine.controller.gateway;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
+import com.adgsoftware.mydomo.engine.controller.DimensionStatusListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Date;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
@@ -62,8 +64,19 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	 */
 	public void setWhere(String newValue) {
 		super.setWhere(""); // Gateway has no address since we are directly connected to it!
-		changeDimensionStatus(getDimensionStatus(Time.class));
-		changeDimensionStatus(getDimensionStatus(Date.class));
+		getDimensionStatus(Time.class, new DimensionStatusListener<Time>() {
+			@Override
+			public void onDimensionStatus(Time status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
+		getDimensionStatus(Date.class, new DimensionStatusListener<Date>() {
+
+			@Override
+			public void onDimensionStatus(Date status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
 	}
 	
 	// GATEWAY
@@ -122,47 +135,47 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	}
 	
 	public byte[] getIpAddress() {
-		IpAddress ip = getDimensionStatus(IpAddress.class);
-		if (ip == null)
+//		IpAddress ip = getDimensionStatus(IpAddress.class);
+//		if (ip == null)
 			return null;
-		return ip.getIpAddress();
+//		return ip.getIpAddress();
 	}
 	
 	public byte[] getNetMask() {
-		NetMask netmask = getDimensionStatus(NetMask.class);
-		if (netmask == null)
+//		NetMask netmask = getDimensionStatus(NetMask.class);
+//		if (netmask == null)
 			return null;
-		return netmask.getNetMask();
+//		return netmask.getNetMask();
 	}
 	
 	public String getDeviceType() {
-		Model model = getDimensionStatus(Model.class);
-		if (model == null)
+//		Model model = getDimensionStatus(Model.class);
+//		if (model == null)
 			return null;
-		return model.getModel();
+//		return model.getModel();
 	}
 	
 	public Version getFirmwareVersion() {
-		FirmwareVersion v = getDimensionStatus(FirmwareVersion.class);
-		if (v == null) {
+//		FirmwareVersion v = getDimensionStatus(FirmwareVersion.class);
+//		if (v == null) {
 			return null;
-		}
-		return v.getVersion();
+//		}
+//		return v.getVersion();
 	}
 	
 	public java.util.Date getUpTime() {
-		UpTime upTime = getDimensionStatus(UpTime.class);
-		if (upTime == null)
+//		UpTime upTime = getDimensionStatus(UpTime.class);
+//		if (upTime == null)
 			return null;
 		
-		return upTime.getTime();
+//		return upTime.getTime();
 	}
 	
 	public java.util.Date getDateTime() {
-		DateTime dt = getDimensionStatus(DateTime.class);
-		if (dt == null)
+//		DateTime dt = getDimensionStatus(DateTime.class);
+//		if (dt == null)
 			return null;
-		return dt.getDate();
+//		return dt.getDate();
 	}
 	
 	public void setDateTime(java.util.Date date) {
@@ -172,17 +185,17 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	}
 	
 	public Version getKernelVersion() {
-		KernelVersion v = getDimensionStatus(KernelVersion.class);
-		if (v == null)
+//		KernelVersion v = getDimensionStatus(KernelVersion.class);
+//		if (v == null)
 			return null;
-		return v.getVersion();
+//		return v.getVersion();
 	}
 	
 	public Version getDistributionVersion() {
-		DistributionVersion v = getDimensionStatus(DistributionVersion.class);
-		if (v == null)
+//		DistributionVersion v = getDimensionStatus(DistributionVersion.class);
+//		if (v == null)
 			return null;
-		return v.getVersion();
+//		return v.getVersion();
 	}
 	
 }
