@@ -58,35 +58,31 @@ public class LightComponent extends AbstractComponent {
 
 			@Override
 			public void onWhatChange(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus) {
-				new Thread(new ThreadWithStatus(newStatus)).start();
+					Status oldStatus, final Status newStatus) {
+				lightButton.post(new Runnable() {
+		            public void run() {
+		            	Log.d("Light", "changeWhat: " + newStatus);
+		    			lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(newStatus));
+		    			lightButton.setText(Light.LightStatus.LIGHT_ON.equals(newStatus) ? "ON" : "OFF");
+		            }
+		        });
 			}
 
 			@Override
 			public void onWhatChangeError(
-					Controller<? extends Status> controller, Status oldStatus,
+					Controller<? extends Status> controller, final Status oldStatus,
 					Status newStatus, CommandResult result) {
-				new Thread(new ThreadWithStatus(oldStatus)).start();
+				lightButton.post(new Runnable() {
+		            public void run() {
+		            	Log.d("Light", "changeWhat: " + oldStatus);
+		    			lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(oldStatus));
+		    			lightButton.setText(Light.LightStatus.LIGHT_ON.equals(oldStatus) ? "ON" : "OFF");
+		            }
+		        });
+				
 			}
 			
 		});
-	}
-	
-	private class ThreadWithStatus implements Runnable {
-		Status newStatus;
-		public ThreadWithStatus(Status newStatus) {
-			this.newStatus = newStatus;
-		}
-		
-		public void run() {
-			lightButton.post(new Runnable() {
-	            public void run() {
-	            	Log.d("Light", "changeWhat: " + newStatus);
-	    			lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(newStatus));
-	    			lightButton.setText(Light.LightStatus.LIGHT_ON.equals(newStatus) ? "ON" : "OFF");
-	            }
-	        });
-		}
 	}
 	
 	// To send to commander
