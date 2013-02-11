@@ -1,9 +1,6 @@
 package com.adgsoftware.mydomo.ui.components;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,27 +20,35 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  * <ul>
  * <li>title is the label prior to the button</li>
  * </ul>
- * @author ssok
- *
  */
 public class LightComponent extends AbstractComponent {
 	
 	private ToggleButton lightButton;
 	
-	public LightComponent(Context context, final Light light) {
+	public LightComponent(Context context) {
 		super(context);
 		lightButton = new ToggleButton(context);
 		this.addView(title);
 		this.addView(lightButton);
 		this.setOrientation(LinearLayout.HORIZONTAL);
+	}
+	
+	/**
+	 * Define the light
+	 * @param light
+	 */
+	public void setLight(final Light light) {
+		
 		lightButton.setId(Integer.valueOf(light.getWho()));
 		lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(light.getWhat()));
+		
 		lightButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				lightButton.setText("...");
-				new SetWhatTask().execute(light);
+				lightButton.setChecked(false); // To avoid to the default mechanism run => button always uncheck... will be check only if action occurs.
+				new SetStatusTask().execute(light);
 			}
 		});
 
@@ -54,20 +59,17 @@ public class LightComponent extends AbstractComponent {
 			@Override
 			public void onWhatChange(Controller<? extends Status> controller,
 					Status oldStatus, Status newStatus) {
-				ThreadWithStatus thread = new ThreadWithStatus(newStatus);
-				thread.run();
+				new Thread(new ThreadWithStatus(newStatus)).start();
 			}
 
 			@Override
 			public void onWhatChangeError(
 					Controller<? extends Status> controller, Status oldStatus,
 					Status newStatus, CommandResult result) {
-				ThreadWithStatus thread = new ThreadWithStatus(oldStatus);
-				thread.run();
+				new Thread(new ThreadWithStatus(oldStatus)).start();
 			}
 			
 		});
-
 	}
 	
 	private class ThreadWithStatus implements Runnable {
@@ -87,16 +89,18 @@ public class LightComponent extends AbstractComponent {
 		}
 	}
 	
-	private class SetWhatTask extends AsyncTask<Light, Void, Void> {
+	// To send to commander
+	private class SetStatusTask extends AsyncTask<Light, Void, Void> {
 		@Override
 		protected Void doInBackground(Light... light) {
 			Log.d("Light", "Invoking getWhat");
 			LightStatus what = light[0].getWhat();
-			Log.d("Light", "setWhat: " + what);
 			if (Light.LightStatus.LIGHT_ON.equals(what)) {
+				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
 				light[0].setWhat(Light.LightStatus.LIGHT_OFF);
 			} else {
 				light[0].setWhat(Light.LightStatus.LIGHT_ON);
+				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
 			}
 			return null;
 		}
@@ -110,17 +114,4 @@ public class LightComponent extends AbstractComponent {
 		super.setTitle(text);
 		this.title.setGravity(Gravity.TOP);
 	}
-
-//	@Override
-//	public void draw(Canvas canvas) {
-//		// TODO Auto-generated method stub
-//
-//		int h = canvas.getHeight();
-//		int l = canvas.getWidth();
-//		Paint p = new Paint();
-//			p.setColor(Color.BLUE);
-//		canvas.drawRect(0, 0, l, h, new Paint());
-//		
-//	}
-	
 }

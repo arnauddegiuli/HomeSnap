@@ -69,7 +69,7 @@ implements Serializable {
 	 * @param newWhat {@link Status} of the device.
 	 */
 	public void setWhat(final T newWhat) {
-		final T oldStatus = what;
+		final T oldStatus = what; // FIXME: see if we just lunch the command and monitor change the state, or if we do the two here (send command AND change state...)
 		what = newWhat;
 		executeAction( new CommandListener() {
 			@Override

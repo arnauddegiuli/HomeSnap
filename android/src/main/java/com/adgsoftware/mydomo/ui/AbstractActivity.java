@@ -17,7 +17,6 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.heating.Heating;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
@@ -30,7 +29,6 @@ import com.adgsoftware.mydomo.ui.components.AbstractComponent;
 import com.adgsoftware.mydomo.ui.components.AutomationComponent;
 import com.adgsoftware.mydomo.ui.components.GatewayComponent;
 import com.adgsoftware.mydomo.ui.components.HeatingComponent;
-import com.adgsoftware.mydomo.ui.components.LightComponent;
 import com.adgsoftware.mydomo.ui.components.OutletComponent;
 import com.adgsoftware.mydomo.ui.components.RoomComponent;
 import com.adgsoftware.mydomo.ui.service.MyDomoService;
@@ -107,20 +105,6 @@ public abstract class AbstractActivity extends Activity {
 		roomComponent.setTitle(room.getTitle());
 		
 		return roomComponent;
-	}
-
-	/**
-	 * Create a light controller and set its title.
-	 * @param light
-	 * @param context
-	 * @return
-	 */
-	protected AbstractComponent createLight(final Light light, Context context) {
-
-		LightComponent lightComponent = new LightComponent(context, light);
-		lightComponent.setTitle(light.getTitle());
-		return lightComponent;
-
 	}
 
 	/**

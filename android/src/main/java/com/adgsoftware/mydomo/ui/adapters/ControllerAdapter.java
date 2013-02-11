@@ -91,7 +91,8 @@ public class ControllerAdapter extends BaseAdapter {
 	 */
 	protected AbstractComponent createLight(final Light light, Context context) {
 
-		LightComponent lightComponent = new LightComponent(context, light);
+		LightComponent lightComponent = new LightComponent(context);
+		lightComponent.setLight(light);
 		return lightComponent;
 
 	}

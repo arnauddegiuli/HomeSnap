@@ -13,8 +13,6 @@ import android.widget.TextView;
  * <li>shown/hidden state</li>
  * </ul>
  * Component itself is included in children classes (light, outlet, heating, automation)
- * 
- * @author ssok
  *
  */
 public abstract class AbstractComponent extends LinearLayout {
@@ -29,14 +27,7 @@ public abstract class AbstractComponent extends LinearLayout {
 		super(context);
 		this.setPadding(0, 10, 0, 10);
 		this.setBackgroundColor(Color.DKGRAY);
-		title = new TextView(context);
-	}
-
-	public String getTitle() {
-		if (title != null && title.getText() != null) {
-			return title.getText().toString();
-		}
-		return null;
+		this.title = new TextView(context);
 	}
 	
 	public boolean isVisible() {
@@ -56,15 +47,19 @@ public abstract class AbstractComponent extends LinearLayout {
 	}
 
 	public void setTitle(String text) {
-		this.title.setPadding(5, 0, 5, 0);
-		this.title.setText(text);
-		android.view.ViewGroup.LayoutParams layoutParams = this.title.getLayoutParams();
+		title.setPadding(5, 0, 5, 0);
+		title.setText(text);
+		android.view.ViewGroup.LayoutParams layoutParams = title.getLayoutParams();
 		if (layoutParams != null) {
 			layoutParams.height = LayoutParams.MATCH_PARENT;
 		}
-		this.title.setGravity(Gravity.CENTER_VERTICAL);
-		this.title.setTextSize(20);
-		this.title.setWidth(LABEL_WIDTH);
+		title.setGravity(Gravity.CENTER_VERTICAL);
+		title.setTextSize(20);
+		title.setWidth(LABEL_WIDTH);
+	}
+
+	public String getTitle() {
+		return String.valueOf(title.getText());
 	}
 
 }

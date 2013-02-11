@@ -90,7 +90,9 @@ public class CommandSession implements Runnable {
 
 	public void stop() {
 		try {
-			client.close();
+			if (client != null) {
+				client.close();
+			}
 		} catch (IOException e) {
 			System.out.println("Exception à la fermeture d'une connexion : "
 					+ e);

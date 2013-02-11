@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.adgsoftware.mydomo.engine.Command;
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
@@ -66,7 +63,7 @@ public class OpenWebCommanderImpl implements Commander {
 	 * Asynchrone connection
 	 */
 	public void connect() { 
-		new Thread(new OpenWebConnectThread(this, null, null)).start(); // Make connection in thread to avoid blocking the user!
+		new Thread(new OpenWebConnectThread(this)).start(); // Make connection in thread to avoid blocking the user!
 		
 	}
 	
@@ -106,55 +103,11 @@ public class OpenWebCommanderImpl implements Commander {
 //			e.printStackTrace();
 //		}
 
-		if (!isConnected()) {
-			new Thread(new OpenWebConnectThread(this, command, resultListener)).start(); // Make connection and lunch command in thread to avoid block the user!
-		} else { // FIXME here too lunch the command in a thread! => refactor code here
-			log.finest("Tx: " + command);
-			writeMessage(command);
-			
-			String msg = readMessage();
-			
-			log.finest("Rx: " + msg);
-			
-	    	if(msg == null){
-	    		log.finest("Command failed.");
-	    		if (resultListener != null) {
-	    			resultListener.onCommand(new CommandResult(null, CommandResultStatus.error));
-	    		}
-	    		return;
-	    	}
-	
-	    	if (Command.ACK.equals(msg)){
-	    		log.finest("Command sent.");
-	    		if (resultListener != null) {
-	    			resultListener.onCommand(new CommandResult(Command.ACK, CommandResultStatus.ok));
-	    		}
-	    		return;
-	    	} else if (Command.NACK.equals(msg)){
-	    		log.finest("Command failed.");
-	    		if (resultListener != null) {
-	    			resultListener.onCommand(new CommandResult(Command.NACK, CommandResultStatus.nok));
-	    		}
-	    		return;
-	    	} else { // First return was information. The next should be acknowledgment
-	    		String actionReturn = msg;
-	    		msg = readMessage();
-	    		log.finest("Rx: " + msg);
-	    		if(Command.ACK.equals(msg)){
-	    			log.finest("Command sent.");
-	    			if (resultListener != null) {
-	    				resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.ok));
-	    			}
-	    			return;
-	    		} 
-	
-				log.finest("Command failed.");
-				if (resultListener != null) {
-					resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.error));
-				}
-				return;
-	    	}
-		} 
+		if (!isConnected()) { // If socket close? => init connection.
+			new Thread(new OpenWebConnectThread(this)).start(); // Open connection in thread to avoid blocking user!
+		}
+		// Send asynchronously the command!
+		new Thread(new OpenWebCommandThread(this, command, resultListener)).start(); 
 	}
 
 	void writeMessage(String message) {

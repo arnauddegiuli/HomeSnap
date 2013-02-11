@@ -7,7 +7,6 @@ public interface Commander {
 
 	/**
 	 * Connect to the open server.
-	 * @return true if connected to the open server
 	 */
 	public abstract void connect();
 	
