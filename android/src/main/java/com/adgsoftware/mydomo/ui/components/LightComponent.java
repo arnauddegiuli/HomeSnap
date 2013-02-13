@@ -29,12 +29,14 @@ public class LightComponent extends AbstractComponent {
 	private int commandRunning = 0;
 	private Drawable light_on;
 	private Drawable light_off;
+	private Drawable loading;
 	
 	public LightComponent(Context context) {
 		super(context);
 		lightButton = new Button(context);
 		light_off = context.getResources().getDrawable(R.drawable.light_off);
 		light_on = context.getResources().getDrawable(R.drawable.light_on);
+		loading = context.getResources().getDrawable(R.drawable.load);
 		setOff();
 		this.addView(title);
 		this.addView(lightButton);
@@ -108,40 +110,43 @@ public class LightComponent extends AbstractComponent {
 	}
 	
 	private void startAnimation() {
-		commandRunning++;
-		if (commandRunning == 1) { // Only start one if more thant one command lunch at the same time.
-			// Start animation
-			setTitle("loading...");
-		}
+		lightButton.setCompoundDrawablesWithIntrinsicBounds(loading, null, null, null);
+//		commandRunning++;
+//		if (commandRunning == 1) { // Only start one if more thant one command lunch at the same time.
+//			// Start animation
+//			setTitle("loading...");
+//		}
 	}
 	
 	private void stopAnimation() {
-		if (commandRunning >= 1) {
-			commandRunning--;
-			if (commandRunning == 0) {
-				// Stop animation
-				setTitle("Done!");
-			}
-		}
+//		if (commandRunning >= 1) {
+//			commandRunning--;
+//			if (commandRunning == 0) {
+//				// Stop animation
+//				setTitle("Done!");
+//			}
+//		}
 	}
 	
 	// To send to commander
 	private class SetStatusTask extends AsyncTask<Light, Void, Void> {
 		@Override
 		protected Void doInBackground(Light... light) {
-			Log.d("Light", "Invoking getWhat");
-			LightStatus what = light[0].getWhat();
-			//startAnimation();
-			if (Light.LightStatus.LIGHT_ON.equals(what)) {
-				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
-				light[0].setWhat(Light.LightStatus.LIGHT_OFF);
+			synchronized (light) {
+				Log.d("Light", "Invoking getWhat");
+				LightStatus what = light[0].getWhat();
+				startAnimation();
+				if (Light.LightStatus.LIGHT_ON.equals(what)) {
+					Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
+					light[0].setWhat(Light.LightStatus.LIGHT_OFF);
+					
+				} else {
+					Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
+					light[0].setWhat(Light.LightStatus.LIGHT_ON);
+				}
 				
-			} else {
-				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
-				light[0].setWhat(Light.LightStatus.LIGHT_ON);
+				return null;
 			}
-			
-			return null;
 		}
 	}
 	
