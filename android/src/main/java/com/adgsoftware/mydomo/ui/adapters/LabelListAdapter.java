@@ -47,7 +47,7 @@ public class LabelListAdapter extends BaseAdapter {
 		
 		// Add button
 		ImageView btnPlus = new ImageView(context);
-		btnPlus.setImageResource(android.R.drawable.btn_plus);
+		btnPlus.setImageResource(R.drawable.add);
 		btnPlus.setPadding(0, 10, 0, 5);
 		
 		cacheView.add(btnPlus);

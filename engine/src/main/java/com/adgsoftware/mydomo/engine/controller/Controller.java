@@ -69,18 +69,19 @@ implements Serializable {
 	 * @param newWhat {@link Status} of the device.
 	 */
 	public void setWhat(final T newWhat) {
-		final T oldStatus = what; // FIXME: see if we just lunch the command and monitor change the state, or if we do the two here (send command AND change state...)
-		what = newWhat;
-		executeAction( new CommandListener() {
+		final T oldStatus = what; 
+//		what = newWhat; don't set the what since it will be done with changeWhat by the monitor listener
+		executeAction(newWhat, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
 				if (CommandResultStatus.ok.equals(result.status)) {
 					// Status has been changed
-					notifyWhatChange(what, newWhat);
+//					what = newWhat;
+//					notifyWhatChange(oldStatus, newWhat); call by monitor!
 				} else {
 					// Error
-					what = oldStatus;
-					notifyWhatChangeError(what, newWhat, result);
+//					what = oldStatus;
+					notifyWhatChangeError(oldStatus, newWhat, result);
 				}
 			}
 		});
@@ -101,11 +102,11 @@ implements Serializable {
 	 * Create the open message for action.
 	 * @return open message.
 	 */
-	protected String createActionMessage() {
+	protected String createActionMessage(T newWhat) {
 		if (where == null) {
 			throw new IllegalArgumentException("Controller must contain an address with where");
 		}
-		return MessageFormat.format(Command.COMMAND, new Object[] {getWho(), getWhat().getCode(), where}); 
+		return MessageFormat.format(Command.COMMAND, new Object[] {getWho(), newWhat.getCode(), where}); 
 	}
 	
 	/**
@@ -123,11 +124,11 @@ implements Serializable {
 	 * Execute an action
 	 * @return result of action execution.
 	 */
-	protected void executeAction(CommandListener commandListener) {
-		if (server == null || getWhat() == null) {
+	protected void executeAction(T newWhat, CommandListener commandListener) {
+		if (server == null || newWhat == null) {
 			commandListener.onCommand(new CommandResult("", CommandResultStatus.nok));
 		} else {
-			server.sendCommand(createActionMessage(), commandListener);
+			server.sendCommand(createActionMessage(newWhat), commandListener);
 		}
 
 	}
@@ -155,12 +156,6 @@ implements Serializable {
 				}
 			});
 		}
-		
-		
-		
-		
-		
-		
 	}
 		
 	protected abstract String getWho();

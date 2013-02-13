@@ -85,9 +85,6 @@ implements Monitor {
 		String what = Command.getWhatFromCommand(message);
 		if (what != null) {
 			// Manage what command
-			
-			// TODO raise the event commandListenerList
-			
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWhere().equals(where)) {
 					changeWhat(controller, what);
@@ -95,7 +92,6 @@ implements Monitor {
 			}
 		} else {
 			// Manage dimension command
-			// TODO raise the event commandListenerList
 			List<DimensionValue> dimensionList = Command.getDimensionListFromCommand(message);
 			String code=null; // TODO get code from commande
 			for (Controller<? extends Status> controller : controllerList) {

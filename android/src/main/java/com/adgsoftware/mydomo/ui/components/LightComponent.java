@@ -1,13 +1,15 @@
 package com.adgsoftware.mydomo.ui.components;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ToggleButton;
 
+import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
@@ -23,11 +25,17 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  */
 public class LightComponent extends AbstractComponent {
 	
-	private ToggleButton lightButton;
+	private Button lightButton;
+	private int commandRunning = 0;
+	private Drawable light_on;
+	private Drawable light_off;
 	
 	public LightComponent(Context context) {
 		super(context);
-		lightButton = new ToggleButton(context);
+		lightButton = new Button(context);
+		light_off = context.getResources().getDrawable(R.drawable.light_off);
+		light_on = context.getResources().getDrawable(R.drawable.light_on);
+		setOff();
 		this.addView(title);
 		this.addView(lightButton);
 		this.setOrientation(LinearLayout.HORIZONTAL);
@@ -40,14 +48,11 @@ public class LightComponent extends AbstractComponent {
 	public void setLight(final Light light) {
 		
 		lightButton.setId(Integer.valueOf(light.getWho()));
-		lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(light.getWhat()));
-		
 		lightButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				lightButton.setText("...");
-				lightButton.setChecked(false); // To avoid to the default mechanism run => button always uncheck... will be check only if action occurs.
 				new SetStatusTask().execute(light);
 			}
 		});
@@ -62,8 +67,13 @@ public class LightComponent extends AbstractComponent {
 				lightButton.post(new Runnable() {
 		            public void run() {
 		            	Log.d("Light", "changeWhat: " + newStatus);
-		    			lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(newStatus));
-		    			lightButton.setText(Light.LightStatus.LIGHT_ON.equals(newStatus) ? "ON" : "OFF");
+		    			if (Light.LightStatus.LIGHT_ON.equals(newStatus)) {
+		    				setOn();
+		    			} else {
+							setOff();
+						}
+		    			
+		    			//stopAnimation();
 		            }
 		        });
 			}
@@ -75,14 +85,44 @@ public class LightComponent extends AbstractComponent {
 				lightButton.post(new Runnable() {
 		            public void run() {
 		            	Log.d("Light", "changeWhat: " + oldStatus);
-		    			lightButton.setChecked(Light.LightStatus.LIGHT_ON.equals(oldStatus));
-		    			lightButton.setText(Light.LightStatus.LIGHT_ON.equals(oldStatus) ? "ON" : "OFF");
+		            	if (Light.LightStatus.LIGHT_ON.equals(oldStatus)) {
+							setOn();
+						} else {
+							setOff();
+						}
+		            	//stopAnimation();
 		            }
 		        });
-				
 			}
-			
 		});
+	}
+
+	private synchronized void setOff() {
+		lightButton.setCompoundDrawablesWithIntrinsicBounds(light_off, null, null, null);
+		lightButton.setText("OFF");
+	}
+	
+	private synchronized void setOn() {
+		lightButton.setCompoundDrawablesWithIntrinsicBounds(light_on, null, null, null);
+		lightButton.setText("ON");
+	}
+	
+	private void startAnimation() {
+		commandRunning++;
+		if (commandRunning == 1) { // Only start one if more thant one command lunch at the same time.
+			// Start animation
+			setTitle("loading...");
+		}
+	}
+	
+	private void stopAnimation() {
+		if (commandRunning >= 1) {
+			commandRunning--;
+			if (commandRunning == 0) {
+				// Stop animation
+				setTitle("Done!");
+			}
+		}
 	}
 	
 	// To send to commander
@@ -91,20 +131,23 @@ public class LightComponent extends AbstractComponent {
 		protected Void doInBackground(Light... light) {
 			Log.d("Light", "Invoking getWhat");
 			LightStatus what = light[0].getWhat();
+			//startAnimation();
 			if (Light.LightStatus.LIGHT_ON.equals(what)) {
 				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
 				light[0].setWhat(Light.LightStatus.LIGHT_OFF);
+				
 			} else {
-				light[0].setWhat(Light.LightStatus.LIGHT_ON);
 				Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
+				light[0].setWhat(Light.LightStatus.LIGHT_ON);
 			}
+			
 			return null;
 		}
 	}
 	
-	public ToggleButton getComponent() {
-		return lightButton;
-	}
+//	public Button getComponent() {
+//		return lightButton;
+//	}
 	
 	public void setTitle(String text) {
 		super.setTitle(text);
