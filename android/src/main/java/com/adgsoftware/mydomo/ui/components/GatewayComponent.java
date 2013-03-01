@@ -1,16 +1,16 @@
 package com.adgsoftware.mydomo.ui.components;
 
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.adgsoftware.mydomo.R;
 import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 
@@ -24,35 +24,43 @@ import com.adgsoftware.mydomo.engine.controller.gateway.Version;
  */
 public class GatewayComponent extends AbstractComponent {
 	
-private TextView gatewayTxt;
+	private TextView gatewayTxt;
+	private Drawable gateway;
+	private Button b = new Button(getContext());
 	
-	public GatewayComponent(final Gateway gateway, final Activity activity) {
+	public GatewayComponent(Context context) {
 		
-		super(activity.getApplicationContext());
-		Context context = activity.getApplicationContext();
+		super(context);
 		gatewayTxt = new TextView(context);
+		gateway = context.getResources().getDrawable(R.drawable.gateway);
+		b.setCompoundDrawablesWithIntrinsicBounds(gateway, null, null, null);
 		this.addView(title);
 		this.addView(gatewayTxt);
 		this.setOrientation(LinearLayout.HORIZONTAL);
+
+
+	}
+	
+	public void setGateway(final Gateway gateway) {
 		gatewayTxt.setId(1);
 		gatewayTxt.setText(gateway.getDeviceType());
 
-		final Button b = new Button(context);
+		
 		b.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 
-				Date date = gateway.getDateTime();
+//				Date date = gateway.getDateTime();
 				Version version = gateway.getDistributionVersion();
 				Version firmwareVersion = gateway.getFirmwareVersion();
 				byte[] ipAddress = gateway.getIpAddress();
 				Version kernelVersion = gateway.getKernelVersion();
 				byte[] netMask = gateway.getNetMask();
-				Date uptime = gateway.getUpTime();
+//				Date uptime = gateway.getUpTime();
 				
 				// 1. Instantiate an AlertDialog.Builder with its constructor
-				android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
+				android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder((Activity) getContext());
 
 				// 2. Chain together various setter methods to set the dialog characteristics
 				builder.setMessage("Distribution Version:" +  version.getBuild() + "." + version.getRelease() + "." + version.getVersion()
@@ -77,7 +85,6 @@ private TextView gatewayTxt;
 		});
 
 		this.addView(b);
-
 	}
 		
 	public void setTitle(String text) {

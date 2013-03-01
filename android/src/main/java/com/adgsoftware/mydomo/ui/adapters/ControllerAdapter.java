@@ -3,7 +3,6 @@ package com.adgsoftware.mydomo.ui.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +88,7 @@ public class ControllerAdapter extends BaseAdapter {
 	 * @param context
 	 * @return
 	 */
-	protected AbstractComponent createLight(final Light light, Context context) {
+	protected AbstractComponent createLight(Light light, Context context) {
 
 		LightComponent lightComponent = new LightComponent(context);
 		lightComponent.setLight(light);
@@ -150,9 +149,10 @@ public class ControllerAdapter extends BaseAdapter {
 	 * @param context
 	 * @return
 	 */
-	protected GatewayComponent createGateway(final Gateway gateway, Context context) {
+	protected GatewayComponent createGateway(Gateway gateway, Context context) {
 
-		GatewayComponent gatewayComponent = new GatewayComponent(gateway, (Activity) context);
+		GatewayComponent gatewayComponent = new GatewayComponent(context);
+		gatewayComponent.setGateway(gateway);
 		return gatewayComponent;
 
 	}

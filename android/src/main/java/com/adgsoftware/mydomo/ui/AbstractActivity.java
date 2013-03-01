@@ -15,7 +15,6 @@ import android.util.Log;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
-import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
 import com.adgsoftware.mydomo.engine.controller.heating.Heating;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
 import com.adgsoftware.mydomo.engine.house.Group;
@@ -25,9 +24,7 @@ import com.adgsoftware.mydomo.ui.activities.EditControllerActivity;
 import com.adgsoftware.mydomo.ui.activities.SelectLabelsActivity;
 import com.adgsoftware.mydomo.ui.activities.SettingsActivity;
 import com.adgsoftware.mydomo.ui.adapters.ControllerAdapter;
-import com.adgsoftware.mydomo.ui.components.AbstractComponent;
 import com.adgsoftware.mydomo.ui.components.AutomationComponent;
-import com.adgsoftware.mydomo.ui.components.GatewayComponent;
 import com.adgsoftware.mydomo.ui.components.HeatingComponent;
 import com.adgsoftware.mydomo.ui.components.OutletComponent;
 import com.adgsoftware.mydomo.ui.components.RoomComponent;
@@ -106,20 +103,6 @@ public abstract class AbstractActivity extends Activity {
 		
 		return roomComponent;
 	}
-
-	/**
-	 * Create a gateway controller and set its title.
-	 * @param gateway
-	 * @param context
-	 * @return
-	 */
-	protected AbstractComponent createGateway(final Gateway gateway) {
-
-		GatewayComponent gatewayComponent = new GatewayComponent(gateway, this);
-		gatewayComponent.setTitle(gateway.getTitle());
-		return gatewayComponent;
-
-	}	
 	
 	/**
 	 * Create an automation controller and set its title.

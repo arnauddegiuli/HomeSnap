@@ -30,15 +30,15 @@ public class CommandSessionClient {
 		
 		g.setWhere(Constants.Gateway.GATEWAY_ADDRESS);
 		g.getFirmwareVersion();
-		g.getDate();
-		g.getDateTime(); // TODO pb with hours
+//		g.getDate();
+//		g.getDateTime(); // TODO pb with hours
 		g.getDeviceType();
 		g.getDistributionVersion();
 		g.getIpAddress();
 		g.getKernelVersion();
 		g.getNetMask();
-		g.getTime();
-		g.getUpTime();
+//		g.getTime();
+//		g.getUpTime();
 		
 		
 		l.addControllerChangeListener(new CommandSessionClient.Listener());

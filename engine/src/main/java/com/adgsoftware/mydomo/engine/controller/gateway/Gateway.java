@@ -64,16 +64,51 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	 */
 	public void setWhere(String newValue) {
 		super.setWhere(""); // Gateway has no address since we are directly connected to it!
-		getDimensionStatus(Time.class, new DimensionStatusListener<Time>() {
+		// IpAddress
+		getDimensionStatus(IpAddress.class, new DimensionStatusListener<IpAddress>() {
+
 			@Override
-			public void onDimensionStatus(Time status, CommandResult result) {
+			public void onDimensionStatus(IpAddress status, CommandResult result) {
 				changeDimensionStatus(status);
 			}
 		});
-		getDimensionStatus(Date.class, new DimensionStatusListener<Date>() {
+		// NetMask
+		getDimensionStatus(NetMask.class, new DimensionStatusListener<NetMask>() {
 
 			@Override
-			public void onDimensionStatus(Date status, CommandResult result) {
+			public void onDimensionStatus(NetMask status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
+		// Model
+		getDimensionStatus(Model.class, new DimensionStatusListener<Model>() {
+
+			@Override
+			public void onDimensionStatus(Model status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
+		// Version
+		getDimensionStatus(FirmwareVersion.class, new DimensionStatusListener<FirmwareVersion>() {
+
+			@Override
+			public void onDimensionStatus(FirmwareVersion status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
+		// KernelVersion
+		getDimensionStatus(KernelVersion.class, new DimensionStatusListener<KernelVersion>() {
+
+			@Override
+			public void onDimensionStatus(KernelVersion status, CommandResult result) {
+				changeDimensionStatus(status);
+			}
+		});
+		// DistributionVersion
+		getDimensionStatus(DistributionVersion.class, new DimensionStatusListener<DistributionVersion>() {
+
+			@Override
+			public void onDimensionStatus(DistributionVersion status, CommandResult result) {
 				changeDimensionStatus(status);
 			}
 		});
@@ -106,12 +141,8 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 		return null;
 	}
 	
-	public java.util.Date getTime() {
-		Time t = (Time)getDimensionStatusFromCache(Gateway.GatewayDimension.TIME.getCode());
-		if (t == null) {
-			return null;
-		}
-		return t.getTime();
+	public void getTime(DimensionStatusListener<Time> listener) {
+		getDimensionStatus(Time.class, listener);
 	}
 	
 	public void setTime(java.util.Date date) {
@@ -120,12 +151,8 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 		setDimensionStatus(time);
 	}
 	
-	public java.util.Date getDate() {
-		Date d = (Date)getDimensionStatusFromCache(Gateway.GatewayDimension.DATE.getCode());
-		if (d == null) {
-			return null;
-		}
-		return d.getDate();
+	public void getDate(DimensionStatusListener<Date> listener) {
+		getDimensionStatus(Date.class, listener);
 	}
 	
 	public void setDate(java.util.Date newDate) {
@@ -135,47 +162,42 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	}
 	
 	public byte[] getIpAddress() {
-//		IpAddress ip = getDimensionStatus(IpAddress.class);
-//		if (ip == null)
+		IpAddress ip = (IpAddress)getDimensionStatusFromCache(Gateway.GatewayDimension.IP_ADDRESS.getCode());
+		if (ip == null) {
 			return null;
-//		return ip.getIpAddress();
+		}
+		return ip.getIpAddress();
+			
 	}
 	
 	public byte[] getNetMask() {
-//		NetMask netmask = getDimensionStatus(NetMask.class);
-//		if (netmask == null)
+		NetMask netmask = (NetMask)getDimensionStatusFromCache(Gateway.GatewayDimension.NETMASK.getCode());
+		if (netmask == null)
 			return null;
-//		return netmask.getNetMask();
+		return netmask.getNetMask();
 	}
 	
 	public String getDeviceType() {
-//		Model model = getDimensionStatus(Model.class);
-//		if (model == null)
+		Model model = (Model)getDimensionStatusFromCache(Gateway.GatewayDimension.MODEL.getCode());
+		if (model == null)
 			return null;
-//		return model.getModel();
+		return model.getModel();
 	}
 	
 	public Version getFirmwareVersion() {
-//		FirmwareVersion v = getDimensionStatus(FirmwareVersion.class);
-//		if (v == null) {
+		FirmwareVersion v = (FirmwareVersion)getDimensionStatusFromCache(Gateway.GatewayDimension.FIRMWARE_VERSION.getCode());
+		if (v == null) {
 			return null;
-//		}
-//		return v.getVersion();
+		}
+		return v.getVersion();
 	}
 	
-	public java.util.Date getUpTime() {
-//		UpTime upTime = getDimensionStatus(UpTime.class);
-//		if (upTime == null)
-			return null;
-		
-//		return upTime.getTime();
+	public void getUpTime(DimensionStatusListener<UpTime> listener) {
+		getDimensionStatus(UpTime.class, listener);
 	}
 	
-	public java.util.Date getDateTime() {
-//		DateTime dt = getDimensionStatus(DateTime.class);
-//		if (dt == null)
-			return null;
-//		return dt.getDate();
+	public void getDateTime(DimensionStatusListener<DateTime> listener) {
+		getDimensionStatus(DateTime.class, listener);
 	}
 	
 	public void setDateTime(java.util.Date date) {
@@ -185,17 +207,17 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	}
 	
 	public Version getKernelVersion() {
-//		KernelVersion v = getDimensionStatus(KernelVersion.class);
-//		if (v == null)
+		KernelVersion v = (KernelVersion)getDimensionStatusFromCache(Gateway.GatewayDimension.KERNEL_VERSION.getCode());
+		if (v == null)
 			return null;
-//		return v.getVersion();
+		return v.getVersion();
 	}
 	
 	public Version getDistributionVersion() {
-//		DistributionVersion v = getDimensionStatus(DistributionVersion.class);
-//		if (v == null)
+		DistributionVersion v = (DistributionVersion)getDimensionStatusFromCache(Gateway.GatewayDimension.DISTRIBUTION_VERSION.getCode());
+		if (v == null)
 			return null;
-//		return v.getVersion();
+		return v.getVersion();
 	}
 	
 }
