@@ -1,5 +1,6 @@
 package com.adgsoftware.mydomo.ui.components;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -26,10 +27,10 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 public class LightComponent extends AbstractComponent {
 	
 	private Button lightButton;
-	private int commandRunning = 0;
 	private Drawable light_on;
 	private Drawable light_off;
 	private Drawable loading;
+	
 	
 	public LightComponent(Context context) {
 		super(context);
@@ -37,7 +38,6 @@ public class LightComponent extends AbstractComponent {
 		light_off = context.getResources().getDrawable(R.drawable.light_off);
 		light_on = context.getResources().getDrawable(R.drawable.light_on);
 		loading = context.getResources().getDrawable(R.drawable.load);
-		setOff();
 		this.addView(title);
 		this.addView(lightButton);
 		this.setOrientation(LinearLayout.HORIZONTAL);
@@ -50,12 +50,17 @@ public class LightComponent extends AbstractComponent {
 	public void setLight(final Light light) {
 		
 		lightButton.setId(Integer.valueOf(light.getWho()));
+		if (LightStatus.LIGHT_ON == light.getWhat()) {
+			setOn();
+		} else {
+			setOff();
+		}
 		lightButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				lightButton.setText("...");
 				new SetStatusTask().execute(light);
+				
 			}
 		});
 
@@ -74,8 +79,6 @@ public class LightComponent extends AbstractComponent {
 		    			} else {
 							setOff();
 						}
-		    			
-		    			//stopAnimation();
 		            }
 		        });
 			}
@@ -92,7 +95,6 @@ public class LightComponent extends AbstractComponent {
 						} else {
 							setOff();
 						}
-		            	//stopAnimation();
 		            }
 		        });
 			}
@@ -101,58 +103,42 @@ public class LightComponent extends AbstractComponent {
 
 	private synchronized void setOff() {
 		lightButton.setCompoundDrawablesWithIntrinsicBounds(light_off, null, null, null);
-		lightButton.setText("OFF");
 	}
 	
 	private synchronized void setOn() {
 		lightButton.setCompoundDrawablesWithIntrinsicBounds(light_on, null, null, null);
-		lightButton.setText("ON");
-	}
-	
-	private void startAnimation() {
-		lightButton.setCompoundDrawablesWithIntrinsicBounds(loading, null, null, null);
-//		commandRunning++;
-//		if (commandRunning == 1) { // Only start one if more thant one command lunch at the same time.
-//			// Start animation
-//			setTitle("loading...");
-//		}
-	}
-	
-	private void stopAnimation() {
-//		if (commandRunning >= 1) {
-//			commandRunning--;
-//			if (commandRunning == 0) {
-//				// Stop animation
-//				setTitle("Done!");
-//			}
-//		}
 	}
 	
 	// To send to commander
 	private class SetStatusTask extends AsyncTask<Light, Void, Void> {
 		@Override
-		protected Void doInBackground(Light... light) {
-			synchronized (light) {
-				Log.d("Light", "Invoking getWhat");
-				LightStatus what = light[0].getWhat();
-				startAnimation();
-				if (Light.LightStatus.LIGHT_ON.equals(what)) {
-					Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
-					light[0].setWhat(Light.LightStatus.LIGHT_OFF);
-					
-				} else {
-					Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
-					light[0].setWhat(Light.LightStatus.LIGHT_ON);
-				}
+		protected Void doInBackground(final Light... light) {
+
+			((Activity) getContext()).runOnUiThread(new Runnable() {
 				
-				return null;
+				@Override
+				public void run() {
+					synchronized (light) {
+						
+						Log.d("Light", "Invoking getWhat");
+						LightStatus what = light[0].getWhat();
+						lightButton.setCompoundDrawablesWithIntrinsicBounds(loading, null, null, null);
+						if (Light.LightStatus.LIGHT_ON.equals(what)) {
+							Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_OFF);
+							light[0].setWhat(Light.LightStatus.LIGHT_OFF);
+							
+						} else {
+							Log.d("Light", "setWhat: " + Light.LightStatus.LIGHT_ON);
+							light[0].setWhat(Light.LightStatus.LIGHT_ON);
+						}
+					}
+				}
 			}
+
+			);
+			return null;
 		}
 	}
-	
-//	public Button getComponent() {
-//		return lightButton;
-//	}
 	
 	public void setTitle(String text) {
 		super.setTitle(text);
