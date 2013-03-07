@@ -63,11 +63,39 @@ public class GatewayComponent extends AbstractComponent {
 				android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder((Activity) getContext());
 
 				// 2. Chain together various setter methods to set the dialog characteristics
-				builder.setMessage("Distribution Version:" +  version.getBuild() + "." + version.getRelease() + "." + version.getVersion()
-						+ "\nFirmWare Version:" +  firmwareVersion.getBuild() + "." + firmwareVersion.getRelease() + "." + firmwareVersion.getVersion()
-						+ "\nIP address:" + (ipAddress[0] < 0 ? ipAddress[0] & 0xff : ipAddress[0]) + "." + (ipAddress[1] < 0 ? ipAddress[1] & 0xff : ipAddress[1]) + "." + (ipAddress[2] < 0 ? ipAddress[2] & 0xff : ipAddress[2]) + "." + (ipAddress[3] < 0 ? ipAddress[3] & 0xff : ipAddress[3])
-						+ "\nNetMask:" + (netMask[0] < 0 ? netMask[0] & 0xff : netMask[0]) + "." + (netMask[1] < 0 ? netMask[1] & 0xff : netMask[1]) + "." + (netMask[2] < 0 ? netMask[2] & 0xff : netMask[2]) + "." + (netMask[3] < 0 ? netMask[3] & 0xff : netMask[3])
-						+ "\nKernel Version:" +  kernelVersion.getBuild() + "." + kernelVersion.getRelease() + "." + kernelVersion.getVersion()
+				StringBuffer sb = new StringBuffer("Distribution Version:");
+				if (version == null) {
+					sb.append(" Not available");
+				} else {
+					sb.append(version.getBuild()).append(".").append(version.getRelease()).append(".").append(version.getVersion());
+				}
+				
+				if (firmwareVersion == null) {
+					sb.append("\nFirmWare Version: Not available");
+				} else {
+					sb.append("\nFirmWare Version:").append(firmwareVersion.getBuild()).append(".").append(firmwareVersion.getRelease()).append(".").append(firmwareVersion.getVersion());
+				}
+				
+				if (ipAddress == null) {
+					sb.append("\nIP address: Not available");
+				} else {
+					sb.append("\nIP address:").append((ipAddress[0] < 0 ? ipAddress[0] & 0xff : ipAddress[0])).append(".").append((ipAddress[1] < 0 ? ipAddress[1] & 0xff : ipAddress[1])).append(".").append((ipAddress[2] < 0 ? ipAddress[2] & 0xff : ipAddress[2])).append(".").append((ipAddress[3] < 0 ? ipAddress[3] & 0xff : ipAddress[3]));
+				}
+					
+				if (netMask == null) {
+					sb.append("\nNetMask: Not available");
+				} else {
+					sb.append("\nNetMask:").append((netMask[0] < 0 ? netMask[0] & 0xff : netMask[0])).append(".").append((netMask[1] < 0 ? netMask[1] & 0xff : netMask[1])).append(".").append((netMask[2] < 0 ? netMask[2] & 0xff : netMask[2])).append(".").append((netMask[3] < 0 ? netMask[3] & 0xff : netMask[3]));
+				}
+				
+				if (kernelVersion == null) {
+					sb.append("\nKernel Version: Not available");
+				} else {
+					sb.append("\nKernel Version:").append(kernelVersion.getBuild()).append(".").append(kernelVersion.getRelease()).append(".").append(kernelVersion.getVersion());
+				}
+				
+				
+				builder.setMessage(sb.toString()
 						)
 				       .setTitle("Gateway information");
 
