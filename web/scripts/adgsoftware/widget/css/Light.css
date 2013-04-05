@@ -1,0 +1,35 @@
+.lightOffIcon {
+  background-image: url('../images/light_off.png');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+}
+
+.lightOnIcon {
+  background-image: url('../images/light_on.png');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+}
+
+.light {
+ position: relative;
+ border:1px;
+ border-color: black;
+ border-style:dashed;
+ height: 47px;
+ width: 360px;
+ background-color: #EEEEEE;
+}
+ 
+.light .lightButtonPanel {
+	position: absolute;
+}
+
+.light .sliderPanel {
+	position: absolute;
+	left: 60px;
+	top: 15px
+}
