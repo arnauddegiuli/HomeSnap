@@ -33,7 +33,9 @@ public class Time extends DimensionStatusImpl {
 		c.set(Calendar.MINUTE, getIntValue(MINUTES_POS));
 		c.set(Calendar.SECOND, getIntValue(SECONDS_POS));
 		c.setTimeZone(getTimeZoneValue(TIMEZONE_POS));
-		// TODO set day to 0
+		c.set(Calendar.DAY_OF_MONTH, 0);
+		c.set(Calendar.MONTH, 0);
+		c.set(Calendar.YEAR, 0);
 		return c.getTime();
 	}
 	

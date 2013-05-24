@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MyDomoServerGatewayModule
+Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodule.heating
+Bundle-Version: 0.1
+Bundle-Activator: com.adgsoftware.mydomo.server.controllermodules.heating.HeatingModuleActivator
+Import-Package: com.adgsoftware.mydomo.engine,
+ com.adgsoftware.mydomo.engine.controller,
+ com.adgsoftware.mydomo.engine.controller.heating,
+ com.adgsoftware.mydomo.engine.controller.heating.dimension,
+ com.adgsoftware.mydomo.server.controllermodules,
+ com.adgsoftware.mydomo.server,
+ org.osgi.framework
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.adgsoftware.mydomo.server.controllermodules.heating

@@ -36,6 +36,10 @@ public abstract class DimensionStatusImpl implements DimensionStatus {
 		return what;
 	}
 	
+	protected String getStringValue(int pos) {
+		return dimensionList.get(pos).getValue();
+	}
+	
 	protected int getIntValue(int pos) {
 		return Integer.parseInt(dimensionList.get(pos).getValue());
 	}
@@ -93,5 +97,26 @@ public abstract class DimensionStatusImpl implements DimensionStatus {
 			}
 		}
 		dimensionList.get(pos).setValue(val);
+	}
+	
+	/**
+	 * Format temperature with My Home SCS system
+	 * @param value temperature in degree (example: 27,5°C = 27.5)
+	 * @param pos
+	 * @param padding
+	 */
+	protected void setTemperatureValue(Double value, int pos) {
+		// TODO Check the temperature (more than 5 and less than 40)
+		int padding = 4;
+		String val = Integer.toString(new Double (value * 10.0).intValue());
+		for(int i = val.length();i<padding;i++) {
+			val = "0" + val;
+		}
+		dimensionList.get(pos).setValue(val);
+	}
+	
+	protected Double getTemperatureValue(int pos) {
+		double val = Double.parseDouble(dimensionList.get(pos).getValue());
+		return new Double(val/10);
 	}
 }

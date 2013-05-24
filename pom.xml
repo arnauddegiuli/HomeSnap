@@ -12,6 +12,7 @@
 	<modules>
 		<module>engine</module>
 		<module>server</module>
+		<module>web</module>
 	</modules>
 
 	<dependencyManagement>

@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
+package com.adgsoftware.mydomo.engine.controller.heating.dimension;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -6,23 +6,22 @@ import java.util.GregorianCalendar;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusImpl;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
+import com.adgsoftware.mydomo.engine.controller.heating.HeatingCentral;
 
-public class Date extends DimensionStatusImpl {
-	
+public class EndDateHoliday extends DimensionStatusImpl {
 	private int DAYOFWEEK_POS = 0;
 	private int DAY_POS = 1;
 	private int MONTH_POS = 2;
 	private int YEAR_POS = 3;
 	
-	public Date() {
+	public EndDateHoliday() {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl(), // Day of week
 				new DimensionValueImpl(), // Day
 				new DimensionValueImpl(), // Month
 				new DimensionValueImpl()  // Year
 				},
-				Gateway.GatewayDimension.DATE.getCode()
+				HeatingCentral.CentralHeatingDimension.END_DATE_HOLIDAY.getCode()
 		);
 	}
 	
@@ -35,7 +34,6 @@ public class Date extends DimensionStatusImpl {
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.MILLISECOND, 0);
-
 		return c.getTime();
 	}
 	

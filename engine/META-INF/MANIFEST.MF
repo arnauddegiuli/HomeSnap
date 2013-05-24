@@ -11,6 +11,7 @@ Export-Package: com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engi
  com.adgsoftware.mydomo.engine.controller.gateway,
  com.adgsoftware.mydomo.engine.controller.gateway.dimension,
  com.adgsoftware.mydomo.engine.controller.heating,
+ com.adgsoftware.mydomo.engine.controller.heating.dimension,
  com.adgsoftware.mydomo.engine.controller.light;uses:="com.adgsoftware.mydomo.engine.controller",
  com.adgsoftware.mydomo.engine.controller.outlet,
  com.adgsoftware.mydomo.engine.house,
