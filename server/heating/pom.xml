@@ -26,7 +26,7 @@
 	                        <Bundle-Description>${project.description}</Bundle-Description>
 	                        <Bundle-Vendor>ADG Software</Bundle-Vendor>
 	                        <Bundle-Version>${project.version}</Bundle-Version>
-	                        <Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.heating.GatewayModuleActivator</Bundle-Activator>
+	                        <Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.heating.HeatingModuleActivator</Bundle-Activator>
 	                        <Import-Package>com.adgsoftware.mydomo.engine.controller, com.adgsoftware.mydomo.server.controllermodules, com.adgsoftware.mydomo.engine, com.adgsoftware.mydomo.engine.controller.heating, com.adgsoftware.mydomo.engine.controller.heating.dimension,  com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
 	                        <Export-Package></Export-Package>
 	                    </instructions>

@@ -17,7 +17,7 @@ import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
-import com.adgsoftware.mydomo.engine.controller.heating.Heating;
+import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
 import com.adgsoftware.mydomo.ui.components.AbstractComponent;
@@ -59,8 +59,8 @@ public class ControllerAdapter extends BaseAdapter {
 				controllerView.addView(createAutomation((Automation) controller, context));
 			} else if (controller instanceof Outlet) {
 				controllerView.addView(createOutlet((Outlet) controller, context));
-			} else if (controller instanceof Heating) {
-				controllerView.addView(createHeating((Heating) controller, context));
+			} else if (controller instanceof HeatingZone) {
+				controllerView.addView(createHeating((HeatingZone) controller, context));
 			} else if (controller instanceof Gateway) {
 				controllerView.addView(createGateway((Gateway) controller, context));
 			}
@@ -119,7 +119,7 @@ public class ControllerAdapter extends BaseAdapter {
 	 * @param context
 	 * @return
 	 */
-	protected HeatingComponent createHeating(final Heating heating,
+	protected HeatingComponent createHeating(final HeatingZone heating,
 			Context context) {
 
 		HeatingComponent heatingComponent = new HeatingComponent(context,

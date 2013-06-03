@@ -29,6 +29,8 @@
     
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
+    <string name="logo">Logo</string>
+    <string name="connected_status">Connected status</string>
     
    
 </resources>

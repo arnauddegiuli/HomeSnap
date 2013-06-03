@@ -47,7 +47,7 @@ public class EditControllerActivity extends AbstractActivity {
 		Light(com.adgsoftware.mydomo.engine.controller.light.Light.class),
 		Gateway(com.adgsoftware.mydomo.engine.controller.gateway.Gateway.class),
 		Automation(com.adgsoftware.mydomo.engine.controller.automation.Automation.class),
-		Heating(com.adgsoftware.mydomo.engine.controller.heating.Heating.class),
+		Heating(com.adgsoftware.mydomo.engine.controller.heating.HeatingZone.class),
 		Outlet(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.class);
 
 		private Class<? extends Controller<? extends Status>> clazz;

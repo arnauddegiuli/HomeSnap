@@ -15,7 +15,7 @@ import android.util.Log;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
-import com.adgsoftware.mydomo.engine.controller.heating.Heating;
+import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
@@ -124,7 +124,7 @@ public abstract class AbstractActivity extends Activity {
 	 * @param context
 	 * @return
 	 */
-	protected HeatingComponent createHeating(final Heating heating, Context context) {
+	protected HeatingComponent createHeating(final HeatingZone heating, Context context) {
 
 		HeatingComponent heatingComponent = new HeatingComponent(context, heating);
 		heatingComponent.setTitle(heating.getTitle());

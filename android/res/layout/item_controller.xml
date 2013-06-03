@@ -6,7 +6,7 @@
     android:baselineAligned="false"
     >
  
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<LinearLayout
 	    android:orientation="vertical"
 	    android:layout_width="0dip"
 	    android:layout_height="wrap_content"
@@ -35,6 +35,7 @@
 	   	android:layout_gravity="center_vertical"
 	   	android:padding="1dp"
 	   	android:layout_weight="0.5"
+	   	android:orientation="horizontal"
 		/>
  
 </LinearLayout>

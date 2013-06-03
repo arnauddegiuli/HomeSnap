@@ -11,7 +11,10 @@
     <string name="title_settings">Réglages</string>
     <string name="title_labels">Liste des labels</string>
     <string name="title_controllers">Liste des contrôleurs</string>
-    
+    <string name="title_controllers_without_label">Controllers without label</string>
+    <string name="title_edit_label">Edit a label</string>
+    <string name="title_edit_controller">Edit a controller</string>
+        
     <string name="label_ip">IP du serveur</string>
     <string name="label_where">Adresse (IP du contrôleur)</string>
     <string name="label_title">Titre (nom du contrôleur)</string>
@@ -19,11 +22,15 @@
     <string name="label_label_count_empty">Aucun label</string>
     <string name="label_controller_type">Type du contrôleur</string>
     <string name="label_choose_controller_type">Choisissez le type du contrôleur</string>
+
+    <string name="message_no_controller_without_label">There are no controllers without label.\nYou can create them in the settings screen.</string>
+    
     
     <string name="ip_separator">:</string>
     
     <string name="button_save">Sauver</string>
     <string name="button_cancel">Annuler</string>
-    
+    <string name="logo">Logo</string>
+    <string name="connected_status">Connecté?</string>
    
 </resources>

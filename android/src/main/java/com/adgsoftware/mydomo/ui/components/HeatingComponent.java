@@ -9,14 +9,13 @@ import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.heating.Heating;
-import com.adgsoftware.mydomo.engine.controller.heating.Heating.HeatingStatus;
+import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
 
 public class HeatingComponent extends AbstractComponent {
 	
 	private SeekBar seekBar;
 
-	public HeatingComponent(Context context, final Heating heating) {
+	public HeatingComponent(Context context, final HeatingZone heating) {
 		super(context);
 		seekBar = new SeekBar(context);
 		this.addView(title);
@@ -39,7 +38,7 @@ public class HeatingComponent extends AbstractComponent {
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				heating.setWhat(HeatingStatus.HEATING_CONDITIONING_MANUAL_ADJUSTMENT_MODE); 
+//				heating.setWhat(CentralHeatingDimension.HeatingZoneDimension.HEATING_CONDITIONING_MANUAL_ADJUSTMENT_MODE); 
 				// TODO how to pass the progress?
 			}
 		};

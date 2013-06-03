@@ -11,10 +11,10 @@
 		android:layout_height="wrap_content"
 	   	android:layout_gravity="center_vertical"
 	   	android:padding="10dp"
-	   	android:contentDescription="Logo"
+	   	android:contentDescription="@string/logo"
 		/>
  
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<LinearLayout
 	    android:orientation="vertical"
 	    android:layout_width="0dp"
 	    android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
 	    <TextView android:id="@+id/titre"
 	         android:layout_width="wrap_content"
 	         android:layout_height="fill_parent"
-	         android:textSize="16dp"
+	         android:textSize="16sp"
 	         android:textStyle="bold"
 	         />
  
