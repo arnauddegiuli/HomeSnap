@@ -30,7 +30,7 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	}
 	
 	public enum HeatingZoneDimension {
-		MEASURE_TEMPERATURE("0"),
+		MEASURE_TEMPERATURE("0"), 
 		PROBE_STATUS("12"),
 		LOCAL_OFFSET("13"),
 		SET_TEMPERATURE("14"),
@@ -55,6 +55,8 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 		}
 	}
 	
+	private Object lock = new Object();
+	
 	@Override
 	public String getWho() {
 		return Command.WHO_HEATING_ADJUSTMENT;
@@ -74,27 +76,31 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	@Override
 	public void setWhere(String newValue) {
 		super.setWhere(newValue);
-		
-		// SetTemperature
-		getDimensionStatus(DesiredTemperature.class, new DimensionStatusListener<DesiredTemperature>() {
-
-			@Override
-			public void onDimensionStatus(DesiredTemperature status, CommandResult result) {
-				changeDimensionStatus(status);
-			}
-		});
 	}
 
-	
 	public Double getDesiredTemperature(HeatingModeEnum mode) {
 		DesiredTemperature dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 		if (dt == null) {
-			return null;
+			getDimensionStatus(DesiredTemperature.class, new DimensionStatusListener<DesiredTemperature>() {
+				@Override
+				public void onDimensionStatus(DesiredTemperature status, CommandResult result) {
+					changeDimensionStatus(status);
+					synchronized (lock) { lock.notify(); }
+				}
+			});
+
+			try {
+				synchronized (lock) { lock.wait(); }
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 		}
-		return dt.getDesiredTemperature();
+		return dt == null ?  null : dt.getDesiredTemperature();
 	}
 	
-	public void setDesiredTemperature(double temperature, HeatingModeEnum mode) {
+	public synchronized void setDesiredTemperature(double temperature, HeatingModeEnum mode) {
 		DesiredTemperature t = new DesiredTemperature();
 		t.setDesiredTemperature(temperature);
 		t.setMode(mode.ordinal()+1);

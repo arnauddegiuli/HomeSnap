@@ -3,7 +3,6 @@
     <string name="app_name">My Domo</string>
     
     <string name="menu_settings">Réglages</string>
-    <string name="menu_edit">Editer les contrôleurs</string>
     <string name="menu_refresh">Rafrachir</string>
     <string name="menu_add_controller">Ajouter un contrôleur</string>
     <string name="menu_add_label">Ajouter un label</string>
@@ -12,7 +11,6 @@
     <string name="title_labels">Liste des labels</string>
     <string name="title_controllers">Liste des contrôleurs</string>
     <string name="title_controllers_without_label">Controllers without label</string>
-    <string name="title_edit_label">Edit a label</string>
     <string name="title_edit_controller">Edit a controller</string>
         
     <string name="label_ip">IP du serveur</string>
@@ -32,5 +30,5 @@
     <string name="button_cancel">Annuler</string>
     <string name="logo">Logo</string>
     <string name="connected_status">Connecté?</string>
-   
+    <string name="arrow">Flèche</string>
 </resources>

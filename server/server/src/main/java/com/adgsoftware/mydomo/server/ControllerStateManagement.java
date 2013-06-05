@@ -20,7 +20,10 @@ public class ControllerStateManagement {
 	 * @param controllerCommand controller to register
 	 */
 	public static void registerControllerCommand(ControllerSimulator controllerCommand) {
-		controllerCommandList.put(controllerCommand.getWho(), controllerCommand);
+		synchronized (controllerCommandList) {
+			controllerCommandList.put(controllerCommand.getWho(), controllerCommand);	
+		}
+		
 	}
 	
 	/**
@@ -28,23 +31,35 @@ public class ControllerStateManagement {
 	 * @param controllerCommand controller to unregister
 	 */
 	public static void unRegisterControllerCommand(ControllerSimulator controllerCommand) {
-		controllerCommandList.remove(controllerCommand.getWho());
+		synchronized (controllerCommandList) {
+			controllerCommandList.remove(controllerCommand.getWho());
+		}
 	}
 	
 	public static void registerControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
-		controllerDimensionCommandList.put(controllerDimensionCommand.getWho(), controllerDimensionCommand);
+		synchronized (controllerDimensionCommandList) {
+			controllerDimensionCommandList.put(controllerDimensionCommand.getWho(), controllerDimensionCommand);	
+		}
+		
 	}
 	
 	public static void unRegisterControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
-		controllerDimensionCommandList.remove(controllerDimensionCommand.getWho());
+		synchronized (controllerDimensionCommandList) {
+			controllerDimensionCommandList.remove(controllerDimensionCommand.getWho());
+		}
 	}
 
 	public static void registerMonitorSession(MonitorSession monitor) {
-		monitorList.add(monitor);
+		synchronized (monitorList) {
+			monitorList.add(monitor);
+		}
+		
 	}
 	
 	public static void unRegisterMonitorSession(MonitorSession monitor) {
-		monitorList.remove(monitor);
+		synchronized (monitorList) {
+			monitorList.remove(monitor);
+		}
 	}	
 	
 	/**
@@ -52,26 +67,38 @@ public class ControllerStateManagement {
 	 * @param command command to execute
 	 * @return the result of the command
 	 */
-	public static synchronized String executeCommand(String command) {
+	public static String executeCommand(String command) {
 		
 		String who = Command.getWhoFromCommand(command);
 		String result;
-		ControllerSimulator cc = controllerCommandList.get(who);
+		ControllerSimulator cc;
+		synchronized (controllerCommandList) {
+			cc = controllerCommandList.get(who);
+		}
 		if (cc != null) {
 			result = cc.execute(command);
 		} else {
-			ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-			if (cdc != null) {
-				result = cdc.execute(command);
-			} else {
-				System.out.println("Command not supported [" + command + "]");
-				result = Command.NACK;
+			synchronized (controllerDimensionCommandList) {
+				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
+				if (cdc != null) {
+					result = cdc.execute(command);
+				} else {
+					System.out.println("Command not supported [" + command + "]");
+					result = Command.NACK;
+				}
 			}
 		}
 		
 		if (!Command.NACK.equalsIgnoreCase(result)) {
-			for (MonitorSession monitor : monitorList) {
-				monitor.monitor(command);
+			synchronized (monitorList) {
+				// Monitor session closed is only detected when we try to lunch a command on it
+				// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+				// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+				// are in the same thread...
+				List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+				for (MonitorSession monitor : monitorList2) {
+					monitor.monitor(command);
+				}
 			}
 		}
 		
@@ -83,19 +110,24 @@ public class ControllerStateManagement {
 	 * @param command the status request to execute
 	 * @return the status
 	 */
-	public static synchronized String executeStatus(String command) {
+	public static String executeStatus(String command) {
 		String who = Command.getWhoFromCommand(command);
+		ControllerSimulator cc;
 		
-		ControllerSimulator cc = controllerCommandList.get(who);
+		synchronized (controllerCommandList) {
+			cc = controllerCommandList.get(who);
+		}
 		if (cc != null) {
 			return cc.status(command);
 		} else {
-			ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-			if (cdc != null) {
-				return cdc.status(command);
-			} else {
-				System.out.println("Command not supported [" + command + "]");
-				return Command.NACK;
+			synchronized (controllerDimensionCommandList) {
+				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
+				if (cdc != null) {
+					return cdc.status(command);
+				} else {
+					System.out.println("Command not supported [" + command + "]");
+					return Command.NACK;
+				}
 			}
 		}
 	}

@@ -6,9 +6,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
@@ -18,7 +17,8 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 public class OpenWebCommanderImpl implements Commander {
 	
 	Socket socket;
-	Logger log = Logger.getLogger(OpenWebCommanderImpl.class.getName());
+//	Logger log = Logger.getLogger(OpenWebCommanderImpl.class.getName());
+	Log log = new Log();
 	BufferedReader input = null;
 	PrintWriter output = null;
 	private String ip;
@@ -77,12 +77,12 @@ public class OpenWebCommanderImpl implements Commander {
 					try {
 						connectionListener.onClose();
 					} catch (Exception e) {
-						log.log(Level.SEVERE, "ConnectionListener raise an error", e);
+						log.severe(Log.Session.Command, "ConnectionListener raise an error: " + e.getMessage());
 					}
 				}
 						
 			} catch (IOException e) {				
-				log.log(Level.SEVERE, "Error during closing the socket", e);
+				log.severe(Log.Session.Command, "Error during closing the socket: " + e.getMessage());
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class OpenWebCommanderImpl implements Commander {
 		if (output != null) { // No output can mean no server is responding
 			output.write(message);
 			output.flush();
-			System.out.println("CLIENT OUT: " + message);
+			log.fine(Log.Session.Command, "TO   COMMAND SERVER: " + message);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class OpenWebCommanderImpl implements Commander {
 	    		if(socket != null && !socket.isInputShutdown()) {
 	    			ci = input.read();		    		
 		    		if (ci == -1) {
-			  			log.finest("End of read from socket.");
+			  			log.finest(Log.Session.Command, "End of read from command server socket.");
 			  			socket = null;
 			  			break;
 			        } else { 
@@ -139,24 +139,27 @@ public class OpenWebCommanderImpl implements Commander {
 					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
 					    	respond[indice] = c;
 					    	exit = true;
-					    	log.finest("End of message from socket [" + respond.toString() + "].");
+					    	log.finest(Log.Session.Command, "End of message from command server socket [" + new String(respond) + "].");
 					    	break;
 					    } else {
 					    	respond[indice] = c;
 					    	indice = indice + 1;
 					    } 
 			        }
+	    		} else {
+	    			close();
+	    			break;
 	    		}
 	        } while(true); 
 		}catch(IOException e){
-			log.log(Level.SEVERE, "Socket not available", e);
+			log.severe(Log.Session.Command, "Socket not available: " + e.getMessage());
 	    }
 		
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
 		
-		System.out.println("CLIENT IN: " + responseString);
+		log.fine(Log.Session.Command, "FROM COMMAND SERVER: " + responseString);
 		
 		return responseString;
     }

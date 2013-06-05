@@ -19,7 +19,12 @@ implements Serializable {
 	private List<ControllerDimensionChangeListener> controllerDimensionChangeListenerList = new ArrayList<ControllerDimensionChangeListener>();
 	protected Hashtable<String, DimensionStatus> list = new Hashtable<String, DimensionStatus>(); // Cache of dimension status => avoid to call the bus each time
 
+	private boolean waitingResult = false;
 	
+	public boolean isWaitingResult() {
+		return waitingResult;
+	}
+
 	/**
 	 * Define the address of the device to control
 	 * @param newValue address of the device
@@ -52,11 +57,19 @@ implements Serializable {
 		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {getWho(), getWhere(), dimension.getCode()}); 
 	}
 	
-	protected void executeAction(DimensionStatus dimensionStatus, CommandListener commandListener) {
+	protected void executeAction(DimensionStatus dimensionStatus, final CommandListener commandListener) {
 		if (server == null) {
 			commandListener.onCommand( new CommandResult("", CommandResultStatus.nok));
 		} else {
-			server.sendCommand(createDimensionActionMessage(dimensionStatus), commandListener);
+			waitingResult = true;
+			server.sendCommand(createDimensionActionMessage(dimensionStatus), new CommandListener() {
+				
+				@Override
+				public void onCommand(CommandResult commandResult) {
+					waitingResult = false;
+					commandListener.onCommand(commandResult);
+				}
+			});
 		}
 	}
 		
@@ -64,22 +77,29 @@ implements Serializable {
 		if (server == null) {
 			listener.onDimensionStatus(null, new CommandResult("", CommandResultStatus.nok));
 		} else {
+			waitingResult = true;
 			server.sendCommand(createDimensionStatusMessage(dimensionStatus), new CommandListener() {
 				@Override
 				public void onCommand(CommandResult result) {
+					waitingResult = false;
 					if (CommandResultStatus.ok.equals(result.status)) {
 						List<DimensionValue> dimensionListResult = Command.getDimensionListFromCommand(result.commandResult);
 						dimensionStatus.setValueList(dimensionListResult);
 						listener.onDimensionStatus(dimensionStatus, result); 
 					} else {
 						listener.onDimensionStatus(null, result);
-					}					
+					}		
 				}
 			});
 		}
 		
 		
 	}
+	
+    /** @param l the new change listener. */
+    public void addControllerDimensionChangeListener(ControllerDimensionChangeListener l) {
+    	controllerDimensionChangeListenerList.add(l);
+    }
 	
     protected void notifyDimensionChange(DimensionStatus newStatus) {
     	for (ControllerDimensionChangeListener listener : controllerDimensionChangeListenerList) {
@@ -121,8 +141,8 @@ implements Serializable {
 			@Override
 			public void onCommand(CommandResult result) {
 				if (CommandResultStatus.ok.equals(result.status)) {
-					notifyDimensionChange(dimensionStatus);
 					list.put(dimensionStatus.getCode(), dimensionStatus);
+					notifyDimensionChange(dimensionStatus);
 				} else {
 					// Error...
 					notifyDimensionChangeError(dimensionStatus, result);
@@ -139,8 +159,8 @@ implements Serializable {
 	 */
 	public void changeDimensionStatus(DimensionStatus dimensionStatus) {
 		if (dimensionStatus != null) {
+			list.put(dimensionStatus.getCode(), dimensionStatus); // First because sometime unlock thread in listener...
 			notifyDimensionChange(dimensionStatus);
-			list.put(dimensionStatus.getCode(), dimensionStatus);
 		}
 	}
 	

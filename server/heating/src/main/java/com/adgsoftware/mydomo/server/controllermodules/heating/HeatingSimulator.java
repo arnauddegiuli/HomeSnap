@@ -24,14 +24,14 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	
 	@Override
 	public String execute(String command) {
-		DimensionValue what = Command.getDimensionFromCommand(command);
+		String what = Command.getDimensionFromCommand(command);
 		String where = Command.getWhereFromCommand(command);
-		String dimensionStr = Command.getDimensionFromCommand(command).getValue();
-		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what.getValue()) ||
-			HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what.getValue()) ||
-			HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what.getValue()) ||
-			HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(what.getValue()) ||
-			HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(what.getValue())) {
+		String dimensionStr = Command.getDimensionFromCommand(command);
+		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what) ||
+			HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what) ||
+			HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what) ||
+			HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(what) ||
+			HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(what)) {
 			
 			dimensionCache.put(where
 					+ "-" + dimensionStr, Command.getDimensionListFromCommand(command));
@@ -45,8 +45,7 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	public String status(String command) {
 
 		String where = HEATING_ADDRESS;
-		String dimensionStr = Command.getDimensionFromCommand(command)
-				.getValue();
+		String dimensionStr = Command.getDimensionFromCommand(command);
 		List<DimensionValue> dimensionList;
 		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
 			

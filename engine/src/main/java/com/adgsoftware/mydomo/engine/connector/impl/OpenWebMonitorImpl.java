@@ -8,13 +8,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
-import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
@@ -25,8 +24,9 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 public class OpenWebMonitorImpl extends Thread 
 implements Monitor {
 
+	Log log = new Log();
 //	GestionePassword gestPassword = null;
-	Logger log = Logger.getLogger(OpenWebMonitorImpl.class.getName());
+//	Logger log = Logger.getLogger(OpenWebMonitorImpl.class.getName());
 	
 	private Socket socket = null;	
 	private BufferedReader depuisClient = null;
@@ -93,7 +93,7 @@ implements Monitor {
 		} else {
 			// Manage dimension command
 			List<DimensionValue> dimensionList = Command.getDimensionListFromCommand(message);
-			String code=null; // TODO get code from commande
+			String code = Command.getDimensionFromCommand(message);
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWhere().equals(where)) {
 					if (controller instanceof ControllerDimension<?>){
@@ -143,7 +143,7 @@ implements Monitor {
 					try {
 						sleep(timer);
 					} catch (InterruptedException e) {
-						log.finest("Timeout interrupted.");
+						log.finest(Log.Session.Monitor, "Timeout interrupted.");
 					}
 				}
 			}
@@ -153,16 +153,16 @@ implements Monitor {
 	@Override
 	public boolean connect() {
 		try {
-			log.finest("Connect to the web server socket["+ ip +":"+ port+"]");
+			log.fine(Log.Session.Monitor, "Connect to socket ["+ ip +":"+ port+"]");
 			socket = new Socket();
 			InetSocketAddress address = new InetSocketAddress(ip, port);
 			socket.connect(address, getTimeout());
 			depuisClient= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			log.finest("InputReader created.");
+			log.finest(Log.Session.Monitor, "InputReader created.");
 			versClient = new PrintWriter(socket.getOutputStream(),true);
-			log.finest("PrintWriter created.");
+			log.finest(Log.Session.Monitor, "PrintWriter created.");
 		}catch (Exception e){
-			log.fine("Impossible to connect to the server ["+ip+":"+port+"]");
+			log.severe(Log.Session.Monitor, "Impossible to connect to the server ["+ip+":"+port+"]");
 			if (socket!=null && socket.isConnected()) {
 				this.close();
 			}
@@ -171,20 +171,17 @@ implements Monitor {
 		
 		if(socket != null){
 			
-			String msg = read(); // TODO thread!
-				
-    			log.finest(" ----- Step Connection ----- ");
-    			log.finest("Rx: " + msg);
+				log.finest(Log.Session.Monitor, "----- Step Connection ----- ");
+				String msg = read(); // TODO thread!
     			if (!Command.ACK.equals(msg)) {
     				// Bad return message
-                    log.fine("Bad message [" + msg + "] received from [" + ip + "]");
+                    log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
                     callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
                     this.close();
                     return false;
     			}
 	            
-                log.finest("\n----- Step Identification -----");
-            	log.finest("Tx: " + Command.MONITOR_SESSION);
+                log.finest(Log.Session.Monitor, "----- Step Identification -----");
             	write(Command.MONITOR_SESSION);
 
 //    			if(usePassword){
@@ -197,21 +194,21 @@ implements Monitor {
 //    		    	log.finest("Tx: " + passwordMsg);
 //    		    	write(passwordMsg);		    	
 //            	}
-    	    	msg = read();
-    	    	log.finest("\n----- Step Final -----");
-    	    	log.finest("Rx: " + msg);
+            	log.finest(Log.Session.Monitor, "----- Step Final -----");
+            	msg = read();
+    	    	
     			if (!Command.ACK.equals(msg)) {		       	
-    		        log.finest("Problem during connection to [" + ip + "] with message [" + msg + "]");
+    		        log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
     		        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
     		        this.close();
     		        return false;
     		    }
     			
-    			log.finest("Connection OK");
+    			log.fine(Log.Session.Monitor, "Connection OK");
     			callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
     	        return true;
 			} else {
-				log.finest("No socket... Impossible to connect");
+				log.severe(Log.Session.Monitor, "No socket... Impossible to connect");
 				callOpenWebConnectionListenerConnect(ConnectionStatusEnum.NoSocket);
 				return false;
 			}
@@ -222,7 +219,7 @@ implements Monitor {
 			try {
 				connectionListener.onConnect(connection);
 			} catch (Exception e) {
-				log.log(Level.SEVERE, "ConnectionListener raise an error", e);
+				log.severe(Log.Session.Monitor, "ConnectionListener raise an error [" + e.getMessage() +"]");
 			}
 		}
 	}
@@ -235,13 +232,13 @@ implements Monitor {
 					try {
 						connectionListener.onClose();
 					} catch (Exception e) {
-						log.log(Level.SEVERE, "ConnectionListener raise an error", e);
+						log.severe(Log.Session.Monitor, "ConnectionListener raise an error [" + e.getMessage() +"]");
 					}
 				}
 				socket.close();
 				socket = null;
 			} catch (IOException e) {
-				log.log(Level.FINE, "Error during closing socket", e);
+				log.severe(Log.Session.Monitor, "Error during closing socket [" + e.getMessage() + "]");
 			}
 		}
 	}
@@ -249,7 +246,7 @@ implements Monitor {
 	private void write(String msg) {
 		versClient.print(msg);
 		versClient.flush();
-		System.out.println("SERVER OUT:[" + msg + "]");
+		log.fine(Log.Session.Monitor, "TO   MONITOR SERVER: " + msg);
 	}
 	
 	private String read(){
@@ -265,7 +262,7 @@ implements Monitor {
 	    		if(socket != null && !socket.isInputShutdown()) {
 	    			ci = depuisClient.read();		    		
 		    		if (ci == -1) {
-		    			System.out.println("End of read from socket.");
+		    			log.finest(Log.Session.Monitor, "End of read from monitor socket.");
 			  			close();
 			  			break;
 			        } else { 
@@ -273,7 +270,7 @@ implements Monitor {
 					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
 					    	respond[indice] = c;
 					    	exit = true;
-					    	System.out.println("End of message from socket [" + new String(respond) + "].");
+					    	log.finest(Log.Session.Monitor, "End of message from monitor socket [" + new String(respond) + "].");
 					    	break;
 					    } else {
 					    	respond[indice] = c;
@@ -286,18 +283,18 @@ implements Monitor {
 	    		}
 	        } while(true); 
 		}catch(IOException e){
-			System.out.println("Socket not available");
+			log.severe(Log.Session.Monitor, "Socket not available");
 	    }
 		
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
 		
-		System.out.println("SERVER IN: " + responseString);
+		log.fine(Log.Session.Monitor, "FROM MONITOR SERVER: " + responseString);
 		
 		return responseString;
     }
-
+	
 	@Override
 	public boolean isConnected() {
 		if(socket != null){

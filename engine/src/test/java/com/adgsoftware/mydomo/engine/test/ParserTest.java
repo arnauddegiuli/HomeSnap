@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.server;
+package com.adgsoftware.mydomo.engine.test;
 
 import com.adgsoftware.mydomo.engine.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.parser.ParseException;

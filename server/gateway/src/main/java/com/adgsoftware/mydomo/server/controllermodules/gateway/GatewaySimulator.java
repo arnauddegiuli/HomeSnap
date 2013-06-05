@@ -30,27 +30,26 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	
 	@Override
 	public String execute(String command) {
-		DimensionValue what = Command.getDimensionFromCommand(command);
+		String what = Command.getDimensionFromCommand(command);
 
-		if (Gateway.GatewayDimension.TIME.getCode().equals(what.getValue())) {
+		if (Gateway.GatewayDimension.TIME.getCode().equals(what)) {
 			// define time... nothing to do except if you want change your
 			// system hours
 			return Command.ACK;
 		} else if (Gateway.GatewayDimension.DATE.getCode().equals(
-				what.getValue())) {
+				what)) {
 			// define date... nothing to do except if you want change your
 			// system hours
 			return Command.ACK;
 		} else if (Gateway.GatewayDimension.DATETIME.getCode().equals(
-				what.getValue())) {
+				what)) {
 			// define date... nothing to do except if you want change your
 			// system hours
 			return Command.ACK;
 		} else if (Gateway.GatewayDimension.IP_ADDRESS.getCode().equals(
-				what.getValue())) {
+				what)) {
 			String where = GATEWAY_ADDRESS; // Gateway has no address! => can only manage connected gateway
-			String dimension = Command.getDimensionFromCommand(command)
-					.getValue();
+			String dimension = Command.getDimensionFromCommand(command);
 
 			dimensionCache.put(where + "-" + dimension,
 					Command.getDimensionListFromCommand(command));
@@ -64,8 +63,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	public String status(String command) {
 
 		String where = GATEWAY_ADDRESS;
-		String dimensionStr = Command.getDimensionFromCommand(command)
-				.getValue();
+		String dimensionStr = Command.getDimensionFromCommand(command);
 		List<DimensionValue> dimensionList;
 		if (Gateway.GatewayDimension.TIME.getCode().equals(dimensionStr)) {
 			Time t = new Time();

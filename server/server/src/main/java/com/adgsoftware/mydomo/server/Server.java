@@ -9,9 +9,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 
 public class Server implements Runnable {
 
+	Log log = new Log();
 	private int port = 1234;
 	private volatile Thread blinker;
 	
@@ -49,25 +52,24 @@ public class Server implements Runnable {
 					versClient = new PrintWriter(new OutputStreamWriter(
 							s.getOutputStream()), true);
 					// Welcome ack
-					write(Command.ACK, versClient);
+					write(Session.Server, Command.ACK, versClient);
 					String sessionType = read(s, depuisClient);
 					if (Command.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
-						System.out.println("Start Monitor Session...");
-						write(Command.ACK, versClient);
+						log.fine(Session.Monitor, "Start Monitor Session...");
+						write(Session.Monitor, Command.ACK, versClient);
 						ControllerStateManagement.registerMonitorSession(
-								new MonitorSession(s, depuisClient,
-										versClient)
+								new MonitorSession(s, versClient)
 						);
 
 					} else if (Command.COMMAND_SESSION
 							.equalsIgnoreCase(sessionType)) {
-						System.out.println("Start Command Session...");
-						write(Command.ACK, versClient);
+						log.fine(Session.Command, "Start Command Session...");
+						write(Session.Command, Command.ACK, versClient);
 						new Thread(new CommandSession(s, depuisClient,
 								versClient)).start();
 
 					} else {
-						write(Command.NACK, versClient);
+						write(Session.Server, Command.NACK, versClient);
 					}
 				} catch (IOException e) {
 					try {
@@ -77,7 +79,7 @@ public class Server implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("Erreur à la creation d'un objet Socket : "
+			System.out.println("Error during Socket creation : "
 					+ e.getMessage());
 			System.exit(1);
 		}
@@ -94,16 +96,13 @@ public class Server implements Runnable {
 			s.port = 1234; // valeur par défaut
 		}
 
-//		ControllerStateManagement.registerControllerCommand(new LightCommand());
-//		ControllerStateManagement.registerControllerDimensionCommand(new GatewayCommand());
-		
 		s.start();
 	}
 
-	private void write(String msg, PrintWriter versClient) {
+	private void write(Session session, String msg, PrintWriter versClient) {
 		versClient.print(msg);
 		versClient.flush();
-		System.out.println("SERVER WRITE:[" + msg + "]");
+		log.fine(session, "SERVER WRITE: " + msg);
 	}
 
 	private String read(Socket client, BufferedReader depuisClient) {
@@ -144,7 +143,7 @@ public class Server implements Runnable {
 			responseString = new String(respond, 0, indice + 1);
 		}
 
-		System.out.println("CLIENT WRITE: " + responseString);
+		log.fine(Session.Server, "CLIENT WRITE: " + responseString);
 
 		return responseString;
 	}

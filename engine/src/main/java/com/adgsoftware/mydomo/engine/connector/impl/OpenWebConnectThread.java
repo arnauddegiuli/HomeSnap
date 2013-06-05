@@ -5,10 +5,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 
@@ -18,7 +17,8 @@ import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
  */
 public class OpenWebConnectThread implements Runnable {
 	
-	Logger log = Logger.getLogger(OpenWebConnectThread.class.getName());
+//	Logger log = Logger.getLogger(OpenWebConnectThread.class.getName());
+	Log log = new Log();
 	private OpenWebCommanderImpl commander;
 	
 	public OpenWebConnectThread(OpenWebCommanderImpl commander) {
@@ -39,7 +39,7 @@ public class OpenWebConnectThread implements Runnable {
 					String ip = commander.getIp();
 					int port = commander.getPort();
 					
-					log.finest("Connect to the web open server socket ["+ ip +":"+ port+"]");
+					log.fine(Log.Session.Command, "Connect to socket ["+ ip +":"+ port+"]");
 					if (ip == null || port == 0) {
 						return false;
 					}
@@ -48,11 +48,11 @@ public class OpenWebConnectThread implements Runnable {
 					InetSocketAddress address = new InetSocketAddress(ip, port);
 					commander.socket.connect(address, commander.getTimeout());
 					commander.input= new BufferedReader(new InputStreamReader(commander.socket.getInputStream()));
-					log.finest("InputReader created.");
+					log.finest(Log.Session.Command, "InputReader created.");
 					commander.output = new PrintWriter(commander.socket.getOutputStream(),true);
-					log.finest("PrintWriter created.");
+					log.finest(Log.Session.Command, "PrintWriter created.");
 				} catch (Exception e){
-					log.log(Level.FINER, "Impossible to connect to the server ["+ commander.getIp() +":"+ commander.getPort()+"]", e);
+					log.severe(Log.Session.Command, "Impossible to connect to the server ["+ commander.getIp() +":"+ commander.getPort()+"]:" + e.getMessage());
 					if (commander.socket!=null && commander.socket.isConnected()) {
 						commander.close();
 					}
@@ -61,49 +61,45 @@ public class OpenWebConnectThread implements Runnable {
 				
 				if(commander.socket != null) {
 						
+					log.finest(Log.Session.Command, " ----- Step Connection ----- ");
 					String msg = commander.readMessage();
-						
-		        	log.finest(" ----- Step Connection ----- ");
-		        	log.finest("Rx: " + msg);
 		            if (!Command.ACK.equals(msg)) {
 		            	// Bad return message
-		                log.log(Level.SEVERE, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
+		                log.severe(Log.Session.Command, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
 		                callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
 		                commander.close();
 		                return false;
 		            }
 					
-		            log.finest("\n----- Step Identification -----");
-		        	log.finest("Tx: " + Command.COMMAND_SESSION);
+		            log.finest(Log.Session.Command, "----- Step Identification -----");
 		        	commander.writeMessage(Command.COMMAND_SESSION);
 		            
 					if(commander.usePassword){
+						log.finest(Log.Session.Command, "----- Step authentification -----");
 						msg = commander.readMessage();
-						log.finest("\n----- Step authentification -----");
-			            log.finest("Rx: " + msg);
 			            
 				    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
 				    	String passwordMsg = "*#"+password+"##"; 
-				    	log.finest("Tx: " + passwordMsg);
+				    	log.finest(Log.Session.Command, "Tx: " + passwordMsg);
 				    	commander.writeMessage(passwordMsg);		    	
 		        	} 
 					
-			    	msg = commander.readMessage();
-			    	log.finest("\n----- Step Final -----");
-			    	log.finest("Rx: " + msg);
+					log.finest(Log.Session.Command, "----- Step Final -----");
+					msg = commander.readMessage();
+			    	
 					if (!Command.ACK.equals(msg)) {		       	
-				        log.finest("Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
+				        log.severe(Log.Session.Command, "Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
 				        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
 				        commander.close();
 				        return false;
 				    }
 					
-					log.finest("Connection OK");
+					log.fine(Log.Session.Command, "Connection OK");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
 			        return true;
 		
 				} else {
-					log.finest("No socket... Impossible to connect");
+					log.severe(Log.Session.Command, "No socket... Impossible to connect");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.NoSocket);
 					return false;
 				}
@@ -118,7 +114,7 @@ public class OpenWebConnectThread implements Runnable {
 			try {
 				connectionListener.onConnect(connection);
 			} catch (Exception e) {
-				log.log(Level.SEVERE, "ConnectionListener raise an error", e);
+				log.severe(Log.Session.Command, "ConnectionListener raise an error: " + e.getMessage());
 			}
 		}
 	}

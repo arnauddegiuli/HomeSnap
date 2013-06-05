@@ -83,12 +83,10 @@ public class Command {
 		}
 	}
 	
-	public static DimensionValue getDimensionFromCommand(String command) {
+	public static String getDimensionFromCommand(String command) {
 		
 		try {
-				DimensionValue d = new DimensionValueImpl();
-				d.setValue(CommandParser.parse(command).getDimension());
-				return d;
+				return CommandParser.parse(command).getDimension();
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 		}
