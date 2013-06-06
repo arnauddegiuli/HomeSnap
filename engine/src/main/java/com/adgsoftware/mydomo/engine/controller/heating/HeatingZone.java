@@ -3,6 +3,7 @@ package com.adgsoftware.mydomo.engine.controller.heating;
 import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
+import com.adgsoftware.mydomo.engine.controller.DimensionStatusCallback;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
@@ -78,7 +79,13 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 		super.setWhere(newValue);
 	}
 
-	public Double getDesiredTemperature(HeatingModeEnum mode) {
+	/**
+	 * Synchronously method to get value. This means that if value is not in cache you need to wait from server response
+	 * before get a return. This may be not good for your ergonomy.
+	 * @param mode
+	 * @return the desired temperature
+	 */
+	public DesiredTemperature getDesiredTemperature(HeatingModeEnum mode) {
 		DesiredTemperature dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 		if (dt == null) {
 			getDimensionStatus(DesiredTemperature.class, new DimensionStatusListener<DesiredTemperature>() {
@@ -97,25 +104,67 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 			}
 			dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 		}
-		return dt == null ?  null : dt.getDesiredTemperature();
+		return dt == null ?  null : dt;
 	}
 	
-	public synchronized void setDesiredTemperature(double temperature, HeatingModeEnum mode) {
+	/**
+	 * Asynchronously method to get value. This means that if value is not in cache you won't have to wait from server response
+	 * before get a return.
+	 * @param mode
+	 * @param callback the method to call when result will be available
+	 */
+	public void getDesiredTemperature(final HeatingModeEnum mode, final DimensionStatusCallback<DesiredTemperature> callback) {	
+		// Asynchronously call
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				callback.value(getDesiredTemperature(mode));
+			}
+		}).start();
+	}
+	
+	/**
+	 * Define the desired temperature. Value can be not be change instantly: it will send order
+	 * to server. Only when monitor session will get the change, this will affect this controller.
+	 * @param temperature
+	 * @param mode
+	 */
+	public void setDesiredTemperature(double temperature, HeatingModeEnum mode) {
 		DesiredTemperature t = new DesiredTemperature();
 		t.setDesiredTemperature(temperature);
 		t.setMode(mode.ordinal()+1);
 		this.setDimensionStatus(t);
 	}
 	
-	public void getMeasureTemperature(DimensionStatusListener<MeasureTemperature> listener) {
-		getDimensionStatus(MeasureTemperature.class, listener);
+	
+	public void getMeasureTemperature(final DimensionStatusCallback<MeasureTemperature> callback) {
+		getDimensionStatus(MeasureTemperature.class, new DimensionStatusListener<MeasureTemperature>() {
+			@Override
+			public void onDimensionStatus(MeasureTemperature status,
+					CommandResult result) {
+				callback.value(status);
+			}
+			
+		});
 	}
 
-	public void getValvesStatus(DimensionStatusListener<ValvesStatus> listener) {
-		getDimensionStatus(ValvesStatus.class, listener);
+	public void getValvesStatus(final DimensionStatusCallback<ValvesStatus> callback) {
+		getDimensionStatus(ValvesStatus.class, new DimensionStatusListener<ValvesStatus>() {
+			@Override
+			public void onDimensionStatus(ValvesStatus status,
+					CommandResult result) {
+				callback.value(status);
+			}
+		});
 	}
 	
-	public void getSetOffset(DimensionStatusListener<SetOffset> listener) {
-		getDimensionStatus(SetOffset.class, listener);
+	public void getSetOffset(final DimensionStatusCallback<SetOffset> callback) {
+		getDimensionStatus(SetOffset.class, new DimensionStatusListener<SetOffset>() {
+			@Override
+			public void onDimensionStatus(SetOffset status,
+					CommandResult result) {
+				callback.value(status);
+			}
+		});
 	}
 }

@@ -26,6 +26,10 @@ public class ValvesStatus extends DimensionStatusImpl {
 		);
 	}
 	
+	public void setConditioningValveStatus(ValveStatusEnum value) {
+		setIntValue(value.ordinal(), CONDITIONING_VALVE_POS, 1);
+	}
+	
 	public ValveStatusEnum getHeatingValveStatus() {
 		return getStatus(
 				getIntValue(HEATING_VALVE_POS)

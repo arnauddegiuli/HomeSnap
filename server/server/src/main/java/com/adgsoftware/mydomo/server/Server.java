@@ -102,7 +102,7 @@ public class Server implements Runnable {
 	private void write(Session session, String msg, PrintWriter versClient) {
 		versClient.print(msg);
 		versClient.flush();
-		log.fine(session, "SERVER WRITE: " + msg);
+		log.fine(session, "FROM " + session.name().toUpperCase() + " SERVER: " + msg);
 	}
 
 	private String read(Socket client, BufferedReader depuisClient) {
@@ -143,7 +143,7 @@ public class Server implements Runnable {
 			responseString = new String(respond, 0, indice + 1);
 		}
 
-		log.fine(Session.Server, "CLIENT WRITE: " + responseString);
+		log.fine(Session.Server, "FROM SERVER CLIENT: " + responseString);
 
 		return responseString;
 	}

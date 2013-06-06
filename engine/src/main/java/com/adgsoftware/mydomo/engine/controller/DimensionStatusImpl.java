@@ -40,6 +40,10 @@ public abstract class DimensionStatusImpl implements DimensionStatus {
 		return dimensionList.get(pos).getValue();
 	}
 	
+	protected void setStringValue(String value, int pos) {
+		dimensionList.get(pos).setValue(value);
+	}
+	
 	protected int getIntValue(int pos) {
 		return Integer.parseInt(dimensionList.get(pos).getValue());
 	}

@@ -118,7 +118,7 @@ implements Monitor {
 	// To use generic: only at the runtime we will know the type so this is only method to set what!
 	private static void changeDimension(ControllerDimension<? extends Status> controller, String code, List<DimensionValue> dimensionList) {
 		DimensionStatus dimensionStatus = controller.getDimensionStatusFromCache(code);
-		if (dimensionStatus.getValueList() != dimensionList) {
+		if (dimensionStatus == null || dimensionStatus.getValueList() != dimensionList) { // dimensionStatus = null at before being initiated... it can happens when we get value before initiated process is finished...
 			controller.changeDimensionStatus(dimensionStatus);
 		}
 	}

@@ -7,14 +7,14 @@ import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone.HeatingZoneDimension;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
+import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class HeatingCommand {
 	
 	// OSGi Shell Function	
 	static final String[] functions = {
-		"temperature", 			"mode",
-		"time"};
+		"desiredTemperature", "currentTemperature"};
 
 	/**
 	 * Change the temperature of the heating system
@@ -23,21 +23,24 @@ public class HeatingCommand {
 	 * @param year
 	 * @return
 	 */
-	public String temperature(double temperature) {
+	public String desiredTemperature(double temperature, String address) {
 		DesiredTemperature dt = new DesiredTemperature();
 		dt.setDesiredTemperature(temperature);
 		dt.setMode(1);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, "", HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
 	}
 	
 	/**
-	 * Change the mode of the heating system
-	 * @param mode
+	 * Simulate the current temperature of a zone
+	 * @param day
+	 * @param month
+	 * @param year
 	 * @return
 	 */
-	public String mode(int mode) {
-		return "";
-//		TODO return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_GATEWAY, "", GatewayDimension.DATETIME, formatDimension(d.getValueList())}));
+	public String currentTemperature(double temperature, String address) {
+		MeasureTemperature dt = new MeasureTemperature();
+		dt.setMeasuredTemperature(temperature);
+		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE, formatDimension(dt.getValueList())}));
 	}
 	
 	private String formatDimension(List<DimensionValue> valueList) {

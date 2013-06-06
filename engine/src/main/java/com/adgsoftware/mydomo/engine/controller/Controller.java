@@ -10,46 +10,52 @@ import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.house.Label;
 
 /**
- * Controller represents a controller for a device.
+ * Controller is a generic class to simulate a controller for a device.
+ * The main role of a controller is to send a command on the domotic BUS.
+ * The targeted device (where) gets the command from the BUS  and executes it.
+ * In our case, controller send the command to the gateway (throught the {@link Commander}) 
+ * which pushes the command on the BUS.
  * <br>
- * A controller can be associated to different label.
+ * A controller can be associated to different {@link Label}.
  *
- * @param <T>
+ * @param <T> Type of status supported by the controller
  */
 public abstract class Controller<T extends Status>
 implements Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
-	private T what;
-	protected String where;
-	private String title;
+	private T what; 		// Represent the status (on/off; open/close; ...)
+	protected String where; // Represent the address of the controller 
+	private String title;	// Title of the controller: string representing the controller
 	protected transient Commander server;
     private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
     private LabelList labelList = new LabelList(this);
     
     /**
-     * Return the address of the device
-     * @return address of the device
+     * Return the address of the targeted device
+     * @return address of the targeted device
      */
 	public String getWhere() {
 		return where;
 	}
 	
 	/**
-	 * Define the address of the device to control
-	 * @param newValue address of the device
+	 * Define the address of the targeted device to control
+	 * @param newValue address of the targeted device
 	 */
 	public void setWhere(String newValue) {
 		this.where = newValue;
-		if (newValue == null) { // Manage null value because we create the controller with no address
+		if (newValue == null) { // Manage null value because we create some controller with no address (Gateway or Heating central with MyHOME Bus)
 			what = null;
 		} else {
 			executeStatus(new StatusListener<T>() {
 				@Override
 				public void onStatus(T status, CommandResult result) {
+					// TODO : one pb with that: if we get the value of what before response we get null and nothing is done to be advertise of the change when value arrive...
 					what = status;
 				}
 			});
@@ -61,6 +67,7 @@ implements Serializable {
 	 * @return the {@link Status} of the device 
 	 */
 	public T getWhat() {
+		// Status is get when where is set. Probably it could be better...
 		return what;
 	}
 	
@@ -69,18 +76,21 @@ implements Serializable {
 	 * @param newWhat {@link Status} of the device.
 	 */
 	public void setWhat(final T newWhat) {
+		// The command is sent to the gateway. Gateway transmits it to the controller.
+		// If everything is fine, Gateway provides through the monitor session the 
+		// new status => not need to set it here since it will be set by the monitor way.
 		final T oldStatus = what; 
-//		what = newWhat; don't set the what since it will be done with changeWhat by the monitor listener
+		// what = newWhat; => it will be done with changeWhat by the monitor listener
 		executeAction(newWhat, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
 				if (CommandResultStatus.ok.equals(result.status)) {
 					// Status has been changed
-//					what = newWhat;
-//					notifyWhatChange(oldStatus, newWhat); call by monitor!
+					// what = newWhat; => it will be done with changeWhat by the monitor listener
+					// notifyWhatChange(oldStatus, newWhat); call by monitor! => it will be done with changeWhat by the monitor listener
 				} else {
 					// Error
-//					what = oldStatus;
+					// what = oldStatus; => it will be done with changeWhat by the monitor listener
 					notifyWhatChangeError(oldStatus, newWhat, result);
 				}
 			}
@@ -172,19 +182,25 @@ implements Serializable {
 	
     /** @param l the new change listener. */
     public void addControllerChangeListener(ControllerChangeListener l) {
-    	controllerChangeListenerList.add(l);
+    	synchronized (controllerChangeListenerList) {
+    		controllerChangeListenerList.add(l);
+		}
     }
 	
     private void notifyWhatChange(Status oldStatus, Status newStatus) {
-    	for (ControllerChangeListener listener : controllerChangeListenerList) {
-    		listener.onWhatChange(this, oldStatus, newStatus); 
-		}
+    	synchronized (controllerChangeListenerList) {
+	    	for (ControllerChangeListener listener : controllerChangeListenerList) {
+	    		listener.onWhatChange(this, oldStatus, newStatus); 
+			}
+    	}
     }
     
     private void notifyWhatChangeError(Status oldStatus, Status newStatus, CommandResult result) {
-    	for (ControllerChangeListener listener : controllerChangeListenerList) {
-    		listener.onWhatChangeError(this, oldStatus, newStatus, result); 
-		}
+    	synchronized (controllerChangeListenerList) {
+    		for (ControllerChangeListener listener : controllerChangeListenerList) {
+	    		listener.onWhatChangeError(this, oldStatus, newStatus, result); 
+			}
+    	}
     }
     
 	public String getTitle() {

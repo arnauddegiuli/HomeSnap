@@ -23,7 +23,7 @@ public class MonitorSession {
 			log.severe(Session.Monitor, "ERROR WHEN MONITOR SERVER WRITE: " + msg);
 			throw new IOException();
 		} else {
-			log.fine(Session.Monitor, "MONITOR SERVER WRITE: " + msg);
+			log.fine(Session.Monitor, "FROM MONITOR SERVER: " + msg);
 		}
 	}
 

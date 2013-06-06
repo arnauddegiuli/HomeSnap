@@ -5,6 +5,7 @@ import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.DimensionValueImpl;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
 import com.adgsoftware.mydomo.engine.controller.heating.Offset;
+import com.adgsoftware.mydomo.engine.controller.heating.Offset.Mode;
 
 public class SetOffset extends DimensionStatusImpl {
 
@@ -14,7 +15,7 @@ public class SetOffset extends DimensionStatusImpl {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl()  // OL: Local Offset
 				},
-				HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode()
+				HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode()
 		);
 	}
 
@@ -41,5 +42,37 @@ public class SetOffset extends DimensionStatusImpl {
 		} else {
 			return null;
 		}
+	}
+	
+	
+	public void setLocalOffset(Offset offset) {
+		
+		String val;
+		Mode mode = offset.getMode();
+		int degree = offset.getDegree();
+		
+		if (Offset.Mode.ON.equals(mode) && 3 == degree) {
+			val = "00";
+		} else if (Offset.Mode.ON.equals(mode) && 1 == degree) {
+			val = "01";
+		} else if (Offset.Mode.ON.equals(mode) && -1 == degree) {
+			val = "11";
+		} else if (Offset.Mode.ON.equals(mode) &&  2 == degree) {
+			val = "02";
+		} else if (Offset.Mode.ON.equals(mode) &&  -2 == degree) {
+			val = "12";
+		} else if (Offset.Mode.ON.equals(mode) &&  3 == degree) {
+			val = "03";
+		} else if (Offset.Mode.ON.equals(mode) &&  -3 == degree) {
+			val = "13";
+		} else if (Offset.Mode.OFF.equals(mode) &&  0 == degree) {
+			val = "4";
+		} else if (Offset.Mode.PROTECTION.equals(mode) && 0 == degree) {
+			val = "5";
+		} else {
+			throw new RuntimeException("Offset ["+ mode + ";" + degree + "] unSupported!");
+		}
+		
+		setStringValue(val, LOCAL_OFFSET_POS);
 	}
 }

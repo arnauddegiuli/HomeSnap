@@ -8,6 +8,8 @@ import java.util.List;
 import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
+import com.adgsoftware.mydomo.engine.controller.heating.Offset;
+import com.adgsoftware.mydomo.engine.controller.heating.Offset.Mode;
 import com.adgsoftware.mydomo.engine.controller.heating.ValveStatusEnum;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
@@ -19,7 +21,6 @@ import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimula
 public class HeatingSimulator implements ControllerDimensionSimulator {
 
 	
-	private static final String HEATING_ADDRESS = "4";
 	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
 	
 	@Override
@@ -44,7 +45,7 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	@Override
 	public String status(String command) {
 
-		String where = HEATING_ADDRESS;
+		String where = Command.getWhereFromCommand(command);
 		String dimensionStr = Command.getDimensionFromCommand(command);
 		List<DimensionValue> dimensionList;
 		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
@@ -59,13 +60,18 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 				dimensionCache.put(where + "-" + dimensionStr, dimensionList);
 			}
 		} else if (HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
-			SetOffset so = new SetOffset();
-			// TODO
-			dimensionList = null;
+			dimensionList = dimensionCache.get(where
+					+ "-" + dimensionStr);
+			if (dimensionList == null) {
+				SetOffset so = new SetOffset();
+				so.setLocalOffset(new Offset(Mode.OFF, 0));
+				dimensionList = so.getValueList();
+				dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+			}
 		} else if (HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
 				dimensionStr)) {
 			MeasureTemperature mt = new MeasureTemperature();
-			mt.setMeasuredTemperature(21d);
+			mt.setMeasuredTemperature(18d);
 			dimensionList = mt.getValueList();
 		} else if (HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(
 				dimensionStr)) {
@@ -76,6 +82,7 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 				dimensionStr)) {
 			ValvesStatus vs = new ValvesStatus();
 			vs.setHeatingValveStatus(ValveStatusEnum.OFF);
+			vs.setConditioningValveStatus(ValveStatusEnum.OFF);
 			dimensionList = vs.getValueList();
 		}  else {
 			return Command.NACK;
