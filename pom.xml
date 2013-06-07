@@ -42,5 +42,17 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<inceptionYear>2011</inceptionYear>
+	<organization>
+	    <name>A. de Giuli</name>
+	    <url>http://jeeasy.org</url>
+	</organization>
+	<developers>
+	    <developer>
+	        <name>Arnaud de Giuli</name>
+	        <email>arnaud.degiuli@free.fr</email>
+	    </developer>
+	</developers>
 </project>
 

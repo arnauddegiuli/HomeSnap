@@ -11,7 +11,7 @@
         <servlet-class>org.eclipse.jetty.example.webapp.Servlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
- <servlet>
+<!--  <servlet>
     <servlet-name>rest.service</servlet-name>
     <servlet-class>
         com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
@@ -22,17 +22,17 @@
     <init-param>
         <param-name>com.sun.jersey.config.property.packages</param-name>
         <param-value>org.eclipse.jetty.example.webapp</param-value>
-    </init-param>
+    </init-param> 
     <load-on-startup>1</load-on-startup>
-</servlet>
+</servlet>-->
     <servlet-mapping>
         <servlet-name>theservlet</servlet-name>
         <url-pattern>/tt/*</url-pattern>
     </servlet-mapping>
- <servlet-mapping>
+<!--  <servlet-mapping>
     <servlet-name>rest.service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
-</servlet-mapping>
+</servlet-mapping> -->
  	
  
  	<welcome-file-list>

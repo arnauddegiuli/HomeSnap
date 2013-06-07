@@ -1,34 +1,91 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	    <modelVersion>4.0.0</modelVersion>
-	    <groupId>com.adgsoftware.mydomo.engine</groupId>
-	    <artifactId>engine</artifactId>
-	    <packaging>jar</packaging>
-	    <name>MyDomoEngine</name>
-	    <description>Engine to send command to My Home gateway with open web protocol</description>
-	     
-		<parent>
-			<groupId>com.adgsoftware.mydomo</groupId>
-			<artifactId>mydomoSolution</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.adgsoftware.mydomo.engine</groupId>
+	<artifactId>engine</artifactId>
+	<packaging>jar</packaging>
+	<name>MyDomoEngine</name>
+	<description>Engine to send command to My Home gateway with open web protocol</description>
 
-	    <!-- Build Configuration -->
-	     
-	    <!-- Dependecies Management -->
-	    <dependencies>
-	    </dependencies>
+	<parent>
+		<groupId>com.adgsoftware.mydomo</groupId>
+		<artifactId>mydomoSolution</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
-	    <build>
-	   	<plugins>
+	<!-- Build Configuration -->
+
+	<!-- Dependecies Management -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
 			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>2.5.1</version>
-        		<configuration>
-          			<source>1.6</source>
-				    <target>1.6</target>
-        		</configuration>
-      		</plugin>
-    	</plugins>
-    	</build>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<licenseName>gpl</licenseName>
+					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.5,)</versionRange>
+										<goals>
+											<goal>
+												update-file-header
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
