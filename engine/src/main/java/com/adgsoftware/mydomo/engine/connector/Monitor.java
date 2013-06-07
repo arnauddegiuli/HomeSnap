@@ -33,6 +33,8 @@ public interface Monitor {
 	
 	public abstract void addControllerStatusListener(CommandListener commandListener);
 	
+	public abstract void addUnknownControllerListener(UnknownControllerListener unknownControllerListener);
+	
 	/**
 	 * Return true if connected to the open server.
 	 * @return true if connected to the open server.

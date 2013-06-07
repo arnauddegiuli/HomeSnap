@@ -4,6 +4,7 @@ package com.adgsoftware.mydomo.engine.test.utils;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.Monitor;
+import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebCommanderImpl;
 import com.adgsoftware.mydomo.engine.connector.impl.OpenWebMonitorImpl;
 import com.adgsoftware.mydomo.engine.controller.Controller;
@@ -109,12 +110,15 @@ public class ControllerServiceImpl implements ControllerService {
 	@Override
 	public void addCommanderConnectionListener(ConnectionListener listener) {
 		this.getOpenWebCommand().addConnectionListener(listener);
-		
 	}
 
 	@Override
 	public void addMonitorConnectionListener(ConnectionListener listener) {
 		this.getOpenWebMonitor().addConnectionListener(listener);
-		
+	}
+
+	@Override
+	public void addUnknowControllerListener(UnknownControllerListener listener) {
+		this.getOpenWebMonitor().addUnknownControllerListener(listener);
 	}
 }

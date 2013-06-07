@@ -15,6 +15,7 @@ import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.Monitor;
+import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
@@ -26,7 +27,6 @@ implements Monitor {
 
 	Log log = new Log();
 //	GestionePassword gestPassword = null;
-//	Logger log = Logger.getLogger(OpenWebMonitorImpl.class.getName());
 	
 	private Socket socket = null;	
 	private BufferedReader depuisClient = null;
@@ -36,8 +36,7 @@ implements Monitor {
 	private int timeout = 5000;
 	private List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
 	private List<CommandListener> commandListenerList = new ArrayList<CommandListener>();
-	
-	
+	private List<UnknownControllerListener> unknownControllerListenerList = new ArrayList<UnknownControllerListener>();
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	
 	/**
@@ -83,10 +82,12 @@ implements Monitor {
 	protected void onMessageReceipt(String message) {
 		String where = Command.getWhereFromCommand(message);
 		String what = Command.getWhatFromCommand(message);
+		boolean known = false;
 		if (what != null) {
 			// Manage what command
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWhere().equals(where)) {
+					known = true;
 					changeWhat(controller, what);
 				}
 			}
@@ -96,12 +97,21 @@ implements Monitor {
 			String code = Command.getDimensionFromCommand(message);
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWhere().equals(where)) {
+					known = true;
 					if (controller instanceof ControllerDimension<?>){
 						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);// TODO: le changeWhat relance l'action.... => pas bon!
 					}
 					else {
 						// error!!!
 					}
+				}
+			}
+		}
+		if (!known) {
+			// Detected unknown device
+			synchronized (unknownControllerListenerList) {
+				for (UnknownControllerListener listener : unknownControllerListenerList) {
+					listener.foundUnknownController( Command.getWhoFromCommand(message), where, what, Command.getDimensionFromCommand(message), Command.getDimensionListFromCommand(message));
 				}
 			}
 		}
@@ -328,5 +338,14 @@ implements Monitor {
 	@Override
 	public void addControllerStatusListener(CommandListener commandListener) {
 		commandListenerList.add(commandListener);
+	}
+
+	@Override
+	public void addUnknownControllerListener(
+			UnknownControllerListener unknownControllerListener) {
+		synchronized (unknownControllerListenerList) {
+			unknownControllerListenerList.add(unknownControllerListener);
+		}
+		
 	}
 }
