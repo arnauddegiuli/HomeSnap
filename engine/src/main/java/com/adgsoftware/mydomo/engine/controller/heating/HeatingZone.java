@@ -25,6 +25,8 @@ package com.adgsoftware.mydomo.engine.controller.heating;
 
 
 import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusCallback;
@@ -39,6 +41,8 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
+	private Log log = new Log();
+	
 	
 	public enum ZoneStatus implements Status {
 		
@@ -123,8 +127,7 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 			try {
 				synchronized (lock) { lock.wait(); }
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.severe(Session.Command, e.getMessage());
 			}
 			dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 		}

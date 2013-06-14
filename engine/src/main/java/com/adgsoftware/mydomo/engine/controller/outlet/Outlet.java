@@ -28,18 +28,18 @@ import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
-public class Outlet extends Controller<Outlet.AutomationStatus> {
+public class Outlet extends Controller<Outlet.OutletStatus> {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
 	// OUTLET
-	public enum AutomationStatus implements Status {
+	public enum OutletStatus implements Status {
 		OUTLET_OFF("0"),
 		OUTLET_ON("1");
 		
 		private String code = "";
-		private AutomationStatus(String code) {
+		private OutletStatus(String code) {
 			this.code = code;
 		}
 		
@@ -57,10 +57,10 @@ public class Outlet extends Controller<Outlet.AutomationStatus> {
 	}
 	
 	@Override
-	public AutomationStatus getStatus(String code) {
+	public OutletStatus getStatus(String code) {
 		if (code == null) 
 			return null;
-		for (AutomationStatus status : AutomationStatus.values()) {
+		for (OutletStatus status : OutletStatus.values()) {
 			if (code.equals(status.getCode())) {
 				return status;
 			}

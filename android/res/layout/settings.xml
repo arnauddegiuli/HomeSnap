@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_ip"
-             android:labelFor="@+id/txtServerIP"/>
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ip_separator" 
-            android:labelFor="@+id/txtServerPort"/>
+            />
 
         <EditText
             android:id="@+id/txtServerPort"

@@ -64,7 +64,7 @@ public class HeatingCommand {
 	public String currentTemperature(double temperature, String address) {
 		MeasureTemperature dt = new MeasureTemperature();
 		dt.setMeasuredTemperature(temperature);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE, formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE.getCode(), formatDimension(dt.getValueList())}));
 	}
 	
 	private String formatDimension(List<DimensionValue> valueList) {

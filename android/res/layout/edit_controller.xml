@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_where"
-                android:labelFor="@+id/txtControllerWhere"/>
+               />
 
             <EditText
                 android:id="@+id/txtControllerWhere"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_title"
-                android:labelFor="@+id/txtControllerTitle" />
+               />
 
             <EditText
                 android:id="@+id/txtControllerTitle"

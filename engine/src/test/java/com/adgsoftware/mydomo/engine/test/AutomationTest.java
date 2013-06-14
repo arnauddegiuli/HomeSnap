@@ -31,23 +31,23 @@ import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation.AutomationStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.test.utils.ControllerServiceImpl;
 
-public class LightTest {
+public class AutomationTest {
 
 	private ControllerService s = new ControllerServiceImpl("localhost", 1234);
 	private Object lock = new Object();
 	
 	@Test
-	public void statusOnOffTest() {
+	public void statusUpDownTest() {
 		
-		final Light light = s.createController(Light.class, "12");
+		final Automation automation = s.createController(Automation.class, "32");
 		
 		// Listener will make us availabe to wait response from server
-		light.addControllerChangeListener(new ControllerChangeListener() {
+		automation.addControllerChangeListener(new ControllerChangeListener() {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -84,11 +84,11 @@ public class LightTest {
 		}
 		
 		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_OFF , light.getWhat());
+		Assert.assertNotNull(automation.getWhat());
+		Assert.assertEquals(AutomationStatus.AUTOMATION_STOP , automation.getWhat());
 		
-		// Now set the value to ON
-		light.setWhat(LightStatus.LIGHT_ON);
+		// Now set the value to AUTOMATION_DOWN
+		automation.setWhat(AutomationStatus.AUTOMATION_DOWN);
 		System.out.println("Wait...");
 		
 		// Wait the response from the server
@@ -102,11 +102,11 @@ public class LightTest {
 		}
 		
 		// Check that after the server response now the status is ON
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_ON , light.getWhat());
+		Assert.assertNotNull(automation.getWhat());
+		Assert.assertEquals(AutomationStatus.AUTOMATION_DOWN , automation.getWhat());
 		
-		// Switch off again
-		light.setWhat(LightStatus.LIGHT_OFF);
+		// Switch UP now again
+		automation.setWhat(AutomationStatus.AUTOMATION_UP);
 		System.out.println("Wait...");
 		
 		try {
@@ -118,8 +118,25 @@ public class LightTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_OFF , light.getWhat());
+		Assert.assertNotNull(automation.getWhat());
+		Assert.assertEquals(AutomationStatus.AUTOMATION_UP , automation.getWhat());
+
+		// Switch OFF now again
+		automation.setWhat(AutomationStatus.AUTOMATION_STOP);
+		System.out.println("Wait...");
+		
+		try {
+			synchronized (lock) {
+				
+				lock.wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(automation.getWhat());
+		Assert.assertEquals(AutomationStatus.AUTOMATION_STOP , automation.getWhat());
+
 		
 		System.out.println("Finish...");
 

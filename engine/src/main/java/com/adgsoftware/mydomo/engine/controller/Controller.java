@@ -128,8 +128,8 @@ implements Serializable {
 	 * @param newWhat {@link Status} of the device.
 	 */
 	public void changeWhat(T newWhat) {
-		notifyWhatChange(this.what, newWhat);
 		this.what = newWhat;
+		notifyWhatChange(this.what, newWhat);
 	}
 	
 	/**

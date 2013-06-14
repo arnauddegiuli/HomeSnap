@@ -11,7 +11,7 @@ import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.outlet.Outlet;
-import com.adgsoftware.mydomo.engine.controller.outlet.Outlet.AutomationStatus;
+import com.adgsoftware.mydomo.engine.controller.outlet.Outlet.OutletStatus;
 
 public class OutletComponent extends AbstractComponent {
 
@@ -28,10 +28,10 @@ public class OutletComponent extends AbstractComponent {
 
 			@Override
 			public void onClick(View v) {
-				if (AutomationStatus.OUTLET_ON.equals(outlet.getWhat())) {
-					outlet.setWhat(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.AutomationStatus.OUTLET_OFF);
+				if (OutletStatus.OUTLET_ON.equals(outlet.getWhat())) {
+					outlet.setWhat(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.OutletStatus.OUTLET_OFF);
 				} else {
-					outlet.setWhat(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.AutomationStatus.OUTLET_ON);
+					outlet.setWhat(com.adgsoftware.mydomo.engine.controller.outlet.Outlet.OutletStatus.OUTLET_ON);
 				}
 			}
 		});
@@ -43,7 +43,7 @@ public class OutletComponent extends AbstractComponent {
 			@Override
 			public void onWhatChange(Controller<? extends Status> controller,
 					Status oldStatus, Status newStatus) {
-				outletToggle.setChecked(AutomationStatus.OUTLET_ON.equals(newStatus));
+				outletToggle.setChecked(OutletStatus.OUTLET_ON.equals(newStatus));
 				
 			}
 
@@ -51,7 +51,7 @@ public class OutletComponent extends AbstractComponent {
 			public void onWhatChangeError(
 					Controller<? extends Status> controller, Status oldStatus,
 					Status newStatus, CommandResult result) {
-				outletToggle.setChecked(AutomationStatus.OUTLET_ON.equals(oldStatus));
+				outletToggle.setChecked(OutletStatus.OUTLET_ON.equals(oldStatus));
 			}
 			
 		});

@@ -42,7 +42,7 @@ public class ControllerStateManagement {
 	 * Register a new ControllerCommand. Call by a module (for example light module) to register it to the server.
 	 * @param controllerCommand controller to register
 	 */
-	public static void registerControllerCommand(ControllerSimulator controllerCommand) {
+	public synchronized static void registerControllerCommand(ControllerSimulator controllerCommand) {
 		synchronized (controllerCommandList) {
 			controllerCommandList.put(controllerCommand.getWho(), controllerCommand);	
 		}
@@ -53,33 +53,33 @@ public class ControllerStateManagement {
 	 * Unregister a controller. Call by a module (for example light module) when user stop the module.
 	 * @param controllerCommand controller to unregister
 	 */
-	public static void unRegisterControllerCommand(ControllerSimulator controllerCommand) {
+	public synchronized static void unRegisterControllerCommand(ControllerSimulator controllerCommand) {
 		synchronized (controllerCommandList) {
 			controllerCommandList.remove(controllerCommand.getWho());
 		}
 	}
 	
-	public static void registerControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
+	public synchronized static void registerControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
 		synchronized (controllerDimensionCommandList) {
 			controllerDimensionCommandList.put(controllerDimensionCommand.getWho(), controllerDimensionCommand);	
 		}
 		
 	}
 	
-	public static void unRegisterControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
+	public synchronized static void unRegisterControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
 		synchronized (controllerDimensionCommandList) {
 			controllerDimensionCommandList.remove(controllerDimensionCommand.getWho());
 		}
 	}
 
-	public static void registerMonitorSession(MonitorSession monitor) {
+	public synchronized static void registerMonitorSession(MonitorSession monitor) {
 		synchronized (monitorList) {
 			monitorList.add(monitor);
 		}
 		
 	}
 	
-	public static void unRegisterMonitorSession(MonitorSession monitor) {
+	public synchronized static void unRegisterMonitorSession(MonitorSession monitor) {
 		synchronized (monitorList) {
 			monitorList.remove(monitor);
 		}
@@ -90,18 +90,19 @@ public class ControllerStateManagement {
 	 * @param command command to execute
 	 * @return the result of the command
 	 */
-	public static String executeCommand(String command) {
+	public synchronized static String executeCommand(String command) {
 		
 		String who = Command.getWhoFromCommand(command);
 		String result;
 		ControllerSimulator cc;
 		synchronized (controllerCommandList) {
+			synchronized (controllerDimensionCommandList) {
 			cc = controllerCommandList.get(who);
-		}
+		
 		if (cc != null) {
 			result = cc.execute(command);
 		} else {
-			synchronized (controllerDimensionCommandList) {
+			
 				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
 				if (cdc != null) {
 					result = cdc.execute(command);
@@ -109,7 +110,7 @@ public class ControllerStateManagement {
 					System.out.println("Command not supported [" + command + "]");
 					result = Command.NACK;
 				}
-			}
+			
 		}
 		
 		if (!Command.NACK.equalsIgnoreCase(result)) {
@@ -124,7 +125,7 @@ public class ControllerStateManagement {
 				}
 			}
 		}
-		
+		}}
 		return result;
 	}
 	
@@ -133,17 +134,18 @@ public class ControllerStateManagement {
 	 * @param command the status request to execute
 	 * @return the status
 	 */
-	public static String executeStatus(String command) {
+	public synchronized static String executeStatus(String command) {
 		String who = Command.getWhoFromCommand(command);
 		ControllerSimulator cc;
 		
 		synchronized (controllerCommandList) {
+			synchronized (controllerDimensionCommandList) {
 			cc = controllerCommandList.get(who);
-		}
+		
 		if (cc != null) {
 			return cc.status(command);
 		} else {
-			synchronized (controllerDimensionCommandList) {
+			
 				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
 				if (cdc != null) {
 					return cdc.status(command);
@@ -152,7 +154,7 @@ public class ControllerStateManagement {
 					return Command.NACK;
 				}
 			}
-		}
+		}}
 	}
 	
 }
