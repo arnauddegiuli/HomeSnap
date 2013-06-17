@@ -105,6 +105,12 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
+		    <groupId>com.adgsoftware.mydomo.engine</groupId>
+		    <artifactId>engine</artifactId>
+		    <version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
 			<version>2.0.4</version>
@@ -123,10 +129,16 @@
 		</dependency>
 
 		<!-- Jersey (JAX-RS) -->
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.17</version>
+ 		<dependency>
+		    <groupId>org.glassfish.jersey.containers</groupId>
+		    <artifactId>jersey-container-servlet-core</artifactId>
+		    <version>2.0</version>
+		</dependency>
+		
+ 		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>javax.annotation-api</artifactId>
+		    <version>1.2-b01</version>
 		</dependency>
 		<!-- <dependency> <groupId>javax.ws.rs</groupId> <artifactId>javax.ws.rs-api</artifactId> 
 			<version>2.0</version> </dependency> -->

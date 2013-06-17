@@ -23,18 +23,17 @@ package mydomowebserver;
  * #L%
  */
 
-//import javax.ws.rs.GET;
-//import javax.ws.rs.Path;
-//
-//@Path( "/example" )
-public class SimpleLogServiceImpl implements SimpleLogService {
+import java.util.HashSet;
+import java.util.Set;
 
-	public void log(String message) {
-		System.out.println(message);
-	}
-	
-//	@GET
-	public String seyHello() {
-		return "JAX-RS and OSGi are a lovely couple.";
-	}
+import javax.ws.rs.core.Application;
+
+public class JerseyApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> result = new HashSet<Class<?>>();
+        result.add(LightRestServiceImpl.class);
+        return result;
+    }
 }

@@ -1,5 +1,7 @@
 package mydomowebserver;
 
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+
 /*
  * #%L
  * MyDomoWebServer
@@ -25,10 +27,9 @@ package mydomowebserver;
 
 
 
-public interface SimpleLogService {
+public interface LightRestService {
 
-	public void log(String message);
-	
-	public String seyHello();
+	public LightStatus command(LightStatus status, String adress);
+	public LightStatus status(String adress);
 
 }

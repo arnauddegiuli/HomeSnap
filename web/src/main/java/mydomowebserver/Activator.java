@@ -25,15 +25,26 @@ package mydomowebserver;
 
 
 import java.util.Hashtable;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpService;
+import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
 
-	private ServiceTracker simpleLogServiceTracker;
-	private SimpleLogService simpleLogService;
+	private BundleContext bc;
+	private HttpService httpService = null;
+    private static final Logger logger = Logger.getLogger(Activator.class.getName());
+    private ServiceTracker httpServiceTracker;
+
+//	private ServiceTracker<LightRestService, LightRestServiceImpl> lightRestServiceTracker;
+//	private LightRestService lightRestService;
 	
 	/*
 	 * (non-Javadoc)
@@ -42,25 +53,59 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		
 		System.setProperty("jetty.home.bundle", "MyDomoWebServer");
-
+		this.bc = context;
 		
 		
 		// register the service
 		context.registerService(
-				SimpleLogService.class.getName(), 
-				new SimpleLogServiceImpl(), 
-				new Hashtable());
+				LightRestService.class.getName(), 
+				new LightRestServiceImpl(), 
+				new Hashtable<String, String>());
 		
-		// create a tracker and track the log service
-		simpleLogServiceTracker = 
-			new ServiceTracker(context, SimpleLogService.class.getName(), null);
-		simpleLogServiceTracker.open();
+//		// create a tracker and track the log service
+//		lightRestServiceTracker = 
+//			new ServiceTracker(context, LightRestService.class.getName(), null);
+//		lightRestServiceTracker.open();
+//		
+//		// grab the service
+//		lightRestService = (LightRestService) lightRestServiceTracker.getService();
 		
-		// grab the service
-		simpleLogService = (SimpleLogService) simpleLogServiceTracker.getService();
+		
+		
 
-		if(simpleLogService != null)
-			simpleLogService.log("Yee ha, I'm logging!");
+		logger.info("STARTING HTTP SERVICE BUNDLE");
+
+		httpServiceTracker = new ServiceTracker(context, HttpService.class.getName(), null) {
+	          @Override
+	          public Object addingService(final ServiceReference serviceRef) {
+	             httpService = (HttpService)super.addingService(serviceRef);
+	             registerServlets();
+	             try {
+					httpService.registerServlet("/light", new LightServlet(), null, null);
+					httpService.registerResources("/server", "", null);
+				} catch (final ServletException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (final NamespaceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	             return httpService;
+	          }
+
+	          @Override
+	            public void removedService(final ServiceReference ref, final Object service) {
+	                if (httpService == service) {
+//	                    unregisterServlets();
+	                    httpService = null;
+	                }
+	                super.removedService(ref, service);
+	            }
+	        };
+
+	        httpServiceTracker.open();
+	                
+	        logger.info("HTTP SERVICE BUNDLE STARTED");
 	}
 	
 	/*
@@ -68,14 +113,103 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		if(simpleLogService != null)
-			simpleLogService.log("Yee ha, I'm logging!");
-		
+				
 		// close the service tracker
-		simpleLogServiceTracker.close();
-		simpleLogServiceTracker = null;
+//		lightRestServiceTracker.close();
+//		lightRestServiceTracker = null;
+//		
+//		lightRestService = null;
 		
-		simpleLogService = null;
+		this.httpServiceTracker.close();
 	}
 
+	private void registerServlets() {
+        try {
+            rawRegisterServlets();
+        } catch (InterruptedException ie) {
+            throw new RuntimeException(ie);
+        } catch (ServletException se) {
+            throw new RuntimeException(se);
+        } catch (NamespaceException se) {
+            throw new RuntimeException(se);
+        }
+    }
+
+//    private void rawRegisterServlets() throws ServletException, NamespaceException, InterruptedException {
+//        logger.info("T BUNDLE: REGISTERING SERVLETS");
+//        logger.info("T BUNDLE: HTTP SERVICE = " + httpService.toString());
+//
+//        HttpContext hc = new HttpContext() {
+//			
+//			@Override
+//			public boolean handleSecurity(HttpServletRequest request,
+//					HttpServletResponse response) throws IOException {
+//				// TODO Auto-generated method stub
+//				return false;
+//			}
+//			
+//			@Override
+//			public URL getResource(String name) {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//			
+//			@Override
+//			public String getMimeType(String name) {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//		};
+//        
+//        httpService.registerServlet("/servi", new Servlet(),  new Hashtable<String, String>(), hc);
+//
+//        logger.info("T BUNDLE: SERVLETS REGISTERED");
+//    }
+//
+//    private void unregisterServlets() {
+//    	if (this.httpService != null) {
+//    		logger.info("T BUNDLE: UNREGISTERING SERVLETS");
+//    		httpService.unregister("/servi");
+//    		logger.info("T BUNDLE: SERVLETS UNREGISTERED");
+//    	}
+//    }	
+	
+    private void rawRegisterServlets() throws ServletException, NamespaceException, InterruptedException {
+//        logger.info("JERSEY BUNDLE: REGISTERING SERVLETS");
+//        logger.info("JERSEY BUNDLE: HTTP SERVICE = " + httpService.toString());
+//
+//        httpService.registerServlet("/jersey-http-service", new ServletContainer(), getJerseyServletParams(), null);
+//
+//        sendAdminEvent();
+//        logger.info("JERSEY BUNDLE: SERVLETS REGISTERED");
+    }
+
+//    private void sendAdminEvent() {
+//        ServiceReference eaRef = bc.getServiceReference(EventAdmin.class.getName());
+//        if (eaRef != null) {
+//            EventAdmin ea = (EventAdmin) bc.getService(eaRef);
+//            ea.sendEvent(new Event("jersey/test/DEPLOYED", new HashMap<String, String>() {
+//
+//                {
+//                    put("context-path", "/");
+//                }
+//            }));
+//            bc.ungetService(eaRef);
+//        }
+//    }
+//
+//    private void unregisterServlets() {
+//        if (this.httpService != null) {
+//            logger.info("JERSEY BUNDLE: UNREGISTERING SERVLETS");
+//            httpService.unregister("/jersey-http-service");
+//            logger.info("JERSEY BUNDLE: SERVLETS UNREGISTERED");
+//        }
+//    }
+//
+//    @SuppressWarnings("UseOfObsoleteCollectionType")
+//    private Dictionary<String, String> getJerseyServletParams() {
+//        Dictionary<String, String> jerseyServletParams = new Hashtable<String, String>();
+//        jerseyServletParams.put("javax.ws.rs.Application", JerseyApplication.class.getName());
+//        return jerseyServletParams;
+//    }
 }
