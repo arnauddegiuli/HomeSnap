@@ -56,8 +56,9 @@ public class OpenWebConnectThread implements Runnable {
 	}
 		
 	public boolean connect() {
-		synchronized (OpenWebCommanderImpl.class) { // mutex on the main thread: only one connection or send message at the same time!
+		synchronized (commander) { // mutex on the main thread: only one connection or send message at the same time!
 			if (!commander.isConnected()) { // Test again since with the lock, maybe a previous thread has opened the connection!
+				
 				try {
 					String ip = commander.getIp();
 					int port = commander.getPort();

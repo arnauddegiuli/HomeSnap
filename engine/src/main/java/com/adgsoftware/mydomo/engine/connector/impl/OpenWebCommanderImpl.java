@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
@@ -41,7 +42,6 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 public class OpenWebCommanderImpl implements Commander {
 	
 	Socket socket;
-//	Logger log = Logger.getLogger(OpenWebCommanderImpl.class.getName());
 	Log log = new Log();
 	BufferedReader input = null;
 	PrintWriter output = null;
@@ -127,11 +127,21 @@ public class OpenWebCommanderImpl implements Commander {
 //			e.printStackTrace();
 //		}
 
-		if (!isConnected()) { // If socket close? => init connection.
-			new Thread(new OpenWebConnectThread(this)).start(); // Open connection in thread to avoid blocking user!
-		}
+		synchronized (this) {
+			if (!isConnected()) { // If socket close? => init connection.
+				new Thread(new OpenWebConnectThread(this)).start(); // Open connection in thread to avoid blocking user!
+			}
+			// Wait to be sure that thread is run before the next => else sometime connection was started after command...
+			try {
+				this.wait(20);
+			} catch (InterruptedException e) {
+				log.severe(Session.Command, "Error during waiting 20 millisecond for connection thread.");
+			}
+		}	
+		
 		// Send asynchronously the command!
-		new Thread(new OpenWebCommandThread(this, command, resultListener)).start(); 
+		new Thread(new OpenWebCommandThread(this, command, resultListener)).start();
+
 	}
 
 	void writeMessage(String message) {
@@ -156,7 +166,7 @@ public class OpenWebCommanderImpl implements Commander {
 	    			ci = input.read();		    		
 		    		if (ci == -1) {
 			  			log.finest(Log.Session.Command, "End of read from command server socket.");
-			  			socket = null;
+			  			close();
 			  			break;
 			        } else { 
 			        	c = (char) ci;			        				        

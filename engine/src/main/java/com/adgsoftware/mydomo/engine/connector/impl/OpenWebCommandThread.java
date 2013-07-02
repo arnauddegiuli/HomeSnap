@@ -35,7 +35,6 @@ import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
  */
 public class OpenWebCommandThread implements Runnable {
 	
-//	Logger log = Logger.getLogger(OpenWebCommandThread.class.getName());
 	Log log = new Log();
 	private OpenWebCommanderImpl commander;
 	private String command;
@@ -55,9 +54,10 @@ public class OpenWebCommandThread implements Runnable {
 	}
 		
 	public void sendCommand(String command, CommandListener resultListener) { 
-		synchronized (OpenWebCommanderImpl.class) { // mutex on the main thread: only one connection or send message at the same time!
+		synchronized (commander) { // mutex on the main thread: only one connection or send message at the same time!
+			
 			if (commander.isConnected()) { // Test again since with the lock, maybe a previous thread has closed the connection!
-
+				
 				commander.writeMessage(command);
 				String msg = commander.readMessage();
 				
