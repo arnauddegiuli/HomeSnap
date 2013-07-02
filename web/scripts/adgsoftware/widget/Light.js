@@ -7,8 +7,10 @@ define([
     "dojo/text!./templates/Light.html",
     "dojo/dom-style",
     "dojo/_base/fx",
-    "dojo/_base/lang"
-], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang) {
+    "dojo/_base/lang",
+    "dojo/request",
+    "dojo/json"
+], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {
 		baseClass: "light",
@@ -17,22 +19,46 @@ define([
 		slider: null,
 		lock: false,
 		on : function() {
-			this.set('label', 'ON');
-			this.button.set('iconClass', 'lightOnIcon');
-			if (!this.lock) {
-				this.lock = true;
-				this.slider.set('value', 0);
-				this.lock = false
-			}
+				adress = "12"; // TODO adress hard coded...
+				// Call REST API to change light
+				var component = this;
+				request.put("/light/" + adress + "/on", {sync: true, handleAs: "json"})
+					.then(function(data){
+						if (data.status == "on") {
+							component.set('label', 'ON');
+							component.button.set('iconClass', 'lightOnIcon');
+							if (!component.lock) {
+								component.lock = true;
+								component.slider.set('value', 0);
+								component.lock = false
+							}
+						} else {
+							console.log('beurk!');
+						}
+	    		    }, function(error) {
+	    		    	alert(error);
+	    	   });
 		},
 		off: function() {
-			this.set('label', 'OFF');
-			this.button.set('iconClass', 'lightOffIcon');
-			if (!this.lock) {
-				this.lock = true;
-				this.slider.set('value', 100);
-				this.lock = false
-			}
+			adress = "12"; // TODO adress hard coded...
+			var component = this;
+	    	 // Call REST API to change light
+	    	 request.put("/light/" + adress + "/off", {sync: true, handleAs: "json"})
+			    .then(function(data){
+		        	  if (data.status == "off") {
+			        	  component.set('label', 'OFF');
+			        	  component.button.set('iconClass', 'lightOffIcon');
+			  			if (!component.lock) {
+			  				component.lock = true;
+			  				component.slider.set('value', 100);
+			  				component.lock = false
+			  			}
+			          } else {
+			        	  console.log('beurk!');
+			          }
+	    		    }, function(error) {
+	    		    	alert(error);
+	    	   });
 		},
 		startup: function() {
 			var component = this;
@@ -40,16 +66,18 @@ define([
 				checked: false,
 			  	iconClass: 'lightOffIcon',
 			  	label: 'OFF',
-			     onChange: function(val){
-			          if (val) {
+			  	onChange: function(val){
+			    	if (val) {
 			        	  component.on();
+			        	  console.log('on');
 			          } else {
 			        	  component.off();
+			        	  console.log('off');
 			          }
-			      },
-			      postCreate: function() {
-			     	 this.set('showLabel', false);
-			      }
+				},
+			  	postCreate: function() {
+			    	this.set('showLabel', false);
+			    }
 				 
 			 }, this.id + "progButtonNode");
 		 

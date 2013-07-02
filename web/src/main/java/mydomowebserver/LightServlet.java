@@ -24,6 +24,7 @@ package mydomowebserver;
  */
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -45,36 +46,60 @@ public class LightServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.err.println("DO GET!");
-		// /adress/on or /adress/off
-		String adress = req.getPathInfo();
-		if (adress != null) {
-			adress = adress.substring(1);
-			LightStatus status;
-			if (!req.getPathInfo().contains("on") && !req.getPathInfo().contains("off")) { // /adress
-				status = service.status(adress);
-			} else { // /adress/on or /adress/off
-				String newStatus = req.getPathInfo();
-				newStatus = "LIGHT_ON";
-				adress ="12";
-				status = service.command(LightStatus.valueOf(newStatus), adress);
-			}
-			
-			resp.getWriter().write("{adress:"+adress+",status:"+ (status == null ? "null" : status.name())+"}");
+		// /adress or /adress
+		resp.setContentType(" application/json");
+		String[] pathInfo = split(req.getPathInfo());
+		if (pathInfo != null && pathInfo.length == 1) {
+			String adress = pathInfo[0];
+			LightStatus status = service.status(adress);
+			String strStatus = (status == null ? "null" : LightStatus.LIGHT_ON == status ? "on" : "off");
+			resp.getWriter().write("{\"adress\":\""+adress+"\",\"status\":\""+ strStatus +"\"}");
 		} else {
-			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress[/on|/off]");
+			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
 		}
+	}
+	
+	private String[] split(String pathInfo) {
+		StringTokenizer st = new StringTokenizer(pathInfo.substring(1), "/");
+		String[] result = new String[st.countTokens()];
+		for (int i = 0; st.hasMoreTokens(); i++) {
+			result[i] = st.nextToken();
+		}
+		return result;
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		
 	}
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(req, resp);
+		System.err.println("DO PUT!");
+		long start = System.currentTimeMillis();
+		resp.setContentType(" application/json");
+		// /adress/on or /adress/off
+		String[] pathInfo = split(req.getPathInfo());
+		if (pathInfo != null && pathInfo.length == 2) {
+			String adress = pathInfo[0];
+			String status = pathInfo[1];
+
+			LightStatus result = null;
+			if ("on".equalsIgnoreCase(status)) {
+				result = service.command(LightStatus.LIGHT_ON, adress);
+			} else if ("off".equalsIgnoreCase(status)) {
+				result = service.command(LightStatus.LIGHT_OFF, adress);
+			} else {
+				resp.getWriter().write("{error: invalid command}");
+				return;
+			}
+			String strStatus = (result == null ? "null" : LightStatus.LIGHT_ON == result ? "on" : "off");
+			resp.getWriter().write("{\"adress\":\""+adress+"\", \"status\":\""+ strStatus +"\"}");
+		} else {
+			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress[/on|/off]");
+		}
+		
+		System.err.println("Time:" + (System.currentTimeMillis() - start));
 	}
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)

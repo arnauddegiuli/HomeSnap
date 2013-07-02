@@ -43,58 +43,61 @@ public class LightRestServiceImpl implements LightRestService {
 	}
 	
 	private ControllerService service = new ControllerServiceImpl("localhost", 1234); // TODO change it!
-	private Map<String, Controller> controllerList = new Hashtable<String, Controller>();
+	private Map<String, Light> controllerList = new Hashtable<String, Light>();
 	
 	@Override
 	public LightStatus command(LightStatus status, String adress) {
 		
-		Light l = service.createController(Light.class, adress);
-		l.addControllerChangeListener(new ControllerChangeListener() {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onWhatChangeError(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus, CommandResult result) {
-				this.notify();
+		Light l = getController(adress);
+		synchronized (this) {
+			if (LightStatus.LIGHT_ON.equals(status)) {
+				l.setWhat(LightStatus.LIGHT_ON);
+			} else if (LightStatus.LIGHT_OFF.equals(status)) {
+				l.setWhat(LightStatus.LIGHT_OFF);
 			}
 			
-			@Override
-			public void onWhatChange(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus) {
-				this.notify();
+			try {
+				this.wait(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
-		
-		if (LightStatus.LIGHT_ON.equals(status)) {
-			l.setWhat(LightStatus.LIGHT_ON);
-		} else if (LightStatus.LIGHT_OFF.equals(status)) {
-			l.setWhat(LightStatus.LIGHT_OFF);
 		}
-		
-		try {
-			this.wait(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return l.getStatus(adress);
+		return l.getWhat();
 	}
 	
-	private Controller<Status> getController(Class<Controller> clazz, String adress) {
-		Controller<Status> result = controllerList.get(adress);
+	private Light getController(String adress) {
+		Light result = controllerList.get(adress);
 		if(result == null) {
-			result = service.createController(clazz, adress);
+			result = service.createController(Light.class, adress);
+			result.addControllerChangeListener(new ControllerChangeListener() {
+				
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onWhatChangeError(Controller<? extends Status> controller,
+						Status oldStatus, Status newStatus, CommandResult result) {
+					synchronized (this) {
+						this.notify();
+					}
+				}
+				
+				@Override
+				public void onWhatChange(Controller<? extends Status> controller,
+						Status oldStatus, Status newStatus) {
+					synchronized (this) {
+						this.notify();
+					}
+				}
+			});
+			
 			controllerList.put(adress, result);
 		}
-		
 		return result;
 	}
 
 	@Override
 	public LightStatus status(String adress) {
-		// TODO Auto-generated method stub
-		Light l = service.createController(Light.class, adress);
-		return l.getWhat();
+		return getController(adress).getWhat();
 	}
 }

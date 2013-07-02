@@ -18,3 +18,4 @@ Export-Package: com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engi
  com.adgsoftware.mydomo.engine.parser,
  com.adgsoftware.mydomo.engine.script,
  com.adgsoftware.mydomo.engine.services
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
