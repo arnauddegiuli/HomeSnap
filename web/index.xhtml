@@ -4,7 +4,9 @@
 <head>
     <title>Tutorial: Hello Dojo!</title>
     <link rel="stylesheet" href="scripts/adgsoftware/widget/css/Light.css" media="screen"/>
-    <link rel="stylesheet" href="scripts/dojo-release-1.8.3/dijit/themes/claro/claro.css" media="screen"/>
+    
+    
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css" media="screen"/>
 </head>
 <body class="claro">
     <h1 id="greeting">Hello</h1>
@@ -14,18 +16,14 @@
 	   	    baseUrl: "scripts/",
 	   	    tlmSiblingOfDojo: false,
 	   	    packages: [
-	   	        { name: "dojo", location: "dojo-release-1.8.3/dojo" },
-	   	        { name: "dijit", location: "dojo-release-1.8.3/dijit" },
-	   	        { name: "dojox", location: "dojo-release-1.8.3/dojox" },
 	   	        { name: "adgsoftware", location: "adgsoftware" }
 	   	    ]
 	   	 };
    </script>
    
-    <script src="scripts/dojo-release-1.8.3/dojo/dojo.js"
-               data-dojo-config="async: true">
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true"></script>
     
-    </script>
+    
     
 
 	<script>
