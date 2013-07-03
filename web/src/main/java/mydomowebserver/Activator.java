@@ -198,7 +198,7 @@ public class Activator implements BundleActivator {
 //        }
 //    }
 //
-//    private void unregisterServlets() {
+//    private voixml,\d unregisterServlets() {
 //        if (this.httpService != null) {
 //            logger.info("JERSEY BUNDLE: UNREGISTERING SERVLETS");
 //            httpService.unregister("/jersey-http-service");
