@@ -54,6 +54,7 @@ public class HeatingTest {
 	public void getDesiredTemperatureSynchroneTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "10");
 		getDesiredTemperatureSynchrone(hz);
+		s.onDestroy();
 	}
 	
 	public void getDesiredTemperatureSynchrone(HeatingZone hz) {
@@ -67,6 +68,7 @@ public class HeatingTest {
 	public void setDesiredTemperatureTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "11");
 		setDesiredTemperature(hz);
+		s.onDestroy();
 	}
 	
 	public void setDesiredTemperature(HeatingZone hz) {
@@ -135,6 +137,7 @@ public class HeatingTest {
 	public void getDesiredTemperatureAsynchroneTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "10");
 		getDesiredTemperatureAsynchrone(hz);
+		s.onDestroy();
 	}
 	
 	public void getDesiredTemperatureAsynchrone(HeatingZone hz) {
@@ -169,6 +172,7 @@ public class HeatingTest {
 	public void getMeasureTemperatureTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "10");
 		getMeasureTemperature(hz);
+		s.onDestroy();
 	}
 	
 	public void getMeasureTemperature(HeatingZone hz) {
@@ -203,6 +207,7 @@ public class HeatingTest {
 	public void getValvesStatusTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "10");
 		getValvesStatus(hz);
+		s.onDestroy();
 	}
 	
 	public void getValvesStatus(HeatingZone hz) {
@@ -237,6 +242,7 @@ public class HeatingTest {
 	public void getSetOffsetTest() {
 		HeatingZone hz = s.createController(HeatingZone.class, "10");
 		getSetOffset(hz);
+		s.onDestroy();
 	}
 	
 	public void getSetOffset(HeatingZone hz) {
@@ -275,6 +281,7 @@ public class HeatingTest {
 		this.getSetOffset(hz);
 		this.getValvesStatus(hz);
 		this.setDesiredTemperature(hz);
+		s.onDestroy();
 	}
 
 }

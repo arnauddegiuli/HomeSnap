@@ -61,6 +61,7 @@ implements Monitor {
 	private List<CommandListener> commandListenerList = new ArrayList<CommandListener>();
 	private List<UnknownControllerListener> unknownControllerListenerList = new ArrayList<UnknownControllerListener>();
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
+	private boolean tryToConnect = true;
 	
 	/**
 	 * 
@@ -83,7 +84,7 @@ implements Monitor {
 	@Override
 	public void setIp(String ip) {
 		this.ip = ip;
-		close();
+		resetSocket();
 	}
 
 	@Override
@@ -94,7 +95,7 @@ implements Monitor {
 	@Override
 	public void setPort(int port) {
 		this.port = port;
-		close();
+		resetSocket();
 	}
 
 	@Override
@@ -125,7 +126,7 @@ implements Monitor {
 						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);// TODO: le changeWhat relance l'action.... => pas bon!
 					}
 					else {
-						// error!!!
+						// TODO error!!!
 					}
 				}
 			}
@@ -180,7 +181,7 @@ implements Monitor {
 					}
 				}
 			}
-		} while (true);
+		} while (tryToConnect);
 	}
 	
 	@Override
@@ -197,7 +198,7 @@ implements Monitor {
 		}catch (Exception e){
 			log.severe(Log.Session.Monitor, "Impossible to connect to the server ["+ip+":"+port+"]");
 			if (socket!=null && socket.isConnected()) {
-				this.close();
+				this.resetSocket();
 			}
 			return false;
 		}
@@ -210,7 +211,7 @@ implements Monitor {
     				// Bad return message
                     log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
                     callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-                    this.close();
+                    this.resetSocket();
                     return false;
     			}
 	            
@@ -233,7 +234,7 @@ implements Monitor {
     			if (!Command.ACK.equals(msg)) {		       	
     		        log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
     		        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-    		        this.close();
+    		        this.resetSocket();
     		        return false;
     		    }
     			
@@ -257,8 +258,19 @@ implements Monitor {
 		}
 	}
 	
+	/**
+	 * Close the socket and stop the thread.
+	 */
 	@Override
 	public void close(){
+		tryToConnect = false; // get out of the thread by stopping try to reconnect the monitor.
+		resetSocket();
+	}
+	
+	/**
+	 * Reset the socket: thread (OpenWebMonitorImpl is a thread) will reopen the socket as soon as possible.
+	 */
+	private void resetSocket() {
 		if(socket != null){
 			try {
 				for (ConnectionListener connectionListener : connectionListenerList) {
@@ -270,6 +282,7 @@ implements Monitor {
 				}
 				socket.close();
 				socket = null;
+				log.fine(Log.Session.Monitor, "Close Monitor Session...");
 			} catch (IOException e) {
 				log.severe(Log.Session.Monitor, "Error during closing socket [" + e.getMessage() + "]");
 			}
@@ -296,7 +309,7 @@ implements Monitor {
 	    			ci = depuisClient.read();		    		
 		    		if (ci == -1) {
 		    			log.finest(Log.Session.Monitor, "End of read from monitor socket.");
-			  			close();
+			  			resetSocket();
 			  			break;
 			        } else { 
 			        	c = (char) ci;			        				        
@@ -311,7 +324,7 @@ implements Monitor {
 					    } 
 			        }
 	    		} else {
-	    			close();
+	    			resetSocket();
 	    			break;
 	    		}
 	        } while(true); 
@@ -334,7 +347,7 @@ implements Monitor {
 			if (socket.isConnected()) {
 				return true;		
 			} else {
-				close();
+				resetSocket();
 				return false;
 			}
 		} else {

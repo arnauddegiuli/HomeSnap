@@ -164,8 +164,8 @@ implements Serializable {
 			@Override
 			public void onCommand(CommandResult result) {
 				if (CommandResultStatus.ok.equals(result.status)) {
-					list.put(dimensionStatus.getCode(), dimensionStatus);
-					notifyDimensionChange(dimensionStatus);
+					list.put(dimensionStatus.getCode(), dimensionStatus); // I do it here and not in monitor because too difficult to recreate the good dimension later....
+				//	notifyDimensionChange(dimensionStatus); // done when come back from monitor
 				} else {
 					// Error...
 					notifyDimensionChangeError(dimensionStatus, result);

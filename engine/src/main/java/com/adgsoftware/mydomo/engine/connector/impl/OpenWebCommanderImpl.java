@@ -87,6 +87,7 @@ public class OpenWebCommanderImpl implements Commander {
 	 * Asynchrone connection
 	 */
 	public void connect() { 
+		// TODO manage if we start another thread by call connect again...
 		new Thread(new OpenWebConnectThread(this)).start(); // Make connection in thread to avoid blocking the user!
 		
 	}
@@ -104,7 +105,7 @@ public class OpenWebCommanderImpl implements Commander {
 						log.severe(Log.Session.Command, "ConnectionListener raise an error: " + e.getMessage());
 					}
 				}
-						
+				log.fine(Log.Session.Command, "Close Command Session...");
 			} catch (IOException e) {				
 				log.severe(Log.Session.Command, "Error during closing the socket: " + e.getMessage());
 			}
