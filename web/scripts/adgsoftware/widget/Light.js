@@ -18,47 +18,33 @@ define([
 		button: null,
 		slider: null,
 		lock: false,
-		on : function() {
-				adress = "12"; // TODO adress hard coded...
+		adress: "12",
+		switchOnOff : function(status, value) {
+			var component = this;
+			if (!component.lock) {
+				component.lock = true;
 				// Call REST API to change light
-				var component = this;
-				request.put("/light/" + adress + "/on", {sync: true, handleAs: "json"})
+				request.put("/light/" + this.adress + "/" + status, {sync: true, handleAs: "json"})
 					.then(function(data){
-						if (data.status == "on") {
-							component.set('label', 'ON');
-							component.button.set('iconClass', 'lightOnIcon');
-							if (!component.lock) {
-								component.lock = true;
-								component.slider.set('value', 0);
-								component.lock = false
+						if (data.status == status) { 
+							if ("on" == status) {
+								component.set('label', 'ON');
+								component.button.set('iconClass', 'lightOnIcon');
+								component.slider.set('value', value);
+							} else { // Off
+								component.set('label', 'OFF');
+					        	component.button.set('iconClass', 'lightOffIcon');
+					        	component.slider.set('value', value);
 							}
+							
 						} else {
-							console.log('beurk!');
+							console.log('Error from server');
 						}
 	    		    }, function(error) {
 	    		    	alert(error);
-	    	   });
-		},
-		off: function() {
-			adress = "12"; // TODO adress hard coded...
-			var component = this;
-	    	 // Call REST API to change light
-	    	 request.put("/light/" + adress + "/off", {sync: true, handleAs: "json"})
-			    .then(function(data){
-		        	  if (data.status == "off") {
-			        	  component.set('label', 'OFF');
-			        	  component.button.set('iconClass', 'lightOffIcon');
-			  			if (!component.lock) {
-			  				component.lock = true;
-			  				component.slider.set('value', 100);
-			  				component.lock = false
-			  			}
-			          } else {
-			        	  console.log('beurk!');
-			          }
-	    		    }, function(error) {
-	    		    	alert(error);
-	    	   });
+	    		});
+				component.lock = false
+			}
 		},
 		startup: function() {
 			var component = this;
@@ -66,12 +52,16 @@ define([
 				checked: false,
 			  	iconClass: 'lightOffIcon',
 			  	label: 'OFF',
-			  	onChange: function(val){
-			    	if (val) {
-			        	  component.on();
+			  	onChange: function(status, value){
+			    	if (!value){
+			    		status ? value = 100 : value = 0;
+			    	}
+			    	
+			  		if (status) {
+			        	  component.switchOnOff("on", 100);
 			        	  console.log('on');
 			          } else {
-			        	  component.off();
+			        	  component.switchOnOff("off", 0);
 			        	  console.log('off');
 			          }
 				},
@@ -90,13 +80,11 @@ define([
 		         style: "width: 300px",
 		         onChange: function(value){
 		        	 if (!component.lock) {
-		        		 component.lock = true;
 			        	 if (value > 0) {
-			            	 component.button.onChange(true);
+			            	 component.button.onChange(true, value);
 			             } else {
-			            	 component.button.onChange(false);
+			            	 component.button.onChange(false, value);
 			             }
-			        	 component.lock = false
 		 			}
 		         }
 		     }, this.id+"slider");
