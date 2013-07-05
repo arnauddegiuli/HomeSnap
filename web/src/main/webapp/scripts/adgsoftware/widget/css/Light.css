@@ -14,7 +14,7 @@
   text-align: center;
 }
 
-.light {
+ .light {
  position: relative;
  border:1px;
  border-color: black;
@@ -28,8 +28,9 @@
 	position: absolute;
 }
 
-.light .sliderPanel {
+ .light .sliderPanel {
 	position: absolute;
 	left: 60px;
 	top: 15px
-}
+} 
+ 

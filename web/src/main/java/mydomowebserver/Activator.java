@@ -23,7 +23,6 @@ package mydomowebserver;
  * #L%
  */
 
-
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -38,178 +37,96 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
 
-	private BundleContext bc;
+	private static final String MAIN_RESOURCES_URI = "/server";
+	private static final String LIGHT_URI = "/light";
 	private HttpService httpService = null;
-    private static final Logger logger = Logger.getLogger(Activator.class.getName());
-    private ServiceTracker httpServiceTracker;
+	private static final Logger logger = Logger.getLogger(Activator.class
+			.getName());
+	private ServiceTracker<HttpService, Object> httpServiceTracker;
 
-//	private ServiceTracker<LightRestService, LightRestServiceImpl> lightRestServiceTracker;
-//	private LightRestService lightRestService;
-	
 	/*
 	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-		
+
 		System.setProperty("jetty.home.bundle", "MyDomoWebServer");
-		this.bc = context;
-		
-		
+
 		// register the service
-		context.registerService(
-				LightRestService.class.getName(), 
-				new LightRestServiceImpl(), 
-				new Hashtable<String, String>());
-		
-//		// create a tracker and track the log service
-//		lightRestServiceTracker = 
-//			new ServiceTracker(context, LightRestService.class.getName(), null);
-//		lightRestServiceTracker.open();
-//		
-//		// grab the service
-//		lightRestService = (LightRestService) lightRestServiceTracker.getService();
-		
-		
-		
+		context.registerService(LightRestService.class.getName(),
+				new LightRestServiceImpl(), new Hashtable<String, String>());
 
 		logger.info("STARTING HTTP SERVICE BUNDLE");
 
-		httpServiceTracker = new ServiceTracker(context, HttpService.class.getName(), null) {
-	          @Override
-	          public Object addingService(final ServiceReference serviceRef) {
-	             httpService = (HttpService)super.addingService(serviceRef);
-	             registerServlets();
-	             try {
-					httpService.registerServlet("/light", new LightServlet(), null, null);
-					httpService.registerResources("/server", "", null);
-				} catch (final ServletException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (final NamespaceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		httpServiceTracker = new ServiceTracker<HttpService, Object>(context,
+				HttpService.class.getName(), null) {
+			@Override
+			public Object addingService(
+					final ServiceReference<HttpService> serviceRef) {
+				httpService = (HttpService) super.addingService(serviceRef);
+				registerServlets();
+				registerResources();
+				return httpService;
+			}
+
+			@Override
+			public void removedService(final ServiceReference<HttpService> ref,
+					final Object service) {
+				if (httpService == service) {
+					unregisterServlets();
+					unregisterResources();
+					httpService = null;
 				}
-	             return httpService;
-	          }
+				super.removedService(ref, service);
+			}
 
-	          @Override
-	            public void removedService(final ServiceReference ref, final Object service) {
-	                if (httpService == service) {
-//	                    unregisterServlets();
-	                    httpService = null;
-	                }
-	                super.removedService(ref, service);
-	            }
-	        };
+		};
 
-	        httpServiceTracker.open();
-	                
-	        logger.info("HTTP SERVICE BUNDLE STARTED");
+		httpServiceTracker.open();
+
+		logger.info("HTTP SERVICE BUNDLE STARTED");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-				
+
 		// close the service tracker
-//		lightRestServiceTracker.close();
-//		lightRestServiceTracker = null;
-//		
-//		lightRestService = null;
-		
 		this.httpServiceTracker.close();
+		this.httpServiceTracker = null;
 	}
 
 	private void registerServlets() {
-        try {
-            rawRegisterServlets();
-        } catch (InterruptedException ie) {
-            throw new RuntimeException(ie);
-        } catch (ServletException se) {
-            throw new RuntimeException(se);
-        } catch (NamespaceException se) {
-            throw new RuntimeException(se);
-        }
-    }
+		try {
+			httpService.registerServlet(LIGHT_URI, new LightServlet(), null,
+					null);
+		} catch (ServletException se) {
+			throw new RuntimeException(se);
+		} catch (NamespaceException se) {
+			throw new RuntimeException(se);
+		}
+	}
 
-//    private void rawRegisterServlets() throws ServletException, NamespaceException, InterruptedException {
-//        logger.info("T BUNDLE: REGISTERING SERVLETS");
-//        logger.info("T BUNDLE: HTTP SERVICE = " + httpService.toString());
-//
-//        HttpContext hc = new HttpContext() {
-//			
-//			@Override
-//			public boolean handleSecurity(HttpServletRequest request,
-//					HttpServletResponse response) throws IOException {
-//				// TODO Auto-generated method stub
-//				return false;
-//			}
-//			
-//			@Override
-//			public URL getResource(String name) {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//			
-//			@Override
-//			public String getMimeType(String name) {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//		};
-//        
-//        httpService.registerServlet("/servi", new Servlet(),  new Hashtable<String, String>(), hc);
-//
-//        logger.info("T BUNDLE: SERVLETS REGISTERED");
-//    }
-//
-//    private void unregisterServlets() {
-//    	if (this.httpService != null) {
-//    		logger.info("T BUNDLE: UNREGISTERING SERVLETS");
-//    		httpService.unregister("/servi");
-//    		logger.info("T BUNDLE: SERVLETS UNREGISTERED");
-//    	}
-//    }	
-	
-    private void rawRegisterServlets() throws ServletException, NamespaceException, InterruptedException {
-//        logger.info("JERSEY BUNDLE: REGISTERING SERVLETS");
-//        logger.info("JERSEY BUNDLE: HTTP SERVICE = " + httpService.toString());
-//
-//        httpService.registerServlet("/jersey-http-service", new ServletContainer(), getJerseyServletParams(), null);
-//
-//        sendAdminEvent();
-//        logger.info("JERSEY BUNDLE: SERVLETS REGISTERED");
-    }
+	private void unregisterServlets() {
+		httpService.unregister(LIGHT_URI);
+	}
 
-//    private void sendAdminEvent() {
-//        ServiceReference eaRef = bc.getServiceReference(EventAdmin.class.getName());
-//        if (eaRef != null) {
-//            EventAdmin ea = (EventAdmin) bc.getService(eaRef);
-//            ea.sendEvent(new Event("jersey/test/DEPLOYED", new HashMap<String, String>() {
-//
-//                {
-//                    put("context-path", "/");
-//                }
-//            }));
-//            bc.ungetService(eaRef);
-//        }
-//    }
-//
-//    private voixml,\d unregisterServlets() {
-//        if (this.httpService != null) {
-//            logger.info("JERSEY BUNDLE: UNREGISTERING SERVLETS");
-//            httpService.unregister("/jersey-http-service");
-//            logger.info("JERSEY BUNDLE: SERVLETS UNREGISTERED");
-//        }
-//    }
-//
-//    @SuppressWarnings("UseOfObsoleteCollectionType")
-//    private Dictionary<String, String> getJerseyServletParams() {
-//        Dictionary<String, String> jerseyServletParams = new Hashtable<String, String>();
-//        jerseyServletParams.put("javax.ws.rs.Application", JerseyApplication.class.getName());
-//        return jerseyServletParams;
-//    }
+	private void registerResources() {
+		try {
+			httpService.registerResources(MAIN_RESOURCES_URI, "src/main/webapp", null);
+		} catch (NamespaceException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void unregisterResources() {
+		httpService.unregister(MAIN_RESOURCES_URI);
+	}
 }
