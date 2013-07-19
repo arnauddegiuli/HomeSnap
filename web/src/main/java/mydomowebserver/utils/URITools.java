@@ -1,7 +1,4 @@
-package mydomowebserver;
-
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+package mydomowebserver.utils;
 
 /*
  * #%L
@@ -26,15 +23,18 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  * #L%
  */
 
+import java.util.StringTokenizer;
 
-
-public interface LightRestService {
-
-	public LightStatus command(LightStatus status, String adress);
-	public LightStatus status(String adress);
-	
-	public Light createLight(String adress);
-	public Light saveLight(Light light);
-	public boolean deleteLight(String adress);
-
+public class URITools {
+	public final static String[] split(String pathInfo) {
+		if (pathInfo == null || pathInfo.isEmpty()) {
+			return new String[0];
+		}
+		StringTokenizer st = new StringTokenizer(pathInfo.substring(1), "/");
+		String[] result = new String[st.countTokens()];
+		for (int i = 0; st.hasMoreTokens(); i++) {
+			result[i] = st.nextToken();
+		}
+		return result;
+	}
 }

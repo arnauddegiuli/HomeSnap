@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -39,6 +40,7 @@ public class Activator implements BundleActivator {
 
 	private static final String MAIN_RESOURCES_URI = "/server";
 	private static final String LIGHT_URI = "/light";
+	private static final String HOUSE_URI = "/house";
 	private HttpService httpService = null;
 	private static final Logger logger = Logger.getLogger(Activator.class
 			.getName());
@@ -107,6 +109,9 @@ public class Activator implements BundleActivator {
 		try {
 			httpService.registerServlet(LIGHT_URI, new LightServlet(), null,
 					null);
+			httpService.registerServlet(HOUSE_URI, new HouseServlet(), null,
+					null);
+			
 		} catch (ServletException se) {
 			throw new RuntimeException(se);
 		} catch (NamespaceException se) {
@@ -116,6 +121,7 @@ public class Activator implements BundleActivator {
 
 	private void unregisterServlets() {
 		httpService.unregister(LIGHT_URI);
+		httpService.unregister(HOUSE_URI);
 	}
 
 	private void registerResources() {

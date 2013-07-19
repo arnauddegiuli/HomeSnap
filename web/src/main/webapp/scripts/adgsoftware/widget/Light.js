@@ -1,3 +1,25 @@
+/*
+ * #%L
+ * MyDomoWebServer
+ * %%
+ * Copyright (C) 2011 - 2013 A. de Giuli
+ * %%
+ * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+ * 
+ *     MyDomo is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     MyDomo is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
 define([
     "dojo/_base/declare",
     "dijit/form/ToggleButton",
@@ -9,8 +31,9 @@ define([
     "dojo/_base/fx",
     "dojo/_base/lang",
     "dojo/request",
-    "dojo/json"
-], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON) {
+    "dojo/json",
+    "adgsoftware/utils/Message"
+], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON, msg) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {
 		baseClass: "light",
@@ -36,12 +59,12 @@ define([
 					        	component.button.set('iconClass', 'lightOffIcon');
 					        	component.slider.set('value', value);
 							}
-							
 						} else {
-							console.log('Error from server');
+							msg.displayError("Error from gateway. Status doesn't change. Try later.");
+							// TODO raise an error to reset the button status to the previous value
 						}
 	    		    }, function(error) {
-	    		    	alert(error);
+	    		    	msg.displayError(error);
 	    		});
 				component.lock = false
 			}

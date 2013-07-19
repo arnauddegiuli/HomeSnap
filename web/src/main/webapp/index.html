@@ -1,3 +1,25 @@
+<!--
+  #%L
+  MyDomoWebServer
+  %%
+  Copyright (C) 2011 - 2013 A. de Giuli
+  %%
+  This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+  
+      MyDomo is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+  
+      MyDomo is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+  
+      You should have received a copy of the GNU General Public License
+      along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
+  #L%
+  -->
 <!doctype html>
 <html lang="en">
 
@@ -95,12 +117,47 @@
 		<h4 class="alert_info">Welcome to the My Domo admin panel.</h4>
 		
 		<div class="clear"></div>
+	
+		<script>
+		
+			function addError(msg) {
+				require([ "adgsoftware/utils/Message" ], function(Message) {
+					//var m = new Message();
+					Message.displayError(msg);
+				});
+			}
+		
+			function addRemoveOnClick(id) {
+				require(["dojo/dom", "dojo/_base/fx", "dojo/fx", "dojo/on", "dojo/dom-style", "dojo/dom-construct"],
+					function(dom, fx, fx2, on, style, domConstruct){          
+				   		on(dom.byId(id), "click", 
+						function(){
+					      style.set(id, "opacity", "1");
+					      var animA = fx.fadeOut({node: id});
+					      
+					      var animB = fx2.wipeOut({node: id,
+					    	    onEnd: function() {domConstruct.destroy(id);}
+					    	  });
+					      
+					      fx2.chain([animA, animB]).play();  
+					   }
+				   
+				   );
+			});
+			};
+			
+			require(["dojo/domReady!"],
+				function(){ 
+				   // Function linked to the button to trigger the fade.
+				   addRemoveOnClick("alert_warning");
+				   addRemoveOnClick("alert_error");
+				   addRemoveOnClick("alert_success");
+				   
+				   addError("CECI EST UN MSG D ERREUR");
+			});
+		</script>	
 				
-		<h4 class="alert_warning">A Warning Alert</h4>
 		
-		<h4 class="alert_error">An Error Message</h4>
-		
-		<h4 class="alert_success">A Success Message</h4>
 		
 		
 		<article class="module width_full">
@@ -110,7 +167,7 @@
 					<script>
 						var myButton, myButton2;
 				
-						require([ "adgsoftware/widget/Light" ], function(Light) {
+						require(["adgsoftware/widget/Light"], function(Light) {
 							myButton = new Light({}, "lightContainer");
 							myButton.startup();
 				
@@ -119,7 +176,6 @@
 						});
 					</script>
 	
-					
 					<div id="lightContainer"></div>
 				
 					<div id="lightContainer2"></div>
@@ -143,8 +199,18 @@
 		</article><!-- end of styles article -->
 		
 		<div class="spacer"></div>
+		
+		<div id="messagebox"/>
+		
+		<h4 class="alert_warning" id="alert_warning">A Warning Alert</h4>
+		
+		<h4 class="alert_error" id="alert_error">An Error Message</h4>
+		
+		<h4 class="alert_success" id="alert_success">A Success Message</h4>
+		
 	</section>
 
+	
 
 </body>
 

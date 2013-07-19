@@ -1,8 +1,5 @@
 package mydomowebserver;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
-
 /*
  * #%L
  * MyDomoWebServer
@@ -26,15 +23,25 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  * #L%
  */
 
+import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public interface LightRestService {
+import mydomowebserver.utils.JSonTools;
+import mydomowebserver.utils.URITools;
 
-	public LightStatus command(LightStatus status, String adress);
-	public LightStatus status(String adress);
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.house.Group;
+import com.adgsoftware.mydomo.engine.house.House;
+import com.adgsoftware.mydomo.engine.house.Label;
+
+public class HouseRestServiceImpl {
+
 	
-	public Light createLight(String adress);
-	public Light saveLight(Light light);
-	public boolean deleteLight(String adress);
-
 }

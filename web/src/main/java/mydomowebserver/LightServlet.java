@@ -32,6 +32,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mydomowebserver.utils.URITools;
+
+import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  
 /** A simple servlet */
@@ -41,14 +44,15 @@ public class LightServlet extends HttpServlet {
 	LightRestService service = new LightRestServiceImpl();
  
 	public void init(ServletConfig config) throws ServletException {
-		System.err.println("Initializing the servlet");;
+		System.err.println("Initializing the LightServlet");
 	}
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.err.println("DO GET!");
 		// /adress or /adress
-		resp.setContentType(" application/json");
-		String[] pathInfo = split(req.getPathInfo());
+		resp.setContentType("application/json");
+		String[] pathInfo = URITools.split(req.getPathInfo());
 		if (pathInfo != null && pathInfo.length == 1) {
 			String adress = pathInfo[0];
 			LightStatus status = service.status(adress);
@@ -59,19 +63,22 @@ public class LightServlet extends HttpServlet {
 		}
 	}
 	
-	private String[] split(String pathInfo) {
-		StringTokenizer st = new StringTokenizer(pathInfo.substring(1), "/");
-		String[] result = new String[st.countTokens()];
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			result[i] = st.nextToken();
-		}
-		return result;
-	}
+
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		System.err.println("DO POST!");
+		// /adress or /adress
+		resp.setContentType("application/json");
+		String[] pathInfo = URITools.split(req.getPathInfo());
+		if (pathInfo != null && pathInfo.length == 1) {
+			resp.getWriter().write(formatJson(service.createLight(pathInfo[0])));
+		} else {
+			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
+		}
 	}
+	
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -79,7 +86,7 @@ public class LightServlet extends HttpServlet {
 		long start = System.currentTimeMillis();
 		resp.setContentType(" application/json");
 		// /adress/on or /adress/off
-		String[] pathInfo = split(req.getPathInfo());
+		String[] pathInfo = URITools.split(req.getPathInfo());
 		if (pathInfo != null && pathInfo.length == 2) {
 			String adress = pathInfo[0];
 			String status = pathInfo[1];
@@ -95,7 +102,13 @@ public class LightServlet extends HttpServlet {
 			}
 			String strStatus = (result == null ? "null" : LightStatus.LIGHT_ON == result ? "on" : "off");
 			resp.getWriter().write("{\"adress\":\""+adress+"\", \"status\":\""+ strStatus +"\"}");
+		} else if (pathInfo != null && pathInfo.length == 1) {
+			// /adress or /adress
+			String json ="";
+			Light light = parseJson(json);
+			service.saveLight(light);
 		} else {
+		
 			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress[/on|/off]");
 		}
 		
@@ -104,7 +117,28 @@ public class LightServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doDelete(req, resp);
+		resp.setContentType("application/json");
+		// /adress or /adress
+		String[] pathInfo = URITools.split(req.getPathInfo());
+		if (pathInfo != null && pathInfo.length == 1) {
+			String adress = pathInfo[0];
+			if (service.deleteLight(adress)) {
+				resp.getWriter().write("{\"success\":\"true\"}");	
+			} else {
+				resp.getWriter().write("{\"sucess\":\"true\", error\":\"Impossible to delete\"}");
+			}
+			
+		} else {
+			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
+		}
+	}
+	
+	private Light parseJson(String json) {
+		return new Light(); // TODO not create ...
+	}
+	
+	private String formatJson(Light light) {
+		String strStatus = (light.getWhat() == null ? "null" : LightStatus.LIGHT_ON == light.getWhat() ? "on" : "off");
+		return "{\"adress\":\""+light.getWhere()+"\",\"status\":\""+ strStatus +"\"}";
 	}
 }

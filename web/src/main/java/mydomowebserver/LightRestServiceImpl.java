@@ -100,4 +100,23 @@ public class LightRestServiceImpl implements LightRestService {
 	public LightStatus status(String adress) {
 		return getController(adress).getWhat();
 	}
+
+	@Override
+	public Light createLight(String adress) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Light saveLight(Light light) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteLight(String adress) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }
