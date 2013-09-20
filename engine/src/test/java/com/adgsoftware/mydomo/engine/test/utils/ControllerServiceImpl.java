@@ -41,7 +41,7 @@ public class ControllerServiceImpl implements ControllerService {
 	private Commander commander;
 	private String host;
 	private int port;
-	private int passwordOpen = 13245;
+	private int passwordOpen = 12345;
 	
 	
 	/**
