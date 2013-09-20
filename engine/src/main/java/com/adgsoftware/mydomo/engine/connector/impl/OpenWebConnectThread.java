@@ -98,11 +98,12 @@ public class OpenWebConnectThread implements Runnable {
 		            log.finest(Log.Session.Command, "----- Step Identification -----");
 		        	commander.writeMessage(Command.COMMAND_SESSION);
 		            
-					if(commander.usePassword){
+					if(commander.getPasswordOpen() != null){
 						log.finest(Log.Session.Command, "----- Step authentification -----");
 						msg = commander.readMessage();
-			            
-				    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
+			            msg = msg.substring(2); // Remove *#
+			            msg = msg.substring(0, msg.length()-2); // Remove last ##
+				    	String password = Password.calcPass(commander.getPasswordOpen(), msg);
 				    	String passwordMsg = "*#"+password+"##"; 
 				    	log.finest(Log.Session.Command, "Tx: " + passwordMsg);
 				    	commander.writeMessage(passwordMsg);		    	

@@ -48,8 +48,8 @@ public class OpenWebCommanderImpl implements Commander {
 	private String ip;
 	private int port;
 	private int timeout = 5000;
-//	private long passwordOpen;
-	boolean usePassword = false; // TODO manage password
+	private Integer passwordOpen;
+
 	List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
 	
 	
@@ -59,10 +59,10 @@ public class OpenWebCommanderImpl implements Commander {
 	 * @param port the port number of the open server
 	 * @param passwordOpen 
 	 */
-	public OpenWebCommanderImpl(String ip, int port, long passwordOpen) {
+	public OpenWebCommanderImpl(String ip, int port, Integer passwordOpen) {
 		this.ip = ip;
 		this.port = port;
-//		this.passwordOpen = passwordOpen;
+		this.passwordOpen = passwordOpen;
 	}
 	
 	public String getIp() {
@@ -233,5 +233,14 @@ public class OpenWebCommanderImpl implements Commander {
 	@Override
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
+	}
+	
+	@Override
+	public void setPasswordOpen(Integer password) {
+		this.passwordOpen = password;
+	}
+
+	public Integer getPasswordOpen() {
+		return passwordOpen;
 	}
 }

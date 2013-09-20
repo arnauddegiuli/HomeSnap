@@ -48,8 +48,8 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 public class OpenWebMonitorImpl extends Thread 
 implements Monitor {
 
-	Log log = new Log();
-//	GestionePassword gestPassword = null;
+	private Log log = new Log();
+    private Integer passwordOpen = null;
 	
 	private Socket socket = null;	
 	private BufferedReader depuisClient = null;
@@ -69,10 +69,10 @@ implements Monitor {
 	 * @param port the port number of the open server
 	 * @param passwordOpen not supported actually
 	 */
-	public OpenWebMonitorImpl(String ip, int port, long passwordOpen){ 
+	public OpenWebMonitorImpl(String ip, int port, Integer passwordOpen){ 
 		this.ip = ip;
 		this.port = port;
-//		this.passwordOpen = passwordOpen;
+		this.passwordOpen = passwordOpen;
 		this.start();
 	}
 	
@@ -96,6 +96,11 @@ implements Monitor {
 	public void setPort(int port) {
 		this.port = port;
 		resetSocket();
+	}
+	
+	@Override
+	public void setPasswordOpen(Integer passwordOpen) {
+		this.passwordOpen = passwordOpen;
 	}
 
 	@Override
@@ -218,16 +223,17 @@ implements Monitor {
                 log.finest(Log.Session.Monitor, "----- Step Identification -----");
             	write(Command.MONITOR_SESSION);
 
-//    			if(usePassword){
-//    				msg = read();
-//    				log.finest("\n----- Step authentification -----");
-//    	            log.finest("Rx: " + msg);
-//    	            
-//    		    	long password = 0; //gestPassword.applicaAlgoritmo(passwordOpen, msg); TODO manage password
-//    		    	String passwordMsg = "*#"+password+"##"; 
-//    		    	log.finest("Tx: " + passwordMsg);
-//    		    	write(passwordMsg);		    	
-//            	}
+    			if(passwordOpen != null){
+    				msg = read();
+    				log.finest(Log.Session.Monitor, "\n----- Step authentification -----");
+    	            log.finest(Log.Session.Monitor, "Rx: " + msg);
+    	            msg = msg.substring(2); // Remove *#
+		            msg = msg.substring(0, msg.length()-2); // Remove last ##
+    		    	String password = Password.calcPass(passwordOpen, msg);
+    		    	String passwordMsg = "*#"+password+"##"; 
+    		    	log.finest(Log.Session.Monitor, "Tx: " + passwordMsg);
+    		    	write(passwordMsg);		    	
+            	}
             	log.finest(Log.Session.Monitor, "----- Step Final -----");
             	msg = read();
     	    	

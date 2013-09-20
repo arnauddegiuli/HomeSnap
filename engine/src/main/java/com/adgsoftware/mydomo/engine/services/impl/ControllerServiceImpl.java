@@ -40,17 +40,19 @@ public class ControllerServiceImpl implements ControllerService {
 	private Commander commander;
 	private String host;
 	private int port;
-	private long passwordOpen = 0L;
+	private Integer passwordOpen;
 	
 	
 	/**
 	 * Constructor.
 	 * @param host the hostname or ip of My Open Server
 	 * @param port the port number of My Open Server
+	 * @param password the passwod of My Open Server (null if not)
 	 */
-	public ControllerServiceImpl(String host, int port) {
+	public ControllerServiceImpl(String host, int port, Integer passwordOpen) {
 		this.host = host;
 		this.port = port;
+		this.passwordOpen = passwordOpen;
 	}
 	
 	/* (non-Javadoc)
@@ -128,6 +130,12 @@ public class ControllerServiceImpl implements ControllerService {
 	public void setPort(int port) {
 		this.getOpenWebCommand().setPort(port);
 		this.getOpenWebMonitor().setPort(port);
+	}
+	
+	@Override
+	public void setPassword(Integer password) {
+		this.getOpenWebCommand().setPasswordOpen(password);
+		this.getOpenWebMonitor().setPasswordOpen(password);
 	}
 
 	@Override

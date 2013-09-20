@@ -101,4 +101,10 @@ public interface Commander {
 	 * @param timeout the timeout of the connection to open server in millisecond.
 	 */
 	public void setTimeout(int timeout);
+
+	/**
+	 * Define the gateway password
+	 * @param password
+	 */
+	public void setPasswordOpen(Integer password);
 }

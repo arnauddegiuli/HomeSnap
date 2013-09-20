@@ -20,6 +20,7 @@
     <string name="label_label_count_empty">Aucun label</string>
     <string name="label_controller_type">Type du contrôleur</string>
     <string name="label_choose_controller_type">Choisissez le type du contrôleur</string>
+	<string name="server_password">Mot de passe</string>
 
     <string name="message_no_controller_without_label">There are no controllers without label.\nYou can create them in the settings screen.</string>
     

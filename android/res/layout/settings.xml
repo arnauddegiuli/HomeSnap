@@ -44,6 +44,25 @@
             android:inputType="number" />
     </LinearLayout>
 
+      <LinearLayout
+        android:id="@+id/rowTxtServerPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_password" 
+            />
+
+        <EditText
+            android:id="@+id/txtServerPassword"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </LinearLayout>
+    
     <TextView
         android:id="@+id/connectedStatusViewer"
         android:layout_width="wrap_content"

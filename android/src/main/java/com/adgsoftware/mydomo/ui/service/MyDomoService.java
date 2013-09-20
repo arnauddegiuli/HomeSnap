@@ -26,6 +26,8 @@ public interface MyDomoService extends IInterface {
 	
 	public void setServerPort(int port);
 	
+	public void setServerPassword(int password);
+	
 	public void addMonitorConnectionListener(ConnectionListener listener);
 	
 	public void addCommanderConnectionListener(ConnectionListener listener);

@@ -79,10 +79,13 @@ public class SettingsActivity extends AbstractActivity {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		String serverIP = settings.getString("serverIP", "192.168.0.19"); // TODO define default value?
 		String serverPort = settings.getString("serverPort", "1234");
+		String serverPassword = settings.getString("serverPassword", "12345");
 		EditText txtServerIP = (EditText) findViewById(R.id.txtServerIP);
 		EditText txtServerPort = (EditText) findViewById(R.id.txtServerPort);
+		EditText txtServerPassword = (EditText) findViewById(R.id.txtServerPassword);
 		txtServerIP.setText(serverIP);
 		txtServerPort.setText(serverPort);
+		txtServerPassword.setText(serverPassword);
 		
 		super.onCreate(savedInstanceState);
 		
@@ -112,14 +115,14 @@ public class SettingsActivity extends AbstractActivity {
 	/**
 	 * Save the given server settings in the shared preferences 
 	 * then update the current commander and monitor. 
-	 * @param serverIP		Server IP (ex. 192.168.0.26)
-	 * @param serverPort	Server port (ex. 1234)
 	 */
 	private void saveServerSettings() {
 		EditText txtServerIP = (EditText) findViewById(R.id.txtServerIP);
 		EditText txtServerPort = (EditText) findViewById(R.id.txtServerPort);
+		EditText txtServerPassword = (EditText) findViewById(R.id.txtServerPassword);
 		String serverIP = txtServerIP.getText().toString();
 		String serverPort = txtServerPort.getText().toString();
+		String serverPassword = txtServerPassword.getText().toString();
 		Log.i("Save settings", serverIP + ":" + serverPort);
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -133,6 +136,11 @@ public class SettingsActivity extends AbstractActivity {
 		if (!settings.getString("serverPort", "0").equals(serverPort)) {
 			editor.putString("serverPort", serverPort);
 			myDomoService.setServerPort(Integer.parseInt(serverPort));
+		}
+		
+		if (!settings.getString("serverPassword", "0").equals(serverPassword)) {
+			editor.putString("serverPassword", serverPassword);
+			myDomoService.setServerPassword(Integer.parseInt(serverPassword));
 		}
 		
 		editor.commit();

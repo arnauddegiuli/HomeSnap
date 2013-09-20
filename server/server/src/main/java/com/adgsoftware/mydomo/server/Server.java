@@ -39,6 +39,8 @@ public class Server implements Runnable {
 
 	Log log = new Log();
 	private int port = 1234;
+	private Integer password = 12345;
+	private static final int nonce = 603356072;
 	private volatile Thread blinker;
 	
     public void stop() {
@@ -78,7 +80,17 @@ public class Server implements Runnable {
 					write(Session.Server, Command.ACK, versClient);
 					String sessionType = read(s, depuisClient);
 					if (Command.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
-						log.fine(Session.Monitor, "Start Monitor Session...");
+						if (password != null) {
+							write(Session.Monitor, "*#" + nonce + "##", versClient);
+							String result = read(s, depuisClient);
+							if (!"*#25280520##".equals(result)) {
+								log.fine(Session.Monitor, "Password error..."); 
+								write(Session.Monitor, Command.NACK, versClient);
+								break;
+							}
+						}
+						
+						log.fine(Session.Monitor, "Start Monitor Session..."); 
 						write(Session.Monitor, Command.ACK, versClient);
 						ControllerStateManagement.registerMonitorSession(
 								new MonitorSession(s, versClient)
@@ -86,6 +98,15 @@ public class Server implements Runnable {
 
 					} else if (Command.COMMAND_SESSION
 							.equalsIgnoreCase(sessionType)) {
+						if (password != null) {
+							write(Session.Monitor, "*#" + nonce + "##", versClient);
+							String result = read(s, depuisClient);
+							if (!"*#25280520##".equals(result)) {
+								log.fine(Session.Monitor, "Password error..."); 
+								write(Session.Monitor, Command.NACK, versClient);
+								break;
+							}
+						}
 						log.fine(Session.Command, "Start Command Session...");
 						write(Session.Command, Command.ACK, versClient);
 						new Thread(new CommandSession(s, depuisClient,

@@ -100,4 +100,10 @@ public interface Monitor {
 	 * @param timeout the timeout of the connection to open server in millisecond.
 	 */
 	public void setTimeout(int timeout);
+
+	/**
+	 * Define the gateway password.
+	 * @param passwordOpen
+	 */
+	public void setPasswordOpen(Integer passwordOpen);
 }

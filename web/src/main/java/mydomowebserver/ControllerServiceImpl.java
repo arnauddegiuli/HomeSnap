@@ -41,7 +41,7 @@ public class ControllerServiceImpl implements ControllerService {
 	private Commander commander;
 	private String host;
 	private int port;
-	private long passwordOpen = 0L;
+	private int passwordOpen = 12345;
 	
 	
 	/**
@@ -53,6 +53,19 @@ public class ControllerServiceImpl implements ControllerService {
 		this.host = host;
 		this.port = port;
 	}
+
+	/**
+	 * Constructor.
+	 * @param host the hostname or ip of My Open Server
+	 * @param port the port number of My Open Server
+	 * @param password the password of My Open Server
+	 */
+	public ControllerServiceImpl(String host, int port, int password) {
+		this.host = host;
+		this.port = port;
+		this.passwordOpen = password;
+	}
+
 	
 	/* (non-Javadoc)
 	 * @see com.adgsoftware.mydomo.engine.services.ControllerService#createController(com.adgsoftware.mydomo.engine.Category, java.lang.String)
@@ -144,5 +157,11 @@ public class ControllerServiceImpl implements ControllerService {
 	@Override
 	public void addUnknowControllerListener(UnknownControllerListener listener) {
 		this.getOpenWebMonitor().addUnknownControllerListener(listener);
+	}
+
+	@Override
+	public void setPassword(Integer password) {
+		this.getOpenWebCommand().setPasswordOpen(password);
+		this.getOpenWebMonitor().setPasswordOpen(password);
 	}
 }

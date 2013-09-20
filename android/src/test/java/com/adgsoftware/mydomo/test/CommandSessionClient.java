@@ -14,8 +14,8 @@ import com.adgsoftware.mydomo.test.Constants.Light1;
 public class CommandSessionClient {
 	
 	public static void main(String[] args) {
-		Commander server = new OpenWebCommanderImpl("localhost", 1234, 0L);
-		Monitor monitor = new OpenWebMonitorImpl("localhost", 1235, 0L);
+		Commander server = new OpenWebCommanderImpl("localhost", 1234, 12345);
+		Monitor monitor = new OpenWebMonitorImpl("localhost", 1235, 12345);
 		server.connect();
 		monitor.connect();
 		

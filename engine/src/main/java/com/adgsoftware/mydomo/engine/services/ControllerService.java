@@ -57,6 +57,12 @@ public interface ControllerService {
 	public abstract void setIp(String ip);
 	
 	/**
+	 * Define the password of the gateway to connect.
+	 * @param password the password
+	 */
+	public abstract void setPassword(Integer password);
+	
+	/**
 	 * Define the port of the gateway to connect.
 	 * @param port
 	 */

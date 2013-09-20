@@ -35,7 +35,8 @@ implements MyDomoService {
 		SharedPreferences settings = application.getSharedPreferences(SettingsActivity.PREFS_NAME, 0);
 		String serverIP = settings.getString("serverIP", "192.168.0.19");
 		String serverPort = settings.getString("serverPort", "1234");
-		this.controller = new ControllerServiceImpl(serverIP, Integer.parseInt(serverPort));
+		String serverPassword = settings.getString("serverPassword", "12345");
+		this.controller = new ControllerServiceImpl(serverIP, Integer.parseInt(serverPort), Integer.parseInt(serverPassword));
 		this.persist = new PersistenceServiceImpl(application, controller);
 	}
 
@@ -123,6 +124,12 @@ implements MyDomoService {
 	public void addCommanderConnectionListener(
 			ConnectionListener listener) {
 		controller.addCommanderConnectionListener(listener);
+	}
+
+	@Override
+	public void setServerPassword(int password) {
+		Log.i("Controller set Password", "******");
+		controller.setPassword(password);
 	}
 	
 }

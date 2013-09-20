@@ -41,7 +41,7 @@ public class ControllerServiceImpl implements ControllerService {
 	private Commander commander;
 	private String host;
 	private int port;
-	private long passwordOpen = 0L;
+	private int passwordOpen = 13245;
 	
 	
 	/**
@@ -144,5 +144,11 @@ public class ControllerServiceImpl implements ControllerService {
 	@Override
 	public void addUnknowControllerListener(UnknownControllerListener listener) {
 		this.getOpenWebMonitor().addUnknownControllerListener(listener);
+	}
+
+	@Override
+	public void setPassword(Integer password) {
+		this.getOpenWebCommand().setPasswordOpen(password);
+		this.getOpenWebMonitor().setPasswordOpen(password);
 	}
 }
