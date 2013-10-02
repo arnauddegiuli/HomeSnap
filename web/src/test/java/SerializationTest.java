@@ -20,7 +20,7 @@
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
-import mydomowebserver.HouseRestServiceImpl;
+import mydomowebserver.house.HouseRestServiceImpl;
 import mydomowebserver.utils.JSonTools;
 
 import org.junit.Test;

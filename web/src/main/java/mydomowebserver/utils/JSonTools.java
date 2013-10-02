@@ -25,6 +25,8 @@ package mydomowebserver.utils;
 
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
@@ -33,15 +35,21 @@ public class JSonTools {
 
 	public final static String toJson(House house) {
 		
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("[");
 		
 		for (Group group : house.getGroups()) {
 			toJsonGroup(group);
-		} 
+			sb.append(",");
+		}
+		if (house.getGroups().size() > 0) {
+			sb.append(",");
+		}
+		
 		for (Label label : house.getLabels()) {
 			sb.append(toJsStringLabel(label));
+			sb.append(",");
 		}
-		;
+		sb.append("]");
 		return sb.toString();
 	}
 	
@@ -61,12 +69,14 @@ public class JSonTools {
 			sb.append(toJson(controller));
 			sb.append(",");
 		}
-		sb.setLength(sb.length() - 1);
+		if (label.getControllerList().size() > 0) {
+			sb.setLength(sb.length() - 1);
+		}
 
 		return sb.append("]}").toString();
 	}
 	
-	public final static String toJson(Controller controller) {
+	public final static String toJson(Controller<?> controller) {
 		StringBuilder sb = new StringBuilder()
 		.append("{\"where\":\"").append(controller.getWhere()).append("\"")
 		.append(", \"title\":\"").append(formatString(controller.getTitle())).append("\"");
@@ -75,5 +85,10 @@ public class JSonTools {
 	
 	public final static String formatString(String string) {
 		return string.replaceAll("[\"]", "\\\\\"");
+	}
+		
+	public final static String formatJson(Light light) {
+		String strStatus = (light.getWhat() == null ? "null" : LightStatus.LIGHT_ON == light.getWhat() ? "on" : "off");
+		return "{\"adress\":\""+light.getWhere()+"\",\"status\":\""+ strStatus +"\"}";
 	}
 }

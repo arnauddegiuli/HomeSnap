@@ -69,6 +69,11 @@
         android:layout_height="wrap_content"
         android:text="@string/connected_status" />
 
+    <Button  android:id="@+id/btnConnect"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connect" />
+    
     <ListView
         android:id="@+id/listviewSettings"
         android:layout_width="fill_parent"

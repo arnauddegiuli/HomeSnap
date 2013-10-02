@@ -1,9 +1,10 @@
-package mydomowebserver;
+package mydomowebserver.controller;
 
 import java.util.Hashtable;
 import java.util.Map;
 
 import javax.ws.rs.Path;
+
 
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.Controller;
@@ -12,6 +13,8 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
+import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
+
 /*
  * #%L
  * MyDomoWebServer
@@ -42,11 +45,11 @@ public class LightRestServiceImpl implements LightRestService {
 		System.out.println(message);
 	}
 	
-	private ControllerService service = new ControllerServiceImpl("localhost", 1234); // TODO change it!
+	private ControllerService service = new ControllerServiceImpl("localhost", 1234, 12345);
 	private Map<String, Light> controllerList = new Hashtable<String, Light>();
 	
 	@Override
-	public LightStatus command(LightStatus status, String adress) {
+	public Light putCommand(String adress, LightStatus status) {
 		
 		Light l = getController(adress);
 		synchronized (this) {
@@ -63,7 +66,30 @@ public class LightRestServiceImpl implements LightRestService {
 				e.printStackTrace();
 			}
 		}
-		return l.getWhat();
+		return l;
+	}
+
+
+	@Override
+	public Light getStatus(String adress) {
+		return getController(adress);
+	}
+
+	@Override
+	public Light putLight(String adress, String title) {
+		Light result = getController(adress);
+		
+		if (result == null) { // creation
+			result = service.createController(Light.class, adress);
+		} 
+		result.setTitle(title);
+		return result;
+	}
+
+	@Override
+	public boolean delLight(String adress) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	private Light getController(String adress) {
@@ -95,28 +121,4 @@ public class LightRestServiceImpl implements LightRestService {
 		}
 		return result;
 	}
-
-	@Override
-	public LightStatus status(String adress) {
-		return getController(adress).getWhat();
-	}
-
-	@Override
-	public Light createLight(String adress) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Light saveLight(Light light) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean deleteLight(String adress) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 }

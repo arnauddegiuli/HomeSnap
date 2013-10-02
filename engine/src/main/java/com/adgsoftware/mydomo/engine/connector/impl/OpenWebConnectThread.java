@@ -43,6 +43,7 @@ public class OpenWebConnectThread implements Runnable {
 //	Logger log = Logger.getLogger(OpenWebConnectThread.class.getName());
 	Log log = new Log();
 	private OpenWebCommanderImpl commander;
+	private Password passwordEncoder = new Password();
 	
 	public OpenWebConnectThread(OpenWebCommanderImpl commander) {
 		this.commander = commander;
@@ -103,7 +104,7 @@ public class OpenWebConnectThread implements Runnable {
 						msg = commander.readMessage();
 			            msg = msg.substring(2); // Remove *#
 			            msg = msg.substring(0, msg.length()-2); // Remove last ##
-				    	String password = Password.calcPass(commander.getPasswordOpen(), msg);
+				    	String password = passwordEncoder.calcPass(commander.getPasswordOpen(), msg);
 				    	String passwordMsg = "*#"+password+"##"; 
 				    	log.finest(Log.Session.Command, "Tx: " + passwordMsg);
 				    	commander.writeMessage(passwordMsg);		    	

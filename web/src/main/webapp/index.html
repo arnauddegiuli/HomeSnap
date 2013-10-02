@@ -41,6 +41,8 @@
 		var djConfig = {
 			baseUrl : "scripts/",
 			tlmSiblingOfDojo : false,
+			async: true,
+			parseOnLoad: true,
 			packages : [ {
 				name : "adgsoftware",
 				location : "adgsoftware"
@@ -48,16 +50,17 @@
 		};
 	</script>
 
-	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js"></script>
 </head>
 
 
 <body class="claro">
-
+           
 	<header id="header">
 		<hgroup>
 			<h1 class="site_title"><a href="index.html">My Domo</a></h1>
-			<h2 class="section_title">Dashboard</h2><div class="btn_view_site"><a href="http://arnauddegiuli.github.io/MyDomo/">View Site</a></div>
+			<h2 class="section_title">Dashboard</h2>
+			<div class="btn_view_site"><a href="http://arnauddegiuli.github.io/MyDomo/">View Site</a></div>
 		</hgroup>
 	</header> <!-- end of header bar -->
 	
@@ -77,32 +80,28 @@
 		</form>
 		<hr/>
 		<h3>House</h3>
-		<ul class="toggle">
+		<ul class="toggle" id="house">
 			<li class="icn_new_article"><a href="#">Chambre 1</a></li>
 			<li class="icn_edit_article"><a href="#">Chambre 2</a></li>
 			<li class="icn_categories"><a href="#">Cuisine</a></li>
 			<li class="icn_tags"><a href="#">Tags</a></li>
 		</ul>
+		<script type="text/javascript">
+						
+			require(["adgsoftware/house/House"], function(House) {
+				house = new House();
+				house.init();
+			});
+			
+		</script>
+		
+		
 		<h3>Scenario</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><a href="#">Add New User</a></li>
 			<li class="icn_view_users"><a href="#">View Users</a></li>
 			<li class="icn_profile"><a href="#">Your Profile</a></li>
 		</ul>
-		<!-- 
-		<h3>Media</h3>
-		<ul class="toggle">
-			<li class="icn_folder"><a href="#">File Manager</a></li>
-			<li class="icn_photo"><a href="#">Gallery</a></li>
-			<li class="icn_audio"><a href="#">Audio</a></li>
-			<li class="icn_video"><a href="#">Video</a></li>
-		</ul>
-		<h3>Admin</h3>
-		<ul class="toggle">
-			<li class="icn_settings"><a href="#">Options</a></li>
-			<li class="icn_security"><a href="#">Security</a></li>
-			<li class="icn_jump_back"><a href="#">Logout</a></li>
-		 </ul> -->
 		
 		<footer>
 			<hr />
@@ -114,51 +113,48 @@
 	
 	<section id="main" class="column">
 		
-		<h4 class="alert_info">Welcome to the My Domo admin panel.</h4>
-		
 		<div class="clear"></div>
 	
 		<script>
 		
-			function addError(msg) {
-				require([ "adgsoftware/utils/Message" ], function(Message) {
-					//var m = new Message();
-					Message.displayError(msg);
-				});
-			}
-		
-			function addRemoveOnClick(id) {
-				require(["dojo/dom", "dojo/_base/fx", "dojo/fx", "dojo/on", "dojo/dom-style", "dojo/dom-construct"],
-					function(dom, fx, fx2, on, style, domConstruct){          
-				   		on(dom.byId(id), "click", 
-						function(){
-					      style.set(id, "opacity", "1");
-					      var animA = fx.fadeOut({node: id});
-					      
-					      var animB = fx2.wipeOut({node: id,
-					    	    onEnd: function() {domConstruct.destroy(id);}
-					    	  });
-					      
-					      fx2.chain([animA, animB]).play();  
-					   }
-				   
-				   );
-			});
-			};
-			
 			require(["dojo/domReady!"],
 				function(){ 
-				   // Function linked to the button to trigger the fade.
-				   addRemoveOnClick("alert_warning");
-				   addRemoveOnClick("alert_error");
-				   addRemoveOnClick("alert_success");
-				   
-				   addError("CECI EST UN MSG D ERREUR");
+				require([ "adgsoftware/utils/Message" ], function(Message) {
+					Message.displayError("Ceci est un msg d'erreur");
+					Message.displaySuccess("Ceci est un msg de succes");
+					Message.displayWarning("Ceci est un msg de warning");
+					Message.displayInformation("Ceci est un msg d'information");
+				});
 			});
 		</script>	
 				
+				
+		<article class="module width_full">
 		
+			<header><h3>Basic Styles</h3></header>
+				<div class="module_content">
+
+				
+				    <div
+				            data-dojo-type="dijit/layout/ContentPane"
+				            data-dojo-props="title: 'Group 1'">
+				        <h4>Group 1 Content</h4>
+				        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				    </div>
+				    <div
+				            data-dojo-type="dijit/layout/ContentPane"
+				            data-dojo-props="title: 'Group Two'">
+				        <h4>Group 2 Content</h4>
+				    </div>
+				    <div
+				            data-dojo-type="dijit/layout/ContentPane"
+				            data-dojo-props="title: 'Long Tab Label for this One'">
+				        <h4>Group 3 Content</h4>
+				    </div>
+				
+				</div>
 		
+ 		</article>
 		
 		<article class="module width_full">
 			<header><h3>Basic Styles</h3></header>
@@ -175,6 +171,14 @@
 							myButton2.startup();
 						});
 					</script>
+					
+					
+<!-- 					<script>
+					require(["adgsoftware/house/Label"], function(Label) {
+						var label = new Label({}, "lightContainer");
+					});
+					
+					</script> -->
 	
 					<div id="lightContainer"></div>
 				
@@ -200,13 +204,9 @@
 		
 		<div class="spacer"></div>
 		
-		<div id="messagebox"/>
+		<div id="messagebox"></div>
 		
-		<h4 class="alert_warning" id="alert_warning">A Warning Alert</h4>
-		
-		<h4 class="alert_error" id="alert_error">An Error Message</h4>
-		
-		<h4 class="alert_success" id="alert_success">A Success Message</h4>
+
 		
 	</section>
 

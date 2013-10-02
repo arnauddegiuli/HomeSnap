@@ -32,4 +32,6 @@
     <string name="logo">Logo</string>
     <string name="connected_status">Connecté?</string>
     <string name="arrow">Flèche</string>
+    <string name="connect">Connexion</string>
+    
 </resources>

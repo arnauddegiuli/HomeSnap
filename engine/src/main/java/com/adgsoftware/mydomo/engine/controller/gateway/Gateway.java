@@ -57,7 +57,6 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 		NETMASK("11"),
 		TIME("0"),
 		UPTIME("19");
-//		VERSION(); TODO manage version
 		
 		private String code = "";
 		private GatewayDimension(String code) {

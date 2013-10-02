@@ -1,4 +1,4 @@
-package mydomowebserver;
+package mydomowebserver.controller;
 
 /*
  * #%L
@@ -24,7 +24,6 @@ package mydomowebserver;
  */
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -32,12 +31,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mydomowebserver.utils.JSonTools;
 import mydomowebserver.utils.URITools;
 
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
  
 /** A simple servlet */
+// /light
 public class LightServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -47,98 +48,101 @@ public class LightServlet extends HttpServlet {
 		System.err.println("Initializing the LightServlet");
 	}
 	
+	// /adress
+	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.err.println("DO GET!");
-		// /adress or /adress
 		resp.setContentType("application/json");
 		String[] pathInfo = URITools.split(req.getPathInfo());
-		if (pathInfo != null && pathInfo.length == 1) {
+		if (pathInfo != null && pathInfo.length > 1) {
 			String adress = pathInfo[0];
-			LightStatus status = service.status(adress);
-			String strStatus = (status == null ? "null" : LightStatus.LIGHT_ON == status ? "on" : "off");
-			resp.getWriter().write("{\"adress\":\""+adress+"\",\"status\":\""+ strStatus +"\"}");
-		} else {
+			Light light = service.getStatus(adress);
+			resp.getWriter().write(JSonTools.formatJson(light));
+		} else if (pathInfo != null && pathInfo.length == 0) {
 			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
 		}
 	}
-	
 
-	
+	// /adress
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.err.println("DO POST!");
-		// /adress or /adress
 		resp.setContentType("application/json");
+		
 		String[] pathInfo = URITools.split(req.getPathInfo());
 		if (pathInfo != null && pathInfo.length == 1) {
-			resp.getWriter().write(formatJson(service.createLight(pathInfo[0])));
+			
+			resp.getWriter().write(JSonTools.formatJson(service.putLight(pathInfo[0], "")));
 		} else {
 			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
 		}
 	}
 	
+	// /adress/on or /adress/off
+	// /adress?title=deviceTitle
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.err.println("DO PUT!");
 		long start = System.currentTimeMillis();
 		resp.setContentType(" application/json");
-		// /adress/on or /adress/off
+		
 		String[] pathInfo = URITools.split(req.getPathInfo());
-		if (pathInfo != null && pathInfo.length == 2) {
+		String title = req.getParameter("title");
+		if (pathInfo != null && pathInfo.length > 0) {
 			String adress = pathInfo[0];
-			String status = pathInfo[1];
-
-			LightStatus result = null;
-			if ("on".equalsIgnoreCase(status)) {
-				result = service.command(LightStatus.LIGHT_ON, adress);
-			} else if ("off".equalsIgnoreCase(status)) {
-				result = service.command(LightStatus.LIGHT_OFF, adress);
+			Light result = null;
+			
+			if (pathInfo.length == 2) {
+				// /adress/on or /adress/off
+				String status = pathInfo[1];
+				
+				if ("on".equalsIgnoreCase(status)) {
+					result = service.putCommand(adress, LightStatus.LIGHT_ON);
+				} else if ("off".equalsIgnoreCase(status)) {
+					result = service.putCommand(adress, LightStatus.LIGHT_OFF);
+				} else {
+					resp.getWriter().write("{error: invalid command}");
+					return;
+				}
+				
+			} else if (pathInfo.length == 1) {
+				// /adress or /adress?title=Titre
+				result = service.putLight(adress, title);
 			} else {
-				resp.getWriter().write("{error: invalid command}");
+				resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress[/on|/off][?title=deviceTitle]");
 				return;
 			}
-			String strStatus = (result == null ? "null" : LightStatus.LIGHT_ON == result ? "on" : "off");
-			resp.getWriter().write("{\"adress\":\""+adress+"\", \"status\":\""+ strStatus +"\"}");
-		} else if (pathInfo != null && pathInfo.length == 1) {
-			// /adress or /adress
-			String json ="";
-			Light light = parseJson(json);
-			service.saveLight(light);
-		} else {
-		
-			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress[/on|/off]");
+			
+			if (title != null && pathInfo.length != 1) {
+				// /*?title=Titre 
+				result = service.putLight(adress, title);
+			}
+			
+			resp.getWriter().write(JSonTools.formatJson(result));
 		}
 		
 		System.err.println("Time:" + (System.currentTimeMillis() - start));
 	}
+	
+	// /adress 
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		System.err.println("DO DEL!");
 		resp.setContentType("application/json");
-		// /adress or /adress
 		String[] pathInfo = URITools.split(req.getPathInfo());
-		if (pathInfo != null && pathInfo.length == 1) {
+		if (pathInfo != null && pathInfo.length > 1) {
 			String adress = pathInfo[0];
-			if (service.deleteLight(adress)) {
+			if (service.delLight(adress)) {
 				resp.getWriter().write("{\"success\":\"true\"}");	
 			} else {
-				resp.getWriter().write("{\"sucess\":\"true\", error\":\"Impossible to delete\"}");
+				resp.getWriter().write("{\"sucess\":\"true\", error\":\"Impossible to delete [" + adress + "]\"}");
 			}
-			
 		} else {
 			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
 		}
-	}
-	
-	private Light parseJson(String json) {
-		return new Light(); // TODO not create ...
-	}
-	
-	private String formatJson(Light light) {
-		String strStatus = (light.getWhat() == null ? "null" : LightStatus.LIGHT_ON == light.getWhat() ? "on" : "off");
-		return "{\"adress\":\""+light.getWhere()+"\",\"status\":\""+ strStatus +"\"}";
 	}
 }

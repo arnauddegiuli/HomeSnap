@@ -31,4 +31,6 @@ public interface MyDomoService extends IInterface {
 	public void addMonitorConnectionListener(ConnectionListener listener);
 	
 	public void addCommanderConnectionListener(ConnectionListener listener);
+	
+	public void connect();
 }

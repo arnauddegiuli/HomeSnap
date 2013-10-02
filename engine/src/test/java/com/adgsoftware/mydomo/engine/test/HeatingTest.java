@@ -35,18 +35,18 @@ import com.adgsoftware.mydomo.engine.controller.DimensionStatusCallback;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingModeEnum;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
-import com.adgsoftware.mydomo.engine.controller.heating.ValveStatusEnum;
 import com.adgsoftware.mydomo.engine.controller.heating.Offset.Mode;
+import com.adgsoftware.mydomo.engine.controller.heating.ValveStatusEnum;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.SetOffset;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.ValvesStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
-import com.adgsoftware.mydomo.engine.test.utils.ControllerServiceImpl;
+import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
 
 public class HeatingTest {
 
-	private ControllerService s = new ControllerServiceImpl("localhost", 1234);
+	private ControllerService s = new ControllerServiceImpl("localhost", 1234, 12345);
 	private Object lock = new Object();
 	
 	

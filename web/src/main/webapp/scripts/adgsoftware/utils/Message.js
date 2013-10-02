@@ -59,7 +59,63 @@ define([
 		},
 		
 		displayInformation: function(msg) {
-	  		var n = domConstruct.create("h4", {class: "alert_succes", innerHTML: msg});
+	  		var n = domConstruct.create("h4", {class: "alert_info", innerHTML: msg});
+	  		style.set(n, "display", "none");
+	  		style.set(n, "opacity", "0");
+	  		domConstruct.place(n, "messagebox", "first");
+	  		
+	  		// TODO lunch not on click but after 5 sec
+	  		on(n, "click", 
+					function(){
+				      style.set(n, "opacity", "1");
+				      var animA = fx.fadeOut({node: n});
+				      
+				      var animB = fx2.wipeOut({node: n,
+				    	    onEnd: function() {domConstruct.destroy(n);}
+				    	  });
+				      
+				      fx2.chain([animA, animB]).play();  
+				   }
+	  		);
+	  		
+	  		
+	  		
+	  		 var animA = fx.fadeIn({node: n});
+	  		 var animB = fx2.wipeIn({node: n});
+		      
+		     fx2.combine([animB, animA]).play();
+			
+		},
+		displayWarning: function(msg) {
+	  		var n = domConstruct.create("h4", {class: "alert_warning", innerHTML: msg});
+	  		style.set(n, "display", "none");
+	  		style.set(n, "opacity", "0");
+	  		domConstruct.place(n, "messagebox", "first");
+	  		
+	  		// TODO lunch not on click but after 5 sec
+	  		on(n, "click", 
+					function(){
+				      style.set(n, "opacity", "1");
+				      var animA = fx.fadeOut({node: n});
+				      
+				      var animB = fx2.wipeOut({node: n,
+				    	    onEnd: function() {domConstruct.destroy(n);}
+				    	  });
+				      
+				      fx2.chain([animA, animB]).play();  
+				   }
+	  		);
+	  		
+	  		
+	  		
+	  		 var animA = fx.fadeIn({node: n});
+	  		 var animB = fx2.wipeIn({node: n});
+		      
+		     fx2.combine([animB, animA]).play();
+			
+		},
+		displaySuccess: function(msg) {
+	  		var n = domConstruct.create("h4", {class: "alert_success", innerHTML: msg});
 	  		style.set(n, "display", "none");
 	  		style.set(n, "opacity", "0");
 	  		domConstruct.place(n, "messagebox", "first");

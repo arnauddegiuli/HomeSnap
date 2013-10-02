@@ -154,4 +154,14 @@ public class ControllerServiceImpl implements ControllerService {
 	public void addUnknowControllerListener(UnknownControllerListener arg0) {
 		this.getOpenWebMonitor().addUnknownControllerListener(arg0);
 	}
+	
+	@Override
+	public void connect() {
+		if (!isCommanderConnected()) {
+		this.getOpenWebCommand().connect();
+		}
+		if (!isMonitorConnected()) {
+			this.getOpenWebMonitor().connect();
+		}
+	}
 }

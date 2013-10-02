@@ -1,8 +1,6 @@
 package com.adgsoftware.mydomo.ui.components;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,7 +15,7 @@ import android.widget.TextView;
  */
 public abstract class AbstractComponent extends LinearLayout {
 
-	public static final int LABEL_WIDTH = 180;
+//	public static final int LABEL_WIDTH = 180;
 	
 	protected TextView title;
 	private android.view.ViewGroup.LayoutParams previousLayoutParams;
@@ -26,7 +24,6 @@ public abstract class AbstractComponent extends LinearLayout {
 	public AbstractComponent(Context context) {
 		super(context);
 		this.setPadding(0, 10, 0, 10);
-		this.setBackgroundColor(Color.DKGRAY);
 		this.title = new TextView(context);
 	}
 	
@@ -49,13 +46,13 @@ public abstract class AbstractComponent extends LinearLayout {
 	public void setTitle(String text) {
 		title.setPadding(5, 0, 5, 0);
 		title.setText(text);
-		android.view.ViewGroup.LayoutParams layoutParams = title.getLayoutParams();
-		if (layoutParams != null) {
-			layoutParams.height = LayoutParams.MATCH_PARENT;
-		}
-		title.setGravity(Gravity.CENTER_VERTICAL);
-		title.setTextSize(20);
-		title.setWidth(LABEL_WIDTH);
+//		android.view.ViewGroup.LayoutParams layoutParams = title.getLayoutParams();
+//		if (layoutParams != null) {
+//			layoutParams.height = LayoutParams.MATCH_PARENT;
+//		}
+//		title.setGravity(Gravity.CENTER_VERTICAL);
+//		title.setTextSize(20);
+//		title.setWidth(LABEL_WIDTH);
 	}
 
 	public String getTitle() {

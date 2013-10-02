@@ -1,4 +1,9 @@
-package mydomowebserver;
+package mydomowebserver.house;
+
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.house.House;
+import com.adgsoftware.mydomo.engine.house.Label;
 
 /*
  * #%L
@@ -23,25 +28,86 @@ package mydomowebserver;
  * #L%
  */
 
-import java.io.IOException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+public class HouseRestServiceImpl implements HouseRestService {
 
-import mydomowebserver.utils.JSonTools;
-import mydomowebserver.utils.URITools;
+	@Override
+	public House getHouse() {
+		return getModel();
+	}
 
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
-import com.adgsoftware.mydomo.engine.house.Group;
-import com.adgsoftware.mydomo.engine.house.House;
-import com.adgsoftware.mydomo.engine.house.Label;
+	@Override
+	public void setHouse() {
+		// TODO Auto-generated method stub
+		
+	}
 
-public class HouseRestServiceImpl {
 
-	
+	// /house/label
+	@Override
+	public Label putLabel(String id, String title) {
+		
+		Label label = getLabel(id);
+		if (label == null) {
+			// Creation
+			label = new Label();
+			getModel().getLabels().add(label);
+		} 
+		label.setTitle(title);
+		// Save
+		return label;
+	}
+
+	// /house/label/controller
+	@Override
+	public Controller<?> putController(String label, String where, String what) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	private House getModel() {
+		House house = new House();
+		
+		Label label = new Label();
+		label.setId("ch1");
+		label.setTitle("Chambre 1");
+		house.getLabels().add(label);
+		
+		Light li = new Light();
+		li.setTitle("toto");
+		li.setWhere("12");
+		label.add(li);
+			
+		Light li2 = new Light();
+		li2.setTitle("Light 2");
+		li2.setWhere("13");
+		label.add(li2);
+		
+		label = new Label();
+		label.setId("ch2");
+		label.setTitle("Chambre 2");
+		house.getLabels().add(label);
+
+		label = new Label();
+		label.setId("cui");
+		label.setTitle("Cuisine");
+		house.getLabels().add(label);
+		
+		return house;
+	}
+
+	private Label getLabel(String id) {
+		if (id != null) {
+			House house = getModel();
+			
+			for (Label label : house.getLabels()) {
+				if (id.equals(label.getId())) {
+					return label;
+				}
+			}
+		}		
+		return null;
+	}
+
 }

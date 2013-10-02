@@ -107,6 +107,9 @@ public class HeatingComponent extends AbstractComponent {
 		
 		heating.addControllerDimensionChangeListener(new ControllerDimensionChangeListener() {
 			
+			/** serial uid */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onDimensionChangeError(
 					ControllerDimension<? extends Status> arg0, DimensionStatus arg1,
@@ -117,8 +120,9 @@ public class HeatingComponent extends AbstractComponent {
 			@Override
 			public void onDimensionChange(ControllerDimension<? extends Status> arg0,
 					DimensionStatus arg1) {
-				setTemperatureImage(((MeasureTemperature) arg1).getMeasuredTemperature());
-				
+				if (arg1 instanceof MeasureTemperature) {
+					setTemperatureImage(((MeasureTemperature) arg1).getMeasuredTemperature());
+				}
 			}
 		});
 

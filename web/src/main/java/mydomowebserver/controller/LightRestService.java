@@ -1,4 +1,4 @@
-package mydomowebserver;
+package mydomowebserver.controller;
 
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
@@ -30,11 +30,29 @@ import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 
 public interface LightRestService {
 
-	public LightStatus command(LightStatus status, String adress);
-	public LightStatus status(String adress);
+	/**
+	 * Update the device with the status
+	 * @param adress device address
+	 * @param status the status
+	 * @return the device
+	 */
+	public Light putCommand(String address, LightStatus status); // Update the address with the status
 	
-	public Light createLight(String adress);
-	public Light saveLight(Light light);
-	public boolean deleteLight(String adress);
+	/**
+	 * Return the device
+	 * @param address the device's address
+	 * @return
+	 */
+	public Light getStatus(String address); // Get the light
+	
+	/**
+	 * Update or Create the device
+	 * @param address the device's address
+	 * @param label the title of the device
+	 * @return the device
+	 */
+	public Light putLight(String address, String label); // Create or update the light
+	
+	public boolean delLight(String address); // Delete the light
 
 }

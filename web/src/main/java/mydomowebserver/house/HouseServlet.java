@@ -1,4 +1,4 @@
-package mydomowebserver;
+package mydomowebserver.house;
 
 /*
  * #%L
@@ -34,12 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 import mydomowebserver.utils.JSonTools;
 import mydomowebserver.utils.URITools;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.house.House;
-import com.adgsoftware.mydomo.engine.house.Label;
-
 public class HouseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	HouseRestService service = new HouseRestServiceImpl();
 	
 	public void init(ServletConfig config) throws ServletException {
 		System.err.println("Initializing the HouseServlet");
@@ -52,39 +50,32 @@ public class HouseServlet extends HttpServlet {
 		resp.setContentType("application/json");
 		String[] pathInfo = URITools.split(req.getPathInfo());
 		if (pathInfo != null && pathInfo.length == 0) {
-			
-			resp.getWriter().write(JSonTools.toJson(getModel()));
+			resp.getWriter().write(JSonTools.toJson(service.getHouse()));
 		} else {
-			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/light/adress");
+			resp.getWriter().write("Usage: http[s]://server:port/house");
+		}
+	}
+	
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		System.err.println("DO PUT HOUSE!");
+		// /house
+		resp.setContentType("application/json");
+		String[] pathInfo = URITools.split(req.getPathInfo());
+		if (pathInfo != null && pathInfo.length == 1) {
+			String label = pathInfo[0];
+			String title = req.getParameter("title");
+			service.putLabel(label, title);
+		} else if (pathInfo != null && pathInfo.length == 2) {
+			String label = pathInfo[0];
+			String adress = pathInfo[1];
+			String what = req.getParameter("what");
+			service.putController(label, adress, what);
+		} else {
+			resp.getWriter().write("No adress provided. Usage: http[s]://server:port/house/label?title=Titre\n" +
+					               "                           http[s]://server:port/house/label/adresse?what=light");
 		}
 	}
 	
 	
-	
-	private House getModel() {
-		House house = new House();
-		
-		Label label = new Label();
-		label.setId("l1");
-		label.setTitle("Label 1");
-		house.getLabels().add(label);
-		
-		Light li = new Light();
-		li.setTitle("toto");
-		li.setWhere("12");
-		label.add(li);
-			
-		Light li2 = new Light();
-		li2.setTitle("Light 2");
-		li2.setWhere("13");
-		label.add(li2);
-		
-		label = new Label();
-		label.setId("l2");
-		label.setTitle("Label 2");
-		house.getLabels().add(label);
-
-		
-		return house;
-	}
 }

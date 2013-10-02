@@ -132,4 +132,9 @@ implements MyDomoService {
 		controller.setPassword(password);
 	}
 	
+	
+	@Override
+	public void connect() {
+		controller.connect();
+	}
 }

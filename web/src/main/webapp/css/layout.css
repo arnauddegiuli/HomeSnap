@@ -20,6 +20,26 @@
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
+ 
+ 
+  
+#appLayout {
+    height: 100%;
+}
+#leftCol {
+    width: 14em;
+}
+ 
+.claro .demoLayout .edgePanel {
+    background-color: #d0e9fc;
+}
+ 
+#viewsChart {
+    width: 550px;
+    height: 550px;
+}
+ 
+ 
 /* Essentials */
 
 html, div, map, dt, isindex, form, header, aside, section, section, article, footer {  
@@ -33,6 +53,7 @@ padding: 0;
 font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 background: #F8F8F8;
 font-size: 12px;
+
 }
 
 .clear {
@@ -439,7 +460,8 @@ background: #F1F1F4 url(../images/module_footer_bg.png) repeat-x;
 
 .module_content {
 margin: 10px 20px;
-color: #666;}
+color: #666;
+}
 
 /* Module Widths */
 

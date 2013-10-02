@@ -135,8 +135,7 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	}
 	
 	/**
-	 * Asynchronously method to get value. This means that if value is not in cache you won't have to wait from server response
-	 * before get a return.
+	 * Asynchronously method to get value.
 	 * @param mode
 	 * @param callback the method to call when result will be available
 	 */
@@ -163,7 +162,10 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 		this.setDimensionStatus(t);
 	}
 	
-	
+	/**
+	 * A
+	 * @param callback
+	 */
 	public void getMeasureTemperature(final DimensionStatusCallback<MeasureTemperature> callback) {
 		getDimensionStatus(MeasureTemperature.class, new DimensionStatusListener<MeasureTemperature>() {
 			@Override

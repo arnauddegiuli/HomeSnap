@@ -25,18 +25,7 @@ package com.adgsoftware.mydomo.engine.connector.impl;
 
 public class Password {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		testCalcPass (12345, "603356072", "25280520");
-		testCalcPass (12345, "410501656", "119537670");
-		testCalcPass (12345, "630292165", "4269684735");
-		testCalcPass (12345, "523781130", "537331200");
-		
-	}
-	
-	public static String calcPass (int password, String nonce) {
+	public String calcPass (int password, String nonce) {
 		boolean flag = true;
 		int num1 = 0x0;
 		int num2 = 0x0;
@@ -109,14 +98,7 @@ public class Password {
 		return String.valueOf(Long.parseLong(Integer.toBinaryString(num1 >>> 0), 2));
 	}
 	
-	private static void testCalcPass (int pass, String nonce, String expected) {
-		String res = calcPass (pass, nonce);
-		String m = pass + ' ' + nonce + ' ' + res + ' ' + expected;
-		if (expected.equals(res))
-			System.out.println("PASS "+m);
-		else
-			System.out.println("FAIL "+m);
-	}
+
 	 
 
 

@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -87,6 +89,16 @@ public class SettingsActivity extends AbstractActivity {
 		txtServerPort.setText(serverPort);
 		txtServerPassword.setText(serverPassword);
 		
+		Button btnConnect = (Button) findViewById(R.id.btnConnect);
+		btnConnect.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				myDomoService.connect();
+				refresh();
+			}
+		});
+		
 		super.onCreate(savedInstanceState);
 		
         createLayout();
@@ -142,8 +154,7 @@ public class SettingsActivity extends AbstractActivity {
 			editor.putString("serverPassword", serverPassword);
 			myDomoService.setServerPassword(Integer.parseInt(serverPassword));
 		}
-		
-		editor.commit();
+		editor.apply();
 	}
 	
 	private static String COMMAND_OFFLINE = "Command[OFFLINE]";

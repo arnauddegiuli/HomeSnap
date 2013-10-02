@@ -29,6 +29,11 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 
 
+import mydomowebserver.controller.LightRestService;
+import mydomowebserver.controller.LightRestServiceImpl;
+import mydomowebserver.controller.LightServlet;
+import mydomowebserver.house.HouseServlet;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

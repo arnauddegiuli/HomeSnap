@@ -88,4 +88,9 @@ public interface ControllerService {
 	 * @param listener
 	 */
 	public void addUnknowControllerListener(UnknownControllerListener listener);
+	
+	/**
+	 * Force connection for Commander and Monitor if there is no connection.
+	 */
+	public void connect();
 }

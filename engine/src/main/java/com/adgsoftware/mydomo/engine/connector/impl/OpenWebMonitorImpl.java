@@ -62,6 +62,7 @@ implements Monitor {
 	private List<UnknownControllerListener> unknownControllerListenerList = new ArrayList<UnknownControllerListener>();
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private boolean tryToConnect = true;
+	private Password passwordEncoder = new Password();
 	
 	/**
 	 * 
@@ -229,7 +230,7 @@ implements Monitor {
     	            log.finest(Log.Session.Monitor, "Rx: " + msg);
     	            msg = msg.substring(2); // Remove *#
 		            msg = msg.substring(0, msg.length()-2); // Remove last ##
-    		    	String password = Password.calcPass(passwordOpen, msg);
+    		    	String password = passwordEncoder.calcPass(passwordOpen, msg);
     		    	String passwordMsg = "*#"+password+"##"; 
     		    	log.finest(Log.Session.Monitor, "Tx: " + passwordMsg);
     		    	write(passwordMsg);		    	
