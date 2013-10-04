@@ -7,9 +7,10 @@ define([
     "dojo/store/JsonRest",
     "dojo/store/Memory",
     "dojo/store/Cache",
+    "adgsoftware/house/Label",
     "dojo/store/Observable",
     "adgsoftware/utils/Message"
-], function(declare, request, dom, domcConstruct,JSON, JsonRest, Memory, Cache, Observable, msg) {
+], function(declare, request, dom, domcConstruct,JSON, JsonRest, Memory, Cache, Label, Observable, msg) {
 	
 //	Label label = declare(, {baseClass:"label"});
 //	Group group = declare(, {baseClass:"group"});
@@ -25,7 +26,7 @@ define([
 	return declare(null, {
 		baseClass: "house",
 		houseStore: null,
-		label: null,
+		labels: null,
 		group: null,
 		load: function(url) {
 			
@@ -34,26 +35,26 @@ define([
 //			
 //		},	
 		init: function() {
-			houseStore = new Cache(masterStore, cacheStore);
+			this.houseStore = new Cache(masterStore, cacheStore);
 						
-			var oldPut = houseStore.put;
-			houseStore.put = function(object, options){
+			var oldPut = this.houseStore.put;
+			this.houseStore.put = function(object, options){
 			    if(object.id == null){
 			        throw new Error("Id must be provided");
 			    }
 			    // now call the original
 			    oldPut.call(this, object, options);
 			};
-			
-			this.refresh();
 		},
-		refresh: function() {
-			results = houseStore.query();
-			var container = dom.byId("house");
-			 
+		draw: function(container) {
+			if (!container)
+				container = dom.byId("house");
+			results = this.houseStore.query();
+			var labels = this.labels = new Array();
 		    // results object provides a forEach method for iteration
 		    results.forEach(function(label){
-		    	domcConstruct.create("li", {innerHTML: "<a href='#'>" + label.title + "</a>"}, container);
+		    	var li = domcConstruct.create("li", {innerHTML: "<a href='#/house/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
+		    	labels.push(new Label(label));
 		    } /*insertRow*/);
 		    
 //		    results.observe(function(item, removedIndex, insertedIndex){

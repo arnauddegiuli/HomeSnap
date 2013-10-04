@@ -63,6 +63,7 @@ public class JSonTools {
 		StringBuilder sb = new StringBuilder()
 			.append("{\"id\":\"").append(label.getId()).append("\"")
 			.append(", \"title\":\"").append(label.getTitle()).append("\"")
+			.append(", \"icon\":\"").append(label.getIcon() != null ? label.getIcon().getClassName() : label.getIconPath()).append("\"")
 			.append(",\"controllers\":[");
 		
 		for (Controller<? extends Status> controller : label.getControllerList()) {
@@ -79,7 +80,9 @@ public class JSonTools {
 	public final static String toJson(Controller<?> controller) {
 		StringBuilder sb = new StringBuilder()
 		.append("{\"where\":\"").append(controller.getWhere()).append("\"")
+		.append(", \"who\":\"").append(controller.getWho()).append("\"")
 		.append(", \"title\":\"").append(formatString(controller.getTitle())).append("\"");
+		
 		return sb.append("}").toString();
 	}
 	

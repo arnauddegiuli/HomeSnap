@@ -56,8 +56,41 @@
 
 <body class="claro">
            
+		<script>
+		
+			require(["dojo/domReady!"],
+				function(){ 
+				require([ "adgsoftware/utils/Message" ], function(Message) {
+					Message.displayError("Ceci est un msg d'erreur");
+					Message.displaySuccess("Ceci est un msg de succes");
+					Message.displayWarning("Ceci est un msg de warning");
+					Message.displayInformation("Ceci est un msg d'information");
+				});
+				
+				
+				require([ "dojo/router", "dojo/dom", "adgsoftware/house/House"], function(router, dom, House) {
+					// Initialize house
+					var house = new House();
+					house.init();
+					var container = dom.byId("house");
+					house.draw(container);
+					// Register route
+					router.register("/house/:id", function (event) {
+						   /* alert(house.houseStore.get(event.params.id).title); */
+						   console.log(house.houseStore.get(event.params.id).title);
+						   // TODO display controller for this label!
+						});
+						router.startup();
+				});
+				
+				
+			});
+		</script>
+           
+           
+           
 	<header id="header">
-		<hgroup>
+		<hgroup>#
 			<h1 class="site_title"><a href="index.html">My Domo</a></h1>
 			<h2 class="section_title">Dashboard</h2>
 			<div class="btn_view_site"><a href="http://arnauddegiuli.github.io/MyDomo/">View Site</a></div>
@@ -81,20 +114,7 @@
 		<hr/>
 		<h3>House</h3>
 		<ul class="toggle" id="house">
-			<li class="icn_new_article"><a href="#">Chambre 1</a></li>
-			<li class="icn_edit_article"><a href="#">Chambre 2</a></li>
-			<li class="icn_categories"><a href="#">Cuisine</a></li>
-			<li class="icn_tags"><a href="#">Tags</a></li>
 		</ul>
-		<script type="text/javascript">
-						
-			require(["adgsoftware/house/House"], function(House) {
-				house = new House();
-				house.init();
-			});
-			
-		</script>
-		
 		
 		<h3>Scenario</h3>
 		<ul class="toggle">
@@ -115,21 +135,57 @@
 		
 		<div class="clear"></div>
 	
-		<script>
+
 		
-			require(["dojo/domReady!"],
-				function(){ 
-				require([ "adgsoftware/utils/Message" ], function(Message) {
-					Message.displayError("Ceci est un msg d'erreur");
-					Message.displaySuccess("Ceci est un msg de succes");
-					Message.displayWarning("Ceci est un msg de warning");
-					Message.displayInformation("Ceci est un msg d'information");
-				});
-			});
-		</script>	
-				
-				
 		<article class="module width_full">
+			<header><h3>Basic Styles</h3></header>
+				<div class="module_content">
+					
+				<!-- 	<script>
+						var myButton, myButton2;
+				
+						require(["adgsoftware/widget/Light"], function(Light) {
+							myButton = new Light({}, "lightContainer");
+							myButton.startup();
+				
+							myButton2 = new Light({}, "lightContainer2");
+							myButton2.startup();
+						});
+					</script> -->
+					
+					
+<!-- 					<script>
+					require(["adgsoftware/house/Label"], function(Label) {
+						var label = new Label({}, "lightContainer");
+					});
+					
+					</script> -->
+	
+					<div id="lightContainer12"></div>
+				
+					<div id="lightContainer13"></div>
+					
+					
+					<h1>Header 1</h1>
+					<h2>Header 2</h2>
+					<h3>Header 3</h3>
+					<h4>Header 4</h4>
+					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Maecenas faucibus mollis interdum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+
+<p>Donec id elit non mi porta <a href="#">link text</a> gravida at eget metus. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis consectetur purus sit amet fermentum. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+
+					<ul>
+						<li>Donec ullamcorper nulla non metus auctor fringilla. </li>
+						<li>Cras mattis consectetur purus sit amet fermentum.</li>
+						<li>Donec ullamcorper nulla non metus auctor fringilla. </li>
+						<li>Cras mattis consectetur purus sit amet fermentum.</li>
+					</ul>
+				</div>
+		</article><!-- end of styles article -->
+		
+		
+		
+				<article class="module width_full">
 		
 			<header><h3>Basic Styles</h3></header>
 				<div class="module_content">
@@ -156,51 +212,6 @@
 		
  		</article>
 		
-		<article class="module width_full">
-			<header><h3>Basic Styles</h3></header>
-				<div class="module_content">
-					
-					<script>
-						var myButton, myButton2;
-				
-						require(["adgsoftware/widget/Light"], function(Light) {
-							myButton = new Light({}, "lightContainer");
-							myButton.startup();
-				
-							myButton2 = new Light({}, "lightContainer2");
-							myButton2.startup();
-						});
-					</script>
-					
-					
-<!-- 					<script>
-					require(["adgsoftware/house/Label"], function(Label) {
-						var label = new Label({}, "lightContainer");
-					});
-					
-					</script> -->
-	
-					<div id="lightContainer"></div>
-				
-					<div id="lightContainer2"></div>
-					
-					
-					<h1>Header 1</h1>
-					<h2>Header 2</h2>
-					<h3>Header 3</h3>
-					<h4>Header 4</h4>
-					<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur purus sit amet fermentum. Maecenas faucibus mollis interdum. Maecenas faucibus mollis interdum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
-
-<p>Donec id elit non mi porta <a href="#">link text</a> gravida at eget metus. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis consectetur purus sit amet fermentum. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
-
-					<ul>
-						<li>Donec ullamcorper nulla non metus auctor fringilla. </li>
-						<li>Cras mattis consectetur purus sit amet fermentum.</li>
-						<li>Donec ullamcorper nulla non metus auctor fringilla. </li>
-						<li>Cras mattis consectetur purus sit amet fermentum.</li>
-					</ul>
-				</div>
-		</article><!-- end of styles article -->
 		
 		<div class="spacer"></div>
 		
@@ -209,8 +220,6 @@
 
 		
 	</section>
-
-	
 
 </body>
 

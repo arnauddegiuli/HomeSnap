@@ -192,7 +192,7 @@ implements Serializable {
 		}
 	}
 		
-	protected abstract String getWho();
+	public abstract String getWho();
 	
 	public abstract T getStatus(String what);
 	

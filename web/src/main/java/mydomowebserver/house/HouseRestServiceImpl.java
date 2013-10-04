@@ -3,6 +3,7 @@ package mydomowebserver.house;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.house.House;
+import com.adgsoftware.mydomo.engine.house.Icon;
 import com.adgsoftware.mydomo.engine.house.Label;
 
 /*
@@ -72,6 +73,7 @@ public class HouseRestServiceImpl implements HouseRestService {
 		Label label = new Label();
 		label.setId("ch1");
 		label.setTitle("Chambre 1");
+		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
 		
 		Light li = new Light();
@@ -87,11 +89,13 @@ public class HouseRestServiceImpl implements HouseRestService {
 		label = new Label();
 		label.setId("ch2");
 		label.setTitle("Chambre 2");
+		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
 
 		label = new Label();
 		label.setId("cui");
 		label.setTitle("Cuisine");
+		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
 		
 		return house;

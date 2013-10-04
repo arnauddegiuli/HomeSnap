@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.adgsoftware.mydomo.engine.house.Label;
+
 import mydomowebserver.utils.JSonTools;
 import mydomowebserver.utils.URITools;
 
@@ -51,8 +53,18 @@ public class HouseServlet extends HttpServlet {
 		String[] pathInfo = URITools.split(req.getPathInfo());
 		if (pathInfo != null && pathInfo.length == 0) {
 			resp.getWriter().write(JSonTools.toJson(service.getHouse()));
+		} else if (pathInfo != null && pathInfo.length == 1) {
+
+			for (Label label : service.getHouse().getLabels()) {
+				if (pathInfo[0].equals(label.getId())) {
+					resp.getWriter().write(JSonTools.toJsStringLabel(label));
+					return;
+				}
+			}
+			resp.getWriter().write("error"); // TODO how throw exception
+			
 		} else {
-			resp.getWriter().write("Usage: http[s]://server:port/house");
+			resp.getWriter().write("Usage: http[s]://server:port/house[/labelid]");
 		}
 	}
 	

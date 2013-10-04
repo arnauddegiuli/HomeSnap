@@ -55,6 +55,8 @@ implements Serializable, List<Controller<? extends Status>> {
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private String title;
 	private String id;
+	private Icon icon;
+	private String iconPath;
 	
 	public String getId() {
 		if (id == null) {
@@ -73,6 +75,22 @@ implements Serializable, List<Controller<? extends Status>> {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public Icon getIcon() {
+		return icon;
+	}
+	
+	public void setIcon(Icon icon) {
+		this.icon = icon;
+	}
+	
+	public String getIconPath() {
+		return iconPath;
+	}
+	
+	public void setIconPath(String iconPath) {
+		this.iconPath = iconPath;
 	}
 	
 	/**
