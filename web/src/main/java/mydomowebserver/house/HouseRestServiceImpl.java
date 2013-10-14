@@ -2,6 +2,7 @@ package mydomowebserver.house;
 
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Icon;
 import com.adgsoftware.mydomo.engine.house.Label;
@@ -109,6 +110,16 @@ public class HouseRestServiceImpl implements HouseRestService {
 		li5.setTitle("Light Cuisine");
 		li5.setWhere("16");
 		label.add(li5);
+
+		Group group1 = new Group();
+		group1.setId("1");
+		group1.setTitle("Group 1");
+		group1.add(li);
+		group1.add(li2);
+		group1.add(li3);
+		group1.add(li4);
+		group1.add(li5);
+		house.getGroups().add(group1);
 
 		return house;
 	}

@@ -43,18 +43,18 @@ define([
 			if (!container)
 				container = dom.byId("house");
 			results = this.houseStore.query();
+			
 			var labels = this.labels = new Array();
 			// results object provides a forEach method for iteration
-			results.forEach(function(label){
-				domcConstruct.create("li", {innerHTML: "<a href='#/house/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
-				console.log("toto");
-				console.log(label);
-				console.log(dom.byId("main"));
-				var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
-				console.log(div);
-				var widget = new Label({label: label}, div);
-				labels.push(widget);
-			} /*insertRow*/);
+			results.forEach(function(house){
+				dojo.forEach(house.labels, function(label) {
+					domcConstruct.create("li", {innerHTML: "<a href='#/house/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
+					var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
+					var widget = new Label({label: label}, div);
+					labels.push(widget);
+				}
+			);
+		} /*insertRow*/);
 
 //		    results.observe(function(item, removedIndex, insertedIndex){
 //		        // this will be called any time a item is added, removed, and updated

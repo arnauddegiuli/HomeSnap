@@ -35,29 +35,50 @@ public class JSonTools {
 
 	public final static String toJson(House house) {
 		
-		StringBuilder sb = new StringBuilder("[");
-		
-		for (Group group : house.getGroups()) {
-			toJsonGroup(group);
-			sb.append(",");
-		}
-		if (house.getGroups().size() > 0) {
-			sb.append(",");
-		}
-		
+		StringBuilder sb = new StringBuilder("[{id:'house', title:'House', labels:[");
+
 		for (Label label : house.getLabels()) {
 			sb.append(toJsStringLabel(label));
 			sb.append(",");
 		}
-		sb.append("]");
+
+		if (house.getLabels().size() > 0) {
+			sb.setLength(sb.length() - 1);
+		}
+
+		sb.append("],groups:[");
+		
+		for (Group group : house.getGroups()) {
+			sb.append(toJsonGroup(group));
+			sb.append(",");
+		}
+
+		if (house.getGroups().size() > 0) {
+			sb.setLength(sb.length() - 1);
+		}
+
+		sb.append("]}]");
 		return sb.toString();
 	}
 	
 	public final static String toJsonGroup(Group group) {
-		// TODO
-		return "";
+		StringBuilder sb = new StringBuilder()
+		.append("{\"id\":\"").append(group.getId()).append("\"")
+		.append(", \"title\":\"").append(group.getTitle()).append("\"")
+//		.append(", \"icon\":\"").append(group.getIcon() != null ? group.getIcon().getClassName() : group.getIconPath()).append("\"") TODO add icon management on group
+		.append(",\"controllers\":[");
+
+		for (Controller<? extends Status> controller : group.getControllerList()) {
+			sb.append(toJson(controller));
+			sb.append(",");
+		}
+		if (group.getControllerList().size() > 0) {
+			sb.setLength(sb.length() - 1);
+		}
+
+		return sb.append("]}").toString();
 	}
-	
+
 	public final static String toJsStringLabel(Label label) {
 		
 		StringBuilder sb = new StringBuilder()

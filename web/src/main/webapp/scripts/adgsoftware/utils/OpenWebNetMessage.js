@@ -20,42 +20,18 @@
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
-.quick_search {
-text-align: center;
-padding: 14px 0 0px 0;
-}
+define([
+	"dojo/_base/declare",
+], function(declare){
+	var OpenWebNetMessage = declare(null, {
 
-.quick_search input[type=text] {
-text-align: left;
-height: 22px;
-width: 88%;
-color: #ccc;
-padding-left: 2%;
-padding-top: 5px;
-background: #fff url(../images/icn_search.png) no-repeat;
-background-position: 10px 6px;
-}
+		send: new function(msg) { // REST call with the msg
+			
+		},
+		callback: new function(){ // Call to mange result
+			
+		}
+	});
 
-.toggleLink {
-display: inline;
-float: none;
-margin-left: 2%
-}
-
-html ul.tabs li.active, html ul.tabs li.active a:hover  {
-background: #ccc;
-}
-
-fieldset input[type=text] {
-margin-left: -10px;
-}
-
-
-fieldset select {
-margin-left: -10px
-}
-
-fieldset textarea {
-margin-left: -10px;
-}
-
+	return new OpenWebNetMessage();
+});
