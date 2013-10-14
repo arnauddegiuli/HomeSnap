@@ -4,23 +4,18 @@ define([
 	"dojo/dom",
 	"dojo/dom-construct",
 	"dojo/json",
-	"dojo/store/JsonRest",
-	"dojo/store/Memory",
 	"dojo/store/Cache",
 	"adgsoftware/widget/label/Label",
 	"dojo/store/Observable",
+	"adgsoftware/store/HouseStore",
 	"adgsoftware/utils/Message"
-], function(declare, request, dom, domcConstruct,JSON, JsonRest, Memory, Cache, Label, Observable, msg) {
+], function(declare, request, dom, domcConstruct,JSON, Cache, Label, Observable, HouseStore, msg) {
 
-	var masterStore = new JsonRest({
-		target: "/house/"
-	});
-	var cacheStore = new Memory({ });
 
 
 	return declare(null, {
 		baseClass: "house",
-		houseStore: null,
+		houseStore: new HouseStore(),
 		labels: null,
 		group: null,
 		load: function(url) {
@@ -28,17 +23,6 @@ define([
 //		addLabel: function(label, title) {
 //			
 //		},	
-		init: function() {
-			this.houseStore = new Cache(masterStore, cacheStore);
-			var oldPut = this.houseStore.put;
-			this.houseStore.put = function(object, options){
-				if(object.id == null){
-					throw new Error("Id must be provided");
-				}
-				// now call the original
-				oldPut.call(this, object, options);
-			};
-		},
 		draw: function(container) {
 			if (!container)
 				container = dom.byId("house");

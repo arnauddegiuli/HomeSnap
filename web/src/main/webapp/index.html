@@ -68,19 +68,18 @@
 				});
 				
 				
-				require([ "dojo/router", "dojo/dom", "adgsoftware/house/House"], function(router, dom, House) {
+				require([ "dojo/router", "dojo/dom", "adgsoftware/widget/house/House"], function(router, dom, House) {
 					// Initialize house
 					var house = new House();
-					house.init();
 					var container = dom.byId("house");
 					house.draw(container);
 					// Register route
 					router.register("/house/:id", function (event) {
-						   /* alert(house.houseStore.get(event.params.id).title); */
-						   console.log(house.houseStore.get(event.params.id).title);
-						   // TODO display controller for this label!
-						});
-						router.startup();
+						/* alert(house.houseStore.get(event.params.id).title); */
+						console.log(house.houseStore.get(event.params.id).title);
+						// TODO display controller for this label!
+					});
+					router.startup();
 				});
 				
 				

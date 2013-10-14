@@ -1,16 +1,15 @@
 define([
 	"dojo/_base/declare",
 	"dojo/aspect",
-	"dojo/store/Memory",
 	"dojo/store/Observable",
 	"dijit/Tree",
 	"dijit/tree/ObjectStoreModel",
 	"dijit/tree/dndSource",
+	"adgsoftware/store/HouseStore",
 	"adgsoftware/utils/Message"
-], function(declare, aspect, Memory,Observable, Tree, ObjectStoreModel, dndSource, msg) {
+], function(declare, aspect, Observable, Tree, ObjectStoreModel, dndSource, HouseStore, msg) {
 	// Create test store, adding the getChildren() method required by ObjectStoreModel
-	var myStore = new Memory({
-		data: [{id:'house', title:'House', labels:[{"id":"ch1", "title":"Chambre 1", "icon":"icn_categories","controllers":[{"where":"12", "who":"1", "title":"toto"},{"where":"13", "who":"1", "title":"Light 2"},{"where":"14", "who":"1", "title":"Light 3"}]},{"id":"ch2", "title":"Chambre 2", "icon":"icn_categories","controllers":[{"where":"15", "who":"1", "title":"Light ch2"}]},{"id":"cui", "title":"Cuisine", "icon":"icn_categories","controllers":[{"where":"16", "who":"1", "title":"Light Cuisine"}]}],groups:[{"id":"1", "title":"Group 1","controllers":[{"where":"12", "who":"1", "title":"toto"},{"where":"13", "who":"1", "title":"Light 2"},{"where":"14", "who":"1", "title":"Light 3"},{"where":"15", "who":"1", "title":"Light ch2"},{"where":"16", "who":"1", "title":"Light Cuisine"}]}]}],
+	var myStore = new HouseStore({
 		getChildren: function(object){
 			if (object.id=='house')
 				return object.labels;
@@ -18,7 +17,8 @@ define([
 				return object.controllers;
 		}
 	});
-
+	
+	
 	aspect.around(myStore, "put", function(originalPut){
 		// To support DnD, the store must support put(child, {parent: parent}).
 		// Since memory store doesn't, we hack it.
@@ -39,7 +39,7 @@ define([
 		store: myStore,
 		query: {id: 'house'}
 	});
-
+	
 	return declare([Tree], {
 		showRoot: false,
 		model: myModel,
