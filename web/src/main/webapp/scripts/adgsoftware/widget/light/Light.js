@@ -21,18 +21,18 @@
  * #L%
  */
 define([
-    "dojo/_base/declare",
-    "dijit/form/ToggleButton",
-    "dijit/form/HorizontalSlider",
-    "dijit/_WidgetBase",
-    "dijit/_TemplatedMixin",
-    "dojo/text!./templates/Light.html",
-    "dojo/dom-style",
-    "dojo/_base/fx",
-    "dojo/_base/lang",
-    "dojo/request",
-    "dojo/json",
-    "adgsoftware/utils/Message"
+	"dojo/_base/declare",
+	"dijit/form/ToggleButton",
+	"dijit/form/HorizontalSlider",
+	"dijit/_WidgetBase",
+	"dijit/_TemplatedMixin",
+	"dojo/text!./templates/Light.html",
+	"dojo/dom-style",
+	"dojo/_base/fx",
+	"dojo/_base/lang",
+	"dojo/request",
+	"dojo/json",
+	"adgsoftware/utils/Message"
 ], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON, msg) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {
@@ -41,7 +41,8 @@ define([
 		button: null,
 		slider: null,
 		lock: false,
-		adress: "12",
+		adress: null,
+		showSlider: false,
 		switchOnOff : function(status, value) {
 			var component = this;
 			if (!component.lock) {
@@ -56,16 +57,16 @@ define([
 								component.slider.set('value', value);
 							} else { // Off
 								component.set('label', 'OFF');
-					        	component.button.set('iconClass', 'lightOffIcon');
-					        	component.slider.set('value', value);
+								component.button.set('iconClass', 'lightOffIcon');
+								component.slider.set('value', value);
 							}
 						} else {
 							msg.displayError("Error from gateway. Status doesn't change. Try later.");
 							// TODO raise an error to reset the button status to the previous value
 						}
-	    		    }, function(error) {
-	    		    	msg.displayError(error);
-	    		});
+					}, function(error) {
+						msg.displayError(error);
+				});
 				component.lock = false
 			}
 		},
@@ -73,45 +74,43 @@ define([
 			var component = this;
 			this.button = new ToggleButton ({
 				checked: false,
-			  	iconClass: 'lightOffIcon',
-			  	label: 'OFF',
-			  	onChange: function(status, value){
-			    	if (!value){
-			    		status ? value = 100 : value = 0;
-			    	}
-			    	
-			  		if (status) {
-			        	  component.switchOnOff("on", 100);
-			        	  console.log('on');
-			          } else {
-			        	  component.switchOnOff("off", 0);
-			        	  console.log('off');
-			          }
+				iconClass: 'lightOffIcon',
+				label: 'OFF',
+				onChange: function(status, value){
+					if (!value){
+						status ? value = 100 : value = 0;
+					}
+					if (status) {
+						component.switchOnOff("on", 100);
+						console.log('on');
+					} else {
+						component.switchOnOff("off", 0);
+						console.log('off');
+					}
 				},
-			  	postCreate: function() {
-			    	this.set('showLabel', false);
-			    }
-				 
-			 }, this.id + "progButtonNode");
-		 
+				postCreate: function() {
+					this.set('showLabel', false);
+				}
+			}, this.id + "progButtonNode");
 
-			 this.slider = new HorizontalSlider({
-		         value: 0,
-		         minimum: 0,
-		         maximum: 100,
-		         intermediateChanges: true,
-		         style: "width: 300px",
-		         onChange: function(value){
-		        	 if (!component.lock) {
-			        	 if (value > 0) {
-			            	 component.button.onChange(true, value);
-			             } else {
-			            	 component.button.onChange(false, value);
-			             }
-		 			}
-		         }
-		     }, this.id+"slider");
+			if (this.showSlider) {
+				this.slider = new HorizontalSlider({
+					value: 0,
+					minimum: 0,
+					maximum: 100,
+					intermediateChanges: true,
+					style: "width: 300px",
+					onChange: function(value){
+						if (!component.lock) {
+							if (value > 0) {
+								component.button.onChange(true, value);
+							} else {
+								component.button.onChange(false, value);
+							}
+						}
+					}
+				}, this.id+"slider");
+			}
 		}
 	});
-		
 });

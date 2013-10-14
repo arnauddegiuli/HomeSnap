@@ -43,11 +43,9 @@ public class HouseRestServiceImpl implements HouseRestService {
 		
 	}
 
-
 	// /house/label
 	@Override
 	public Label putLabel(String id, String title) {
-		
 		Label label = getLabel(id);
 		if (label == null) {
 			// Creation
@@ -66,45 +64,59 @@ public class HouseRestServiceImpl implements HouseRestService {
 		return null;
 	}
 
-
 	private House getModel() {
 		House house = new House();
-		
+
 		Label label = new Label();
 		label.setId("ch1");
 		label.setTitle("Chambre 1");
 		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
-		
+
 		Light li = new Light();
 		li.setTitle("toto");
 		li.setWhere("12");
 		label.add(li);
-			
+
 		Light li2 = new Light();
 		li2.setTitle("Light 2");
 		li2.setWhere("13");
 		label.add(li2);
-		
+
+		Light li3 = new Light();
+		li3.setTitle("Light 3");
+		li3.setWhere("14");
+		label.add(li3);
+
 		label = new Label();
 		label.setId("ch2");
 		label.setTitle("Chambre 2");
 		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
 
+		Light li4 = new Light();
+		li4.setTitle("Light ch2");
+		li4.setWhere("15");
+		label.add(li4);
+
 		label = new Label();
 		label.setId("cui");
 		label.setTitle("Cuisine");
 		label.setIcon(Icon.chamber);
 		house.getLabels().add(label);
-		
+
+		Light li5 = new Light();
+		li5.setTitle("Light Cuisine");
+		li5.setWhere("16");
+		label.add(li5);
+
 		return house;
 	}
 
 	private Label getLabel(String id) {
 		if (id != null) {
 			House house = getModel();
-			
+
 			for (Label label : house.getLabels()) {
 				if (id.equals(label.getId())) {
 					return label;
@@ -113,5 +125,4 @@ public class HouseRestServiceImpl implements HouseRestService {
 		}		
 		return null;
 	}
-
 }
