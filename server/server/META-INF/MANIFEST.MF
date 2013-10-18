@@ -7,11 +7,11 @@ Bundle-Activator: com.adgsoftware.mydomo.server.MyDomoServerActivator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.adgsoftware.mydomo.engine,
- com.adgsoftware.mydomo.engine.controller,
-  com.adgsoftware.mydomo.engine.controller.gateway,
- com.adgsoftware.mydomo.engine.controller.gateway.dimension,
- com.adgsoftware.mydomo.engine.controller.light,
- com.adgsoftware.mydomo.engine.parser,
- com.adgsoftware.mydomo.server.controllermodules,
- org.osgi.framework
+com.adgsoftware.mydomo.engine.controller,
+com.adgsoftware.mydomo.engine.controller.gateway,
+com.adgsoftware.mydomo.engine.controller.gateway.dimension,
+com.adgsoftware.mydomo.engine.controller.light,
+com.adgsoftware.mydomo.engine.parser,
+com.adgsoftware.mydomo.server.controllermodules,
+org.osgi.framework
 Export-Package: com.adgsoftware.mydomo.server

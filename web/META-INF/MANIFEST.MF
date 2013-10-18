@@ -3,19 +3,27 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoWebServer
 Bundle-SymbolicName: MyDomoWebServer
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: mydomowebserver.Activator
-Import-Package: org.osgi.framework;version="1.3.0",
- org.osgi.service.log; version="1.3",
- org.osgi.util.tracker;version="1.3.1",
- javax.servlet;version="2.6.0",
- javax.servlet.http;version="2.6.0",
- org.osgi.service.http,
+Bundle-Activator: com.adgsoftware.mydomo.webserver.Activator
+Export-Package: .,
+ com.adgsoftware.mydomo.webserver,
+ com.adgsoftware.mydomo.webserver.rest,
+ com.adgsoftware.mydomo.webserver.rest.listener,
+ com.adgsoftware.mydomo.webserver.servlet.house,
+ com.adgsoftware.mydomo.webserver.servlet.house.parser,
+ com.adgsoftware.mydomo.webserver.utils
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
+Import-Package: com.adgsoftware.mydomo.engine.connector,
+ com.adgsoftware.mydomo.engine.connector.impl,
  com.adgsoftware.mydomo.engine.controller,
  com.adgsoftware.mydomo.engine.controller.light,
+ com.adgsoftware.mydomo.engine.house,
  com.adgsoftware.mydomo.engine.services,
  com.adgsoftware.mydomo.engine.services.impl,
- com.adgsoftware.mydomo.engine.connector,
- com.adgsoftware.mydomo.engine.connector.impl,
- com.adgsoftware.mydomo.engine.house
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Web-ContextPath: /test
+ javax.servlet;version="2.6.0",
+ javax.servlet.http;version="2.6.0",
+ org.osgi.framework;version="1.3.0",
+ org.osgi.service.http,
+ org.osgi.service.log;version="1.3.0",
+ org.osgi.util.tracker;version="1.3.1"
+Web-ContextPath: /server

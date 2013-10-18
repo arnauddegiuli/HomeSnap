@@ -32,7 +32,7 @@ define([
 			// results object provides a forEach method for iteration
 			results.forEach(function(house){
 				dojo.forEach(house.labels, function(label) {
-					domcConstruct.create("li", {innerHTML: "<a href='#/house/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
+					domcConstruct.create("li", {innerHTML: "<a href='#/house/labels/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
 					var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
 					var widget = new Label({label: label}, div);
 					labels.push(widget);

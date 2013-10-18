@@ -26,13 +26,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
 	<title>My Domo</title>
-	
+
 	<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" />
 	<!--[if lt IE 9]>
 	<link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" />
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	
+
 	<link rel="stylesheet" href="scripts/adgsoftware/widget/light/css/Light.css" media="screen" />
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css" media="screen" />
 
@@ -52,42 +52,34 @@
 
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js"></script>
 </head>
-
-
 <body class="claro">
-           
 		<script>
-		
 			require(["dojo/domReady!"],
 				function(){ 
 				require([ "adgsoftware/utils/Message" ], function(Message) {
-					Message.displayError("Ceci est un msg d'erreur");
+/* 					Message.displayError("Ceci est un msg d'erreur");
 					Message.displaySuccess("Ceci est un msg de succes");
 					Message.displayWarning("Ceci est un msg de warning");
-					Message.displayInformation("Ceci est un msg d'information");
+					Message.displayInformation("Ceci est un msg d'information"); */
 				});
-				
-				
+
 				require([ "dojo/router", "dojo/dom", "adgsoftware/widget/house/House"], function(router, dom, House) {
 					// Initialize house
 					var house = new House();
 					var container = dom.byId("house");
 					house.draw(container);
 					// Register route
-					router.register("/house/:id", function (event) {
+					router.register("/house/labels/:id", function (event) {
 						/* alert(house.houseStore.get(event.params.id).title); */
 						console.log(house.houseStore.get(event.params.id).title);
 						// TODO display controller for this label!
 					});
 					router.startup();
 				});
-				
-				
+
 			});
 		</script>
-           
-           
-           
+
 	<header id="header">
 		<hgroup>#
 			<h1 class="site_title"><a href="index.html">My Domo</a></h1>
@@ -95,7 +87,7 @@
 			<div class="btn_view_site"><a href="http://arnauddegiuli.github.io/MyDomo/">View Site</a></div>
 		</hgroup>
 	</header> <!-- end of header bar -->
-	
+
 	<section id="secondary_bar">
 		<div class="user">
 			<p><a href="admin.html">Login</a></p>
@@ -105,7 +97,7 @@
 			<article class="breadcrumbs"><a href="index.html">My Domo</a></article>
 		</div>
 	</section><!-- end of secondary bar -->
-	
+
 	<aside id="sidebar" class="column">
 		 <form class="quick_search">
 			<input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;"/>
@@ -114,14 +106,14 @@
 		<h3>House</h3>
 		<ul class="toggle" id="house">
 		</ul>
-		
+
 		<h3>Scenario</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><a href="#">Add New User</a></li>
 			<li class="icn_view_users"><a href="#">View Users</a></li>
 			<li class="icn_profile"><a href="#">Your Profile</a></li>
 		</ul>
-		
+
 		<footer>
 			<hr />
 			<p><strong>Copyright &copy; 2013 My Domo</strong></p>
@@ -129,49 +121,15 @@
 		</footer>
 	</aside>
 	<!-- end of sidebar -->
-	
+
 	<section id="main" class="column">
-		
+
 		<div class="clear"></div>
-	
-		
-		<!-- <article class="module width_full">
-			<header><h3>Chambre 1</h3></header>
-				<div class="module_content">
-					
-					<script>
-						var myButton, myButton2;
-				
-						require(["adgsoftware/widget/Light"], function(Light) {
-							myButton = new Light({}, "lightContainer");
-							myButton.startup();
-				
-							myButton2 = new Light({}, "lightContainer2");
-							myButton2.startup();
-						});
-					</script>
-					
-						
-					<div id="lightContainer12"></div>
-				
-					<div id="lightContainer13"></div>
-					
-					
-					
-				</div>
-		</article>end of styles article -->
-		
-		
-		
-				
+
 		<div class="spacer"></div>
-		
+
 		<div id="messagebox"></div>
-		
 
-		
 	</section>
-
 </body>
-
 </html>

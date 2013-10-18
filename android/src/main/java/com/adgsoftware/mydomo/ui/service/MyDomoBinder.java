@@ -26,6 +26,7 @@ implements MyDomoService {
 	private PersistenceService persist;
 	private ControllerService controller;
 	private House house = null;
+	private Application application;
 	
 	public MyDomoBinder() {
 		super();
@@ -37,7 +38,8 @@ implements MyDomoService {
 		String serverPort = settings.getString("serverPort", "1234");
 		String serverPassword = settings.getString("serverPassword", "12345");
 		this.controller = new ControllerServiceImpl(serverIP, Integer.parseInt(serverPort), Integer.parseInt(serverPassword));
-		this.persist = new PersistenceServiceImpl(application, controller);
+		this.persist = new PersistenceServiceImpl(controller);
+		this.application = application;
 	}
 
 	public void onDestroy() {
@@ -84,12 +86,12 @@ implements MyDomoService {
 	
 	public void save(House house) throws IOException {
 		this.house = house;  
-		persist.save(house);
+		persist.save(house, application.openFileOutput("house.xml", Application.MODE_PRIVATE));
 	}
 	
 	public House retrieve() throws IOException {
 		if (house == null) {
-			house = persist.retrieve();
+			house = persist.retrieve(application.openFileInput("house.xml"));
 		}
 		return house;
 	}

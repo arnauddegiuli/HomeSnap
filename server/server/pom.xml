@@ -21,23 +21,27 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-						<Bundle-Name>Service listener example</Bundle-Name>
-						<Bundle-Description>My Home testing Open Web server</Bundle-Description>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
+						<Bundle-Name>${project.name}</Bundle-Name>
+						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
-						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.adgsoftware.mydomo.test.MyDomoServerActivator</Bundle-Activator>
-						<Import-Package>com.adgsoftware.mydomo.engine,
-							com.adgsoftware.mydomo.engine.controller.light,
+						<Bundle-Version>0.1</Bundle-Version>
+						<Bundle-Activator>com.adgsoftware.mydomo.server.MyDomoServerActivator</Bundle-Activator>
+						<Import-Package>
+							com.adgsoftware.mydomo.engine,
 							com.adgsoftware.mydomo.engine.controller,
 							com.adgsoftware.mydomo.engine.controller.gateway,
 							com.adgsoftware.mydomo.engine.controller.gateway.dimension,
+							com.adgsoftware.mydomo.engine.controller.light,
 							com.adgsoftware.mydomo.engine.parser,
 							com.adgsoftware.mydomo.server.controllermodules,
-							com.adgsoftware.mydomo.test, org.osgi.framework</Import-Package>
+							org.osgi.framework
+						</Import-Package>
+						<Export-Package>com.adgsoftware.mydomo.server</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -20,14 +20,14 @@
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
-import mydomowebserver.house.HouseRestServiceImpl;
-import mydomowebserver.utils.JSonTools;
 
 import org.junit.Test;
 
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.webserver.servlet.house.HouseServiceImpl;
+import com.adgsoftware.mydomo.webserver.utils.JSonTools;
 
 
 public class SerializationTest {
@@ -38,7 +38,7 @@ public class SerializationTest {
 	@Test
 	public void toJsonTest() {
 		
-		HouseRestServiceImpl service = new HouseRestServiceImpl();
+		HouseServiceImpl service = new HouseServiceImpl();
 		System.out.print(JSonTools.toJson(getModel()));
 	}
 	

@@ -48,7 +48,7 @@ define([
 			if (!component.lock) {
 				component.lock = true;
 				// Call REST API to change light
-				request.put("/light/" + this.adress + "/" + status, {sync: true, handleAs: "json"})
+				request.put("/house/controllers/" + this.adress + "/" + status, {sync: true, handleAs: "json"})
 					.then(function(data){
 						if (data.status == status) { 
 							if ("on" == status) {

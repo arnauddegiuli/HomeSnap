@@ -9,7 +9,7 @@ define(["dojo/_base/declare",
 
 	if (masterStore == null) {
 		masterStore = new JsonRest({
-			target: "/house/"
+			target: "/house"
 		});
 		cacheStore = new Memory({ });
 	}
