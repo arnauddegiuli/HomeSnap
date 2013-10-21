@@ -23,6 +23,10 @@ package com.adgsoftware.mydomo.webserver;
  * #L%
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -55,6 +59,7 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
+//		System.out.print(context.);
 		System.setProperty("jetty.home.bundle", "MyDomoWebServer");
 
 		// register the service
@@ -106,7 +111,7 @@ public class Activator implements BundleActivator {
 	private void registerServlets() {
 		try {
 			httpService.registerServlet(HOUSE_URI, new HouseServlet(), null,
-					null);
+					httpService.createDefaultHttpContext());
 			
 		} catch (ServletException se) {
 			throw new RuntimeException(se);
@@ -122,7 +127,8 @@ public class Activator implements BundleActivator {
 
 	private void registerResources() {
 		try {
-			httpService.registerResources(MAIN_RESOURCES_URI, "src/main/webapp", null);
+			httpService.registerResources(MAIN_RESOURCES_URI, "", httpService.createDefaultHttpContext());
+			
 		} catch (NamespaceException e) {
 			throw new RuntimeException(e);
 			

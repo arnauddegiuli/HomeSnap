@@ -23,7 +23,10 @@ package com.adgsoftware.mydomo.webserver.servlet.house;
  * #L%
  */
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -48,6 +51,26 @@ public class HouseServlet extends HttpServlet {
 
 	public void init(ServletConfig config) throws ServletException {
 		System.err.println("Initializing the HouseServlet");
+		
+		try {
+			File f = new File("src/main/webapp/index.html");
+			
+			System.out.print(f.getAbsolutePath());;
+			
+			InputStream in = new FileInputStream(f);
+			
+			 byte[] buffer = new byte[1024]; // Adjust if you want
+			    int bytesRead;
+			    while ((bytesRead = in.read(buffer)) != -1)
+			    {
+			        System.out.write(buffer, 0, bytesRead);
+			    }
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

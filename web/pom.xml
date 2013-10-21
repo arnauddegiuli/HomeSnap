@@ -24,7 +24,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
 						<Bundle-Name>${project.name}</Bundle-Name>
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
@@ -44,7 +44,6 @@
 							 org.osgi.service.log;version="1.3.0",
 							 org.osgi.util.tracker;version="1.3.1"
 						</Import-Package>
-						<Web-ContextPath>/server</Web-ContextPath>
 					</instructions>
 				</configuration>
 			</plugin>
