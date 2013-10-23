@@ -1,0 +1,32 @@
+<div id="label" title="Label">
+
+	<div class="dijitDialogPaneContentArea">
+		<table>
+			<tr>
+				<td><label for="id">Id: </label></td>
+				<td><input data-dojo-type="dijit/form/TextBox" type="text"
+					name="labelDialogId" id="labelDialogId"></td>
+			</tr>
+			<tr>
+				<td><label for="title">Title: </label></td>
+				<td><input data-dojo-type="dijit/form/TextBox" type="text"
+					name="labelDialogTitle" id="labelDialogTitle"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="dijitDialogPaneActionBar">
+		<button data-dojo-type="dijit/form/Button" type="submit"
+			onClick="return label.isValid();">OK</button>
+		<button data-dojo-type="dijit/form/Button" type="button"
+			onClick="label.hide()">Cancel</button>
+
+		<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'labelDialogId',position:['above']">
+			<i>Label</i>  identifier ( <b>must</b> be unique)
+		</div>
+
+		<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'labelDialogTitle',position:['below']">
+			<i>Label</i> description
+		</div>
+	</div>
+</div>

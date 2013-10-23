@@ -63,9 +63,9 @@
 					Message.displayInformation("Ceci est un msg d'information"); */
 				});
 
-				require([ "dojo/router", "dojo/dom", "adgsoftware/widget/house/House"], function(router, dom, House) {
+				require([ "dojo/router", "dojo/dom", "adgsoftware/widget/house/House", "adgsoftware/store/HouseStore"], function(router, dom, House, HouseStore) {
 					// Initialize house
-					var house = new House();
+					var house = new House({store: new HouseStore()});
 					var container = dom.byId("house");
 					house.draw(container);
 					// Register route

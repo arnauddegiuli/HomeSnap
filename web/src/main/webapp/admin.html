@@ -75,7 +75,7 @@
 		<hr/>
 		<h3>Content</h3>
 		<ul class="toggle">
-			<li class="icn_new_article"><a href="#">New Label</a></li>
+			<li class="icn_new_article"><a href="#" onclick="require(['dijit/registry'], function(registry) {registry.byId('label').show();});">New Label</a></li>
 			<li class="icn_edit_article"><a href="#">Edit Labels</a></li>
 			<li class="icn_categories"><a href="#">Devices</a></li>
 			<li class="icn_tags"><a href="#">Tags</a></li>
@@ -114,19 +114,29 @@
 				<article class="stats_graph">
 					<img src="http://chart.apis.google.com/chart?chxr=0,0,3000&chxt=y&chs=520x140&cht=lc&chco=76A4FB,80C65A&chd=s:Tdjpsvyvttmiihgmnrst,OTbdcfhhggcTUTTUadfk&chls=2|2&chma=40,20,20,30" width="520" height="140" alt="" />
 						<script>
-							require(["dojo/_base/window", "dojo/domReady!"], function(win){
-								require([ "adgsoftware/widget/openWebNetConsole/OpenWebNetConsole",
-									"adgsoftware/widget/houseAdmin/HouseAdmin",
-									"adgsoftware/widget/houseAdmin/DeviceList"], function(Console, HouseAdmin, DeviceList) {
-									new Console({}, "OpenWebNetConsole");
-									
-									var houseAdmin = new HouseAdmin({}, "HouseAdmin");
-									houseAdmin.startup();
-									
-									var avalaibleDevice = new DeviceList({}, "AvalaibleDevice");
-									avalaibleDevice.startup();
-									
+							require(["dojo/_base/window", "adgsoftware/widget/openWebNetConsole/OpenWebNetConsole",
+									"adgsoftware/widget/houseAdmin/HouseAdmin", "adgsoftware/widget/houseAdmin/DeviceList", 
+									"adgsoftware/widget/label/LabelDialog",
+									"dojo/router", "adgsoftware/store/HouseStore", "dojo/domReady!"], 
+									function(win, Console, HouseAdmin, DeviceList, Dialog, router, HouseStore) {
+								new Console({}, "OpenWebNetConsole");
+
+								var houseStore = new HouseStore();
+								var houseAdmin = new HouseAdmin({store: houseStore}, "HouseAdmin");
+								houseAdmin.startup();
+								var avalaibleDevice = new DeviceList({}, "AvalaibleDevice");
+								avalaibleDevice.startup();
+								
+								// Register route
+								router.register("newLabel", function (event) {
+									console.log('click sur newLabel');
 								});
+								
+								new Dialog({id:'label'});
+								
+								router.startup();
+								
+								
 							});
 					</script>
 				</article>
@@ -341,5 +351,6 @@
 			<div class="spacer"></div>
 		</article><!-- end of content manager article -->
 	</section>
+
 </body>
 </html>

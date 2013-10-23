@@ -23,10 +23,6 @@ package com.adgsoftware.mydomo.webserver;
  * #L%
  */
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -43,7 +39,6 @@ import com.adgsoftware.mydomo.webserver.servlet.house.HouseServlet;
 public class Activator implements BundleActivator {
 
 	private static final String MAIN_RESOURCES_URI = "/server";
-	private static final String LIGHT_URI = "/light";
 	private static final String HOUSE_URI = "/house";
 	private HttpService httpService = null;
 	private static final Logger logger = Logger.getLogger(Activator.class

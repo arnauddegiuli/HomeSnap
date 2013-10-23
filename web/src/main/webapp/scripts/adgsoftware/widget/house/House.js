@@ -7,15 +7,14 @@ define([
 	"dojo/store/Cache",
 	"adgsoftware/widget/label/Label",
 	"dojo/store/Observable",
-	"adgsoftware/store/HouseStore",
 	"adgsoftware/utils/Message"
-], function(declare, request, dom, domcConstruct,JSON, Cache, Label, Observable, HouseStore, msg) {
+], function(declare, request, dom, domcConstruct,JSON, Cache, Label, Observable, msg) {
 
 
 
 	return declare(null, {
 		baseClass: "house",
-		houseStore: new HouseStore(),
+		store: null,
 		labels: null,
 		group: null,
 		load: function(url) {
@@ -26,8 +25,7 @@ define([
 		draw: function(container) {
 			if (!container)
 				container = dom.byId("house");
-			results = this.houseStore.query();
-			
+			results = this.store.query();
 			var labels = this.labels = new Array();
 			// results object provides a forEach method for iteration
 			results.forEach(function(house){
@@ -36,9 +34,8 @@ define([
 					var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
 					var widget = new Label({label: label}, div);
 					labels.push(widget);
-				}
-			);
-		} /*insertRow*/);
+				});
+			} /*insertRow*/);
 
 //		    results.observe(function(item, removedIndex, insertedIndex){
 //		        // this will be called any time a item is added, removed, and updated
@@ -49,6 +46,9 @@ define([
 //		            insertRow(item, insertedIndex);
 //		        }
 //		    }, true); // we can indicate to be notified of object updates as well
+		},
+		constructor: function(args) {
+			declare.safeMixin(this,args);
 		}
 //		 
 //		    function insertRow(item, i){

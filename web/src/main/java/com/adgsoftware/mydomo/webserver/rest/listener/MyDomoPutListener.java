@@ -23,7 +23,7 @@ import com.adgsoftware.mydomo.webserver.utils.JSonTools;
 public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyDomoRestAPI {
 
 	private ControllerService service = new ControllerServiceImpl("localhost", 1234, 12345);
-	private Map<String, Light> controllerList = new Hashtable<String, Light>();
+	private Map<String, Light> lightList = new Hashtable<String, Light>();
 
 	public MyDomoPutListener(House house, String uri, Map<String, String[]> parameters) {
 		super(house, uri, parameters);
@@ -67,26 +67,21 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onController(String where) throws UnsupportedRestOperation {
 		// TODO update controller
+//		public Light putLight(String adress, String title) {
+//			Light result = getLight(adress);
+//			
+//			if (result == null) { // creation
+//				result = service.createController(Light.class, adress);
+//			} 
+//			result.setTitle(title);
+//			return result;
+//		}
 	}
 	
 	@Override
 	public void onLightStatus(String where, LightStatus status) throws RestOperationException {
-		setResult(JSonTools.toJson(putCommand(where, status)));
-	}
-	
-	public Light putLight(String adress, String title) {
-		Light result = getController(adress);
 		
-		if (result == null) { // creation
-			result = service.createController(Light.class, adress);
-		} 
-		result.setTitle(title);
-		return result;
-	}
-	
-	private Light putCommand(String adress, LightStatus status) {
-		
-		Light l = getController(adress);
+		Light l = getLight(where);
 		synchronized (this) {
 			if (LightStatus.LIGHT_ON.equals(status)) {
 				l.setWhat(LightStatus.LIGHT_ON);
@@ -100,12 +95,12 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			setResult(JSonTools.toJson(l));
 		}
-		return l;
 	}
 
-	private Light getController(String adress) {
-		Light result = controllerList.get(adress);
+	private Light getLight(String adress) {
+		Light result = lightList.get(adress);
 		if(result == null) {
 			result = service.createController(Light.class, adress);
 			result.addControllerChangeListener(new ControllerChangeListener() {
@@ -129,23 +124,9 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 				}
 			});
 			
-			controllerList.put(adress, result);
+			lightList.put(adress, result);
 		}
 		return result;
 	}
-	
-	// /house/label
-//	public Label putLabel(String id, String title) {
-//		Label label = getLabel(id);
-//		if (label == null) {
-//			// Creation
-//			label = new Label();
-//			readHouse().getLabels().add(label);
-//		} 
-//		label.setTitle(title);
-//		// Save
-//		saveHouse(house);
-//		return label;
-//	}
 
 }
