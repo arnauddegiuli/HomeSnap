@@ -24,11 +24,10 @@ package com.adgsoftware.mydomo.engine.services.impl;
  */
 
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileNotFoundException;
+import java.io.OutputStream;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -57,14 +56,14 @@ public class PersistenceServiceImpl implements PersistenceService {
 	}
 
 	@Override
-	public void save(House house, FileOutputStream file) throws IOException {
+	public void save(House house, OutputStream file) throws IOException {
 		file.write(serialized(house).getBytes());
 		file.flush();
 		file.close();
 	}
 
 	@Override
-	public House retrieve(FileInputStream file) throws IOException {
+	public House retrieve(InputStream file) throws IOException {
 		House result;
 		try {
 			result = deserialized(file);
