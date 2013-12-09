@@ -43,29 +43,19 @@ public class Scanner {
 			@Override
 			public void foundUnknownController(String who, String where, String what,
 					String dimensionCode, List<DimensionValue> dimensionList) {
-				
 				StringBuilder sb = new StringBuilder();
-				
 				for (DimensionValue dimValue : dimensionList) {
 					sb.append("\t\t - value[").append(dimValue.getValue()).append("]\n");
 				}
-				
-				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : dimensionCode [{3}] : dimension\n", who, where, what, dimensionCode, sb.toString()));
-				
+				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : dimensionCode [{3}] : {4}\n", who, where, what, dimensionCode, sb.toString()));
 			}
 		});
-
-		
 	}
-	
-	
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new Scanner("localhost", 1234, 12345);
+		new Scanner("192.168.1.35", 20000, 12345);
 	}
-
-	
-	
 }
