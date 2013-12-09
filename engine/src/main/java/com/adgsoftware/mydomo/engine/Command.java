@@ -23,7 +23,6 @@ package com.adgsoftware.mydomo.engine;
  * #L%
  */
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,24 +32,29 @@ import com.adgsoftware.mydomo.engine.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.parser.ParseException;
 
 public class Command {
-// TODO refactor this class to move it to connector.impl... and remove dependencies in other package. to be able to manage connection to xpl or knx
-	// Standard          *WHO*WHAT*WHERE##
-	// Status request    *#WHO*WHERE##
+	// TODO refactor this class to move it to connector.impl... and remove
+	// dependencies in other package. to be able to manage connection to xpl or
+	// knx
+	// Standard *WHO*WHAT*WHERE##
+	// Status request *#WHO*WHERE##
 	// Dimension request *#WHO*WHERE*DIMENSION##
-	// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##	
-	
+	// Dimension write *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
+
 	public final static String ACK = "*#*1##";
 	public final static String NACK = "*#*0##";
-	
+
 	public final static String COMMAND_SESSION = "*99*0##";
 	public final static String MONITOR_SESSION = "*99*1##";
-	
+
 	public final static String COMMAND = "*{0}*{1}*{2}##"; // *WHO*WHAT*WHERE##
-	public final static String STATUS = "*#{0}*{1}##";     // *#WHO*WHERE##
-	public final static String DIMENSION_STATUS = "*#{0}*{1}*{2}##"; // *#WHO*WHERE*DIMENSION## => response: *#WHO#*WHERE*WHATDIMENSION*VAL1*...*VALn##
-	public final static String DIMENSION_COMMAND = "*#{0}*{1}*#{2}*{3}##"; // *#WHO*WHERE*#WHATDIMENSION*DIMESION1*...*Dimensionn##  
+	public final static String STATUS = "*#{0}*{1}##"; // *#WHO*WHERE##
+	public final static String DIMENSION_STATUS = "*#{0}*{1}*{2}##"; // *#WHO*WHERE*DIMENSION##
+																		// =>
+																		// response:
+																		// *#WHO#*WHERE*WHATDIMENSION*VAL1*...*VALn##
+	public final static String DIMENSION_COMMAND = "*#{0}*{1}*#{2}*{3}##"; // *#WHO*WHERE*#WHATDIMENSION*DIMESION1*...*Dimensionn##
 	public final static String DIMENSION_SEPARATOR = "*";
-	
+
 	// WHO 28 €
 	public final static String WHO_SCENARIO = "0";
 	public final static String WHO_LIGHTING = "1";
@@ -61,25 +65,69 @@ public class Command {
 	public final static String WHO_GATEWAY = "13";
 	public final static String WHO_SOUND_SYSTEM = "16";
 	public final static String WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT = "1004";
-	
+
 	public static boolean isStandardCommand(String command) {
 		try {
-			return CommandEnum.STANDARD_COMMAND.equals(CommandParser.parse(command).getType());
+			return CommandEnum.STANDARD_COMMAND.equals(CommandParser.parse(
+					command).getType());
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 			return false;
 		}
 	}
-	
+
 	public static boolean isDimensionCommand(String command) {
 		try {
-			return CommandEnum.DIMENSION_COMMAND.equals(CommandParser.parse(command).getType());
+			return CommandEnum.DIMENSION_COMMAND.equals(CommandParser.parse(
+					command).getType());
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 			return false;
 		}
 	}
-	
+
+	public static boolean isGeneralCommand(String command) {
+		try {
+			String who = CommandParser.parse(command).getWho();
+			if (who.equals("0")) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (ParseException e) {
+			System.out.println("Invalid command [" + command + "].");
+			return false;
+		}
+	}
+
+	public static boolean isGroupCommand(String command) {
+		try {
+			String who = CommandParser.parse(command).getWho();
+			if (who.startsWith("#")) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (ParseException e) {
+			System.out.println("Invalid command [" + command + "].");
+			return false;
+		}
+	}
+
+	public static boolean isAmbianceCommand(String command) {
+		try {
+			String who = CommandParser.parse(command).getWho();
+			if (who.length() == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (ParseException e) {
+			System.out.println("Invalid command [" + command + "].");
+			return false;
+		}
+	}
+
 	public static String getWhatFromCommand(String command) {
 		try {
 			return CommandParser.parse(command).getWhat();
@@ -88,7 +136,7 @@ public class Command {
 			return null;
 		}
 	}
-	
+
 	public static String getWhoFromCommand(String command) {
 		try {
 			return CommandParser.parse(command).getWho();
@@ -97,7 +145,7 @@ public class Command {
 			return null;
 		}
 	}
-	
+
 	public static String getWhereFromCommand(String command) {
 		try {
 			return CommandParser.parse(command).getWhere();
@@ -106,21 +154,23 @@ public class Command {
 			return null;
 		}
 	}
-	
+
 	public static String getDimensionFromCommand(String command) {
-		
+
 		try {
-				return CommandParser.parse(command).getDimension();
+			return CommandParser.parse(command).getDimension();
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 		}
 		return null;
 	}
-	
-	public static List<DimensionValue> getDimensionListFromCommand(String command) {
+
+	public static List<DimensionValue> getDimensionListFromCommand(
+			String command) {
 		List<DimensionValue> dimensionList = new ArrayList<DimensionValue>();
 		try {
-			for (String dimension : CommandParser.parse(command).getDimensionList()) {
+			for (String dimension : CommandParser.parse(command)
+					.getDimensionList()) {
 				DimensionValue d = new DimensionValueImpl();
 				d.setValue(dimension);
 				dimensionList.add(d);

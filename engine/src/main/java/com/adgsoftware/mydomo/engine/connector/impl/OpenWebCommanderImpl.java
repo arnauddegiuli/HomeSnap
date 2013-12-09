@@ -28,9 +28,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
@@ -51,8 +53,7 @@ public class OpenWebCommanderImpl implements Commander {
 	private Integer passwordOpen;
 
 	List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
-	
-	
+
 	/**
 	 * 
 	 * @param ip the ip or dns name of the open server
@@ -64,7 +65,7 @@ public class OpenWebCommanderImpl implements Commander {
 		this.port = port;
 		this.passwordOpen = passwordOpen;
 	}
-	
+
 	public String getIp() {
 		return ip;
 	}
@@ -82,16 +83,15 @@ public class OpenWebCommanderImpl implements Commander {
 		this.port = port;
 		close();
 	}
-	
+
 	/**
 	 * Asynchrone connection
 	 */
 	public void connect() { 
 		// TODO manage if we start another thread by call connect again...
 		new Thread(new OpenWebConnectThread(this)).start(); // Make connection in thread to avoid blocking the user!
-		
 	}
-	
+
 	@Override
 	public void close() {
 		if(socket != null){
@@ -111,7 +111,7 @@ public class OpenWebCommanderImpl implements Commander {
 			}
 		}
 	}
-	
+
 	@Override
 	public void sendCommand(String command, CommandListener resultListener){
 
@@ -139,10 +139,9 @@ public class OpenWebCommanderImpl implements Commander {
 				log.severe(Session.Command, "Error during waiting 20 millisecond for connection thread.");
 			}
 		}	
-		
+
 		// Send asynchronously the command!
 		new Thread(new OpenWebCommandThread(this, command, resultListener)).start();
-
 	}
 
 	void writeMessage(String message) {
@@ -152,59 +151,58 @@ public class OpenWebCommanderImpl implements Commander {
 			log.fine(Log.Session.Command, "TO   COMMAND SERVER: " + message);
 		}
 	}
-	
-    String readMessage(){
-	    int indice = 0;
-	    boolean exit = false;
-	    char respond[] = new char[1024];
+
+	String readMessage(){
+		int indice = 0;
+		boolean exit = false;
+		char respond[] = new char[1024];
 		char c = ' ';
 		int ci = 0;
 		String responseString = null;
-		
-    	try{
-	    	do { 
-	    		if(socket != null && !socket.isInputShutdown()) {
-	    			ci = input.read();		    		
-		    		if (ci == -1) {
-			  			log.finest(Log.Session.Command, "End of read from command server socket.");
-			  			close();
-			  			break;
-			        } else { 
-			        	c = (char) ci;			        				        
-					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
-					    	respond[indice] = c;
-					    	exit = true;
-					    	log.finest(Log.Session.Command, "End of message from command server socket [" + new String(respond) + "].");
-					    	break;
-					    } else {
-					    	respond[indice] = c;
-					    	indice = indice + 1;
-					    } 
-			        }
-	    		} else {
-	    			close();
-	    			break;
-	    		}
-	        } while(true); 
+
+		try{
+			do { 
+				if(socket != null && !socket.isInputShutdown()) {
+					ci = input.read();
+					if (ci == -1) {
+						log.finest(Log.Session.Command, "End of read from command server socket.");
+						close();
+						break;
+					} else { 
+						c = (char) ci;
+						if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
+							respond[indice] = c;
+							exit = true;
+							log.finest(Log.Session.Command, "End of message from command server socket [" + new String(respond) + "].");
+							break;
+						} else {
+							respond[indice] = c;
+							indice = indice + 1;
+						}
+					}
+				} else {
+					close();
+					break;
+				}
+			} while(true); 
 		}catch(IOException e){
 			log.severe(Log.Session.Command, "Socket not available: " + e.getMessage());
-	    }
-		
+		}
+
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
-		
+
 		log.fine(Log.Session.Command, "FROM COMMAND SERVER: " + responseString);
-		
+
 		return responseString;
-    }
+	}
 
 	@Override
 	public void addControllerToExecute(Controller<? extends Status> controller) {
 		controller.setServer(this);
-		
 	}
-	
+
 	@Override
 	public boolean isConnected() {
 		if(socket != null){
@@ -234,7 +232,7 @@ public class OpenWebCommanderImpl implements Commander {
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
-	
+
 	@Override
 	public void setPasswordOpen(Integer password) {
 		this.passwordOpen = password;
@@ -242,5 +240,27 @@ public class OpenWebCommanderImpl implements Commander {
 
 	public Integer getPasswordOpen() {
 		return passwordOpen;
+	}
+	
+	/**
+	 * Create the open message for action.
+	 * @return open message.
+	 */
+	public String createActionMessage(Status newWhat, String where, String who) {
+		if (where == null) {
+			throw new IllegalArgumentException("Controller must contain an address with where");
+		}
+		return MessageFormat.format(Command.COMMAND, new Object[] {who, newWhat.getCode(), where}); 
+	}
+	
+	/**
+	 * Create the open message for status.
+	 * @return open message.
+	 */
+	public String createStatusMessage(String where, String who) {
+		if (where == null) {
+			throw new IllegalArgumentException("Controller must contain an address with where");
+		}
+		return MessageFormat.format(Command.STATUS, new Object[] {who, where}); 
 	}
 }

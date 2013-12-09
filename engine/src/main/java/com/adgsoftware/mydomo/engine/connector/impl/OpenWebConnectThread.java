@@ -44,7 +44,7 @@ public class OpenWebConnectThread implements Runnable {
 	Log log = new Log();
 	private OpenWebCommanderImpl commander;
 	private Password passwordEncoder = new Password();
-	
+
 	public OpenWebConnectThread(OpenWebCommanderImpl commander) {
 		this.commander = commander;
 	}
@@ -55,11 +55,11 @@ public class OpenWebConnectThread implements Runnable {
 
 	public void stop() {
 	}
-		
+
 	public boolean connect() {
 		synchronized (commander) { // mutex on the main thread: only one connection or send message at the same time!
 			if (!commander.isConnected()) { // Test again since with the lock, maybe a previous thread has opened the connection!
-				
+
 				try {
 					String ip = commander.getIp();
 					int port = commander.getPort();
@@ -68,7 +68,7 @@ public class OpenWebConnectThread implements Runnable {
 					if (ip == null || port == 0) {
 						return false;
 					}
-					
+
 					commander.socket = new Socket();
 					InetSocketAddress address = new InetSocketAddress(ip, port);
 					commander.socket.connect(address, commander.getTimeout());
@@ -83,58 +83,58 @@ public class OpenWebConnectThread implements Runnable {
 					}
 					return false;
 				}
-				
+
 				if(commander.socket != null) {
 						
 					log.finest(Log.Session.Command, " ----- Step Connection ----- ");
 					String msg = commander.readMessage();
-		            if (!Command.ACK.equals(msg)) {
-		            	// Bad return message
-		                log.severe(Log.Session.Command, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
-		                callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-		                commander.close();
-		                return false;
-		            }
-					
-		            log.finest(Log.Session.Command, "----- Step Identification -----");
-		        	commander.writeMessage(Command.COMMAND_SESSION);
-		            
+					if (!Command.ACK.equals(msg)) {
+						// Bad return message
+						log.severe(Log.Session.Command, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
+						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
+						commander.close();
+						return false;
+					}
+
+					log.finest(Log.Session.Command, "----- Step Identification -----");
+					commander.writeMessage(Command.COMMAND_SESSION);
+
 					if(commander.getPasswordOpen() != null){
 						log.finest(Log.Session.Command, "----- Step authentification -----");
 						msg = commander.readMessage();
-			            msg = msg.substring(2); // Remove *#
-			            msg = msg.substring(0, msg.length()-2); // Remove last ##
-				    	String password = passwordEncoder.calcPass(commander.getPasswordOpen(), msg);
-				    	String passwordMsg = "*#"+password+"##"; 
-				    	log.finest(Log.Session.Command, "Tx: " + passwordMsg);
-				    	commander.writeMessage(passwordMsg);		    	
-		        	} 
-					
+						msg = msg.substring(2); // Remove *#
+						msg = msg.substring(0, msg.length()-2); // Remove last ##
+						String password = passwordEncoder.calcPass(commander.getPasswordOpen(), msg);
+						String passwordMsg = "*#"+password+"##"; 
+						log.finest(Log.Session.Command, "Tx: " + passwordMsg);
+						commander.writeMessage(passwordMsg);
+					}
+
 					log.finest(Log.Session.Command, "----- Step Final -----");
 					msg = commander.readMessage();
-			    	
+
 					if (!Command.ACK.equals(msg)) {		       	
-				        log.severe(Log.Session.Command, "Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
-				        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-				        commander.close();
-				        return false;
-				    }
-					
+						log.severe(Log.Session.Command, "Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
+						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
+						commander.close();
+						return false;
+					}
+
 					log.fine(Log.Session.Command, "Connection OK");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
-			        return true;
-		
+					return true;
+
 				} else {
 					log.severe(Log.Session.Command, "No socket... Impossible to connect");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.NoSocket);
 					return false;
 				}
 			}
-			
+
 			return true;
 		}
 	}
-	
+
 	private void callOpenWebConnectionListenerConnect(ConnectionStatusEnum connection) {
 		for (ConnectionListener connectionListener : commander.connectionListenerList) {
 			try {

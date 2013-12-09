@@ -23,7 +23,6 @@ package com.adgsoftware.mydomo.engine.connector;
  * #L%
  */
 
-
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -107,4 +106,12 @@ public interface Commander {
 	 * @param password
 	 */
 	public void setPasswordOpen(Integer password);
+	
+	public String createActionMessage(Status newWhat, String where, String who);
+	
+	/**
+	 * Create the open message for status.
+	 * @return open message.
+	 */
+	public String createStatusMessage(String where, String who);
 }

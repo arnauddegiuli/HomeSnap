@@ -49,8 +49,8 @@ public class OpenWebMonitorImpl extends Thread
 implements Monitor {
 
 	private Log log = new Log();
-    private Integer passwordOpen = null;
-	
+	private Integer passwordOpen = null;
+
 	private Socket socket = null;	
 	private BufferedReader depuisClient = null;
 	private PrintWriter versClient = null;
@@ -63,7 +63,7 @@ implements Monitor {
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private boolean tryToConnect = true;
 	private Password passwordEncoder = new Password();
-	
+
 	/**
 	 * 
 	 * @param ip the ip or dns name of the open server
@@ -76,7 +76,7 @@ implements Monitor {
 		this.passwordOpen = passwordOpen;
 		this.start();
 	}
-	
+
 	@Override
 	public String getIp() {
 		return ip;
@@ -98,7 +98,7 @@ implements Monitor {
 		this.port = port;
 		resetSocket();
 	}
-	
+
 	@Override
 	public void setPasswordOpen(Integer passwordOpen) {
 		this.passwordOpen = passwordOpen;
@@ -112,11 +112,45 @@ implements Monitor {
 	protected void onMessageReceipt(String message) {
 		String where = Command.getWhereFromCommand(message);
 		String what = Command.getWhatFromCommand(message);
+		String who = Command.getWhoFromCommand(message);
+		boolean known = false;
+		
+		if (Command.isGeneralCommand(message)) {
+			// We send command to all correct address
+			for (int i = 11; i < 99; i++) {
+				if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+					known &= updateController(who, what, "" + i, message);
+				}
+			}
+		} else if (Command.isGroupCommand(message)) {
+			// We send command to group address
+			
+		} else if (Command.isAmbianceCommand(message)) {
+			// We send ambiance command to address
+			for (int i = 1; i < 9; i++) {
+				known &= updateController(who, what, where + i, message);
+			}
+		} else {
+			// Command direct on a controller
+			known = updateController(who, what, where, message);
+		}
+		
+		if (!known) {
+			// Detected unknown device
+			synchronized (unknownControllerListenerList) {
+				for (UnknownControllerListener listener : unknownControllerListenerList) {
+					listener.foundUnknownController( Command.getWhoFromCommand(message), where, what, Command.getDimensionFromCommand(message), Command.getDimensionListFromCommand(message));
+				}
+			}
+		}
+	}
+
+	private boolean updateController(String who, String what, String where, String message) {
 		boolean known = false;
 		if (what != null) {
 			// Manage what command
 			for (Controller<? extends Status> controller : controllerList) {
-				if (controller.getWhere().equals(where)) {
+				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
 					known = true;
 					changeWhat(controller, what);
 				}
@@ -126,7 +160,7 @@ implements Monitor {
 			List<DimensionValue> dimensionList = Command.getDimensionListFromCommand(message);
 			String code = Command.getDimensionFromCommand(message);
 			for (Controller<? extends Status> controller : controllerList) {
-				if (controller.getWhere().equals(where)) {
+				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
 					known = true;
 					if (controller instanceof ControllerDimension<?>){
 						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);// TODO: le changeWhat relance l'action.... => pas bon!
@@ -137,16 +171,10 @@ implements Monitor {
 				}
 			}
 		}
-		if (!known) {
-			// Detected unknown device
-			synchronized (unknownControllerListenerList) {
-				for (UnknownControllerListener listener : unknownControllerListenerList) {
-					listener.foundUnknownController( Command.getWhoFromCommand(message), where, what, Command.getDimensionFromCommand(message), Command.getDimensionListFromCommand(message));
-				}
-			}
-		}
+
+		return known;
 	}
-	
+
 	// To use generic: only at the runtime we will know the type so this is only method to set what!
 	private static <T extends Status> void changeWhat(Controller<T> controller, String code) {
 		T status = controller.getStatus(code);
@@ -154,7 +182,7 @@ implements Monitor {
 			controller.changeWhat(status);
 		}
 	}
-	
+
 	// To use generic: only at the runtime we will know the type so this is only method to set what!
 	private static void changeDimension(ControllerDimension<? extends Status> controller, String code, List<DimensionValue> dimensionList) {
 		DimensionStatus dimensionStatus = controller.getDimensionStatusFromCache(code);
@@ -162,7 +190,7 @@ implements Monitor {
 			controller.changeDimensionStatus(dimensionStatus);
 		}
 	}
-	
+
 	public void run() {
 		long timer = 1000;
 		do {
@@ -189,7 +217,7 @@ implements Monitor {
 			}
 		} while (tryToConnect);
 	}
-	
+
 	@Override
 	public boolean connect() {
 		try {
@@ -208,53 +236,53 @@ implements Monitor {
 			}
 			return false;
 		}
-		
+
 		if(socket != null){
 			
 				log.finest(Log.Session.Monitor, "----- Step Connection ----- ");
 				String msg = read(); // TODO thread!
-    			if (!Command.ACK.equals(msg)) {
-    				// Bad return message
-                    log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
-                    callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-                    this.resetSocket();
-                    return false;
-    			}
-	            
-                log.finest(Log.Session.Monitor, "----- Step Identification -----");
-            	write(Command.MONITOR_SESSION);
+				if (!Command.ACK.equals(msg)) {
+					// Bad return message
+					log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
+					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
+					this.resetSocket();
+					return false;
+				}
 
-    			if(passwordOpen != null){
-    				msg = read();
-    				log.finest(Log.Session.Monitor, "\n----- Step authentification -----");
-    	            log.finest(Log.Session.Monitor, "Rx: " + msg);
-    	            msg = msg.substring(2); // Remove *#
-		            msg = msg.substring(0, msg.length()-2); // Remove last ##
-    		    	String password = passwordEncoder.calcPass(passwordOpen, msg);
-    		    	String passwordMsg = "*#"+password+"##"; 
-    		    	log.finest(Log.Session.Monitor, "Tx: " + passwordMsg);
-    		    	write(passwordMsg);		    	
-            	}
-            	log.finest(Log.Session.Monitor, "----- Step Final -----");
-            	msg = read();
-    	    	
-    			if (!Command.ACK.equals(msg)) {		       	
-    		        log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
-    		        callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-    		        this.resetSocket();
-    		        return false;
-    		    }
-    			
-    			log.fine(Log.Session.Monitor, "Connection OK");
-    			callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
-    	        return true;
+				log.finest(Log.Session.Monitor, "----- Step Identification -----");
+				write(Command.MONITOR_SESSION);
+
+				if(passwordOpen != null){
+					msg = read();
+					log.finest(Log.Session.Monitor, "\n----- Step authentification -----");
+					log.finest(Log.Session.Monitor, "Rx: " + msg);
+					msg = msg.substring(2); // Remove *#
+					msg = msg.substring(0, msg.length()-2); // Remove last ##
+					String password = passwordEncoder.calcPass(passwordOpen, msg);
+					String passwordMsg = "*#"+password+"##"; 
+					log.finest(Log.Session.Monitor, "Tx: " + passwordMsg);
+					write(passwordMsg);		    	
+				}
+				log.finest(Log.Session.Monitor, "----- Step Final -----");
+				msg = read();
+
+				if (!Command.ACK.equals(msg)) {		       	
+					log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
+					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
+					this.resetSocket();
+					return false;
+				}
+
+				log.fine(Log.Session.Monitor, "Connection OK");
+				callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Connected);
+				return true;
 			} else {
 				log.severe(Log.Session.Monitor, "No socket... Impossible to connect");
 				callOpenWebConnectionListenerConnect(ConnectionStatusEnum.NoSocket);
 				return false;
 			}
 	}
-	
+
 	private void callOpenWebConnectionListenerConnect(ConnectionStatusEnum connection) {
 		for (ConnectionListener connectionListener : connectionListenerList) {
 			try {
@@ -264,7 +292,7 @@ implements Monitor {
 			}
 		}
 	}
-	
+
 	/**
 	 * Close the socket and stop the thread.
 	 */
@@ -273,7 +301,7 @@ implements Monitor {
 		tryToConnect = false; // get out of the thread by stopping try to reconnect the monitor.
 		resetSocket();
 	}
-	
+
 	/**
 	 * Reset the socket: thread (OpenWebMonitorImpl is a thread) will reopen the socket as soon as possible.
 	 */
@@ -295,59 +323,59 @@ implements Monitor {
 			}
 		}
 	}
-	
+
 	private void write(String msg) {
 		versClient.print(msg);
 		versClient.flush();
 		log.fine(Log.Session.Monitor, "TO   MONITOR SERVER: " + msg);
 	}
-	
+
 	private String read(){
-	    int indice = 0;
-	    boolean exit = false;
-	    char respond[] = new char[1024];
+		int indice = 0;
+		boolean exit = false;
+		char respond[] = new char[1024];
 		char c = ' ';
 		int ci = 0;
 		String responseString = null;
-		
-    	try{
-	    	do { 
-	    		if(socket != null && !socket.isInputShutdown()) {
-	    			ci = depuisClient.read();		    		
-		    		if (ci == -1) {
-		    			log.finest(Log.Session.Monitor, "End of read from monitor socket.");
-			  			resetSocket();
-			  			break;
-			        } else { 
-			        	c = (char) ci;			        				        
-					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
-					    	respond[indice] = c;
-					    	exit = true;
-					    	log.finest(Log.Session.Monitor, "End of message from monitor socket [" + new String(respond) + "].");
-					    	break;
-					    } else {
-					    	respond[indice] = c;
-					    	indice = indice + 1;
-					    } 
-			        }
-	    		} else {
-	    			resetSocket();
-	    			break;
-	    		}
-	        } while(true); 
+
+		try{
+			do { 
+				if(socket != null && !socket.isInputShutdown()) {
+					ci = depuisClient.read();		    		
+					if (ci == -1) {
+						log.finest(Log.Session.Monitor, "End of read from monitor socket.");
+						resetSocket();
+						break;
+					} else { 
+						c = (char) ci;			        				        
+						if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
+							respond[indice] = c;
+							exit = true;
+							log.finest(Log.Session.Monitor, "End of message from monitor socket [" + new String(respond) + "].");
+							break;
+						} else {
+							respond[indice] = c;
+							indice = indice + 1;
+						}
+					}
+				} else {
+					resetSocket();
+					break;
+				}
+			} while(true);
 		}catch(IOException e){
 			log.severe(Log.Session.Monitor, "Socket not available");
-	    }
-		
+		}
+
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
-		
+
 		log.fine(Log.Session.Monitor, "FROM MONITOR SERVER: " + responseString);
-		
+
 		return responseString;
-    }
-	
+	}
+
 	@Override
 	public boolean isConnected() {
 		if(socket != null){
@@ -367,7 +395,7 @@ implements Monitor {
 			ConnectionListener connectionListener) {
 		connectionListenerList.add(connectionListener);
 	}
-	
+
 	@Override
 	public int getTimeout() {
 		return timeout;

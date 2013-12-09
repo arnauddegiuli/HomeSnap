@@ -29,8 +29,13 @@ import com.adgsoftware.mydomo.engine.connector.CommandResult;
 
 /** ControllerChangeListener. */
 public interface ControllerChangeListener extends Serializable {
-    /** @param controller the controller that changed. */
-    void onWhatChange(Controller<? extends Status> controller, Status oldStatus, Status newStatus);
-    
-    void onWhatChangeError(Controller<? extends Status> controller, Status oldStatus, Status newStatus, CommandResult result);
+	/**
+	 * @param controller
+	 *            the controller that changed.
+	 */
+	void onWhatChange(Controller<? extends Status> controller,
+			Status oldStatus, Status newStatus);
+
+	void onWhatChangeError(Controller<? extends Status> controller,
+			Status oldStatus, Status newStatus, CommandResult result);
 }

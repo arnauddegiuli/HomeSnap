@@ -94,12 +94,8 @@ public class Password {
 			}
 			num2 = num1;
 		}
-				
+
 		return String.valueOf(Long.parseLong(Integer.toBinaryString(num1 >>> 0), 2));
 	}
-	
-
-	 
-
 
 }
