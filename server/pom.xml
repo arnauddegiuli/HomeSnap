@@ -20,6 +20,7 @@
 		<module>light</module>
 		<module>gateway</module>
 		<module>heating</module>
+		<module>automation</module>
 	</modules>
 
 	<dependencyManagement>
