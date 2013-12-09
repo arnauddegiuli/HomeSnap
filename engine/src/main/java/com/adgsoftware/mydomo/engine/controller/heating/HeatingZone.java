@@ -114,24 +114,19 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	 * @return the desired temperature
 	 */
 	public DesiredTemperature getDesiredTemperature(HeatingModeEnum mode) {
-		DesiredTemperature dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
-		if (dt == null) {
-			getDimensionStatus(DesiredTemperature.class, new DimensionStatusListener<DesiredTemperature>() {
-				@Override
-				public void onDimensionStatus(DesiredTemperature status, CommandResult result) {
-					changeDimensionStatus(status);
-					synchronized (lock) { lock.notify(); }
-				}
-			});
-
-			try {
-				synchronized (lock) { lock.wait(); }
-			} catch (InterruptedException e) {
-				log.severe(Session.Command, e.getMessage());
+		getDesiredTemperature(mode, new DimensionStatusCallback<DesiredTemperature>() {
+			@Override
+			public void value(DesiredTemperature value) {
+				synchronized (lock) { lock.notify(); }
 			}
-			dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
+		});
+
+		try {
+			synchronized (lock) { lock.wait(1000); } // Just wait 1000 in case of notify is faster than wait...
+		} catch (InterruptedException e) {
+			log.severe(Session.Command, e.getMessage());
 		}
-		return dt == null ?  null : dt;
+		return (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
 	}
 	
 	/**
@@ -140,13 +135,19 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	 * @param callback the method to call when result will be available
 	 */
 	public void getDesiredTemperature(final HeatingModeEnum mode, final DimensionStatusCallback<DesiredTemperature> callback) {	
-		// Asynchronously call
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				callback.value(getDesiredTemperature(mode));
-			}
-		}).start();
+		DesiredTemperature dt = (DesiredTemperature) getDimensionStatusFromCache(HeatingZoneDimension.SET_TEMPERATURE.getCode());
+		if (dt == null) {
+			getDimensionStatus(DesiredTemperature.class, new DimensionStatusListener<DesiredTemperature>() {
+				@Override
+				public void onDimensionStatus(DesiredTemperature status, CommandResult result) {
+					changeDimensionStatus(status);
+					callback.value(status);
+				}
+			});
+
+		} else {
+			callback.value(dt);
+		}
 	}
 	
 	/**
