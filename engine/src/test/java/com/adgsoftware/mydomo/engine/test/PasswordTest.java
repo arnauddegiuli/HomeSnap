@@ -27,7 +27,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.connector.impl.Password;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Password;
 
 public class PasswordTest {
 

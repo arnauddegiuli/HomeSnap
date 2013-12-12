@@ -23,12 +23,16 @@ package com.adgsoftware.mydomo.engine.test;
  * #L%
  */
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.parser.CommandParser;
-import com.adgsoftware.mydomo.engine.parser.ParseException;
+import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 
 public class ParserTest {
 	
@@ -37,13 +41,11 @@ public class ParserTest {
 		// Standard          *WHO*WHAT*WHERE##
 		String standard = "*1*1*12##";
 		CommandParser p  = CommandParser.parse(standard);
-		System.out.println(p.getWho()); // Should display 1
 		Assert.assertEquals(p.getWho(), "1");
 		
 		// Space case..
 		String gatewayStatusCommand = "*#13**0##";
 		p  = CommandParser.parse(gatewayStatusCommand);
-		System.out.println(p.getWho()); // Should display 13
 		Assert.assertEquals(p.getWho(), "13");
 
 	}
@@ -53,7 +55,6 @@ public class ParserTest {
 		// Standard          *WHO*WHAT*WHERE##
 		String standard = "*1*1*12##";
 		CommandParser p  = CommandParser.parse(standard);
-		System.out.println(p.getWhere()); // Should display 12
 		Assert.assertEquals(p.getWhere(), "12");
 	}
 	
@@ -62,7 +63,6 @@ public class ParserTest {
 		// Status request    *#WHO*WHERE##
 		String status = "*#1*12##";
 		CommandParser p  = CommandParser.parse(status);
-		System.out.println(p.getWhere()); // Should display 12;
 		Assert.assertEquals(p.getWhere(), "12");
 	}
 	
@@ -71,7 +71,6 @@ public class ParserTest {
 		// Dimension request *#WHO*WHERE*DIMENSION##tring dimensionCommand = "*#12*1*#1*02*11*05*2012##";
 		String dimensionStatus = "*#12*22*0##";
 		CommandParser p  = CommandParser.parse(dimensionStatus);
-		System.out.println(p.getDimension()); // Should display 0
 		Assert.assertEquals(p.getDimension(), "0");
 	}
 	
@@ -80,7 +79,18 @@ public class ParserTest {
 		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
 		String dimensionCommand = "*#12*1*#1*02*11*05*2012##";
 		CommandParser p  = CommandParser.parse(dimensionCommand);
-		System.out.println(p.getDimension()); // Should display 1
 		Assert.assertEquals(p.getDimension(), "1");
+		Assert.assertEquals(p.getDimensionList().size(), 4);
+		Assert.assertEquals(p.getDimensionList().get(0), "02");
+		Assert.assertEquals(p.getDimensionList().get(3), "2012");
 	}
+	
+	@Test
+	public void dimensionReadListTest() throws ParseException {
+		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
+		List<DimensionValue> l = Command.getDimensionListFromCommand("*#4*6*0*0226##");
+		Assert.assertEquals(l.size(), 1);
+		Assert.assertEquals(l.get(0), "0226");
+	}
+	
 }

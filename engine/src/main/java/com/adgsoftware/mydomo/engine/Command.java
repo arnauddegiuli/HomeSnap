@@ -26,10 +26,10 @@ package com.adgsoftware.mydomo.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.parser.CommandParser;
-import com.adgsoftware.mydomo.engine.parser.ParseException;
 
 public class Command {
 	// TODO refactor this class to move it to connector.impl... and remove

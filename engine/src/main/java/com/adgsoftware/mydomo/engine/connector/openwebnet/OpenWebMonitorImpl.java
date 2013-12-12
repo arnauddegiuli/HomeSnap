@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.connector.impl;
+package com.adgsoftware.mydomo.engine.connector.openwebnet;
 
 /*
  * #%L

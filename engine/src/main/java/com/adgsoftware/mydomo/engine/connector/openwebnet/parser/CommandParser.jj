@@ -73,7 +73,7 @@ private void parseOneLine():
 {
 		// Standard          *WHO*WHAT*WHERE##
 		// Status request    *#WHO*WHERE##
-		// Dimension request *#WHO*WHERE*DIMENSION##
+		// Dimension request *#WHO*WHERE*DIMENSION## || *#WHO*WHERE*DIMENSION#VAL1*VAL2*...VALn##
 		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
 		               
 
@@ -123,10 +123,13 @@ Token dimension;
 Token val;
 }
 {
-	  "*" dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();} 
+	  "*" dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();}
+	  	("*" val=<VAL> {this.dimensionList.add(val.toString());}
+      	)*
+      	"##" {}
 	| "*#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 
       ("*" val=<VAL> {this.dimensionList.add(val.toString());}
       )*
-      "##" {String str =""; for (int i = 0; i < dimensionList.size(); i++) {str = str + ";" + dimensionList.get(i);} }
+      "##" {}
 
 }
