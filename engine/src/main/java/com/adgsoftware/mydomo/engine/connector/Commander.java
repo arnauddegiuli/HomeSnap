@@ -24,6 +24,7 @@ package com.adgsoftware.mydomo.engine.connector;
  */
 
 import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
 public interface Commander {
@@ -114,4 +115,8 @@ public interface Commander {
 	 * @return open message.
 	 */
 	public String createStatusMessage(String where, String who);
+	
+	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension);
+	
+	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus);
 }

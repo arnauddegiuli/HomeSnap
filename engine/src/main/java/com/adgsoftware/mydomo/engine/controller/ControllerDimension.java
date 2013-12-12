@@ -24,7 +24,6 @@ package com.adgsoftware.mydomo.engine.controller;
  */
 
 import java.io.Serializable;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -41,9 +40,12 @@ implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<ControllerDimensionChangeListener> controllerDimensionChangeListenerList = new ArrayList<ControllerDimensionChangeListener>();
 	protected Hashtable<String, DimensionStatus> list = new Hashtable<String, DimensionStatus>(); // Cache of dimension status => avoid to call the bus each time
-
 	private boolean waitingResult = false;
-	
+
+	/**
+	 * Return true if controller is waiting information from gateway
+	 * @return
+	 */
 	public boolean isWaitingResult() {
 		return waitingResult;
 	}
@@ -58,35 +60,14 @@ implements Serializable {
 		this.where = newValue;
 	}
 	
-	protected String createDimensionActionMessage(DimensionStatus dimensionStatus) {
-		if (where == null) {
-			throw new IllegalArgumentException("Controller must contain a where.");
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (DimensionValue dimension : dimensionStatus.getValueList()) {
-			sb.append(dimension.getValue());
-			sb.append(Command.DIMENSION_SEPARATOR);
-		}
-		sb.setLength(sb.length()-1);
-		
-		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {getWho(), getWhere(), dimensionStatus.getCode(), sb.toString()}); 
-	}
-	
-	protected String createDimensionStatusMessage(DimensionStatus dimension) {
-		if (getWhere() == null) {
-			throw new IllegalArgumentException("Controller must contain a where.");
-		}
-		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {getWho(), getWhere(), dimension.getCode()}); 
-	}
-	
+
 	protected void executeAction(DimensionStatus dimensionStatus, final CommandListener commandListener) {
 		if (server == null) {
 			commandListener.onCommand( new CommandResult("", CommandResultStatus.nok));
 		} else {
 			waitingResult = true;
-			server.sendCommand(createDimensionActionMessage(dimensionStatus), new CommandListener() {
-				
+			server.sendCommand(server.createDimensionActionMessage(getWhere(), getWho(), dimensionStatus), new CommandListener() {
+
 				@Override
 				public void onCommand(CommandResult commandResult) {
 					waitingResult = false;
@@ -95,13 +76,13 @@ implements Serializable {
 			});
 		}
 	}
-		
+
 	protected <D extends DimensionStatus> void executeStatus(final D dimensionStatus, final DimensionStatusListener<D> listener) {
 		if (server == null) {
 			listener.onDimensionStatus(null, new CommandResult("", CommandResultStatus.nok));
 		} else {
 			waitingResult = true;
-			server.sendCommand(createDimensionStatusMessage(dimensionStatus), new CommandListener() {
+			server.sendCommand(server.createDimensionStatusMessage(getWhere(), getWho(), dimensionStatus), new CommandListener() {
 				@Override
 				public void onCommand(CommandResult result) {
 					waitingResult = false;
@@ -115,31 +96,36 @@ implements Serializable {
 				}
 			});
 		}
-		
-		
 	}
-	
-    /** @param l the new change listener. */
-    public void addControllerDimensionChangeListener(ControllerDimensionChangeListener l) {
-    	controllerDimensionChangeListenerList.add(l);
-    }
-	
-    protected void notifyDimensionChange(DimensionStatus newStatus) {
-    	for (ControllerDimensionChangeListener listener : controllerDimensionChangeListenerList) {
-    		listener.onDimensionChange(this, newStatus); 
+
+	/**
+	 * @param l
+	 *            the new change listener.
+	 */
+	public void addControllerDimensionChangeListener(
+			ControllerDimensionChangeListener l) {
+		controllerDimensionChangeListenerList.add(l);
+	}
+
+	protected void notifyDimensionChange(DimensionStatus newStatus) {
+		for (ControllerDimensionChangeListener listener : controllerDimensionChangeListenerList) {
+			listener.onDimensionChange(this, newStatus);
 		}
-    }
-    
-    protected void notifyDimensionChangeError(DimensionStatus newStatus, CommandResult result) {
-    	for (ControllerDimensionChangeListener listener : controllerDimensionChangeListenerList) {
-    		listener.onDimensionChangeError(this, newStatus, result); 
+	}
+
+	protected void notifyDimensionChangeError(DimensionStatus newStatus,
+			CommandResult result) {
+		for (ControllerDimensionChangeListener listener : controllerDimensionChangeListenerList) {
+			listener.onDimensionChangeError(this, newStatus, result);
 		}
-    }
-    
-    /**
-	 * Get the {@link DimensionStatus} of the device
-	 * by sending the command on the bus.
-	 * @param clazz class of the dimensionStatus of the device.
+	}
+
+	/**
+	 * Get the {@link DimensionStatus} of the device by sending the command on
+	 * the bus.
+	 * 
+	 * @param clazz
+	 *            class of the dimensionStatus of the device.
 	 * @return the dimension status
 	 */
 	protected <D extends DimensionStatus> void getDimensionStatus(Class<D> clazz, DimensionStatusListener<D> listener) {
@@ -154,7 +140,7 @@ implements Serializable {
 			listener.onDimensionStatus(null, new CommandResult(null, CommandResultStatus.error));
 		}
 	}
-	
+
 	/**
 	 * Define the {@link Status} of the device.
 	 * @param what {@link Status} of the device.
@@ -172,9 +158,8 @@ implements Serializable {
 				}
 			}
 		});
-		
 	}
-	
+
 	/**
 	 * Define the new {@link DimensionStatus} of the device
 	 * without sent the command on the bus.
@@ -186,7 +171,7 @@ implements Serializable {
 			notifyDimensionChange(dimensionStatus);
 		}
 	}
-	
+
 	/**
 	 * Get the {@link DimensionStatus} of the device
 	 * without sent the command on the bus.

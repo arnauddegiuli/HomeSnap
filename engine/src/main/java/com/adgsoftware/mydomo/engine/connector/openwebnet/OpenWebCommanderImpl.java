@@ -39,6 +39,8 @@ import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
+import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
 public class OpenWebCommanderImpl implements Commander {
@@ -262,5 +264,27 @@ public class OpenWebCommanderImpl implements Commander {
 			throw new IllegalArgumentException("Controller must contain an address with where");
 		}
 		return MessageFormat.format(Command.STATUS, new Object[] {who, where}); 
+	}
+	
+	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension) {
+		if (where == null) {
+			throw new IllegalArgumentException("Controller must contain a where.");
+		}
+		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {who, where, dimension.getCode()}); 
+	}
+	
+	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus) {
+		if (where == null) {
+			throw new IllegalArgumentException("Controller must contain a where.");
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (DimensionValue dimension : dimensionStatus.getValueList()) {
+			sb.append(dimension.getValue());
+			sb.append(Command.DIMENSION_SEPARATOR);
+		}
+		sb.setLength(sb.length()-1);
+		
+		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()}); 
 	}
 }

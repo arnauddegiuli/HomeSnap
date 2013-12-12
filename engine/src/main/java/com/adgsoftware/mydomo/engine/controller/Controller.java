@@ -111,8 +111,7 @@ public abstract class Controller<T extends Status> implements Serializable {
 		// The command is sent to the gateway. Gateway transmits it to the
 		// controller.
 		// If everything is fine, Gateway provides through the monitor session
-		// the
-		// new status => not need to set it here since it will be set by the
+		// the new status => not need to set it here since it will be set by the
 		// monitor way.
 		final T oldStatus = what;
 		// what = newWhat; => it will be done with changeWhat by the monitor
