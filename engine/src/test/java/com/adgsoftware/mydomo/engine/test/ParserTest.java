@@ -29,7 +29,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.WhereType;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
@@ -41,23 +42,99 @@ public class ParserTest {
 		// Standard          *WHO*WHAT*WHERE##
 		String standard = "*1*1*12##";
 		CommandParser p  = CommandParser.parse(standard);
-		Assert.assertEquals(p.getWho(), "1");
+		Assert.assertEquals("1", p.getWho());
 		
 		// Space case..
 		String gatewayStatusCommand = "*#13**0##";
 		p  = CommandParser.parse(gatewayStatusCommand);
-		Assert.assertEquals(p.getWho(), "13");
+		Assert.assertEquals("13", p.getWho());
 
 	}
-	
+
 	@Test
-	public void whereTest() throws ParseException {
+	public void whereGeneralTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*0##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("0", p.getWhere());
+		Assert.assertEquals(WhereType.GENERAL, p.getWhereType());
+	}
+
+	@Test
+	public void whereAmbianceTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*1##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("1", p.getWhere());
+		Assert.assertEquals( WhereType.ENVIRONMENT, p.getWhereType());
+		Assert.assertEquals("1", p.getEnvironment());
+	}
+
+	@Test
+	public void whereGroupTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*#1##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("#1", p.getWhere());
+		Assert.assertEquals("1", p.getGroup());
+		Assert.assertEquals(WhereType.GROUP, p.getWhereType());
+	}	
+
+	@Test
+	public void wherePointToPointTest() throws ParseException {
 		// Standard          *WHO*WHAT*WHERE##
 		String standard = "*1*1*12##";
 		CommandParser p  = CommandParser.parse(standard);
-		Assert.assertEquals(p.getWhere(), "12");
+		Assert.assertEquals("12", p.getWhere());
+		Assert.assertEquals("12", p.getPoint());
+		Assert.assertEquals(WhereType.POINTTOPOINT, p.getWhereType());
 	}
-	
+
+	@Test
+	public void whereGeneralOnBusTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*0#4#2##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("0#4#2", p.getWhere());
+		Assert.assertEquals(WhereType.GENERALONLOCALBUS, p.getWhereType());
+		Assert.assertEquals("2", p.getBus());
+	}
+
+	@Test
+	public void whereAmbianceOnBusTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*1#4#2##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("1#4#2", p.getWhere());
+		Assert.assertEquals("1", p.getEnvironment());
+		Assert.assertEquals(WhereType.ENVIRONMENTONLOCALBUS, p.getWhereType());
+		Assert.assertEquals("2", p.getBus());
+	}
+
+	@Test
+	public void whereGroupOnBusTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*#1#4#2##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals("#1#4#2", p.getWhere());
+		Assert.assertEquals("1", p.getGroup());
+		Assert.assertEquals("2", p.getBus());
+		Assert.assertEquals(WhereType.GROUPONLOCALBUS, p.getWhereType());
+	}
+
+	@Test
+	public void wherePointToPointOnBusTest() throws ParseException {
+		// Standard          *WHO*WHAT*WHERE##
+		String standard = "*1*1*12#4#2##";
+		CommandParser p  = CommandParser.parse(standard);
+		Assert.assertEquals(p.getWhere(), "12#4#2");
+		Assert.assertEquals("12", p.getPoint());
+		Assert.assertEquals(WhereType.POINTTOPOINT, p.getWhereType());
+		Assert.assertEquals("2", p.getBus());
+	}
+
+
+
 	@Test
 	public void statusTest() throws ParseException {
 		// Status request    *#WHO*WHERE##
@@ -90,7 +167,7 @@ public class ParserTest {
 		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
 		List<DimensionValue> l = Command.getDimensionListFromCommand("*#4*6*0*0226##");
 		Assert.assertEquals(l.size(), 1);
-		Assert.assertEquals(l.get(0), "0226");
+		Assert.assertEquals(l.get(0).getValue(), "0226");
 	}
 	
 }

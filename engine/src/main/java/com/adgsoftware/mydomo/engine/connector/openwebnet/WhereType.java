@@ -1,0 +1,12 @@
+package com.adgsoftware.mydomo.engine.connector.openwebnet;
+
+public enum WhereType {
+	GENERAL,
+	ENVIRONMENT,
+	GROUP,
+	POINTTOPOINT,
+	GENERALONLOCALBUS,
+	ENVIRONMENTONLOCALBUS,
+	GROUPONLOCALBUS,
+	POINTTOPOINTONLOCALBUS;
+}

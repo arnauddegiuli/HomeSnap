@@ -4,13 +4,14 @@ options
     STATIC=false;
 }
 PARSER_BEGIN(CommandParser)
-package com.adgsoftware.mydomo.engine.parser;
+package com.adgsoftware.mydomo.engine.connector.openwebnet.parser;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.CommandEnum;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.WhereType;
 
 public class CommandParser
 {
@@ -19,38 +20,62 @@ public class CommandParser
 	private String where;
 	private String dimension;
 	private CommandEnum type;
+	private WhereType whereType;
+	private String bus = "0";
+	private String environment;
+	private String group;
+	private String point;
 	private List<String> dimensionList = new ArrayList<String>();
 	
-    public static CommandParser parse(String command) throws ParseException 
-    {
-    	CommandParser parser = new CommandParser(new ByteArrayInputStream(command.getBytes()));
-        parser.parseOneLine();
-            
-        return parser;
-    }
-    
-    public String getWho() {
-	 return who;
+	public static CommandParser parse(String command) throws ParseException 
+	{
+		CommandParser parser = new CommandParser(new ByteArrayInputStream(command.getBytes()));
+		parser.parseOneLine();
+		return parser;
 	}
-	
+
+	public String getWho() {
+		return who;
+	}
+
 	public String getWhat() {
-	 return what;
+		return what;
 	}
-	
+
 	public String getWhere() {
-	 return where;
+		return where;
 	}
-	
+
 	public String getDimension() {
-	 return dimension;
+		return dimension;
 	}
-	
+
 	public CommandEnum getType() {
-	 return type;
+		return type;
 	}
-	
+
+	public WhereType getWhereType() {
+		return whereType;
+	}
+
+	public String getBus() {
+		return bus;
+	}
+
+	public String getEnvironment() {
+		return environment;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public String getPoint() {
+		return point;
+	}
+
 	public List<String> getDimensionList() {
-	 return dimensionList;
+		return dimensionList;
 	}
 }
 
@@ -64,7 +89,7 @@ SKIP :
 TOKEN:
 {
 
-	< VAL: (["0"-"9"])+ >
+    < VAL: (["0"-"9"])+ >
 |   < EOL: "\n" >
 }
 private void parseOneLine():
@@ -88,21 +113,21 @@ void standard():
 {
     Token who;
     Token what;
-    Token where;
+    String where;
 }
 {
-	who=<VAL> "*" what=<VAL> "*" where=<VAL> "##" {this.type=CommandEnum.STANDARD_COMMAND; this.who = who.toString(); this.what=what.toString(); this.where = where.toString();}
+	who=<VAL> "*" what=<VAL> where=where() "##" {this.type=CommandEnum.STANDARD_COMMAND; this.who = who.toString(); this.what=what.toString(); this.where = where;}
 }
 
 void other():
 {
     Token who;
-    Token where;
+    String where;
     Token dimension;
     Token val;
 }
 {
-	 (who=<VAL> "*" where=<VAL> {this.who = who.toString(); this.where=where.toString();}
+	 (who=<VAL> where=where() {this.who = who.toString(); this.where=where;}
 	 	( "##" {this.type=CommandEnum.STANDARD_STATUS;}
 	 	| dimension() {}
 	 	)
@@ -132,4 +157,22 @@ Token val;
       )*
       "##" {}
 
+}
+
+String where():
+{
+Token environment;
+Token group;
+Token bus;
+}
+{
+   "*#" group=<VAL> {this.whereType=WhereType.GROUP; this.group=group.toString(); }
+    (
+    	"#4#" bus=<VAL> {this.whereType = WhereType.GROUPONLOCALBUS; this.group=group.toString(); this.bus=bus.toString(); return "#" + this.group + "#4#" + this.bus;}
+    	| {return "#"+group;}
+    )
+   | "*" environment=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERAL;} else if(environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENT; this.environment=environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} }
+   		("#4#" bus=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERALONLOCALBUS;} else if (environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENTONLOCALBUS; this.environment= environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} this.bus=bus.toString(); return environment.toString() + "#4#" + bus.toString();}
+    	| {return environment.toString();}
+    	)
 }
