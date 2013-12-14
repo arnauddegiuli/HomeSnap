@@ -24,7 +24,7 @@ package com.adgsoftware.mydomo.engine.controller.light;
  */
 
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -66,24 +66,26 @@ public class Light extends Controller<Light.LightStatus> {
 		LIGHT_ON_BLINKING_4_AND_HALF_SEC("28"),
 		LIGHT_ON_BLINKING_5_SEC("29"),
 		LIGHT_ON_UP_ONE_LEVEL("30"), // TODO manage speed!
-		LIGHT_OFF_ONE_LEVEL("31"); // TODO manage speed!
-		
+		LIGHT_OFF_ONE_LEVEL("31"), // TODO manage speed!
+
+		LIGHT_FORCE_ON("1000#1"),
+		LIGHT_FORCE_OFF("1000#0");
 		private String code = "";
 		private LightStatus(String code) {
 			this.code = code;
 		}
-		
+
 		public String getCode() {
 			return code;
 		}
 	}
-		
+
 	public Light() {
 	}
-	
+
 	@Override
 	public String getWho() {
-		return Command.WHO_LIGHTING;
+		return ControllerType.WHO_LIGHTING;
 	}
 
 	@Override

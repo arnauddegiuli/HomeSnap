@@ -24,7 +24,7 @@ package com.adgsoftware.mydomo.engine.controller.outlet;
  */
 
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -53,7 +53,7 @@ public class Outlet extends Controller<Outlet.OutletStatus> {
 	
 	@Override
 	public String getWho() {
-		return Command.WHO_POWER_MANAGEMENT;
+		return ControllerType.WHO_POWER_MANAGEMENT;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine;
+package com.adgsoftware.mydomo.engine.connector.openwebnet;
 
 /*
  * #%L
@@ -26,6 +26,7 @@ package com.adgsoftware.mydomo.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.adgsoftware.mydomo.engine.CommandEnum;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;

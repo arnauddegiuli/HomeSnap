@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.controller;
+package com.adgsoftware.mydomo.engine.connector;
 
 /*
  * #%L
@@ -23,23 +23,18 @@ package com.adgsoftware.mydomo.engine.controller;
  * #L%
  */
 
-public class DimensionValueImpl implements DimensionValue {
+public class ControllerType {
 
-	String value;
-	
-	@Override
-	public String getValue() {
-		return value;
-	}
+	// WHO 28 €
+	public final static String WHO_SCENARIO = "0";
+	public final static String WHO_LIGHTING = "1";
+	public final static String WHO_AUTOMATION = "2";
+	public final static String WHO_POWER_MANAGEMENT = "3";
+	public final static String WHO_HEATING_ADJUSTMENT = "4";
+	public final static String WHO_MULTIMEDIA = "7";
+	public final static String WHO_GATEWAY = "13";
+	public final static String WHO_SOUND_SYSTEM = "16";
+	public final static String WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT = "1004";
 
-	@Override
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	@Override
-	public String toString() {
-		return getValue();
-	}
 
 }

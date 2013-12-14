@@ -24,10 +24,10 @@ package com.adgsoftware.mydomo.engine.controller.heating;
  */
 
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusCallback;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusListener;
@@ -88,7 +88,7 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	
 	@Override
 	public String getWho() {
-		return Command.WHO_HEATING_ADJUSTMENT;
+		return ControllerType.WHO_HEATING_ADJUSTMENT;
 	}
 	
 	@Override

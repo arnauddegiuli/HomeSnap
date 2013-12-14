@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 
 public abstract class ControllerDimension<T extends Status> extends Controller<T> 
 implements Serializable {

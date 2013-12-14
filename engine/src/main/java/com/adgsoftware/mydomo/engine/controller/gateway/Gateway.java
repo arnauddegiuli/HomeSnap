@@ -24,8 +24,8 @@ package com.adgsoftware.mydomo.engine.controller.gateway;
  */
 
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusListener;
 import com.adgsoftware.mydomo.engine.controller.Status;
@@ -149,7 +149,7 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 	
 	@Override
 	public String getWho() {
-		return Command.WHO_GATEWAY;
+		return ControllerType.WHO_GATEWAY;
 	}
 
 	@Override

@@ -27,11 +27,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 import com.adgsoftware.mydomo.engine.house.Label;
 
 /**

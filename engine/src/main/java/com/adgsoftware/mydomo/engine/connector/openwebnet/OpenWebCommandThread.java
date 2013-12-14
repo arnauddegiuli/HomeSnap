@@ -23,7 +23,6 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;

@@ -24,7 +24,7 @@ package com.adgsoftware.mydomo.engine.controller.automation;
  */
 
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -50,7 +50,7 @@ public class Automation extends Controller<Automation.AutomationStatus> {
 	
 	@Override
 	public String getWho() {
-		return Command.WHO_AUTOMATION;
+		return ControllerType.WHO_AUTOMATION;
 	}
 	
 	@Override
