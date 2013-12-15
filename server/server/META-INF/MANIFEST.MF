@@ -13,7 +13,6 @@ com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
 com.adgsoftware.mydomo.engine.controller.gateway,
 com.adgsoftware.mydomo.engine.controller.gateway.dimension,
 com.adgsoftware.mydomo.engine.controller.light,
-com.adgsoftware.mydomo.engine.parser,
 com.adgsoftware.mydomo.server.controllermodules,
 org.osgi.framework
 Export-Package: com.adgsoftware.mydomo.server
