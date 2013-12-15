@@ -27,23 +27,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.logging.Level;
 
-import com.adgsoftware.mydomo.engine.Log;
-import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.DefaultCommandResult;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 
 public abstract class ControllerDimension<T extends Status> extends Controller<T> 
 implements Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
-	private Log log = new Log();
 	private List<ControllerDimensionChangeListener> controllerDimensionChangeListenerList = new ArrayList<ControllerDimensionChangeListener>();
 	protected Hashtable<String, DimensionStatus> list = new Hashtable<String, DimensionStatus>(); // Cache of dimension status => avoid to call the bus each time
 	private boolean waitingResult = false;
@@ -93,12 +87,7 @@ implements Serializable {
 				public void onCommand(CommandResult result) {
 					waitingResult = false;
 					if (CommandResultStatus.ok.equals(result.getStatus())) {
-						List<DimensionValue> dimensionListResult = null;
-						try {
-							Command.getCommandAnalyser(result.getResult()).getDimensionListFromCommand(); // TODO move from here to connector
-						} catch (ParseException e) {
-							log.log(Session.Command, Level.SEVERE, "Unknown response [" + result.getResult() + "]. Command result ignored.");
-						}
+						List<DimensionValue> dimensionListResult = result.getDimensionList();
 						dimensionStatus.setValueList(dimensionListResult);
 						listener.onDimensionStatus(dimensionStatus, result); 
 					} else {

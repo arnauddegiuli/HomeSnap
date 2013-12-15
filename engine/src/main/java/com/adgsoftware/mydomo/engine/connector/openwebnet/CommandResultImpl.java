@@ -1,7 +1,14 @@
 package com.adgsoftware.mydomo.engine.connector.openwebnet;
 
+import java.util.List;
+import java.util.logging.Level;
+
+import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 
 /*
  * #%L
@@ -31,12 +38,21 @@ import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
  * CommandResult is the result of a command sent to gateway.
  */
 public class CommandResultImpl implements CommandResult {
-	public String commandResult;
-	public CommandResultStatus status;
+	private String commandResult;
+	private CommandResultStatus status;
+	private Log log = new Log();
+	private Command parser;
 	
 	public CommandResultImpl(String commandResult, CommandResultStatus status) {
 		this.commandResult = commandResult;
 		this.status = status;
+		if (!Command.ACK.equals(commandResult) && !Command.NACK.equals(commandResult)) {
+			try {
+				parser = Command.getCommandAnalyser(commandResult);
+			} catch (ParseException e) {
+				log.log(Session.Command, Level.SEVERE, "Unknown command result [" + commandResult + "].");
+			}
+		}
 	}
 
 	public String getResult() {
@@ -45,5 +61,41 @@ public class CommandResultImpl implements CommandResult {
 
 	public CommandResultStatus getStatus() {
 		return status;
+	}
+
+	@Override
+	public String getWhat() {
+		if (parser != null) {
+			return parser.getWhatFromCommand();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public String getWho() {
+		if (parser != null) {
+			return parser.getWhoFromCommand();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public String getWhere() {
+		if (parser != null) {
+			return parser.getWhereFromCommand();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<DimensionValue> getDimensionList() {
+		if (parser != null) {
+			return parser.getDimensionListFromCommand();
+		} else {
+			return null;
+		}
 	}
 }

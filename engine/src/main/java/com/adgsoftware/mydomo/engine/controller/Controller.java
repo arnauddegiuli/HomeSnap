@@ -26,17 +26,12 @@ package com.adgsoftware.mydomo.engine.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
-import com.adgsoftware.mydomo.engine.Log;
-import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.DefaultCommandResult;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.house.Label;
 
 /**
@@ -54,7 +49,6 @@ public abstract class Controller<T extends Status> implements Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
-	private Log log = new Log();
 	private T what; // Represent the status (on/off; open/close; ...)
 	protected String where; // Represent the address of the controller
 	private String title; // string representing the controller
@@ -187,13 +181,7 @@ public abstract class Controller<T extends Status> implements Serializable {
 						public void onCommand(CommandResult result) {
 							if (CommandResultStatus.ok.equals(result.getStatus())) {
 								// Return the status of the controller from the server
-								T status = null;
-								try {
-									status = getStatus(Command.getCommandAnalyser(result.getResult()) // TODO this must be done in connector! to not be link to protocole
-											.getWhatFromCommand());
-								} catch (ParseException e) {
-									log.log(Session.Command, Level.SEVERE, "Unknown response [" + result.getResult() + "]. Command result ignored.");
-								}
+								T status = getStatus(result.getWhat());
 								statusListener.onStatus(
 										status,
 										result);
