@@ -46,6 +46,7 @@ import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.house.Label;
 
 public class OpenWebMonitorImpl extends Thread 
 implements Monitor {
@@ -123,18 +124,25 @@ implements Monitor {
 				// We send command to all correct address
 				for (int i = 11; i < 99; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						known &= updateController(who, what, "" + i, message, parser);
+						known |= updateController(who, what, "" + i, message, parser);
 					}
 				}
 			} else if (parser.isGroupCommand()) {
 				// We send command to group address
-				//String group = parser.getGroupFromCommand();
-				// TODO parcours les controllers et trouver les labels correspondant au group
+				for (Controller<? extends Status> controller : controllerList) {
+					for (Label label : controller.getLabels()) {
+						if (label.getId().equals(parser.getGroupFromCommand()) &&
+								controller.getWho().equals(who)) {
+							known = true;
+							changeWhat(controller, what);	
+						}
+					}
+				}
 			} else if (parser.isEnvironmentCommand()) {
 				String environment = parser.getEnvironmentFromCommand();
 				// We send ambiance command to address
 				for (int i = 1; i < 9; i++) {
-					known &= updateController(who, what, environment + i, message, parser);
+					known |= updateController(who, what, environment + i, message, parser);
 				}
 			} else {
 				// Command direct on a controller
@@ -172,15 +180,14 @@ implements Monitor {
 				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
 					known = true;
 					if (controller instanceof ControllerDimension<?>){
-						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);// TODO: le changeWhat relance l'action.... => pas bon!
+						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);
 					}
 					else {
-						// TODO error!!!
+						log.log(Session.Monitor, Level.SEVERE, "Message received [" + message +"] don't match with declared controller: message for a DimensionController but a Controller found.");
 					}
 				}
 			}
 		}
-
 		return known;
 	}
 
@@ -249,7 +256,7 @@ implements Monitor {
 		if(socket != null){
 			
 				log.finest(Log.Session.Monitor, "----- Step Connection ----- ");
-				String msg = read(); // TODO thread!
+				String msg = read();
 				if (!Command.ACK.equals(msg)) {
 					// Bad return message
 					log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
