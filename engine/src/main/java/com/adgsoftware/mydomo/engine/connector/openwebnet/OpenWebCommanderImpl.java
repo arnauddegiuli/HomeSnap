@@ -286,4 +286,16 @@ public class OpenWebCommanderImpl implements Commander {
 		
 		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()}); 
 	}
+
+	@Override
+	public void removeControllerToExecute(
+			Controller<? extends Status> controller) {
+		controller.setServer(null);
+		
+	}
+
+	@Override
+	public void removeConnectionListener(ConnectionListener connectionListener) {
+		connectionListenerList.remove(connectionListener);
+	}
 }

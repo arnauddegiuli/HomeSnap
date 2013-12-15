@@ -42,11 +42,11 @@ import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTempera
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.SetOffset;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.ValvesStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
-import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
+import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
 public class HeatingTest {
 
-	private ControllerService s = new ControllerServiceImpl("localhost", 1234, 12345);
+	private ControllerService s = new OpenWebNetControllerService("localhost", 1234, 12345);
 	private Object lock = new Object();
 	
 	

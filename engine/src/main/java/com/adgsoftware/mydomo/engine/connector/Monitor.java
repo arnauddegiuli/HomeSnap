@@ -52,13 +52,41 @@ public interface Monitor {
 	 * @param controller
 	 */
 	public abstract void addControllerToMonitor(Controller<? extends Status> controller);
-	
+	/**
+	 * Remove controller which listen event.
+	 * @param controller
+	 */
+	public abstract void removeControllerToMonitor(Controller<? extends Status> controller);
+	/**
+	 * Add a {@link ConnectionListener}
+	 * @param connectionListener
+	 */
 	public abstract void addConnectionListener(ConnectionListener connectionListener);
-	
+	/**
+	 * Remove a {@link ConnectionListener}
+	 * @param connectionListener
+	 */
+	public abstract void removeConnectionListener(ConnectionListener connectionListener);
+	/**
+	 * Add a {@link CommandListener}
+	 * @param commandListener
+	 */
 	public abstract void addControllerStatusListener(CommandListener commandListener);
-	
+	/**
+	 * Remove a {@link CommandListener}
+	 * @param commandListener
+	 */
+	public abstract void removeControllerStatusListener(CommandListener commandListener);
+	/**
+	 * Add an {@link UnknownControllerListener}
+	 * @param unknownControllerListener
+	 */
 	public abstract void addUnknownControllerListener(UnknownControllerListener unknownControllerListener);
-	
+	/**
+	 * Remove an {@link UnknownControllerListener}
+	 * @param unknownControllerListener
+	 */
+	public abstract void removeUnknownControllerListener(UnknownControllerListener unknownControllerListener);
 	/**
 	 * Return true if connected to the open server.
 	 * @return true if connected to the open server.

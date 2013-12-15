@@ -52,20 +52,30 @@ public interface Commander {
 	 */
 	public abstract void sendCommand(String command, CommandListener resultListener);
 
-	// FIXME remove controller and connection listener?
-	
 	/**
 	 * Add a controller which will be able to use this commander.
 	 * @param controller
 	 */
 	public abstract void addControllerToExecute(Controller<? extends Status> controller);
-	
+
+	/**
+	 * Remove a controller which is able to use this commander.
+	 * @param controller
+	 */
+	public abstract void removeControllerToExecute(Controller<? extends Status> controller);
+
 	/**
 	 * Add a connectionListener.
 	 * @param connectionListener
 	 */
 	public abstract void addConnectionListener(ConnectionListener connectionListener);
-	
+
+	/**
+	 * Remove a connectionListener.
+	 * @param connectionListener
+	 */
+	public abstract void removeConnectionListener(ConnectionListener connectionListener);
+
 	/**
 	 * Return the ip of the open server.
 	 * @return the ip of the open server.

@@ -34,19 +34,18 @@ import java.util.logging.Level;
  *
  */
 public class Log {
-	
+
 	private boolean finest = false;
 	private boolean debug = true;
 	private boolean error = true;
 	private boolean info = true;
 	private boolean logMonitor = true;
 	private boolean logCommand = true;
-	
+
 	public enum Session {
 		Monitor, Command, Server;
 	}
-	
-	
+
 	public void log(Session session, Level level, String log) {
 		
 		if (session.equals(Log.Session.Monitor) && !logMonitor) {
@@ -62,9 +61,7 @@ public class Log {
 				error && level.intValue()>Level.SEVERE.intValue()) {
 
 			String s = session.name().toUpperCase();
-			
 			System.out.println("[" + getTime() + "] -" + s + " SESSION- " + log);
-			
 		}
 	}
 	
@@ -73,19 +70,19 @@ public class Log {
 			log(session, Level.FINEST, log);
 		}
 	}
-	
+
 	public void fine(Session session, String log) {
 		if (debug) {
 			log(session, Level.FINE, log);
 		}
 	}
-	
+
 	public void severe(Session session, String log) {
 		if (error) {
 			log(session, Level.SEVERE, log);
 		}
 	}
-	
+
 	private String getTime() {
 		return new SimpleDateFormat("hh:mm:ss:SSSS").format(new Date());
 	}

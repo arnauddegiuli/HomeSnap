@@ -34,11 +34,11 @@ import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation.AutomationStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
-import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
+import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
 public class AutomationTest {
 
-	private ControllerService s = new ControllerServiceImpl("localhost", 1234, 12345);
+	private ControllerService s = new OpenWebNetControllerService("localhost", 1234, 12345);
 	private Object lock = new Object();
 	
 	@Test

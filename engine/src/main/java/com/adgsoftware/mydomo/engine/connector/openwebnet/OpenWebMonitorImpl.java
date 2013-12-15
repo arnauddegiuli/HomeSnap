@@ -435,4 +435,26 @@ implements Monitor {
 		}
 		
 	}
+
+	@Override
+	public void removeControllerToMonitor(
+			Controller<? extends Status> controller) {
+		controllerList.remove(controller);
+	}
+
+	@Override
+	public void removeConnectionListener(ConnectionListener connectionListener) {
+		connectionListenerList.remove(connectionListener);
+	}
+
+	@Override
+	public void removeControllerStatusListener(CommandListener commandListener) {
+		commandListenerList.remove(commandListener);
+	}
+
+	@Override
+	public void removeUnknownControllerListener(
+			UnknownControllerListener unknownControllerListener) {
+		unknownControllerListenerList.remove(unknownControllerListener);
+	}
 }
