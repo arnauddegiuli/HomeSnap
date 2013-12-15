@@ -25,8 +25,7 @@ package com.adgsoftware.mydomo.engine.test;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;

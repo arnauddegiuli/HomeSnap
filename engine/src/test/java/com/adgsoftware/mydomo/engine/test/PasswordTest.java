@@ -23,8 +23,8 @@ package com.adgsoftware.mydomo.engine.test;
  * #L%
  */
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.adgsoftware.mydomo.engine.connector.openwebnet.Password;
