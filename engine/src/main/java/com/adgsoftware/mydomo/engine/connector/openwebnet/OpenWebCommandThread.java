@@ -25,7 +25,6 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 
 /**
@@ -61,7 +60,7 @@ public class OpenWebCommandThread implements Runnable {
 				if(msg == null){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResult(null, CommandResultStatus.error));
+						resultListener.onCommand(new CommandResultImpl(null, CommandResultStatus.error));
 					}
 					return;
 				}
@@ -69,13 +68,13 @@ public class OpenWebCommandThread implements Runnable {
 				if (Command.ACK.equals(msg)){
 					log.finest(Log.Session.Command, "Command sent.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResult(Command.ACK, CommandResultStatus.ok));
+						resultListener.onCommand(new CommandResultImpl(Command.ACK, CommandResultStatus.ok));
 					}
 					return;
 				} else if (Command.NACK.equals(msg)){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResult(Command.NACK, CommandResultStatus.nok));
+						resultListener.onCommand(new CommandResultImpl(Command.NACK, CommandResultStatus.nok));
 					}
 					return;
 				} else { // First return was information. The next should be acknowledgment
@@ -84,21 +83,21 @@ public class OpenWebCommandThread implements Runnable {
 					if(Command.ACK.equals(msg)){
 						log.finest(Log.Session.Command, "Command sent.");
 						if (resultListener != null) {
-							resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.ok));
+							resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.ok));
 						}
 						return;
 					}
 
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResult(actionReturn, CommandResultStatus.error));
+						resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.error));
 					}
 					return;
 				}
 			} else { // connection closed...
 				log.severe(Log.Session.Command, "Command failed (Connection closed).");
 				if (resultListener != null) {
-					resultListener.onCommand(new CommandResult(Command.NACK, CommandResultStatus.nok));
+					resultListener.onCommand(new CommandResultImpl(Command.NACK, CommandResultStatus.nok));
 				}
 				return;
 			}

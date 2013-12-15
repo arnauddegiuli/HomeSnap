@@ -39,21 +39,21 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Export-Package>com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engine.controller",
-								com.adgsoftware.mydomo.engine.connector,
-								com.adgsoftware.mydomo.engine.connector.impl,
-								com.adgsoftware.mydomo.engine.controller,
-								com.adgsoftware.mydomo.engine.controller.automation,
-								com.adgsoftware.mydomo.engine.controller.gateway,
-								com.adgsoftware.mydomo.engine.controller.gateway.dimension,
-								com.adgsoftware.mydomo.engine.controller.heating,
-								com.adgsoftware.mydomo.engine.controller.heating.dimension,
-								com.adgsoftware.mydomo.engine.controller.light;uses:="com.adgsoftware.mydomo.engine.controller",
-								com.adgsoftware.mydomo.engine.controller.outlet,
-								com.adgsoftware.mydomo.engine.house,
-								com.adgsoftware.mydomo.engine.parser,
-								com.adgsoftware.mydomo.engine.script,
-								com.adgsoftware.mydomo.engine.services,
-								com.adgsoftware.mydomo.engine.services.impl
+								 com.adgsoftware.mydomo.engine.connector,
+								 com.adgsoftware.mydomo.engine.connector.openwebnet,
+								 com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
+								 com.adgsoftware.mydomo.engine.controller,
+								 com.adgsoftware.mydomo.engine.controller.automation,
+								 com.adgsoftware.mydomo.engine.controller.gateway,
+								 com.adgsoftware.mydomo.engine.controller.gateway.dimension,
+								 com.adgsoftware.mydomo.engine.controller.heating,
+								 com.adgsoftware.mydomo.engine.controller.heating.dimension,
+								 com.adgsoftware.mydomo.engine.controller.light;uses:="com.adgsoftware.mydomo.engine.controller",
+								 com.adgsoftware.mydomo.engine.controller.outlet,
+								 com.adgsoftware.mydomo.engine.house,
+								 com.adgsoftware.mydomo.engine.script,
+								 com.adgsoftware.mydomo.engine.services,
+								 com.adgsoftware.mydomo.engine.services.impl
 						</Export-Package>
 					</instructions>
 				</configuration>

@@ -31,13 +31,16 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
@@ -109,42 +112,49 @@ implements Monitor {
 	}
 	
 	protected void onMessageReceipt(String message) {
-		String where = Command.getWhereFromCommand(message);
-		String what = Command.getWhatFromCommand(message);
-		String who = Command.getWhoFromCommand(message);
-		boolean known = false;
-		
-		if (Command.isGeneralCommand(message)) {
-			// We send command to all correct address
-			for (int i = 11; i < 99; i++) {
-				if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-					known &= updateController(who, what, "" + i, message);
+		try {
+			Command parser = Command.getCommandAnalyser(message);
+			String where = parser.getWhereFromCommand();
+			String what = parser.getWhatFromCommand();
+			String who = parser.getWhoFromCommand();
+			boolean known = false;
+			// TODO manage message on other bus
+			if (parser.isGeneralCommand()) {
+				// We send command to all correct address
+				for (int i = 11; i < 99; i++) {
+					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+						known &= updateController(who, what, "" + i, message, parser);
+					}
+				}
+			} else if (parser.isGroupCommand()) {
+				// We send command to group address
+				//String group = parser.getGroupFromCommand();
+				// TODO parcours les controllers et trouver les labels correspondant au group
+			} else if (parser.isEnvironmentCommand()) {
+				String environment = parser.getEnvironmentFromCommand();
+				// We send ambiance command to address
+				for (int i = 1; i < 9; i++) {
+					known &= updateController(who, what, environment + i, message, parser);
+				}
+			} else {
+				// Command direct on a controller
+				known = updateController(who, what, where, message, parser);
+			}
+
+			if (!known) {
+				// Detected unknown device
+				synchronized (unknownControllerListenerList) {
+					for (UnknownControllerListener listener : unknownControllerListenerList) {
+						listener.foundUnknownController( parser.getWhoFromCommand(), where, what, parser.getDimensionFromCommand(), parser.getDimensionListFromCommand());
+					}
 				}
 			}
-		} else if (Command.isGroupCommand(message)) {
-			// We send command to group address
-			
-		} else if (Command.isAmbianceCommand(message)) {
-			// We send ambiance command to address
-			for (int i = 1; i < 9; i++) {
-				known &= updateController(who, what, where + i, message);
-			}
-		} else {
-			// Command direct on a controller
-			known = updateController(who, what, where, message);
-		}
-		
-		if (!known) {
-			// Detected unknown device
-			synchronized (unknownControllerListenerList) {
-				for (UnknownControllerListener listener : unknownControllerListenerList) {
-					listener.foundUnknownController( Command.getWhoFromCommand(message), where, what, Command.getDimensionFromCommand(message), Command.getDimensionListFromCommand(message));
-				}
-			}
+		} catch (ParseException e) {
+			log.log(Session.Monitor, Level.WARNING, "Unknown message receipt [" + message +"]. Message dropped.");
 		}
 	}
 
-	private boolean updateController(String who, String what, String where, String message) {
+	private boolean updateController(String who, String what, String where, String message, Command parser) {
 		boolean known = false;
 		if (what != null) {
 			// Manage what command
@@ -156,8 +166,8 @@ implements Monitor {
 			}
 		} else {
 			// Manage dimension command
-			List<DimensionValue> dimensionList = Command.getDimensionListFromCommand(message);
-			String code = Command.getDimensionFromCommand(message);
+			List<DimensionValue> dimensionList = parser.getDimensionListFromCommand();
+			String code = parser.getDimensionFromCommand();
 			for (Controller<? extends Status> controller : controllerList) {
 				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
 					known = true;

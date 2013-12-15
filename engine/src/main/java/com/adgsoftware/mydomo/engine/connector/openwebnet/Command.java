@@ -33,9 +33,6 @@ import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.DimensionValueImpl;
 
 public class Command {
-	// TODO refactor this class to move it to connector.impl... and remove
-	// dependencies in other package. to be able to manage connection to xpl or
-	// knx
 	// Standard *WHO*WHAT*WHERE##
 	// Status request *#WHO*WHERE##
 	// Dimension request *#WHO*WHERE*DIMENSION##
@@ -67,117 +64,70 @@ public class Command {
 	public final static String WHO_SOUND_SYSTEM = "16";
 	public final static String WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT = "1004";
 
-	public static boolean isStandardCommand(String command) {
+	// private constructor
+	private Command(String command) throws ParseException {parser = CommandParser.parse(command);}
+
+	private CommandParser parser;
+
+	public static Command getCommandAnalyser(String command) throws ParseException {
 		try {
-			return CommandEnum.STANDARD_COMMAND.equals(CommandParser.parse(
-					command).getType());
+			return new Command(command);
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
-			return false;
+			throw e;
 		}
 	}
-
-	public static boolean isDimensionCommand(String command) {
-		try {
-			return CommandEnum.DIMENSION_COMMAND.equals(CommandParser.parse(
-					command).getType());
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return false;
-		}
+	
+	public boolean isStandardCommand() {
+		return CommandEnum.STANDARD_COMMAND.equals(parser.getType());
 	}
 
-	public static boolean isGeneralCommand(String command) {
-		try {
-			String who = CommandParser.parse(command).getWho();
-			if (who.equals("0")) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return false;
-		}
+	public boolean isDimensionCommand() {
+		return CommandEnum.DIMENSION_COMMAND.equals(parser.getType());
 	}
 
-	public static boolean isGroupCommand(String command) {
-		try {
-			String who = CommandParser.parse(command).getWho();
-			if (who.startsWith("#")) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return false;
-		}
+	public boolean isGeneralCommand() {
+		return WhereType.GENERAL.equals(parser.getWhereType());
 	}
 
-	public static boolean isAmbianceCommand(String command) {
-		try {
-			String who = CommandParser.parse(command).getWho();
-			if (who.length() == 1) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return false;
-		}
+	public boolean isGroupCommand() {
+		return WhereType.GROUP.equals(parser.getWhereType());
 	}
 
-	public static String getWhatFromCommand(String command) {
-		try {
-			return CommandParser.parse(command).getWhat();
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return null;
-		}
+	public boolean isEnvironmentCommand() {
+		return WhereType.ENVIRONMENT.equals(parser.getWho());
 	}
 
-	public static String getWhoFromCommand(String command) {
-		try {
-			return CommandParser.parse(command).getWho();
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return null;
-		}
+	public String getWhatFromCommand() {
+		return parser.getWhat();
 	}
 
-	public static String getWhereFromCommand(String command) {
-		try {
-			return CommandParser.parse(command).getWhere();
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-			return null;
-		}
+	public String getWhoFromCommand() {
+		return parser.getWho();
 	}
 
-	public static String getDimensionFromCommand(String command) {
-
-		try {
-			return CommandParser.parse(command).getDimension();
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
-		}
-		return null;
+	public String getWhereFromCommand() {
+		return parser.getWhere();
 	}
 
-	public static List<DimensionValue> getDimensionListFromCommand(
-			String command) {
+	public String getDimensionFromCommand() {
+		return parser.getDimension();
+	}
+
+	public String getGroupFromCommand() {
+		return parser.getGroup();
+	}
+
+	public String getEnvironmentFromCommand() {
+		return parser.getEnvironment();
+	}
+
+	public List<DimensionValue> getDimensionListFromCommand() {
 		List<DimensionValue> dimensionList = new ArrayList<DimensionValue>();
-		try {
-			for (String dimension : CommandParser.parse(command)
-					.getDimensionList()) {
-				DimensionValue d = new DimensionValueImpl();
-				d.setValue(dimension);
-				dimensionList.add(d);
-			}
-		} catch (ParseException e) {
-			System.out.println("Invalid command [" + command + "].");
+		for (String dimension : parser.getDimensionList()) {
+			DimensionValue d = new DimensionValueImpl();
+			d.setValue(dimension);
+			dimensionList.add(d);
 		}
 		return dimensionList;
 	}

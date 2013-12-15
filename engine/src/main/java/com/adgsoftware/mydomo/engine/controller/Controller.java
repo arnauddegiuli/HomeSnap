@@ -26,12 +26,17 @@ package com.adgsoftware.mydomo.engine.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
+import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.DefaultCommandResult;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.house.Label;
 
 /**
@@ -49,10 +54,10 @@ public abstract class Controller<T extends Status> implements Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
+	private Log log = new Log();
 	private T what; // Represent the status (on/off; open/close; ...)
 	protected String where; // Represent the address of the controller
-	private String title; // Title of the controller: string representing the
-							// controller
+	private String title; // string representing the controller
 	protected transient Commander server;
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
 	private LabelList labelList = new LabelList(this);
@@ -119,7 +124,7 @@ public abstract class Controller<T extends Status> implements Serializable {
 		executeAction(newWhat, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
-				if (CommandResultStatus.ok.equals(result.status)) {
+				if (CommandResultStatus.ok.equals(result.getStatus())) {
 					// Status has been changed
 					// what = newWhat; => it will be done with changeWhat by the
 					// monitor listener
@@ -155,7 +160,7 @@ public abstract class Controller<T extends Status> implements Serializable {
 	 */
 	protected void executeAction(T newWhat, CommandListener commandListener) {
 		if (server == null || newWhat == null) {
-			commandListener.onCommand(new CommandResult("",
+			commandListener.onCommand(new DefaultCommandResult("",
 					CommandResultStatus.nok));
 		} else {
 			server.sendCommand(
@@ -173,19 +178,24 @@ public abstract class Controller<T extends Status> implements Serializable {
 	protected void executeStatus(final StatusListener<T> statusListener) {
 
 		if (server == null) {
-			statusListener.onStatus(what, new CommandResult("",
+			statusListener.onStatus(what, new DefaultCommandResult("",
 					CommandResultStatus.nok));
 		} else {
 			server.sendCommand(server.createStatusMessage(where, getWho()),
 					new CommandListener() {
 						@Override
 						public void onCommand(CommandResult result) {
-							if (CommandResultStatus.ok.equals(result.status)) {
-								// Return the status of the controller from the
-								// server
+							if (CommandResultStatus.ok.equals(result.getStatus())) {
+								// Return the status of the controller from the server
+								T status = null;
+								try {
+									status = getStatus(Command.getCommandAnalyser(result.getResult()) // TODO this must be done in connector! to not be link to protocole
+											.getWhatFromCommand());
+								} catch (ParseException e) {
+									log.log(Session.Command, Level.SEVERE, "Unknown response [" + result.getResult() + "]. Command result ignored.");
+								}
 								statusListener.onStatus(
-										getStatus(Command
-												.getWhatFromCommand(result.commandResult)),
+										status,
 										result);
 							} else {
 								// ERROR: message not sent on Bus or error

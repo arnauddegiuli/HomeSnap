@@ -27,17 +27,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Level;
 
+import com.adgsoftware.mydomo.engine.Log;
+import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
+import com.adgsoftware.mydomo.engine.connector.DefaultCommandResult;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 
 public abstract class ControllerDimension<T extends Status> extends Controller<T> 
 implements Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
+	private Log log = new Log();
 	private List<ControllerDimensionChangeListener> controllerDimensionChangeListenerList = new ArrayList<ControllerDimensionChangeListener>();
 	protected Hashtable<String, DimensionStatus> list = new Hashtable<String, DimensionStatus>(); // Cache of dimension status => avoid to call the bus each time
 	private boolean waitingResult = false;
@@ -63,7 +69,7 @@ implements Serializable {
 
 	protected void executeAction(DimensionStatus dimensionStatus, final CommandListener commandListener) {
 		if (server == null) {
-			commandListener.onCommand( new CommandResult("", CommandResultStatus.nok));
+			commandListener.onCommand( new DefaultCommandResult("", CommandResultStatus.nok));
 		} else {
 			waitingResult = true;
 			server.sendCommand(server.createDimensionActionMessage(getWhere(), getWho(), dimensionStatus), new CommandListener() {
@@ -79,15 +85,20 @@ implements Serializable {
 
 	protected <D extends DimensionStatus> void executeStatus(final D dimensionStatus, final DimensionStatusListener<D> listener) {
 		if (server == null) {
-			listener.onDimensionStatus(null, new CommandResult("", CommandResultStatus.nok));
+			listener.onDimensionStatus(null, new DefaultCommandResult("", CommandResultStatus.nok));
 		} else {
 			waitingResult = true;
 			server.sendCommand(server.createDimensionStatusMessage(getWhere(), getWho(), dimensionStatus), new CommandListener() {
 				@Override
 				public void onCommand(CommandResult result) {
 					waitingResult = false;
-					if (CommandResultStatus.ok.equals(result.status)) {
-						List<DimensionValue> dimensionListResult = Command.getDimensionListFromCommand(result.commandResult);
+					if (CommandResultStatus.ok.equals(result.getStatus())) {
+						List<DimensionValue> dimensionListResult = null;
+						try {
+							Command.getCommandAnalyser(result.getResult()).getDimensionListFromCommand(); // TODO move from here to connector
+						} catch (ParseException e) {
+							log.log(Session.Command, Level.SEVERE, "Unknown response [" + result.getResult() + "]. Command result ignored.");
+						}
 						dimensionStatus.setValueList(dimensionListResult);
 						listener.onDimensionStatus(dimensionStatus, result); 
 					} else {
@@ -134,10 +145,10 @@ implements Serializable {
 			executeStatus(result, listener);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
-			listener.onDimensionStatus(null, new CommandResult(null, CommandResultStatus.error));
+			listener.onDimensionStatus(null, new DefaultCommandResult(null, CommandResultStatus.error));
 		} catch (IllegalAccessException e) {
 			e.printStackTrace(); // FIXME log and not stacktrace
-			listener.onDimensionStatus(null, new CommandResult(null, CommandResultStatus.error));
+			listener.onDimensionStatus(null, new DefaultCommandResult(null, CommandResultStatus.error));
 		}
 	}
 
@@ -149,7 +160,7 @@ implements Serializable {
 		executeAction(dimensionStatus, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
-				if (CommandResultStatus.ok.equals(result.status)) {
+				if (CommandResultStatus.ok.equals(result.getStatus())) {
 					list.put(dimensionStatus.getCode(), dimensionStatus); // I do it here and not in monitor because too difficult to recreate the good dimension later....
 				//	notifyDimensionChange(dimensionStatus); // done when come back from monitor
 				} else {

@@ -198,38 +198,63 @@ Token val;
     }
   }
 
-  final public String where() throws ParseException {
-Token environment;
-Token group;
-Token bus;
-    if (jj_2_17(2)) {
-      jj_consume_token(6);
-      group = jj_consume_token(VAL);
-                     this.whereType=WhereType.GROUP; this.group=group.toString();
-      if (jj_2_15(2)) {
-        jj_consume_token(11);
-        bus = jj_consume_token(VAL);
-                         this.whereType = WhereType.GROUPONLOCALBUS; this.group=group.toString(); this.bus=bus.toString(); {if (true) return "#" + this.group + "#4#" + this.bus;}
-      } else {
-           {if (true) return "#"+group;}
-      }
-    } else if (jj_2_18(2)) {
-      jj_consume_token(7);
-      environment = jj_consume_token(VAL);
-                            if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERAL;} else if(environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENT; this.environment=environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;}
-      if (jj_2_16(2)) {
-        jj_consume_token(11);
-        bus = jj_consume_token(VAL);
-                                  if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERALONLOCALBUS;} else if (environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENTONLOCALBUS; this.environment= environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} this.bus=bus.toString(); {if (true) return environment.toString() + "#4#" + bus.toString();}
-      } else {
-           {if (true) return environment.toString();}
-      }
-    } else {
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    throw new Error("Missing return statement in function");
-  }
+	final public String where() throws ParseException {
+		Token environment;
+		Token group;
+		Token bus;
+		if (jj_2_17(2)) {
+			jj_consume_token(6);
+			group = jj_consume_token(VAL);
+			this.whereType = WhereType.GROUP;
+			this.group = group.toString();
+			if (jj_2_15(2)) {
+				jj_consume_token(11);
+				bus = jj_consume_token(VAL);
+				this.whereType = WhereType.GROUPONLOCALBUS;
+				this.group = group.toString();
+				this.bus = bus.toString();
+
+				return "#" + this.group + "#4#" + this.bus;
+
+			} else {
+				return "#" + group;
+			}
+		} else if (jj_2_18(2)) {
+			jj_consume_token(7);
+			environment = jj_consume_token(VAL);
+			if ("0".equals(environment.toString())) {
+				this.whereType = WhereType.GENERAL;
+			} else if (environment.toString().length() == 1) {
+				this.whereType = WhereType.ENVIRONMENT;
+				this.environment = environment.toString();
+			} else {
+				this.point = environment.toString();
+				this.whereType = WhereType.POINTTOPOINT;
+			}
+			if (jj_2_16(2)) {
+				jj_consume_token(11);
+				bus = jj_consume_token(VAL);
+				if ("0".equals(environment.toString())) {
+					this.whereType = WhereType.GENERALONLOCALBUS;
+				} else if (environment.toString().length() == 1) {
+					this.whereType = WhereType.ENVIRONMENTONLOCALBUS;
+					this.environment = environment.toString();
+				} else {
+					this.point = environment.toString();
+					this.whereType = WhereType.POINTTOPOINT;
+				}
+				this.bus = bus.toString();
+
+				return environment.toString() + "#4#" + bus.toString();
+			} else {
+				return environment.toString();
+			}
+		} else {
+			jj_consume_token(-1);
+			throw new ParseException();
+		}
+		// throw new Error("Missing return statement in function");
+	}
 
   private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;

@@ -165,7 +165,7 @@ public class ParserTest {
 	@Test
 	public void dimensionReadListTest() throws ParseException {
 		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
-		List<DimensionValue> l = Command.getDimensionListFromCommand("*#4*6*0*0226##");
+		List<DimensionValue> l = Command.getCommandAnalyser("*#4*6*0*0226##").getDimensionListFromCommand();
 		Assert.assertEquals(l.size(), 1);
 		Assert.assertEquals(l.get(0).getValue(), "0226");
 	}
