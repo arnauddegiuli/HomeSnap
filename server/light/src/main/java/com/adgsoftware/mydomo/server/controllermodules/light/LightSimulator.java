@@ -27,7 +27,8 @@ package com.adgsoftware.mydomo.server.controllermodules.light;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
@@ -37,29 +38,42 @@ public class LightSimulator implements ControllerSimulator {
 	
 	@Override
 	public String execute(String command) {
-		String what = Command.getWhatFromCommand(command);
-		String where = Command.getWhereFromCommand(command);
-		if (Light.LightStatus.LIGHT_OFF.getCode().equals(what)
-				|| Light.LightStatus.LIGHT_ON.getCode().equals(what)) {
-			statusList.put(where, what);
-			return Command.ACK;
-		} else {
-			System.out.println("Command not supported [" + command + "]");
-			return Command.NACK;
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String what = parser.getWhatFromCommand();
+			String where = parser.getWhereFromCommand();
+			if (Light.LightStatus.LIGHT_OFF.getCode().equals(what)
+					|| Light.LightStatus.LIGHT_ON.getCode().equals(what)) {
+				statusList.put(where, what);
+				return Command.ACK;
+			} else {
+				System.out.println("Command not supported [" + command + "]");
+				return Command.NACK;
+			}
+		} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 		}
 	}
 	
 	@Override
 	public String status(String command) {
-		String where = Command.getWhereFromCommand(command);
-		String what = statusList.get(where);
-		if (what == null) {
-			what = Light.LightStatus.LIGHT_OFF.getCode();
-			statusList.put(where, what);
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String where = parser.getWhereFromCommand();
+			String what = statusList.get(where);
+			if (what == null) {
+				what = Light.LightStatus.LIGHT_OFF.getCode();
+				statusList.put(where, what);
+			}
+
+			return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, what, where} ) + Command.ACK;
+		} catch (ParseException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
-
-		return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, what, where} ) + Command.ACK;
-
 	}
 
 	@Override

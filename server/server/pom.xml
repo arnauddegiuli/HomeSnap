@@ -30,6 +30,8 @@
 						<Import-Package>
 							com.adgsoftware.mydomo.engine,
 							com.adgsoftware.mydomo.engine.controller,
+							com.adgsoftware.mydomo.engine.connector.openwebnet,
+							com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
 							com.adgsoftware.mydomo.engine.controller.gateway,
 							com.adgsoftware.mydomo.engine.controller.gateway.dimension,
 							com.adgsoftware.mydomo.engine.controller.light,
@@ -38,6 +40,7 @@
 							org.osgi.framework
 						</Import-Package>
 						<Export-Package>com.adgsoftware.mydomo.server</Export-Package>
+						<Require-Bundle>com.adgsoftware.mydomo.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

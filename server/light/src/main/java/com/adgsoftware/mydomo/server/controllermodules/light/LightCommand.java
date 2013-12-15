@@ -26,7 +26,7 @@ package com.adgsoftware.mydomo.server.controllermodules.light;
 
 import java.text.MessageFormat;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 

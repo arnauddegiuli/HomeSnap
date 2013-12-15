@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.gateway.Gateway.GatewayDimension;
 import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Date;

@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
 import com.adgsoftware.mydomo.engine.controller.heating.Offset;
@@ -49,83 +50,96 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	
 	@Override
 	public String execute(String command) {
-		String what = Command.getDimensionFromCommand(command);
-		String where = Command.getWhereFromCommand(command);
-		String dimensionStr = Command.getDimensionFromCommand(command);
-		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what) ||
-			HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what) ||
-			HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what) ||
-			HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(what) ||
-			HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(what)) {
-			
-			dimensionCache.put(where
-					+ "-" + dimensionStr, Command.getDimensionListFromCommand(command));
-			return Command.ACK;
-		} else {
-			return Command.NACK;
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String what = parser.getDimensionFromCommand();
+			String where = parser.getWhereFromCommand();
+			String dimensionStr = parser.getDimensionFromCommand();
+			if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what) ||
+				HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what) ||
+				HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what) ||
+				HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(what) ||
+				HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(what)) {
+				
+				dimensionCache.put(where
+						+ "-" + dimensionStr, parser.getDimensionListFromCommand());
+				return Command.ACK;
+			} else {
+				return Command.NACK;
+			}
+		} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 		}
 	}
 
 	@Override
 	public String status(String command) {
-
-		String where = Command.getWhereFromCommand(command);
-		String dimensionStr = Command.getDimensionFromCommand(command);
-		List<DimensionValue> dimensionList;
-		if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
-			
-			dimensionList = dimensionCache.get(where
-					+ "-" + dimensionStr);
-			if (dimensionList == null) {
-				DesiredTemperature dt = new DesiredTemperature();
-				dt.setDesiredTemperature(21d);
-				dt.setMode(3); // Generic mode
-				dimensionList = dt.getValueList();
-				dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String where = parser.getWhereFromCommand();
+			String dimensionStr = parser.getDimensionFromCommand();
+			List<DimensionValue> dimensionList;
+			if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
+				
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					DesiredTemperature dt = new DesiredTemperature();
+					dt.setDesiredTemperature(21d);
+					dt.setMode(3); // Generic mode
+					dimensionList = dt.getValueList();
+					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+				}
+			} else if (HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					SetOffset so = new SetOffset();
+					so.setLocalOffset(new Offset(Mode.OFF, 0));
+					dimensionList = so.getValueList();
+					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+				}
+			} else if (HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
+					dimensionStr)) {
+				MeasureTemperature mt = new MeasureTemperature();
+				mt.setMeasuredTemperature(18d);
+				dimensionList = mt.getValueList();
+			} else if (HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(
+					dimensionStr)) {
+				// TODO
+				ProbeStatus ps = new ProbeStatus();
+				dimensionList = null;
+			} else if (HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(
+					dimensionStr)) {
+				ValvesStatus vs = new ValvesStatus();
+				vs.setHeatingValveStatus(ValveStatusEnum.OFF);
+				vs.setConditioningValveStatus(ValveStatusEnum.OFF);
+				dimensionList = vs.getValueList();
+			}  else {
+				return Command.NACK;
 			}
-		} else if (HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
-			dimensionList = dimensionCache.get(where
-					+ "-" + dimensionStr);
+	
 			if (dimensionList == null) {
-				SetOffset so = new SetOffset();
-				so.setLocalOffset(new Offset(Mode.OFF, 0));
-				dimensionList = so.getValueList();
-				dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+				dimensionList = new ArrayList<DimensionValue>();
+				dimensionCache.put(where + "-"
+						+ dimensionStr, dimensionList);
 			}
-		} else if (HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
-				dimensionStr)) {
-			MeasureTemperature mt = new MeasureTemperature();
-			mt.setMeasuredTemperature(18d);
-			dimensionList = mt.getValueList();
-		} else if (HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(
-				dimensionStr)) {
-			// TODO
-			ProbeStatus ps = new ProbeStatus();
-			dimensionList = null;
-		} else if (HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(
-				dimensionStr)) {
-			ValvesStatus vs = new ValvesStatus();
-			vs.setHeatingValveStatus(ValveStatusEnum.OFF);
-			vs.setConditioningValveStatus(ValveStatusEnum.OFF);
-			dimensionList = vs.getValueList();
-		}  else {
-			return Command.NACK;
+			StringBuilder sb = new StringBuilder();
+			for (DimensionValue dimension : dimensionList) {
+				sb.append(dimension.getValue());
+				sb.append(Command.DIMENSION_SEPARATOR);
+			}
+			sb.setLength(sb.length() - 1);
+			return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {
+					Command.WHO_HEATING_ADJUSTMENT, where, dimensionStr, sb.toString() })
+					+ Command.ACK;
+		} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 		}
-
-		if (dimensionList == null) {
-			dimensionList = new ArrayList<DimensionValue>();
-			dimensionCache.put(where + "-"
-					+ dimensionStr, dimensionList);
-		}
-		StringBuilder sb = new StringBuilder();
-		for (DimensionValue dimension : dimensionList) {
-			sb.append(dimension.getValue());
-			sb.append(Command.DIMENSION_SEPARATOR);
-		}
-		sb.setLength(sb.length() - 1);
-		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {
-				Command.WHO_HEATING_ADJUSTMENT, where, dimensionStr, sb.toString() })
-				+ Command.ACK;
 	}
 
 	@Override

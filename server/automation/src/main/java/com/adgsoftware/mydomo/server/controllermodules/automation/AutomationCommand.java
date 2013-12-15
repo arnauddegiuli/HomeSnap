@@ -25,7 +25,7 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 
 import java.text.MessageFormat;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 

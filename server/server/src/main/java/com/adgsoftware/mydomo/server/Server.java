@@ -31,9 +31,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
 
 public class Server implements Runnable {
 

@@ -28,7 +28,7 @@ import java.util.List;
 
 import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.connector.impl.OpenWebMonitorImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebMonitorImpl;
 import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 
 

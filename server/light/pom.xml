@@ -28,12 +28,17 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.light.LightModuleActivator</Bundle-Activator>
-						<Import-Package>com.adgsoftware.mydomo.engine.controller,
-							com.adgsoftware.mydomo.server.controllermodules,
-							com.adgsoftware.mydomo.engine,
-							com.adgsoftware.mydomo.engine.controller.light,
-							com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
-						<Export-Package></Export-Package>
+						<Import-Package>com.adgsoftware.mydomo.engine,
+							 com.adgsoftware.mydomo.engine.connector.openwebnet,
+							 com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
+							 com.adgsoftware.mydomo.engine.controller,
+							 com.adgsoftware.mydomo.engine.controller.light,
+							 com.adgsoftware.mydomo.server,
+							 com.adgsoftware.mydomo.server.controllermodules,
+							 org.osgi.framework
+ 						</Import-Package>
+						<Export-Package>com.adgsoftware.mydomo.server.controllermodules.light</Export-Package>
+						<Require-Bundle>com.adgsoftware.mydomo.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

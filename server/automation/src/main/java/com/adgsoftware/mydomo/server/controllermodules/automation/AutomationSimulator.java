@@ -27,7 +27,8 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
@@ -37,29 +38,44 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	@Override
 	public String execute(String command) {
-		String what = Command.getWhatFromCommand(command);
-		String where = Command.getWhereFromCommand(command);
-		if (Automation.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
-				|| Automation.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
-				|| Automation.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
-			statusList.put(where, what);
-			return Command.ACK;
-		} else {
-			System.out.println("Command not supported [" + command + "]");
-			return Command.NACK;
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String what = parser.getWhatFromCommand();
+			String where = parser.getWhereFromCommand();
+			if (Automation.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
+					|| Automation.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
+					|| Automation.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
+				statusList.put(where, what);
+				return Command.ACK;
+			} else {
+				System.out.println("Command not supported [" + command + "]");
+				return Command.NACK;
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
 	@Override
 	public String status(String command) {
-		String where = Command.getWhereFromCommand(command);
-		String what = statusList.get(where);
-		if (what == null) {
-			what = Automation.AutomationStatus.AUTOMATION_STOP.getCode();
-			statusList.put(where, what);
-		}
+		String where;
+		try {
+			where = Command.getCommandAnalyser(command).getWhereFromCommand();
+			String what = statusList.get(where);
+			if (what == null) {
+				what = Automation.AutomationStatus.AUTOMATION_STOP.getCode();
+				statusList.put(where, what);
+			}
 
-		return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, what, where} ) + Command.ACK;
+			return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, what, where} ) + Command.ACK;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	@Override

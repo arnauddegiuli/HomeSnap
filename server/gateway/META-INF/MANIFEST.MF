@@ -5,12 +5,14 @@ Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodule.gateway
 Bundle-Version: 0.1
 Bundle-Activator: com.adgsoftware.mydomo.server.controllermodules.gateway.GatewayModuleActivator
 Import-Package: com.adgsoftware.mydomo.engine,
+ com.adgsoftware.mydomo.engine.connector.openwebnet,
  com.adgsoftware.mydomo.engine.controller,
  com.adgsoftware.mydomo.engine.controller.gateway,
  com.adgsoftware.mydomo.engine.controller.gateway.dimension,
- com.adgsoftware.mydomo.server.controllermodules,
  com.adgsoftware.mydomo.server,
+ com.adgsoftware.mydomo.server.controllermodules,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.adgsoftware.mydomo.server.controllermodules.gateway
+Require-Bundle: com.adgsoftware.mydomo.engine

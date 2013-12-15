@@ -29,11 +29,14 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.automation.AutomationModuleActivator</Bundle-Activator>
 						<Import-Package>com.adgsoftware.mydomo.engine.controller,
+							com.adgsoftware.mydomo.engine.connector.openwebnet,
+							com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
 							com.adgsoftware.mydomo.server.controllermodules,
 							com.adgsoftware.mydomo.engine,
 							com.adgsoftware.mydomo.engine.controller.automation,
 							com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
 						<Export-Package></Export-Package>
+						<Require-Bundle>com.adgsoftware.mydomo.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

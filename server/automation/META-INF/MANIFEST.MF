@@ -6,6 +6,8 @@ Bundle-Version: 0.1
 Bundle-Activator: com.adgsoftware.mydomo.server.controllermodules.automation.AutomationModuleActivator
 Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.controller,
+ com.adgsoftware.mydomo.engine.connector.openwebnet,
+ com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
  com.adgsoftware.mydomo.engine.controller.automation,
  com.adgsoftware.mydomo.server.controllermodules,
  com.adgsoftware.mydomo.server,
@@ -13,3 +15,4 @@ Import-Package: com.adgsoftware.mydomo.engine,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.adgsoftware.mydomo.server.controllermodules.automation
+Require-Bundle: com.adgsoftware.mydomo.engine

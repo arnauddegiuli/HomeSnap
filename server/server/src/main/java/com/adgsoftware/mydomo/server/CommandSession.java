@@ -29,9 +29,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.adgsoftware.mydomo.engine.Command;
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 
 public class CommandSession implements Runnable {
 	private Socket client; // liaison avec client
@@ -107,12 +108,18 @@ public class CommandSession implements Runnable {
 			}
 			else {
 				String result = Command.NACK;
-				
-				if (Command.isStandardCommand(lue) || Command.isDimensionCommand(lue)) {
-					result = ControllerStateManagement.executeCommand(lue);
-				} else {
-					result = ControllerStateManagement.executeStatus(lue);
-				}					
+				Command parser;
+				try {
+					parser = Command.getCommandAnalyser(lue);
+					if (parser.isStandardCommand() || parser.isDimensionCommand()) {
+						result = ControllerStateManagement.executeCommand(lue);
+					} else {
+						result = ControllerStateManagement.executeStatus(lue);
+					}	
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				write(result);
 			}
 		}

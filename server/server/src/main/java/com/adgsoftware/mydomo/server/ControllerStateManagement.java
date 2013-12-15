@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
@@ -91,42 +92,48 @@ public class ControllerStateManagement {
 	 * @return the result of the command
 	 */
 	public synchronized static String executeCommand(String command) {
-		
-		String who = Command.getWhoFromCommand(command);
-		String result;
-		ControllerSimulator cc;
-		synchronized (controllerCommandList) {
-			synchronized (controllerDimensionCommandList) {
-			cc = controllerCommandList.get(who);
-		
-		if (cc != null) {
-			result = cc.execute(command);
-		} else {
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String who = parser.getWhoFromCommand();
+			String result;
+			ControllerSimulator cc;
+			synchronized (controllerCommandList) {
+				synchronized (controllerDimensionCommandList) {
+				cc = controllerCommandList.get(who);
 			
-				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-				if (cdc != null) {
-					result = cdc.execute(command);
-				} else {
-					System.out.println("Command not supported [" + command + "]");
-					result = Command.NACK;
-				}
+			if (cc != null) {
+				result = cc.execute(command);
+			} else {
+				
+					ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
+					if (cdc != null) {
+						result = cdc.execute(command);
+					} else {
+						System.out.println("Command not supported [" + command + "]");
+						result = Command.NACK;
+					}
+				
+			}
 			
-		}
-		
-		if (!Command.NACK.equalsIgnoreCase(result)) {
-			synchronized (monitorList) {
-				// Monitor session closed is only detected when we try to lunch a command on it
-				// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
-				// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
-				// are in the same thread...
-				List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
-				for (MonitorSession monitor : monitorList2) {
-					monitor.monitor(command);
+			if (!Command.NACK.equalsIgnoreCase(result)) {
+				synchronized (monitorList) {
+					// Monitor session closed is only detected when we try to lunch a command on it
+					// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+					// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+					// are in the same thread...
+					List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+					for (MonitorSession monitor : monitorList2) {
+						monitor.monitor(command);
+					}
 				}
 			}
+			}}
+			return result;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
-		}}
-		return result;
 	}
 	
 	/**
@@ -135,26 +142,33 @@ public class ControllerStateManagement {
 	 * @return the status
 	 */
 	public synchronized static String executeStatus(String command) {
-		String who = Command.getWhoFromCommand(command);
-		ControllerSimulator cc;
-		
-		synchronized (controllerCommandList) {
-			synchronized (controllerDimensionCommandList) {
-			cc = controllerCommandList.get(who);
-		
-		if (cc != null) {
-			return cc.status(command);
-		} else {
+		try {
+			Command parser = Command.getCommandAnalyser(command);
+			String who = parser.getWhoFromCommand();
+			ControllerSimulator cc;
 			
-				ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-				if (cdc != null) {
-					return cdc.status(command);
-				} else {
-					System.out.println("Command not supported [" + command + "]");
-					return Command.NACK;
+			synchronized (controllerCommandList) {
+				synchronized (controllerDimensionCommandList) {
+				cc = controllerCommandList.get(who);
+			
+			if (cc != null) {
+				return cc.status(command);
+			} else {
+				
+					ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
+					if (cdc != null) {
+						return cdc.status(command);
+					} else {
+						System.out.println("Command not supported [" + command + "]");
+						return Command.NACK;
+					}
 				}
-			}
-		}}
+			}}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }
