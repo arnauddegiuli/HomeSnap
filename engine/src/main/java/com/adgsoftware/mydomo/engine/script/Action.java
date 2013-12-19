@@ -36,15 +36,12 @@ public class Action<T extends Status> {
 		this.status = status;
 		this.controller = controller;
 	}
-	
+
 	public Controller<T> getController() {
 		return controller;
 	}
 
-
 	public T getStatus() {
 		return status;
 	}
-	
-	
 }

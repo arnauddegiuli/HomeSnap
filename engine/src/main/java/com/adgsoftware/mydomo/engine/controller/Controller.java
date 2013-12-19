@@ -132,7 +132,6 @@ public abstract class Controller<T extends Status> implements Serializable {
 				}
 			}
 		});
-
 	}
 
 	/**
