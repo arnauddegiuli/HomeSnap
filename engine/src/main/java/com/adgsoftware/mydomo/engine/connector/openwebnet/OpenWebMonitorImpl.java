@@ -158,7 +158,7 @@ implements Monitor {
 				}
 			}
 		} catch (ParseException e) {
-			log.log(Session.Monitor, Level.WARNING, "Unknown message receipt [" + message +"]. Message dropped.");
+			log.log(Session.Monitor, Level.WARNING, "Unknown message received [" + message +"]. Message dropped.");
 		}
 	}
 
@@ -167,7 +167,7 @@ implements Monitor {
 		if (what != null) {
 			// Manage what command
 			for (Controller<? extends Status> controller : controllerList) {
-				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
+				if (who.equals(controller.getWho()) && where.equals(controller.getWhere())) {
 					known = true;
 					changeWhat(controller, what);
 				}
@@ -177,7 +177,7 @@ implements Monitor {
 			List<DimensionValue> dimensionList = parser.getDimensionListFromCommand();
 			String code = parser.getDimensionFromCommand();
 			for (Controller<? extends Status> controller : controllerList) {
-				if (controller.getWho().equals(who) && controller.getWhere().equals(where)) {
+				if (who.equals(controller.getWho()) && where.equals(controller.getWhere())) {
 					known = true;
 					if (controller instanceof ControllerDimension<?>){
 						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);
