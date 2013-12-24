@@ -54,6 +54,7 @@ implements Serializable, List<Controller<? extends Status>> {
 //	private List<Label> subLabelList = new ArrayList<Label>();
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private String title;
+	private String description;
 	private String id;
 	private Icon icon;
 	private String iconPath;
@@ -76,7 +77,15 @@ implements Serializable, List<Controller<? extends Status>> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Icon getIcon() {
 		return icon;
 	}
