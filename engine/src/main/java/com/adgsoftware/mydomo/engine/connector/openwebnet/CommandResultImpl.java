@@ -46,7 +46,7 @@ public class CommandResultImpl implements CommandResult {
 	public CommandResultImpl(String commandResult, CommandResultStatus status) {
 		this.commandResult = commandResult;
 		this.status = status;
-		if (!Command.ACK.equals(commandResult) && !Command.NACK.equals(commandResult)) {
+		if (commandResult != null &&!Command.ACK.equals(commandResult) && !Command.NACK.equals(commandResult)) {
 			try {
 				parser = Command.getCommandAnalyser(commandResult);
 			} catch (ParseException e) {
