@@ -139,7 +139,7 @@ public class ParserTest {
 		// Status request    *#WHO*WHERE##
 		String status = "*#1*12##";
 		CommandParser p  = CommandParser.parse(status);
-		Assert.assertEquals(p.getWhere(), "12");
+		Assert.assertEquals("12", p.getWhere());
 	}
 	
 	@Test
@@ -147,7 +147,7 @@ public class ParserTest {
 		// Dimension request *#WHO*WHERE*DIMENSION##tring dimensionCommand = "*#12*1*#1*02*11*05*2012##";
 		String dimensionStatus = "*#12*22*0##";
 		CommandParser p  = CommandParser.parse(dimensionStatus);
-		Assert.assertEquals(p.getDimension(), "0");
+		Assert.assertEquals("0", p.getDimension());
 	}
 	
 	@Test
@@ -155,18 +155,32 @@ public class ParserTest {
 		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
 		String dimensionCommand = "*#12*1*#1*02*11*05*2012##";
 		CommandParser p  = CommandParser.parse(dimensionCommand);
-		Assert.assertEquals(p.getDimension(), "1");
-		Assert.assertEquals(p.getDimensionList().size(), 4);
-		Assert.assertEquals(p.getDimensionList().get(0), "02");
-		Assert.assertEquals(p.getDimensionList().get(3), "2012");
+		Assert.assertEquals("1", p.getDimension());
+		Assert.assertEquals(4, p.getDimensionList().size());
+		Assert.assertEquals("02", p.getDimensionList().get(0));
+		Assert.assertEquals("2012", p.getDimensionList().get(3));
 	}
 	
 	@Test
 	public void dimensionReadListTest() throws ParseException {
 		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
 		List<DimensionValue> l = Command.getCommandAnalyser("*#4*6*0*0226##").getDimensionListFromCommand();
-		Assert.assertEquals(l.size(), 1);
-		Assert.assertEquals(l.get(0).getValue(), "0226");
+		Assert.assertEquals(1, l.size());
+		Assert.assertEquals("0226", l.get(0).getValue());
 	}
 	
+	@Test
+	public void heatingDimension20Test() throws ParseException {
+		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
+		Command p = Command.getCommandAnalyser("*#4*9#1*20*1##");
+
+		Assert.assertEquals("1", p.getSpecialCommand().getActuator());
+		Assert.assertEquals("9", p.getSpecialCommand().getZone());
+
+		Assert.assertEquals("20", p.getDimensionFromCommand());
+
+		List<DimensionValue> l = p.getDimensionListFromCommand();
+		Assert.assertEquals(1, l.size());
+		Assert.assertEquals("1", l.get(0).getValue());
+	}
 }

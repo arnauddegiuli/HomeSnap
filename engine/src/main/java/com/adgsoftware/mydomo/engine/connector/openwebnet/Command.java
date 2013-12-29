@@ -131,4 +131,8 @@ public class Command {
 		}
 		return dimensionList;
 	}
+
+	public SpecialCommand getSpecialCommand() {
+		return new SpecialCommand(parser);
+	}
 }

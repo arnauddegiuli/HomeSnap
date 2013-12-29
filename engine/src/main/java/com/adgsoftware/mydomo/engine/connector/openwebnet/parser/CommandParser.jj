@@ -25,6 +25,8 @@ public class CommandParser
 	private String environment;
 	private String group;
 	private String point;
+	private String actuator;
+	private String zone;
 	private List<String> dimensionList = new ArrayList<String>();
 	
 	public static CommandParser parse(String command) throws ParseException 
@@ -72,6 +74,18 @@ public class CommandParser
 
 	public String getPoint() {
 		return point;
+	}
+
+	public String getActuator() {
+		return actuator;
+	}
+
+	public String getZone() {
+		if (zone==null) {
+			return point;
+		} else {
+			return zone;
+		}
 	}
 
 	public List<String> getDimensionList() {
@@ -160,8 +174,13 @@ Token val;
 }
 
 
-		// Standard          *VAL
-
+		// Standard          *[1-9][1-9]
+		// General           *0
+		// Environment       *[1-9]
+		// Group             *#[1-9]
+		// For heating:      *[0-99#1-9] actuator from zone
+		//                   *[0-99#0] all actuator from zone
+		//                   *[0#0] all actuator from all zone
 String where():
 {
 Token environment;
@@ -176,6 +195,7 @@ Token bus;
     )
    | "*" environment=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERAL;} else if(environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENT; this.environment=environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} }
    		("#4#" bus=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERALONLOCALBUS;} else if (environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENTONLOCALBUS; this.environment= environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} this.bus=bus.toString(); return environment.toString() + "#4#" + bus.toString();}
+    	|"#"group=<VAL> {this.whereType = WhereType.SPECIAL_HEATING; this.actuator = group.toString(); this.zone=environment.toString(); return this.zone + "#" + this.actuator;}
     	| {return environment.toString();}
     	)
 }

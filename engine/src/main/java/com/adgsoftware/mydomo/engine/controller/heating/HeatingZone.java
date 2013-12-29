@@ -60,10 +60,12 @@ public class HeatingZone extends ControllerDimension<HeatingZone.ZoneStatus> {
 	
 	public enum HeatingZoneDimension {
 		MEASURE_TEMPERATURE("0"), 
+		FAN_COIL_SPEED("11"),
 		PROBE_STATUS("12"),
 		LOCAL_OFFSET("13"),
 		SET_TEMPERATURE("14"),
-		VALVE_STATUS("19");
+		VALVE_STATUS("19"),
+		ACTUATOR_STATUS("20");
 		
 		private String code;
 		private HeatingZoneDimension(String code) {
