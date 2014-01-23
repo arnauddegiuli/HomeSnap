@@ -24,6 +24,10 @@ package com.adgsoftware.mydomo.engine.controller.outlet;
  */
 
 
+import javax.xml.bind.UnmarshalException;
+
+import org.json.JSONObject;
+
 import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
@@ -68,4 +72,27 @@ public class Outlet extends Controller<Outlet.OutletStatus> {
 		return null;
 	}
 
+
+	@Override
+	public JSONObject toJson() {
+		Status what = getWhat();
+		String strStatus = (what == null ? null : OutletStatus.OUTLET_ON == what ? "on" : "off");
+		JSONObject lightJson = new JSONObject();
+		lightJson.put("where", getWhere())
+				 .put("what", strStatus);
+		return lightJson;
+	}
+
+	@Override
+	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
+		setWhere(jsonObject.getString("where"));
+		Object what = jsonObject.get("what");
+		if ("on".equals(what)) {
+			setWhat(OutletStatus.OUTLET_ON);	
+		} else if ("off".equals(what)) {
+			setWhat(OutletStatus.OUTLET_OFF);
+		} else {
+			throw new UnmarshalException("Error when deserialized status from JSON object (" + jsonObject.toString() + ")");
+		}
+	}
 }

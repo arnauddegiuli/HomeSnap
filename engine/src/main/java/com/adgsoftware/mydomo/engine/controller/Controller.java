@@ -27,6 +27,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.UnmarshalException;
+
+import org.json.JSONObject;
+
+import com.adgsoftware.mydomo.engine.JsonSerializable;
 import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
@@ -45,13 +50,14 @@ import com.adgsoftware.mydomo.engine.house.Label;
  * @param <T>
  *            Type of status supported by the controller
  */
-public abstract class Controller<T extends Status> implements Serializable {
+public abstract class Controller<T extends Status> implements Serializable, JsonSerializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
 	private T what; // Represent the status (on/off; open/close; ...)
 	protected String where; // Represent the address of the controller
 	private String title; // string representing the controller
+	private String description; // string describing the controller
 	protected transient Commander server;
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
 	private LabelList labelList = new LabelList(this);
@@ -160,7 +166,6 @@ public abstract class Controller<T extends Status> implements Serializable {
 					server.createActionMessage(newWhat, where, getWho()),
 					commandListener);
 		}
-
 	}
 
 	/**
@@ -252,4 +257,34 @@ public abstract class Controller<T extends Status> implements Serializable {
 		return labelList;
 	}
 
+	/**
+	 * Return the description of the controller
+	 * @return description of the controller
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Define the description of the controller.
+	 * @param description of the controller
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public JSONObject toJson() {
+		JSONObject lightJson = new JSONObject();
+		lightJson.put("who", getWho())
+				 .put("title", getTitle())
+				 .put("description", getDescription());
+		return lightJson;
+	}
+
+	@Override
+	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
+		setTitle(jsonObject.getString("title"));
+		setDescription(jsonObject.getString("description"));
+	}
 }

@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.controller.gateway;
+package com.adgsoftware.mydomo.engine.test;
 
 /*
  * #%L
@@ -23,39 +23,27 @@ package com.adgsoftware.mydomo.engine.controller.gateway;
  * #L%
  */
 
-public class Version {
 
-	private int version;
-	private int release;
-	private int build;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.services.ControllerService;
+import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
-	public int getVersion() {
-		return version;
+public class T {
+
+	private ControllerService s = new OpenWebNetControllerService("192.168.1.35", 20000, 12345);
+
+	
+	public static void main(String[] args) {
+		new T().statusOnOff();
 	}
+	
+	public void statusOnOff() {
+		
+		final Light light = s.createController(Light.class, "42");
+		
+		light.setWhat(LightStatus.LIGHT_OFF);
 
-	public void setVersion(int version) {
-		this.version = version;
+		
 	}
-
-	public int getRelease() {
-		return release;
-	}
-
-	public void setRelease(int release) {
-		this.release = release;
-	}
-
-	public int getBuild() {
-		return build;
-	}
-
-	public void setBuild(int build) {
-		this.build = build;
-	}
-
-	@Override
-	public String toString() {
-		return "" + version + "." + release + "." + build;
-	}
-
 }

@@ -24,6 +24,8 @@ package com.adgsoftware.mydomo.engine.controller.automation;
  */
 
 
+import org.json.JSONObject;
+
 import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
@@ -63,5 +65,42 @@ public class Automation extends Controller<Automation.AutomationStatus> {
 			}
 		}	
 		return null;
+	}
+	
+
+	@Override
+	public JSONObject toJson() {
+		Status what = getWhat();
+		String strStatus = null;
+		if (AutomationStatus.AUTOMATION_STOP == what) {
+			strStatus = "stop";
+		} else if (AutomationStatus.AUTOMATION_DOWN == what) {
+			strStatus = "down";
+		} else if (AutomationStatus.AUTOMATION_UP == what) {
+			strStatus = "up";
+		}
+		JSONObject lightJson = new JSONObject();
+		lightJson.put("where", getWhere())
+				 .put("what", strStatus)
+				 .put("title", getTitle())
+				 .put("description", getDescription());
+		return lightJson; // TODO labels are lost...
+	}
+
+	@Override
+	public void fromJson(JSONObject jsonObject) {
+		setWhere(jsonObject.getString("where"));
+		Object what = jsonObject.get("what");
+		if ("up".equals(what)) {
+			setWhat(AutomationStatus.AUTOMATION_UP);	
+		} else if ("down".equals(what)) {
+			setWhat(AutomationStatus.AUTOMATION_DOWN);
+		} else if ("stop".equals(what)) {
+			setWhat(AutomationStatus.AUTOMATION_STOP);
+		} else {
+			// TODO message: status unknown or undefined
+		}
+		setTitle(jsonObject.getString("title"));
+		setDescription(jsonObject.getString("description"));
 	}
 }

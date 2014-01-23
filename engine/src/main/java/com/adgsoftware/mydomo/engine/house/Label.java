@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.adgsoftware.mydomo.engine.JsonSerializable;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.LabelList;
 import com.adgsoftware.mydomo.engine.controller.Status;
@@ -46,7 +50,9 @@ import com.adgsoftware.mydomo.engine.controller.Status;
  *
  */
 public class Label  
-implements Serializable, List<Controller<? extends Status>> {
+implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
+
+	protected static final String JSON_ID = "id";
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
@@ -58,6 +64,7 @@ implements Serializable, List<Controller<? extends Status>> {
 	private String id;
 	private Icon icon;
 	private String iconPath;
+	private House house;
 	
 	public String getId() {
 		if (id == null) {
@@ -89,19 +96,23 @@ implements Serializable, List<Controller<? extends Status>> {
 	public Icon getIcon() {
 		return icon;
 	}
-	
+
 	public void setIcon(Icon icon) {
 		this.icon = icon;
 	}
-	
+
 	public String getIconPath() {
 		return iconPath;
 	}
-	
+
 	public void setIconPath(String iconPath) {
 		this.iconPath = iconPath;
 	}
-	
+
+	protected void setHouse(House house) {
+		this.house = house;
+	}
+
 	/**
 	 * 
 	 * @param object
@@ -280,4 +291,69 @@ implements Serializable, List<Controller<? extends Status>> {
 		return controllerList;
 	}
 
+	@Override
+	public JSONObject toJson() {
+		JSONObject label = new JSONObject();
+		label.put(JSON_ID, getId());
+		label.put("title", getTitle());
+		label.put("description", getDescription());
+		String icon = getIcon() != null ? getIcon().getClassName() : getIconPath();
+		label.put("icon", icon);
+		JSONArray controllers = new JSONArray();
+
+		for (Controller<? extends Status> controller : getControllerList()) {
+			controllers.put(controller.getWhere());
+		}
+		return label;
+	}
+
+	@Override
+	public void fromJson(JSONObject jsonObject) {
+		setId(jsonObject.getString(JSON_ID));
+		setTitle(jsonObject.getString("title"));
+		setDescription(jsonObject.getString("description"));
+		String icon = jsonObject.getString("icon");
+		try {
+			setIcon((Icon) Class.forName(icon).newInstance());
+		} catch (Exception e) {
+			setIconPath(icon);
+		}
+		JSONArray controllers = jsonObject.getJSONArray("controllers");
+		for (int i = 0; i < controllers.length(); i++) {
+			String where = controllers.getString(i);
+			boolean found = false;
+			for (Controller<?> controller : getControllerList()) {
+				if(where.equals(controller.getWhere())) {
+					found = true;
+				}
+			}
+			// If contoller not found update the label with the controller
+			if (!found) {
+				if (house != null) {
+					for (Group group : house.getGroups()) {
+						for (Controller<? extends Status> controller : group.getControllerList()) {
+							if (where.equals(controller.getWhere())) {
+								add(controller);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		// Remove controller from label
+		for (Controller<?> controller : getControllerList()) {
+			boolean found = false;
+			for (int i = 0; i < controllers.length(); i++) {
+				String where = controllers.getString(i);
+				if(where.equals(controller.getWhere())) {
+					found = true;
+				}
+			}
+
+			if (!found) {
+				getControllerList().remove(controller);
+			}
+		}
+	}
 }

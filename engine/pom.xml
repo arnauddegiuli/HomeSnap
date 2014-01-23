@@ -29,6 +29,7 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
+				<version>2.4.0</version>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
@@ -53,7 +54,9 @@
 								 com.adgsoftware.mydomo.engine.house,
 								 com.adgsoftware.mydomo.engine.script,
 								 com.adgsoftware.mydomo.engine.services,
-								 com.adgsoftware.mydomo.engine.services.impl
+								 com.adgsoftware.mydomo.engine.services.impl,
+								 org.json,
+								 org.json.zip
 						</Export-Package>
 					</instructions>
 				</configuration>
@@ -78,6 +81,7 @@
 				<configuration>
 					<licenseName>gpl</licenseName>
 					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+					<exclude>org/json/*.java,org/json/zip/*.java</exclude>
 				</configuration>
 				<executions>
 					<execution>

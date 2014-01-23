@@ -18,5 +18,7 @@ Export-Package: com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engi
  com.adgsoftware.mydomo.engine.house,
  com.adgsoftware.mydomo.engine.script,
  com.adgsoftware.mydomo.engine.services,
- com.adgsoftware.mydomo.engine.services.impl
+ com.adgsoftware.mydomo.engine.services.impl,
+ org.json,
+ org.json.zip
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -24,6 +24,10 @@ package com.adgsoftware.mydomo.engine.controller.gateway;
  */
 
 
+import javax.xml.bind.UnmarshalException;
+
+import org.json.JSONObject;
+
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
@@ -243,4 +247,95 @@ public class Gateway extends ControllerDimension<Gateway.GatewayStatus> {
 		return v.getVersion();
 	}
 	
+	
+	@Override
+	public JSONObject toJson() {
+		JSONObject gatewayJson = super.toJson();
+// TODO finish asynchrounously call... since we need to refactor dimension controller, I don't finish now.
+//		final boolean dateReady = false;
+//		final Date date;
+//		final String dateValue;
+//		getDate(new DimensionStatusListener<Date>() {
+//			@Override
+//			public void onDimensionStatus(Date status, CommandResult result) {
+//				date = status;
+//				dateReady = true;
+//				
+//			}
+//		});
+//		final boolean dateTimeReady = false;
+//		final DateTime dateTime;
+//		final String dateTimeValue;
+//		getDateTime(new DimensionStatusListener<DateTime>() {
+//			@Override
+//			public void onDimensionStatus(DateTime status, CommandResult result) {
+//				dateTime = status;
+//				dateTimeReady = true;
+//				
+//			}
+//		});
+//		final boolean timeReady = false;
+//		final Time time;
+//		final String timeValue;
+//		getTime(new DimensionStatusListener<Time>() {
+//			@Override
+//			public void onDimensionStatus(Time status, CommandResult result) {
+//				time = status;
+//				timeReady = true;
+//				
+//			}
+//		});
+//		final boolean upTimeReady = false;
+//		final Time upTime;
+//		final String upTimeValue;
+//		getTime(new DimensionStatusListener<Time>() {
+//			@Override
+//			public void onDimensionStatus(Time status, CommandResult result) {
+//				upTime = status;
+//				upTimeReady = true;
+//				
+//			}
+//		});
+//		long startTime = System.currentTimeMillis();
+//		long currentTime = startTime;
+//		while ((!dateReady || !dateTimeReady || !timeReady || !upTimeReady)
+//			&& ((currentTime-startTime) > 4000)) { // 4s timeout
+//			// wait
+//			wait(100);
+//			currentTime = System.currentTimeMillis();
+//		}
+//		if (date != null) {
+//			dateValue = new SimpleDateFormat("dd-MM-yyyy").format(date.getDate());
+//		}
+//		if (dateTime != null) {
+//			dateTimeValue = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(dateTime.getDate());
+//		}
+//		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+//		if (time != null) {
+//			timeValue = sdf.format(time.getTime());
+//		}
+//		if (upTime != null) {
+//			upTimeValue = sdf.format(upTime.getTime());
+//		}
+
+		gatewayJson.put("where", getWhere())
+				 .put("what", "NONE")
+//				 .put("date", dateValue)
+//				 .put("datetime",dateTimeValue)
+				 .put("deviceType", getDeviceType())
+				 .put("distributionVersion", getDistributionVersion().toString())
+				 .put("firmwareVersion", getFirmwareVersion().toString())
+				 .put("ipAddress", getIpAddress())
+				 .put("kernelVersion", getKernelVersion().toString())
+				 .put("netMask", getNetMask());
+//				 .put("time",timeValue)
+//				 .put("upTime",upTimeValue);
+		return gatewayJson;
+	}
+
+	@Override
+	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
+		super.fromJson(jsonObject);
+		setWhere(jsonObject.getString("where"));
+	}
 }

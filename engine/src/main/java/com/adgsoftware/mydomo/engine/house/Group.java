@@ -32,6 +32,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import javax.xml.bind.UnmarshalException;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.adgsoftware.mydomo.engine.JsonSerializable;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 
@@ -40,13 +46,16 @@ import com.adgsoftware.mydomo.engine.controller.Status;
  * It can be compare to network mask: a group of devices.
  */
 public class Group
-implements Serializable {
+implements Serializable, JsonSerializable {
+
+	protected static final String JSON_ID = "id";
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
 	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
 	private String title;
+	private String description;
 	private String id;
 	
 	public String getId() {
@@ -66,6 +75,14 @@ implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public List<Controller<? extends Status>> getControllerList() {
@@ -194,4 +211,40 @@ implements Serializable {
 		return true;
 	}
 
+	@Override
+	public JSONObject toJson() {
+		JSONObject group = new JSONObject();
+		group.put(JSON_ID, getId())
+			.put("title", getTitle())
+			.put("description", getDescription());
+
+		JSONArray controllers = new JSONArray();
+		for (Controller<? extends Status> controller : getControllerList()) {
+			controllers.put(controller.toJson());
+		}
+		group.put("controllers", controllers);
+		return group;
+	}
+
+	/**
+	 * Deserialized the json. Only update data but not able to add new
+	 * data. To add new child use cration api.
+	 * @param jsonObject object to deseralized
+	 * @return 
+	 */
+	@Override
+	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
+		setTitle(jsonObject.getString("title"));
+		setDescription(jsonObject.getString("description"));
+		JSONArray controllers = jsonObject.getJSONArray("controllers");
+		for (int i = 0; i < controllers.length(); i++) {
+			JSONObject c = controllers.getJSONObject(i);
+			String whereString = c.getString("where");
+			for (Controller<?> controller : getControllerList()) {
+				if (whereString.equals(controller.getWhere())) {
+					controller.fromJson(c);
+				}
+			}
+		}
+	}
 }
