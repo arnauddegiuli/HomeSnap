@@ -18,7 +18,7 @@ public abstract class DefaultFactory implements ControllerFactory {
 			if (monitor != null) {
 				monitor.addControllerToMonitor(controller);
 			}
-			Commander commander = getController();
+			Commander commander = getCommander();
 			if (controller != null)  {
 				commander.addControllerToControl(controller);
 			}
@@ -38,5 +38,5 @@ public abstract class DefaultFactory implements ControllerFactory {
 	 * 
 	 * @return
 	 */
-	protected abstract Commander getController();
+	protected abstract Commander getCommander();
 }
