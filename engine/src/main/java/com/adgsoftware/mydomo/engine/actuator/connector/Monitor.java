@@ -1,12 +1,5 @@
 package com.adgsoftware.mydomo.engine.actuator.connector;
 
-import com.adgsoftware.mydomo.engine.actuator.CommandListener;
-import com.adgsoftware.mydomo.engine.actuator.Controller;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
-import com.adgsoftware.mydomo.engine.actuator.what.core.StateName;
-import com.adgsoftware.mydomo.engine.actuator.where.Where;
-import com.adgsoftware.mydomo.engine.actuator.who.Who;
-
 /*
  * #%L
  * MyDomoEngine
@@ -30,54 +23,75 @@ import com.adgsoftware.mydomo.engine.actuator.who.Who;
  * #L%
  */
 
-public interface Commander {
+
+import com.adgsoftware.mydomo.engine.actuator.CommandListener;
+import com.adgsoftware.mydomo.engine.actuator.Controller;
+
+/**
+ * Monitor listens event from the open server. Each time open
+ * server receives an event (light on, outlet on, change temperature, ...)
+ * it sends event to OpenWebMonitor.
+ * OpenWebMonitor raise this event to concern controller registered.
+ *
+ */
+public interface Monitor {
 
 	/**
 	 * Connect to the open server.
+	 * @return true if connected to the open server
 	 */
-	public abstract void connect();
-	
-	/**
-	 * Return true if connected to the open server.
-	 * @return true if connected to the open server.
-	 */
-	public abstract boolean isConnected();
+	public abstract boolean connect();
 
 	/**
 	 * Close connection to the open server.
 	 */
 	public abstract void close();
-
+	
 	/**
-	 * Send a command to the open server.
-	 * @param command the command to send
-	 * @return the result of the command
-	 */
-	public abstract void sendCommand(String command, CommandListener resultListener);
-
-	/**
-	 * Add a controller which will be able to use this commander.
+	 * Register controller to listen event.
 	 * @param controller
 	 */
-	public abstract void addControllerToExecute(Controller controller);
-
+	public abstract void addControllerToMonitor(Controller controller);
 	/**
-	 * Remove a controller which is able to use this commander.
+	 * Remove controller which listen event.
 	 * @param controller
 	 */
-	public abstract void removeControllerToExecute(Controller controller);
-
+	public abstract void removeControllerToMonitor(Controller controller);
 	/**
-	 * Add a connectionListener.
+	 * Add a {@link ConnectionListener}
 	 * @param connectionListener
 	 */
 	public abstract void addConnectionListener(ConnectionListener connectionListener);
-
 	/**
-	 * Remove a connectionListener.
+	 * Remove a {@link ConnectionListener}
 	 * @param connectionListener
 	 */
 	public abstract void removeConnectionListener(ConnectionListener connectionListener);
+	/**
+	 * Add a {@link CommandListener}
+	 * @param commandListener
+	 */
+	public abstract void addControllerStatusListener(CommandListener commandListener);
+	/**
+	 * Remove a {@link CommandListener}
+	 * @param commandListener
+	 */
+	public abstract void removeControllerStatusListener(CommandListener commandListener);
+	/**
+	 * Add an {@link UnknownControllerListener}
+	 * @param unknownControllerListener
+	 */
+	public abstract void addUnknownControllerListener(UnknownControllerListener unknownControllerListener);
+	/**
+	 * Remove an {@link UnknownControllerListener}
+	 * @param unknownControllerListener
+	 */
+	public abstract void removeUnknownControllerListener(UnknownControllerListener unknownControllerListener);
+	/**
+	 * Return true if connected to the open server.
+	 * @return true if connected to the open server.
+	 */
+	public abstract boolean isConnected();
 
 	/**
 	 * Return the ip of the open server.
@@ -102,7 +116,7 @@ public interface Commander {
 	 * @param port the port of the open server.
 	 */
 	public void setPort(int port);
-
+	
 	/**
 	 * Return the timeout of the connection to open server in millisecond.
 	 * @return the timeout of the connection to open server in millisecond.
@@ -116,21 +130,8 @@ public interface Commander {
 	public void setTimeout(int timeout);
 
 	/**
-	 * Define the gateway password
-	 * @param password
+	 * Define the gateway password.
+	 * @param passwordOpen
 	 */
-	public void setPasswordOpen(Integer password);
-	
-	/**
-	 * Create the message for action.
-	 * @return open message.
-	 */
-	public String createActionMessage(State newWhat, Where where, Who who);
-	
-	/**
-	 * Create the message for status.
-	 * @return open message.
-	 */
-	public String createStatusMessage(StateName what, Where where, Who who);
-	
+	public void setPasswordOpen(Integer passwordOpen);
 }

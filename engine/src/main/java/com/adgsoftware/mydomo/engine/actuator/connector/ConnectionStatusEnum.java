@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.actuator;
+package com.adgsoftware.mydomo.engine.actuator.connector;
 
 /*
  * #%L
@@ -23,7 +23,9 @@ package com.adgsoftware.mydomo.engine.actuator;
  * #L%
  */
 
+public enum ConnectionStatusEnum {
 
-public enum CommandResultStatus {
-	ok, nok, error;
+	Connected, 
+	WrongAcknowledgement,
+	NoSocket;
 }

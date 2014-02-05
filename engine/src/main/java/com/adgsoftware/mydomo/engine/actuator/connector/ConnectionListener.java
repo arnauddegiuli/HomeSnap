@@ -1,7 +1,4 @@
-package com.adgsoftware.mydomo.engine.actuator;
-
-import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+package com.adgsoftware.mydomo.engine.actuator.connector;
 
 /*
  * #%L
@@ -26,8 +23,20 @@ import com.adgsoftware.mydomo.engine.actuator.what.core.State;
  * #L%
  */
 
+/**
+ * ConnectionListener manage close and connect event.
+ */
+public interface ConnectionListener {
 
-public interface StatusListener {
-
-	public void onStatus(State status, CommandResult result);
+	/**
+	 * Raise each time close is call on the connection.
+	 */
+	public void onClose();
+	 
+	/**
+	 * Raise each time a connection to the gateway is try with the result of it,
+	 * @param connectionStatus
+	 */
+	public void onConnect(ConnectionStatusEnum connectionStatus);
+	 
 }

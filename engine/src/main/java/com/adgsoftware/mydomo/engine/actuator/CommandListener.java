@@ -1,5 +1,7 @@
 package com.adgsoftware.mydomo.engine.actuator;
 
+import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
+
 /*
  * #%L
  * MyDomoEngine

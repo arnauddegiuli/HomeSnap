@@ -1,7 +1,4 @@
-package com.adgsoftware.mydomo.engine.actuator;
-
-import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+package com.adgsoftware.mydomo.engine.actuator.connector;
 
 /*
  * #%L
@@ -26,8 +23,19 @@ import com.adgsoftware.mydomo.engine.actuator.what.core.State;
  * #L%
  */
 
+import java.util.List;
 
-public interface StatusListener {
+import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+import com.adgsoftware.mydomo.engine.actuator.where.Where;
+import com.adgsoftware.mydomo.engine.actuator.who.Who;
 
-	public void onStatus(State status, CommandResult result);
+/**
+ * Each time a monitor session ( {@link Monitor} ) get a message and isn't able to 
+ * found a controller, {@link UnknownControllerListener#foundUnknownController(String, String, String, String, List)}
+ * is called.
+ * @author adegiuli
+ */
+public interface UnknownControllerListener {
+
+	public void foundUnknownController(Who who, Where where, State what);
 }

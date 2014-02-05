@@ -112,7 +112,7 @@ public class Light extends Controller {
 	}
 
 	public LightState getStatus() {
-		return (LightState) get("status");
+		return (LightState) get(StateName.STATUS);
 	}
 
 	@Override

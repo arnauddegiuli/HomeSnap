@@ -1,7 +1,4 @@
-package com.adgsoftware.mydomo.engine.actuator;
-
-import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+package com.adgsoftware.mydomo.engine.actuator.connector.openwebnet;
 
 /*
  * #%L
@@ -26,8 +23,14 @@ import com.adgsoftware.mydomo.engine.actuator.what.core.State;
  * #L%
  */
 
-
-public interface StatusListener {
-
-	public void onStatus(State status, CommandResult result);
+public enum WhereType {
+	GENERAL,
+	ENVIRONMENT,
+	GROUP,
+	POINTTOPOINT,
+	GENERALONLOCALBUS,
+	ENVIRONMENTONLOCALBUS,
+	GROUPONLOCALBUS,
+	POINTTOPOINTONLOCALBUS,
+	SPECIAL_HEATING;
 }

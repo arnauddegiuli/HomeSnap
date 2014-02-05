@@ -1,4 +1,9 @@
-package com.adgsoftware.mydomo.engine.actuator;
+package com.adgsoftware.mydomo.engine.actuator.connector;
+
+import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+import com.adgsoftware.mydomo.engine.actuator.what.core.StateName;
+import com.adgsoftware.mydomo.engine.actuator.where.Where;
+import com.adgsoftware.mydomo.engine.actuator.who.Who;
 
 /*
  * #%L
@@ -23,11 +28,6 @@ package com.adgsoftware.mydomo.engine.actuator;
  * #L%
  */
 
-import java.util.List;
-
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-
 public class DefaultCommandResult implements CommandResult {
 	private String commandResult;
 	private CommandResultStatus status;
@@ -48,22 +48,17 @@ public class DefaultCommandResult implements CommandResult {
 	}
 
 	@Override
-	public State getWhat() {
+	public State getWhat(StateName name) {
 		return null;
 	}
 
 	@Override
-	public String getWho() {
+	public Who getWho() {
 		return null;
 	}
 
 	@Override
-	public String getWhere() {
-		return null;
-	}
-
-	@Override
-	public List<DimensionValue> getDimensionList() {
+	public Where getWhere() {
 		return null;
 	}
 }

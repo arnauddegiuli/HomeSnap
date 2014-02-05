@@ -25,6 +25,7 @@ package com.adgsoftware.mydomo.engine.actuator;
 
 import java.io.Serializable;
 
+import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.actuator.what.core.State;
 
 

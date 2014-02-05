@@ -1,13 +1,10 @@
-package com.adgsoftware.mydomo.engine.actuator;
-
-import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+package com.adgsoftware.mydomo.engine.actuator.connector.openwebnet;
 
 /*
  * #%L
  * MyDomoEngine
  * %%
- * Copyright (C) 2011 - 2013 A. de Giuli
+ * Copyright (C) 2011 - 2014 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
@@ -26,8 +23,21 @@ import com.adgsoftware.mydomo.engine.actuator.what.core.State;
  * #L%
  */
 
+import com.adgsoftware.mydomo.engine.actuator.connector.openwebnet.parser.CommandParser;
 
-public interface StatusListener {
+public class SpecialCommand {
 
-	public void onStatus(State status, CommandResult result);
+	private CommandParser parser;
+
+	protected SpecialCommand(CommandParser parser) {
+		this.parser = parser;
+	}
+	
+	public String getActuator() {
+		return parser.getActuator();
+	}
+
+	public String getZone() {
+		return parser.getZone();
+	}
 }

@@ -14,7 +14,10 @@ import javax.xml.bind.UnmarshalException;
 import org.json.JSONObject;
 
 import com.adgsoftware.mydomo.engine.JsonSerializable;
+import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.actuator.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.actuator.connector.Commander;
+import com.adgsoftware.mydomo.engine.actuator.connector.DefaultCommandResult;
 import com.adgsoftware.mydomo.engine.actuator.what.core.State;
 import com.adgsoftware.mydomo.engine.actuator.what.core.StateName;
 import com.adgsoftware.mydomo.engine.actuator.what.core.StateValue;
@@ -74,74 +77,17 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		if (newValue == null) { // Manage null value because we create some
 								// controller with no address (Gateway or
 								// Heating central with MyHOME Bus)
-			// TODO put all status to default what = null;
+			for (StateName stateName : stateTypes.keySet()) {
+				stateList.put(stateName, null);
+			}
 		} else {
 			// Récupérer les status
 			for (StateName stateName : stateTypes.keySet()) {
-				executeStatus(stateName, new StatusListener() {
-					@Override
-					public void onStatus(State status, CommandResult result) {
-						// TODO : one pb with that: if we get the value of what
-						// before response we get null and nothing is done to be
-						// advertise of the change when value arrive...
-						stateList.put(status.getName(), status.getValue());
-					}
-				});	
+				get(stateName);
 			}
 			
 		}
 	}
-
-
-
-
-
-//	/**
-//	 * Define the new {@link Status} of the device.
-//	 * 
-//	 * @param newWhat
-//	 *            {@link Status} of the device.
-//	 */
-//	public void setWhat(final T newWhat) {
-//		// The command is sent to the gateway. Gateway transmits it to the
-//		// controller.
-//		// If everything is fine, Gateway provides through the monitor session
-//		// the new status => not need to set it here since it will be set by the
-//		// monitor way.
-//		final T oldStatus = what;
-//		// what = newWhat; => it will be done with changeWhat by the monitor
-//		// listener
-//		executeAction(newWhat, new CommandListener() {
-//			@Override
-//			public void onCommand(CommandResult result) {
-//				if (CommandResultStatus.ok.equals(result.getStatus())) {
-//					// Status has been changed
-//					// what = newWhat; => it will be done with changeWhat by the
-//					// monitor listener
-//					// notifyWhatChange(oldStatus, newWhat); call by monitor! =>
-//					// it will be done with changeWhat by the monitor listener
-//				} else {
-//					// Error
-//					// what = oldStatus; => it will be done with changeWhat by
-//					// the monitor listener
-//					notifyWhatChangeError(oldStatus, newWhat, result);
-//				}
-//			}
-//		});
-//	}
-//
-//	
-//	/**
-//	 * Define the new {@link Status} of the device without sent the command on
-//	 * the bus.
-//	 * 
-//	 * @param newWhat
-//	 *            {@link Status} of the device.
-//	 */
-//	public void changeWhat(T newWhat) {
-//		this.what = newWhat;
-//		notifyWhatChange(this.what, newWhat);
-//	}
 
 	/**
 	 * Execute an action
@@ -166,7 +112,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			);
 		}
 	}
-// TOD ODELETE			server.createDimensionActionMessage(getWhere(), getWho(), dimensionStatus)
+
 	/**
 	 * Get the status of the controller.
 	 * 
@@ -186,7 +132,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 							waitingResult = false;
 							if (CommandResultStatus.ok.equals(result.getStatus())) {
 								// Return the status of the controller from the server
-								State status = result.getWhat();
+								State status = result.getWhat(stateName);
 								statusListener.onStatus(
 										status,
 										result);
@@ -339,10 +285,22 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * @param state The state name
 	 * @return The current value of the state into the current status.
 	 */
-	protected StateValue get(String state) {
-		return stateList.get(state);
+	protected StateValue get(StateName stateName) {
+		StateValue val = stateList.get(stateName);
+		if (val == null) {
+			executeStatus(stateName, new StatusListener() {
+				@Override
+				public void onStatus(State status, CommandResult result) {
+					// TODO : one pb with that: if we get the value of what
+					// before response we get null and nothing is done to be
+					// advertise of the change when value arrive...
+					stateList.put(status.getName(), status.getValue());
+				}
+			});	
+		}
+		return val;
 	}
-	
+
 	/**
 	 * Return the value of a state of the status.
 	 * If the state is not yet defined into the status, the default value is returned.
@@ -350,8 +308,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * @param defaultValue The default value
 	 * @return The current value of the state into the current status or <code>defaultValue</code>
 	 */
-	protected StateValue get(String state, StateValue defaultValue) {
-		
+	protected StateValue get(StateName state, StateValue defaultValue) {
 		StateValue result = get(state);
 		return result == null ? defaultValue : result;
 	}
@@ -362,37 +319,53 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * @param value The value of the state to set into the status
 	 */
 	protected void set(StateName state, StateValue value) {
-		if (checkStateValue(state, value)) {
-			stateList.put(state, value);
-		} else {
+		if (!checkStateValue(state, value)) {
 			// TODO Create a StateValueException
-			throw new IllegalArgumentException("Unable to set ["+ state +"] state to "+ value.getValue()
+			throw new IllegalArgumentException("Unable to set ["+ state.getName() +"] state to "+ value.getValue()
 					+", the state value must be an instance of "+ stateTypes.get(state).getName());
 		}
+
+		// The command is sent to the gateway. Gateway transmits it to the
+		// actuator.
+		// If everything is fine, Gateway provides through the monitor session
+		// the new status => not need to set it here since it will be set by the
+		// monitor way.
+		final State oldStatus = new State(state, get(state));
+		final State newStatus = new State(state, value);
+		// what = newWhat; => it will be done with changeWhat by the monitor
+		// listener
+		executeAction(newStatus, new CommandListener() {
+			@Override
+			public void onCommand(CommandResult result) {
+				if (CommandResultStatus.ok.equals(result.getStatus())) {
+					// Status has been changed
+					// what = newWhat; => it will be done with changeWhat by the
+					// monitor listener
+					// notifyWhatChange(oldStatus, newWhat); call by monitor! =>
+					// it will be done with changeWhat by the monitor listener
+				} else {
+					// Error
+					// what = oldStatus; => it will be done with changeWhat by
+					// the monitor listener
+					notifyWhatChangeError(oldStatus, newStatus, result);
+				}
+			}
+		});
 	}
 
 	/**
+	 * Define the new {@link Status} of the device without sent the command on
+	 * the bus.
 	 * 
-	 * @param state
+	 * @param newWhat
+	 *            {@link Status} of the device.
 	 */
-	protected void remove(String state) {
-		if (canRemove(state)) {
-			stateList.remove(state);
-		} else {
-			// TODO NonRemoveableStateException
-		}
+	public void changeState(State newWhat) {
+		State oldWhat = new State(newWhat.getName(), stateList.get(newWhat.getName()));
+		stateList.put(newWhat.getName(), newWhat.getValue());
+		notifyWhatChange(oldWhat, newWhat);
 	}
 
-	/**
-	 * Return all states with their values of the status.
-	 * @return an unmodifiable set of state/value
-	 */
-	public Set<Entry<StateName, StateValue>> entrySet() {
-		return Collections.unmodifiableSet(stateList.entrySet());
-	}
-	
-
-	
 	/**
 	 * Return the states types in order to prevent from a wrong assigment when
 	 * the {@link #set(String, StateValue)} method is called.
@@ -401,15 +374,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 */
 	protected abstract Map<StateName, Class<? extends StateValue>> getSupportedStateTypes();
 
-	/**
-	 * 
-	 * @param state
-	 * @return
-	 */
-	private boolean canRemove(String state) {
-		return true; // TODO Some states like "status" sould not be deletable. May be we have to add a "deleteble" flag into the stateTypes map.
-	}
-	
 	/**
 	 * Check that a class value is compatible with a state.
 	 * For state names which are not defined by this controller, the result is always <true>.

@@ -1,7 +1,4 @@
-package com.adgsoftware.mydomo.engine.actuator;
-
-import com.adgsoftware.mydomo.engine.actuator.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.actuator.what.core.State;
+package com.adgsoftware.mydomo.engine.actuator.connector;
 
 /*
  * #%L
@@ -27,7 +24,6 @@ import com.adgsoftware.mydomo.engine.actuator.what.core.State;
  */
 
 
-public interface StatusListener {
-
-	public void onStatus(State status, CommandResult result);
+public enum CommandResultStatus {
+	ok, nok, error;
 }
