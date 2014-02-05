@@ -31,4 +31,18 @@ public enum StateName implements StateNames {
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static StateName fromValue(String name) {
+		for (StateName state : StateName.values()) {
+			if (state.getName().equals(name)) {
+				return state;
+			}
+		}
+		return null;
+	}
 }

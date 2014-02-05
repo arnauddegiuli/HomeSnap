@@ -35,4 +35,18 @@ public enum LightStatus implements StateValue {
 	public String getValue() {
 		return value;
 	}
+	
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static LightStatus fromValue(String value) {
+		for (LightStatus status : LightStatus.values()) {
+			if (status.getValue().equals(value)) {
+				return status;
+			}
+		}
+		return null;
+	}
 }

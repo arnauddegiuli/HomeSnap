@@ -10,11 +10,30 @@ import com.homesnap.engine.controller.state.type.DoubleValue;
  */
 public class LightController extends Controller {
 	
+	/** */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
 	public LightController(String address) {
 		super(address);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getStatus() {
+		return get(StateName.STATUS).getValue();
+	}
+	
+	/**
+	 * 
+	 * @param status
+	 */
+	public void setStatus(LightStatus status) {
+		set(StateName.STATUS, status);
 	}
 	
 	/**

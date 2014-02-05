@@ -1,5 +1,7 @@
 package com.homesnap.engine.controller;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,8 +18,11 @@ import com.homesnap.engine.controller.state.StateValue;
  * @version 1.0
  * @since 1.0
  */
-public abstract class Controller/*<T extends ControllerType>*/ {
+public abstract class Controller/*<T extends ControllerType>*/ implements Serializable {
 	
+	/** */
+	private static final long serialVersionUID = 1L;
+
 	/** The name the controller */
 	private String name;
 	
@@ -91,6 +96,14 @@ public abstract class Controller/*<T extends ControllerType>*/ {
 	
 	/**
 	 * 
+	 * @param address
+	 */
+	protected void setAddress(String address) {
+		this.address = address;
+	}
+	
+	/**
+	 * 
 	 * @return
 	 */
 	public ControllerType getType() {
@@ -146,13 +159,13 @@ public abstract class Controller/*<T extends ControllerType>*/ {
 		
 		if (checkStateValue(state, value)) {
 			if (commander == null) {
-				throw new NullPointerException("The device has no controller"); // TODO Is that possible due to the design pattern DeviceFactory ?
-			}
-			executeLater(
-					createCommand(new State(state, value), new CommandListener() {
-						@Override
-						public void onCommand(CommandResult commandResult) {
-							switch (commandResult.getStatus()) {
+				stateList.put(state, value);
+			} else {
+				executeLater(
+						createCommand(new State(state, value), new CommandListener() {
+							@Override
+							public void onCommand(CommandResult commandResult) {
+								switch (commandResult.getStatus()) {
 								case ok: {
 									stateList.put(state, value);
 									System.out.println("device updated "+ commandResult.getResult());
@@ -161,10 +174,11 @@ public abstract class Controller/*<T extends ControllerType>*/ {
 								default: {
 									System.out.println("device not updated "+ commandResult.getResult());
 								}
+								}
 							}
-						}
-					})
-			);
+						})
+				);
+			}
 		} else {
 			// TODO Create a StateValueException
 			throw new IllegalArgumentException("Unable to set ["+ state +"] state to "+ value.getValue()
@@ -211,6 +225,14 @@ public abstract class Controller/*<T extends ControllerType>*/ {
 	 */
 	protected void declareState(StateName state, Class<? extends StateValue> stateClass) {
 		stateTypes.put(state, stateClass);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	protected Map<StateName,  StateValue> getStates() {
+		return Collections.unmodifiableMap(stateList);
 	}
 
 	/**
