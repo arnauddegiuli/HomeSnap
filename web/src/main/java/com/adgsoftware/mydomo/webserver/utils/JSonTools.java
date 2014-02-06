@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.webserver.utils;
+         package com.adgsoftware.mydomo.webserver.utils;
 
 /*
  * #%L
@@ -24,13 +24,13 @@ package com.adgsoftware.mydomo.webserver.utils;
  */
 
 
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import org.json.JSONObject;
+
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
 import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
@@ -38,87 +38,36 @@ import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
 public class JSonTools {
 
 	public final static String toJson(House house) {
-		
-		StringBuilder sb = new StringBuilder("[{id:'house', title:'House', labels:[");
-
-		for (Label label : house.getLabels()) {
-			sb.append(toJson(label));
-			sb.append(",");
+		if (house == null) {
+			return JSONObject.NULL.toString();
+		} else {
+			return house.toJson().toString();
 		}
-
-		if (house.getLabels().size() > 0) {
-			sb.setLength(sb.length() - 1);
-		}
-
-		sb.append("],groups:[");
-		
-		for (Group group : house.getGroups()) {
-			sb.append(toJson(group));
-			sb.append(",");
-		}
-
-		if (house.getGroups().size() > 0) {
-			sb.setLength(sb.length() - 1);
-		}
-
-		sb.append("]}]");
-		return sb.toString();
 	}
 	
 	public final static String toJson(Group group) {
-		// TODO if group == null???? => serialiaze null!
-		StringBuilder sb = new StringBuilder()
-		.append("{\"id\":\"").append(group.getId()).append("\"")
-		.append(", \"title\":\"").append(group.getTitle()).append("\"")
-//		.append(", \"icon\":\"").append(group.getIcon() != null ? group.getIcon().getClassName() : group.getIconPath()).append("\"") TODO add icon management on group
-		.append(",\"controllers\":[");
-
-		for (Controller<? extends Status> controller : group.getControllerList()) {
-			sb.append(toJson(controller));
-			sb.append(",");
+		if (group == null) {
+			return JSONObject.NULL.toString();
+		} else {
+			return group.toJson().toString();
 		}
-		if (group.getControllerList().size() > 0) {
-			sb.setLength(sb.length() - 1);
-		}
-
-		return sb.append("]}").toString();
 	}
 
 	public final static String toJson(Label label) {
-		
-		StringBuilder sb = new StringBuilder()
-			.append("{\"id\":\"").append(label.getId()).append("\"")
-			.append(", \"title\":\"").append(label.getTitle()).append("\"")
-			.append(", \"icon\":\"").append(label.getIcon() != null ? label.getIcon().getClassName() : label.getIconPath()).append("\"")
-			.append(",\"controllers\":[");
-		
-		for (Controller<? extends Status> controller : label.getControllerList()) {
-			sb.append(toJson(controller));
-			sb.append(",");
-		}
-		if (label.getControllerList().size() > 0) {
-			sb.setLength(sb.length() - 1);
+		if (label == null) {
+			return JSONObject.NULL.toString();
+		} else {
+			return label.toJson().toString();
 		}
 
-		return sb.append("]}").toString();
 	}
 
 	public final static String toJson(Controller<? extends Status> controller) {
-		StringBuilder sb = new StringBuilder()
-		.append("{\"where\":\"").append(controller.getWhere()).append("\"")
-		.append(", \"who\":\"").append(controller.getWho()).append("\"")
-		.append(", \"title\":\"").append(formatString(controller.getTitle())).append("\"");
-		
-		return sb.append("}").toString();
-	}
-
-	private final static String formatString(String string) {
-		return string.replaceAll("[\"]", "\\\\\"");
-	}
-
-	public final static String toJson(Light light) {
-		String strStatus = (light.getWhat() == null ? "null" : LightStatus.LIGHT_ON == light.getWhat() ? "on" : "off");
-		return "{\"adress\":\""+light.getWhere()+"\",\"status\":\""+ strStatus +"\"}";
+		if (controller == null) {
+			return JSONObject.NULL.toString();
+		} else {
+			return controller.toJson().toString();
+		}
 	}
 
 	public final static String toJson(MissingParameterRestOperation e) {
@@ -134,11 +83,10 @@ public class JSonTools {
 	}
 
 	private final static String formatException(Exception e) {
-		return "[{error:'" + e.getClass().getSimpleName() + "', message:'" + formatString(e.getMessage())+ "'}]";
+		return "[{error:'" + JSONObject.quote(e.getClass().getSimpleName()) + "', message:'" + JSONObject.quote(e.getMessage())+ "'}]";
 	}
 
-	public static String formatNull() {
-		// TODO Auto-generated method stub
-		return "null";
+	public final static String formatNull() {
+		return JSONObject.NULL.toString();
 	}
 }

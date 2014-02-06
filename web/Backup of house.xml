@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<house>
+	<groups>
+		<group title="Group 1" id="1">
+			<controller where="11" title="Dressing"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="12" title="Suite Parentale"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="13" title="Couloir Suite Parentale"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="14" title="Douche]"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="15" title="Miroir Douche"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 2" id="2">
+			<controller where="21" title="Bureau"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 3" id="3">
+			<controller where="31" title="Cellier"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="32" title="WC du bas"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="35" title="Vide Poche"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 4" id="4">
+			<controller where="41" title="Entrée"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="42" title="Salon"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="43" title="Escalier"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="44" title="Mur télé"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 5" id="5">
+			<controller where="51" title="Salle à manger"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="52" title="Ilot Cuisine"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="53" title="Cuisine"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 6" id="6">
+			<controller where="61" title="Chambre Tom"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="63" title="Chambre Marius"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="64" title="Dressing Garçon"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="66" title="Chambre Loïs"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 7" id="7">
+			<controller where="71" title="Salle de Bain"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="72" title="Miroir Salle de Bain"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="73" title="WC du haut"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 8" id="8">
+			<controller where="81" title="Couloir du haut"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="82" title="Salle de jeux"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+		<group title="Group 9" id="9">
+			<controller where="91" title="Extérieur 1"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="92" title="Extérieur 2"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="93" title="Extérieur 3"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+			<controller where="94" title="Extérieur 4"
+				class="com.adgsoftware.mydomo.engine.controller.light.Light" />
+		</group>
+	</groups>
+	<labels>
+		<label title="Chambre Tom" id="ch1">
+			<controllerLink where="61" />
+		</label>
+		<label title="Chambre Marius" id="ch2">
+			<controllerLink where="63" />
+		</label>
+		<label title="Salon" id="sal">
+			<controllerLink where="42" />
+		</label>
+	</labels>
+</house>

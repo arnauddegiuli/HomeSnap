@@ -17,9 +17,9 @@
 
 	<div class="dijitDialogPaneActionBar">
 		<button data-dojo-type="dijit/form/Button" type="submit"
-			onClick="return label.isValid();">OK</button>
+			onClick="this.getParent().hide(); return this.getParent().add(labelDialogId.value, labelDialogTitle.value);">OK</button>
 		<button data-dojo-type="dijit/form/Button" type="button"
-			onClick="label.hide()">Cancel</button>
+			onClick="this.getParent().hide();">Cancel</button>
 
 		<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'labelDialogId',position:['above']">
 			<i>Label</i>  identifier ( <b>must</b> be unique)

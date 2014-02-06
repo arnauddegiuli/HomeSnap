@@ -1,19 +1,17 @@
-var masterStore = null;
-var cacheStore = null;
 
 define(["dojo/_base/declare",
 	"dojo/store/Memory",
 	"dojo/store/Cache",
-	"dojo/store/JsonRest"
-], function(declare, Memory, Cache, JsonRest){
+	"dojo/store/JsonRest",
+	"dojo/store/Observable"
+], function(declare, Memory, Cache, JsonRest, Observable){
 
-	if (masterStore == null) {
-		masterStore = new JsonRest({
-			target: "/house"
-		});
-		cacheStore = new Memory({ });
-	}
 	
+	masterStore = new JsonRest({
+		target: "/house"
+	});
+	cacheStore = new Memory();
+
 	return declare(null, {
 		// summary:
 		//		This is a store for House data. It implements dojo/store/api/Store.
@@ -30,6 +28,7 @@ define(["dojo/_base/declare",
 			//		formatted data.
 			this.headers = {};
 			declare.safeMixin(this, options);
+
 			
 			this.houseStore = new Cache(masterStore, cacheStore);
 			var oldPut = this.houseStore.put;
@@ -40,6 +39,8 @@ define(["dojo/_base/declare",
 				// now call the original
 				oldPut.call(this, object, options);
 			};
+			
+//			this.houseStore = new Observable(this.houseStore);
 		},
 
 		// idProperty: String
@@ -129,7 +130,11 @@ define(["dojo/_base/declare",
 			//		Additional options to apply to the retrieval of the children.
 			// returns: dojo/store/api/Store.QueryResults
 			//		A result set of the children of the parent object.
-			return this.houseStore.getChildren();
+			if (parent.id == 'house') {
+				return [parent.labels, parent.groups];
+			} else {
+				return parent.controllers;
+			}
 		},
 		getMetadata: function(object){
 			// summary:

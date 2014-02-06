@@ -22,10 +22,13 @@ define([
 		constructor: function(args) {
 			args.model = new ObjectStoreModel({
 				store: args.store,
-				query: {id: 'house'}
+				query: {id: 'house'},
+				mayHaveChildren: function (item) {
+					return item.controllers;
+				}
 			});
 			declare.safeMixin(this,args);
-			
+
 			aspect.around(this.model.store, "getChildren", function(originalGetChildren){
 				return function(obj, options){
 					if (obj.id=='house')
@@ -34,20 +37,19 @@ define([
 						return obj.controllers;
 				}
 			});
-			
-			
-			aspect.around(this.model.store, "put", function(originalPut){
-				// To support DnD, the store must support put(child, {parent: parent}).
-				// Since memory store doesn't, we hack it.
-				// Since our store is relational, that just amounts to setting child.parent
-				// to the parent's id.
-				return function(obj, options){
-					if(options && options.parent){
-						obj.parent = options.parent.id;
-					}
-					return originalPut.call(myStore, obj, options);
-				}
-			});
+
+//			aspect.around(this.model.store, "put", function(originalPut){
+//				// To support DnD, the store must support put(child, {parent: parent}).
+//				// Since memory store doesn't, we hack it.
+//				// Since our store is relational, that just amounts to setting child.parent
+//				// to the parent's id.
+//				return function(obj, options){
+//					if(options && options.parent){
+//						obj.parent = options.parent.id;
+//					}
+//					return originalPut.call(this.model.store, obj, options);
+//				}
+//			});
 			
 			this.model.store = new Observable(this.model.store);
 		}

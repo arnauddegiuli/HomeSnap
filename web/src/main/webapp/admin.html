@@ -108,6 +108,11 @@
 
 	<section id="main" class="column">
 		<h4 class="alert_info">Welcome to the My Domo admin panel.</h4>
+
+		<div id="messagebox"></div>
+
+
+		
 		<article class="module width_full">
 			<header><h3>Stats</h3></header>
 			<div class="module_content">
@@ -117,27 +122,95 @@
 							require(["dojo/_base/window", "adgsoftware/widget/openWebNetConsole/OpenWebNetConsole",
 									"adgsoftware/widget/houseAdmin/HouseAdmin", "adgsoftware/widget/houseAdmin/DeviceList", 
 									"adgsoftware/widget/label/LabelDialog",
-									"dojo/router", "adgsoftware/store/HouseStore", "dojo/domReady!"], 
-									function(win, Console, HouseAdmin, DeviceList, Dialog, router, HouseStore) {
+									"dojo/router", 
+									"dojo/when", "adgsoftware/store/HouseStore", "adgsoftware/utils/Message", "dojo/store/Observable", "dojo/domReady!"], 
+									function(win, Console, HouseAdmin, DeviceList, Dialog, router, when, HouseStore, msg, Observable) {
 								new Console({}, "OpenWebNetConsole");
 
 								var houseStore = new HouseStore();
+								houseStore = new Observable(houseStore);
+								
 								var houseAdmin = new HouseAdmin({store: houseStore}, "HouseAdmin");
 								houseAdmin.startup();
-								var avalaibleDevice = new DeviceList({}, "AvalaibleDevice");
+								var avalaibleDevice = new DeviceList({store: houseStore}, "AvalaibleDevice");
 								avalaibleDevice.startup();
-								
+
 								// Register route
 								router.register("newLabel", function (event) {
 									console.log('click sur newLabel');
 								});
-								
-								new Dialog({id:'label'});
+
+								new Dialog({id: 'label', store: houseStore});
+
+								var controller = {id: '/groups/1/18'};
+								controller.where = 18;
+								controller.title = 'title18'; 
+								var parent = houseStore.get('/groups/1');
+								console.log(controller);
+								console.log(parent);
+								try {
+									houseStore.put(controller, {parent: parent});
+								} catch (err) {
+									msg.displayError(err);
+								}
+								console.log(houseStore.get('/groups/1/18'));
+								console.log(houseStore.get('/groups/1/18'));
 								
 								router.startup();
 								
 								
+								
+								when(houseStore.get("/groups/1")).then(function(results){console.log(results);});
+								when(houseStore.get("/groups/1")).then(function(results){console.log(results);});
+								when(houseStore.get("/groups/1")).then(function(results){console.log(results);});
+								when(houseStore.get("/groups/1")).then(function(results){console.log(results);});
+								when(houseStore.get("/groups/1")).then(function(results){console.log(results);});
+								when(houseStore.get("/groups/1/15")).then(function(results){console.log(results);});
+								
+								when(houseStore.put(controller, {id: '/groups/1/18'})).then(function(results){console.log(results);});
 							});
+							
+							
+							/* require(["dojo/store/Memory",
+							    	"dojo/store/Cache",
+							    	"dojo/store/JsonRest", 
+							    	"dojo/when", 
+							    	"dojo/aspect",
+							    	"dojo/domReady!"], function(Memory, Cache, JsonRest, when, aspect) {
+								var masterStore = new JsonRest({
+									target: "/house"
+								});
+								
+								aspect.around(masterStore, "getChildren", function(originalGetChildren){
+									return function(obj, options){
+										if (obj.id=='house')
+											return obj.labels;
+										else
+											return obj.controllers;
+									}
+								});
+								
+								// masterStore.put = function(object, options) {
+								//	if (object.parent) {
+								//		object.category = options.parent;
+								//	}
+								//}
+								
+								
+								var cacheStore = new Memory();
+								var controller = {id: '18', type:'2'};
+								var c = new Cache(masterStore, cacheStore);
+								when(c.get("/groups/1")).then(function(results){console.log(results);});
+								when(c.get("/groups/1")).then(function(results){console.log(results);});
+								when(c.get("/groups/1")).then(function(results){console.log(results);});
+								when(c.get("/groups/1")).then(function(results){console.log(results);});
+								when(c.get("/groups/1")).then(function(results){console.log(results);});
+								when(c.get("/groups/1/15")).then(function(results){console.log(results);});
+								
+								when(c.put(controller, {id: '/groups/1/18'})).then(function(results){console.log(results);});
+								console.log(c);
+								
+							}); */
 					</script>
 				</article>
 
@@ -351,6 +424,8 @@
 			<div class="spacer"></div>
 		</article><!-- end of content manager article -->
 	</section>
+
+
 
 </body>
 </html>

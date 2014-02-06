@@ -3,15 +3,15 @@ package com.adgsoftware.mydomo.webserver.rest.listener;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
-import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.house.House;
+import com.adgsoftware.mydomo.engine.oldconnector.CommandResult;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.ControllerChangeListener;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
-import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
+import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
 import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
@@ -22,16 +22,22 @@ import com.adgsoftware.mydomo.webserver.utils.JSonTools;
 
 public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyDomoRestAPI {
 
-	private ControllerService service = new ControllerServiceImpl("localhost", 1234, 12345);
+	private ControllerService service = new OpenWebNetControllerService("localhost", 1234, 12345);
 	private Map<String, Light> lightList = new Hashtable<String, Light>();
 
-	public MyDomoPutListener(House house, String uri, Map<String, String[]> parameters) {
+	private String body;
+	
+	public MyDomoPutListener(House house, String uri, Map<String, String[]> parameters, String body) {
 		super(house, uri, parameters);
+		this.body = body;
 	}
 
 	@Override
 	public void onHouse() {
 		// TODO mettre à jour
+//		House newHouse = JSonTools.fromJson(body);
+//		getHouse().setGroups(newHouse.getGroups());
+//		getHouse().setLabels(newHouse.getLabels());
 	}
 
 	@Override
@@ -62,6 +68,11 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onControllerByGroup(String groupId, String where) {
 		// TODO update controller
+		System.out.println("UPDATE group=[" + groupId + "] with where=[" + where + "]");
+		System.out.println("Body=[" + body + "]");
+		
+//		Controller<?> c = JSonTools.ControllerFromJson(service, body);
+//		getGroup(groupId).add(c);
 	}
 
 	@Override

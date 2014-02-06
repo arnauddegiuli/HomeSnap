@@ -2,12 +2,12 @@ package com.adgsoftware.mydomo.webserver.rest.listener;
 
 import java.util.Map;
 
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.Verb;
@@ -42,12 +42,7 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onLabel(String labelId) {
 		Label l = getLabel(labelId);
-		if (l != null) {
-			setResult(JSonTools.toJson(l));
-		}
-		else {
-			setResult(JSonTools.formatNull());
-		}
+		setResult(JSonTools.toJson(l));
 	}
 
 	@Override
@@ -76,7 +71,9 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	public void onControllerByGroup(String groupId, String where) {
 		Group g = getGroup(groupId);
 		for (Controller<? extends Status> controller : g.getControllerList()) {
-			if (controller.getWhere().equals(where)) {
+			if (controller.getWhere() == null) {
+				// TODO log warning!
+			} else if (controller.getWhere().equals(where)) {
 				setResult(JSonTools.toJson(controller));
 				return;
 			}

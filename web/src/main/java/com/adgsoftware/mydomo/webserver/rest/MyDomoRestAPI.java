@@ -1,6 +1,6 @@
 package com.adgsoftware.mydomo.webserver.rest;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 
 public interface MyDomoRestAPI {
 

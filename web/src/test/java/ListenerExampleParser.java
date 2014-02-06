@@ -1,5 +1,5 @@
 
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;

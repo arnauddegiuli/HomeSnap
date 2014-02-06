@@ -31,12 +31,15 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.adgsoftware.mydomo.webserver.Activator</Bundle-Activator>
 						<Import-Package>com.adgsoftware.mydomo.engine.connector,
-							 com.adgsoftware.mydomo.engine.connector.impl,
+							 com.adgsoftware.mydomo.engine.connector.openwebnet,
 							 com.adgsoftware.mydomo.engine.controller,
 							 com.adgsoftware.mydomo.engine.controller.light,
+							 com.adgsoftware.mydomo.engine.controller.automation,
 							 com.adgsoftware.mydomo.engine.house,
 							 com.adgsoftware.mydomo.engine.services,
 							 com.adgsoftware.mydomo.engine.services.impl,
+							 org.json,
+							 org.json.zip,
 							 javax.servlet;version="2.6.0",
 							 javax.servlet.http;version="2.6.0",
 							 org.osgi.framework;version="1.3.0",
@@ -47,6 +50,7 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

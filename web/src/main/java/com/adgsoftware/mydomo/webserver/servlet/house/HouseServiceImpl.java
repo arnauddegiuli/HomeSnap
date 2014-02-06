@@ -5,13 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Icon;
 import com.adgsoftware.mydomo.engine.house.Label;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
 import com.adgsoftware.mydomo.engine.services.PersistenceService;
-import com.adgsoftware.mydomo.engine.services.impl.ControllerServiceImpl;
+import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.PersistenceServiceImpl;
 
 /*
@@ -42,8 +42,8 @@ public class HouseServiceImpl {
 
 	private static Object lock = new String();
 	private static House house = null;
-	private PersistenceService persistence = new PersistenceServiceImpl(new ControllerServiceImpl("localhost", 1234, 12345));
-	
+	private PersistenceService persistence = new PersistenceServiceImpl(new OpenWebNetControllerService("localhost", 1234, 12345));
+
 	public void saveHouse(House house) {
 		synchronized (lock) {
 			if (house != null) {
@@ -64,17 +64,17 @@ public class HouseServiceImpl {
 	public House readHouse() {
 		synchronized (lock) {
 			if (house == null) {
-//				try {
-//					house = persistence.retrieve(new FileInputStream("house.xml"));
+				try {
+					house = persistence.retrieve(new FileInputStream("house.xml"));
 					if (house == null) {
 						house = buildTempHouse();
-//					}
-//				} catch (FileNotFoundException e) {
+					}
+				} catch (FileNotFoundException e) {
 //					// TODO backup
-//					house = buildTempHouse();
-//				} catch (IOException e) {
+					house = buildTempHouse();
+				} catch (IOException e) {
 //					// TODO backup
-//					house = buildTempHouse();
+					house = buildTempHouse();
 				}
 			}
 			return house;
@@ -136,21 +136,7 @@ public class HouseServiceImpl {
 		group1.add(li4);
 		group1.add(li5);
 		house.getGroups().add(group1);
-		
-		return house;
-	}
-	
-	
-	private Label getLabel(String id) {
-		if (id != null) {
-			House house = readHouse();
 
-			for (Label label : house.getLabels()) {
-				if (id.equals(label.getId())) {
-					return label;
-				}
-			}
-		}		
-		return null;
+		return house;
 	}
 }

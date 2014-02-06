@@ -23,7 +23,9 @@ package com.adgsoftware.mydomo.webserver.servlet.house;
  * #L%
  */
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -60,7 +62,6 @@ public class HouseServlet extends HttpServlet {
 			MyDomoGetListener listener = new MyDomoGetListener(house, uri, req.getParameterMap());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
-			service.saveHouse(house);
 			resp.getWriter().write(listener.getResult());
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -81,7 +82,15 @@ public class HouseServlet extends HttpServlet {
 		try {
 			House house = service.readHouse();
 			String uri = getUri(req);
-			MyDomoPutListener listener = new MyDomoPutListener(house, uri, req.getParameterMap());
+			
+			BufferedReader b = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			StringBuilder sb = new StringBuilder("");
+			String str = b.readLine();
+			while (str != null) {
+				sb.append(str);
+				str = b.readLine();
+			}
+			MyDomoPutListener listener = new MyDomoPutListener(house, uri, req.getParameterMap(), sb.toString());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
 			service.saveHouse(house);

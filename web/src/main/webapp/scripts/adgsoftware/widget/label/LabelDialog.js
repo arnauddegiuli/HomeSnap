@@ -10,5 +10,13 @@ define([
 			content: template,
 			title: 'Label',
 			style: 'width: 300px',
+			store: null,
+			add: function(where, title) {
+				var controller = {id: where};
+				controller.where = where;
+				controller.title = title;
+				this.store.add(controller); // {id: where, parent: '1'} TODO ajoute tjs au group 10
+				console.log(this.store);
+			}
 		});
 });
