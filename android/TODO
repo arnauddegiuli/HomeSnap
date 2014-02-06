@@ -1,0 +1,42 @@
+
+Vue Maison
+   Renommer liste des labels en "Vue Maison"
+   connecter ou pas => pas de bug
+   affichage connecter ou pas...
+   Créer un Label ou le modifier: revoir le look
+   Ajouter facilement un controller
+   Revoir lorsqu'il n'y aucun controller: afficher la liste des controller avec une coche indiquant qu'il sont déjà pris. Possibilté d'en rajouter en nous emmenant dans panneau de configuration
+   Lorsque l'on clique sur ajout de contoller mais que tous sont déjà pris: la liste est vide
+
+
+Vue Panneau de configuration
+    1ere étape ajouter la gateway! => permmettra de configurer le reste
+    
+    
+    Vue maison
+    	pouvoir configurer une image de fond pour chaque label
+    	lorsque l'on slide vers la droite ou gauche => naviguer dans les labels
+    	Liste controller
+        	ajout d'un controller
+        	modification d'un controller
+        	suppression d'un controller
+
+    
+Navigation
+   panneau avec différent options: panneau de configuration, maison, ...
+   
+   
+Controller
+   Gérer un mode déconnecté?
+
+
+   lumière
+   gateway
+   		lorsque pas connecté -> récupère info indispo. Mais lorsque redeviens connecté garde les vieilles infos...
+   volet
+   		revoir le look
+   chauffage
+   scénario
+   vue compteur eau/électricité
+   porte garage
+   prises (idem lumière)

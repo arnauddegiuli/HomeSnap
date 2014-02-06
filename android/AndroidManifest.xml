@@ -18,6 +18,7 @@
 		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.ControllersActivity"></activity>
 		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.EditControllerActivity"></activity>
 		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.LabelDetailsActivity"></activity>
+		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.LabelDetailsGridActivity"></activity>
 		<activity android:name="com.adgsoftware.mydomo.andcom.adgsoftware.mydomo.android.ui.activities.todo.ScenarioActivityity"></activity>
 		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.SettingsActivity"></activity>
 		<activity android:name=".ui.activities.todo.ScenarioActivity"></activity>

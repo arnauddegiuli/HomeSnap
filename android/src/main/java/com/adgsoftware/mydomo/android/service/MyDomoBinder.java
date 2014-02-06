@@ -178,9 +178,7 @@ implements MyDomoService {
 			Collection<? extends Controller<? extends Status>> controllerList)
 			throws ControlException {
 		List<Control> controlList = new ArrayList<Control>();
-		if (id == null) {
-			controlList.add(new MissingValue());
-		} else if (getLabel(id) != null) {
+		if (getLabel(id) != null) {
 			controlList.add(new IdAlreadyExist());
 		}
 
@@ -194,8 +192,8 @@ implements MyDomoService {
 		}
 		Label label = new Label();
 		label.setTitle(title);
-		// label.setDescription(description); TODO
-		label.setId(id);
+		//label.setDescription(description); TODO
+		if (id != null)label.setId(id);
 		label.setIcon(icon);
 		label.setIconPath(iconPath);
 		if (controllerList != null) label.addAll(controllerList);

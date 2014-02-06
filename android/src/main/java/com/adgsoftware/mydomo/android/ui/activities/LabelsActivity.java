@@ -89,7 +89,7 @@ public class LabelsActivity extends AbstractActivity {
 				try {
 					// Select Label
 					Intent intent = new Intent(LabelsActivity.this,
-							LabelDetailsActivity.class);
+							LabelDetailsGridActivity.class);
 					intent.putExtra("selectedLabelId", labelEnum.getId());
 					intent.putExtra("selectedLabelTitle", labelEnum.getTitle()); // TODO revoir la facon de passer les paramètre title...
 					startActivity(intent);

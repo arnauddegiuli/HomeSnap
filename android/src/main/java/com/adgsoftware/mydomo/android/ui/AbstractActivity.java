@@ -80,6 +80,8 @@ public abstract class AbstractActivity extends Activity {
 			
 			getApplicationContext().bindService(new Intent(this, MyDomoServiceImpl.class),
 						sc, BIND_AUTO_CREATE);
+		} else {
+			myDomoService.connect();
 		}
 	}
 	
@@ -177,7 +179,6 @@ public abstract class AbstractActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		myDomoService.onDestroy();
 	}
 
 	public String computeGroupFromAddress(String where) {

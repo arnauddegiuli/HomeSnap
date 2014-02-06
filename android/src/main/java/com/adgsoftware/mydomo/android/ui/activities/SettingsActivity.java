@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.adgsoftware.mydomo.R;
+import com.adgsoftware.mydomo.android.service.MyDomoService;
 import com.adgsoftware.mydomo.android.ui.AbstractActivity;
 import com.adgsoftware.mydomo.android.ui.Constants;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
@@ -95,8 +97,15 @@ public class SettingsActivity extends AbstractActivity {
 			
 			@Override
 			public void onClick(View v) {
-				myDomoService.connect();
-				refresh();
+				new AsyncTask<MyDomoService, Void, Void>() {
+					@Override
+					protected Void doInBackground(MyDomoService... params) {
+						myDomoService.connect();
+						refresh();
+						return null;
+					}
+				}.execute(myDomoService);
+				
 			}
 		});
 		

@@ -46,8 +46,8 @@ public class HeatingComponent extends AbstractComponent {
 //		seekBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 //		seekBar.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
 		
+//		heating.getDesiredTemperature(arg0)
 		heating.getMeasureTemperature(new DimensionStatusCallback<MeasureTemperature>() {
-			
 			@Override
 			public void value(MeasureTemperature arg0) {
 				if (arg0 != null) {
@@ -95,7 +95,7 @@ public class HeatingComponent extends AbstractComponent {
 					Status oldStatus, Status newStatus) {
 				//TODO				
 			}
-
+			
 			@Override
 			public void onWhatChangeError(
 					Controller<? extends Status> controller, Status oldStatus,

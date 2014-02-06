@@ -36,7 +36,7 @@ public class LightComponent extends AbstractComponent {
 		light_off = context.getResources().getDrawable(R.drawable.light_off);
 		light_on = context.getResources().getDrawable(R.drawable.light_on);
 		loading = context.getResources().getDrawable(R.drawable.load);
-		this.addView(title);
+//		this.addView(title);
 		this.addView(lightButton);
 		this.setOrientation(LinearLayout.HORIZONTAL);
 
