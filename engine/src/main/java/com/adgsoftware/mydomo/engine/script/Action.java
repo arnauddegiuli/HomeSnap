@@ -24,8 +24,8 @@ package com.adgsoftware.mydomo.engine.script;
  */
 
 
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 public class Action<T extends Status> {
 

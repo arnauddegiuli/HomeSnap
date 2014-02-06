@@ -35,17 +35,17 @@ import java.util.logging.Level;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
-import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.connector.Monitor;
 import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.CommandListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.ControllerDimension;
-import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.what.impl.StringValue;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 import com.adgsoftware.mydomo.engine.house.Label;
 
 public class OpenWebMonitorImpl extends Thread 
@@ -63,7 +63,7 @@ implements Monitor {
 	private List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
 	private List<CommandListener> commandListenerList = new ArrayList<CommandListener>();
 	private List<UnknownControllerListener> unknownControllerListenerList = new ArrayList<UnknownControllerListener>();
-	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
+	private List<Controller> controllerList = new ArrayList<Controller>();
 	private boolean tryToConnect = true;
 	private Password passwordEncoder = new Password();
 
@@ -80,61 +80,77 @@ implements Monitor {
 		this.start();
 	}
 
-	@Override
+	/**
+	 * Return the ip of the open server.
+	 * @return the ip of the open server.
+	 */
 	public String getIp() {
 		return ip;
 	}
 
-	@Override
+	/**
+	 * Define the ip of the open server.
+	 * @param ip the ip of the open server.
+	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 		resetSocket();
 	}
 
-	@Override
+	/**
+	 * Return the port of the open server.
+	 * @return the port of the open server.
+	 */
 	public int getPort() {
 		return port;
 	}
 
-	@Override
+	/**
+	 * Define the port of the open server.
+	 * @param port the port of the open server.
+	 */
 	public void setPort(int port) {
 		this.port = port;
 		resetSocket();
 	}
 
-	@Override
+	/**
+	 * Define the gateway password.
+	 * @param passwordOpen
+	 */
 	public void setPasswordOpen(Integer passwordOpen) {
 		this.passwordOpen = passwordOpen;
 	}
 
 	@Override
-	public void addControllerToMonitor(Controller<? extends Status> controller) {
+	public void addControllerToMonitor(Controller controller) {
 		controllerList.add(controller);
 	}
 	
 	protected void onMessageReceipt(String message) {
 		try {
-			Command parser = Command.getCommandAnalyser(message);
-			String where = parser.getWhereFromCommand();
-			String what = parser.getWhatFromCommand();
-			String who = parser.getWhoFromCommand();
+			OpenWebNetConstant parser = OpenWebNetConstant.getCommandAnalyser(message);
+			Where where = new Where(parser.getWhereFromCommand(), parser.getWhereFromCommand());
+			com.adgsoftware.mydomo.engine.controller.what.State what = new com.adgsoftware.mydomo.engine.controller.what.State(StateName.STATUS, new StringValue(parser.getWhatFromCommand())); // TODO mapping WHAT
+			Who who = ControllerType.fromOpenWebNet(parser.getWhoFromCommand());
 			boolean known = false;
 			// TODO manage message on other bus
 			if (parser.isGeneralCommand()) {
 				// We send command to all correct address
 				for (int i = 11; i < 99; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						known |= updateController(who, what, "" + i, message, parser);
+						known |= updateController(who, what, new Where(""+i, ""+i), message, parser);
 					}
 				}
 			} else if (parser.isGroupCommand()) {
 				// We send command to group address
-				for (Controller<? extends Status> controller : controllerList) {
+				for (Controller controller : controllerList) {
 					for (Label label : controller.getLabels()) {
 						if (label.getId().equals(parser.getGroupFromCommand()) &&
 								controller.getWho().equals(who)) {
 							known = true;
-							changeWhat(controller, what);	
+							controller.changeState(what);
+							// TODO manage dimension...
 						}
 					}
 				}
@@ -142,7 +158,7 @@ implements Monitor {
 				String environment = parser.getEnvironmentFromCommand();
 				// We send ambiance command to address
 				for (int i = 1; i < 9; i++) {
-					known |= updateController(who, what, environment + i, message, parser);
+					known |= updateController(who, what, new Where(environment + i, environment + i), message, parser);
 				}
 			} else {
 				// Command direct on a controller
@@ -153,7 +169,8 @@ implements Monitor {
 				// Detected unknown device
 				synchronized (unknownControllerListenerList) {
 					for (UnknownControllerListener listener : unknownControllerListenerList) {
-						listener.foundUnknownController( parser.getWhoFromCommand(), where, what, parser.getDimensionFromCommand(), parser.getDimensionListFromCommand());
+						// TODO manage dimension 	listener.foundUnknownController( parser.getWhoFromCommand(), where, what, parser.getDimensionFromCommand(), parser.getDimensionListFromCommand());
+					listener.foundUnknownController( who, where, what);
 					}
 				}
 			}
@@ -162,50 +179,51 @@ implements Monitor {
 		}
 	}
 
-	private boolean updateController(String who, String what, String where, String message, Command parser) {
+	private boolean updateController(Who who, com.adgsoftware.mydomo.engine.controller.what.State what, Where where, String message, OpenWebNetConstant parser) {
 		boolean known = false;
 		if (what != null) {
 			// Manage what command
-			for (Controller<? extends Status> controller : controllerList) {
+			for (Controller controller : controllerList) {
 				if (who.equals(controller.getWho()) && where.equals(controller.getWhere())) {
 					known = true;
-					changeWhat(controller, what);
+					controller.changeState(what);
 				}
 			}
 		} else {
 			// Manage dimension command
-			List<DimensionValue> dimensionList = parser.getDimensionListFromCommand();
-			String code = parser.getDimensionFromCommand();
-			for (Controller<? extends Status> controller : controllerList) {
-				if (who.equals(controller.getWho()) && where.equals(controller.getWhere())) {
-					known = true;
-					if (controller instanceof ControllerDimension<?>){
-						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);
-					}
-					else {
-						log.log(Session.Monitor, Level.SEVERE, "Message received [" + message +"] don't match with declared controller: message for a DimensionController but a Controller found.");
-					}
-				}
-			}
+			log.log(Session.Monitor, Level.SEVERE, "Message received [" + message +"], but dimension not supported now.");
+//			List<DimensionValue> dimensionList = parser.getDimensionListFromCommand();
+//			String code = parser.getDimensionFromCommand();
+//			for (Controller controller : controllerList) {
+//				if (who.equals(controller.getWho()) && where.getTo().equals(controller.getWhere().getTo())) {
+//					known = true;
+//					if (controller instanceof ControllerDimension){
+//						changeDimension((ControllerDimension<? extends Status>) controller, code, dimensionList);
+//					}
+//					else {
+//						log.log(Session.Monitor, Level.SEVERE, "Message received [" + message +"] don't match with declared controller: message for a DimensionController but a Controller found.");
+//					}
+//				}
+//			}
 		}
 		return known;
 	}
 
-	// To use generic: only at the runtime we will know the type so this is only method to set what!
-	private static <T extends Status> void changeWhat(Controller<T> controller, String code) {
-		T status = controller.getStatus(code);
-		if (status != controller.getWhat()) { // If status has changed
-			controller.changeWhat(status);
-		}
-	}
+//	// To use generic: only at the runtime we will know the type so this is only method to set what!
+//	private static void changeWhat(Controller controller, String code) {
+//		T status = controller.getStatus(code);
+//		if (status != controller.getWhat()) { // If status has changed
+//			controller.changeWhat(status);
+//		}
+//	}
 
-	// To use generic: only at the runtime we will know the type so this is only method to set what!
-	private static void changeDimension(ControllerDimension<? extends Status> controller, String code, List<DimensionValue> dimensionList) {
-		DimensionStatus dimensionStatus = controller.getDimensionStatusFromCache(code);
-		if (dimensionStatus == null || dimensionStatus.getValueList() != dimensionList) { // dimensionStatus = null at before being initiated... it can happens when we get value before initiated process is finished...
-			controller.changeDimensionStatus(dimensionStatus);
-		}
-	}
+//	// To use generic: only at the runtime we will know the type so this is only method to set what!
+//	private static void changeDimension(ControllerDimension<? extends Status> controller, String code, List<DimensionValue> dimensionList) {
+//		DimensionStatus dimensionStatus = controller.getDimensionStatusFromCache(code);
+//		if (dimensionStatus == null || dimensionStatus.getValueList() != dimensionList) { // dimensionStatus = null at before being initiated... it can happens when we get value before initiated process is finished...
+//			controller.changeDimensionStatus(dimensionStatus);
+//		}
+//	}
 
 	public void run() {
 		long timer = 1000;
@@ -257,7 +275,7 @@ implements Monitor {
 			
 				log.finest(Log.Session.Monitor, "----- Step Connection ----- ");
 				String msg = read();
-				if (!Command.ACK.equals(msg)) {
+				if (!OpenWebNetConstant.ACK.equals(msg)) {
 					// Bad return message
 					log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
@@ -266,7 +284,7 @@ implements Monitor {
 				}
 
 				log.finest(Log.Session.Monitor, "----- Step Identification -----");
-				write(Command.MONITOR_SESSION);
+				write(OpenWebNetConstant.MONITOR_SESSION);
 
 				if(passwordOpen != null){
 					msg = read();
@@ -282,7 +300,7 @@ implements Monitor {
 				log.finest(Log.Session.Monitor, "----- Step Final -----");
 				msg = read();
 
-				if (!Command.ACK.equals(msg)) {		       	
+				if (!OpenWebNetConstant.ACK.equals(msg)) {		       	
 					log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
 					this.resetSocket();
@@ -412,12 +430,18 @@ implements Monitor {
 		connectionListenerList.add(connectionListener);
 	}
 
-	@Override
+	/**
+	 * Return the timeout of the connection to open server in millisecond.
+	 * @return the timeout of the connection to open server in millisecond.
+	 */
 	public int getTimeout() {
 		return timeout;
 	}
 
-	@Override
+	/**
+	 * Define the timeout of the connection to open server in millisecond.
+	 * @param timeout the timeout of the connection to open server in millisecond.
+	 */
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
@@ -438,7 +462,7 @@ implements Monitor {
 
 	@Override
 	public void removeControllerToMonitor(
-			Controller<? extends Status> controller) {
+			Controller controller) {
 		controllerList.remove(controller);
 	}
 

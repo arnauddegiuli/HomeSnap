@@ -27,12 +27,12 @@ package com.adgsoftware.mydomo.engine.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
-import com.adgsoftware.mydomo.engine.controller.Status;
-import com.adgsoftware.mydomo.engine.controller.automation.Automation;
-import com.adgsoftware.mydomo.engine.controller.automation.Automation.AutomationStatus;
+import com.adgsoftware.mydomo.engine.oldconnector.CommandResult;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.ControllerChangeListener;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
+import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation.AutomationStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 

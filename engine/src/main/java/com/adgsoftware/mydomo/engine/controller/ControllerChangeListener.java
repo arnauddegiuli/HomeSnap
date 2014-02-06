@@ -26,6 +26,8 @@ package com.adgsoftware.mydomo.engine.controller;
 import java.io.Serializable;
 
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+
 
 /** ControllerChangeListener. */
 public interface ControllerChangeListener extends Serializable {
@@ -33,9 +35,9 @@ public interface ControllerChangeListener extends Serializable {
 	 * @param controller
 	 *            the controller that changed.
 	 */
-	void onWhatChange(Controller<? extends Status> controller,
-			Status oldStatus, Status newStatus);
+	void onWhatChange(Controller controller,
+			State oldStatus, State newStatus);
 
-	void onWhatChangeError(Controller<? extends Status> controller,
-			Status oldStatus, Status newStatus, CommandResult result);
+	void onWhatChangeError(Controller controller,
+			State oldStatus, State newStatus, CommandResult result);
 }

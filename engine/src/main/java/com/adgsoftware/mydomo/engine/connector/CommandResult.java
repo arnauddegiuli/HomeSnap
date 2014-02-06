@@ -1,5 +1,10 @@
 package com.adgsoftware.mydomo.engine.connector;
 
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,9 +28,6 @@ package com.adgsoftware.mydomo.engine.connector;
  * #L%
  */
 
-import java.util.List;
-
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
 
 /**
  * Interface which provides information from return from gateway after send a
@@ -37,29 +39,23 @@ public interface CommandResult {
 	 * @return the status of the command.
 	 */
 	public CommandResultStatus getStatus();
-	/**
-	 * Return the raw result from the gateway.
-	 * @return the raw result.
-	 */
-	public String getResult();
+
 	/**
 	 * Return the "formatted" (from the raw result) what of the command.
 	 * @return the what of the command.
 	 */
-	public String getWhat();
+	public State getWhat(StateName name);
+
 	/**
 	 * Return the type "formatted" (from the raw result) of the target device
 	 * @return the type
 	 */
-	public String getWho();
+	public Who getWho();
+
 	/**
 	 * Return the target "formatted" (from the raw result) of the command.
 	 * @return the target of the command.
 	 */
-	public String getWhere();
-	/**
-	 * Return the formatted dimensionList
-	 * @return dimensionList
-	 */
-	public List<DimensionValue> getDimensionList();
+	public Where getWhere();
+
 }

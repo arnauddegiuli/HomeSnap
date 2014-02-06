@@ -29,18 +29,18 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
-import com.adgsoftware.mydomo.engine.controller.heating.Offset;
-import com.adgsoftware.mydomo.engine.controller.heating.Offset.Mode;
-import com.adgsoftware.mydomo.engine.controller.heating.ValveStatusEnum;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.ProbeStatus;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.SetOffset;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.ValvesStatus;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.ValveStatusEnum;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset.Mode;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.DesiredTemperature;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.MeasureTemperature;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.ProbeStatus;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.SetOffset;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.ValvesStatus;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 
 public class HeatingSimulator implements ControllerDimensionSimulator {

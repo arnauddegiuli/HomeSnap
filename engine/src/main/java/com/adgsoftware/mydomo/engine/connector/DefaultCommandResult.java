@@ -1,5 +1,10 @@
 package com.adgsoftware.mydomo.engine.connector;
 
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,10 +28,6 @@ package com.adgsoftware.mydomo.engine.connector;
  * #L%
  */
 
-import java.util.List;
-
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-
 public class DefaultCommandResult implements CommandResult {
 	private String commandResult;
 	private CommandResultStatus status;
@@ -41,28 +42,22 @@ public class DefaultCommandResult implements CommandResult {
 		return status;
 	}
 
-	@Override
 	public String getResult() {
 		return commandResult;
 	}
 
 	@Override
-	public String getWhat() {
+	public State getWhat(StateName name) {
 		return null;
 	}
 
 	@Override
-	public String getWho() {
+	public Who getWho() {
 		return null;
 	}
 
 	@Override
-	public String getWhere() {
-		return null;
-	}
-
-	@Override
-	public List<DimensionValue> getDimensionList() {
+	public Where getWhere() {
 		return null;
 	}
 }

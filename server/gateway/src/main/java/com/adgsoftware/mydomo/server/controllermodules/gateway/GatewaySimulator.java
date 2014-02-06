@@ -34,17 +34,17 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.engine.controller.gateway.Gateway;
-import com.adgsoftware.mydomo.engine.controller.gateway.Version;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DateTime;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.DistributionVersion;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.FirmwareVersion;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.IpAddress;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Model;
-import com.adgsoftware.mydomo.engine.controller.gateway.dimension.Time;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Version;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.DateTime;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.DistributionVersion;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.FirmwareVersion;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.IpAddress;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.Model;
+import com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.Time;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 
 public class GatewaySimulator implements ControllerDimensionSimulator {
@@ -103,7 +103,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 				t.setTime(new Date());
 				dimensionList = t.getValueList();
 			} else if (Gateway.GatewayDimension.DATE.getCode().equals(dimensionStr)) {
-				com.adgsoftware.mydomo.engine.controller.gateway.dimension.Date d = new com.adgsoftware.mydomo.engine.controller.gateway.dimension.Date();
+				com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.Date d = new com.adgsoftware.mydomo.engine.oldcontroller.gateway.dimension.Date();
 				d.setTime(new Date());
 				dimensionList = d.getValueList();
 			} else if (Gateway.GatewayDimension.DATETIME.getCode().equals(

@@ -24,21 +24,26 @@ package com.adgsoftware.mydomo.engine.controller.light;
  */
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.UnmarshalException;
 
 import org.json.JSONObject;
 
-import com.adgsoftware.mydomo.engine.connector.ControllerType;
 import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.what.StateValue;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 
-public class Light extends Controller<Light.LightStatus> {
+public class Light extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
 	// LIGHT
-	public enum LightStatus implements Status {
+	public enum LightStateValue implements StateValue {
 		LIGHT_OFF("0"), // TODO manage speed 0 to 255!
 		LIGHT_ON("1"), // TODO manage speed!
 		LIGHT_ON_20_PERCENT("2"),
@@ -74,41 +79,42 @@ public class Light extends Controller<Light.LightStatus> {
 
 		LIGHT_FORCE_ON("1000#1"),
 		LIGHT_FORCE_OFF("1000#0");
-		private String code = "";
-		private LightStatus(String code) {
-			this.code = code;
+		private String value;
+		private LightStateValue(String value) {
+			this.value = value;
 		}
 
-		public String getCode() {
-			return code;
+		@Override
+		public String getValue() {
+			return value;
 		}
 	}
 
 	public Light() {
 	}
 
-	@Override
-	public String getWho() {
-		return ControllerType.WHO_LIGHTING;
+	public LightStateValue getStatus() {
+		return (LightStateValue) get(StateName.STATUS);
 	}
 
 	@Override
-	public LightStatus getStatus(String code) {
-		if (code == null) 
-			return null;
-		for (LightStatus status : LightStatus.values()) {
-			if (code.equals(status.getCode())) {
-				return status;
-			}
-		}	
-		return null;
+	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
+		Map<StateName, Class<? extends StateValue>> m = new HashMap<StateName, Class<? extends StateValue>>();
+		m.put(StateName.STATUS, LightStateValue.class);
+		return m;
 	}
+
+	@Override
+	public Who getWho() {
+		return Who.LIGHT;
+	}
+
 
 	@Override
 	public JSONObject toJson() {
 		JSONObject lightJson = super.toJson();
-		Status what = getWhat();
-		String strStatus = (what == null ? null : LightStatus.LIGHT_ON == what ? "on" : "off");
+		StateValue what = getStatus();
+		String strStatus = (what == null ? null : LightStateValue.LIGHT_ON == what ? "on" : "off");
 		lightJson.put("where", getWhere())
 				 .put("what", strStatus);
 		return lightJson;
@@ -120,12 +126,13 @@ public class Light extends Controller<Light.LightStatus> {
 			return;
 
 		super.fromJson(jsonObject);
-		setWhere(jsonObject.getString("where"));
+		Where w = new Where(jsonObject.getString("where"), jsonObject.getString("where"));
+		setWhere(w); // TODO  manage where better
 		Object what = jsonObject.get("what");
 		if ("on".equals(what)) {
-			setWhat(LightStatus.LIGHT_ON);	
+			set(StateName.STATUS,LightStateValue.LIGHT_ON);	
 		} else if ("off".equals(what)) {
-			setWhat(LightStatus.LIGHT_OFF);
+			set(StateName.STATUS,LightStateValue.LIGHT_OFF);
 		} else {
 			throw new UnmarshalException("Error when deserialized status from JSON object (" + jsonObject.toString() + ")");
 		}

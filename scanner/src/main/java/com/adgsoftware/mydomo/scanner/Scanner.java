@@ -26,10 +26,10 @@ package com.adgsoftware.mydomo.scanner;
 import java.text.MessageFormat;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.Monitor;
-import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebMonitorImpl;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
+import com.adgsoftware.mydomo.engine.oldconnector.Monitor;
+import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebMonitorImpl;
+import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
 
 
 public class Scanner {
@@ -45,7 +45,7 @@ public class Scanner {
 					String dimensionCode, List<DimensionValue> dimensionList) {
 				StringBuilder sb = new StringBuilder();
 				for (DimensionValue dimValue : dimensionList) {
-					sb.append("\t\t - value[").append(dimValue.getValue()).append("]\n");
+					sb.append("\n\t\t - value[").append(dimValue.getValue()).append("]");
 				}
 				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : dimensionCode [{3}] : {4}\n", who, where, what, dimensionCode, sb.toString()));
 			}

@@ -38,8 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.adgsoftware.mydomo.engine.JsonSerializable;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 /**
  * Group represent a physical model of controller group. 

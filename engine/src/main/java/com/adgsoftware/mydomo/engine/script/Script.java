@@ -26,7 +26,7 @@ package com.adgsoftware.mydomo.engine.script;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 public class Script {
 

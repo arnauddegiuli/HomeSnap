@@ -28,11 +28,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.WhereType;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.WhereType;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.CommandParser;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
 
 public class ParserTest {
 	

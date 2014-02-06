@@ -1,5 +1,9 @@
 package com.adgsoftware.mydomo.engine.connector;
 
+import com.adgsoftware.mydomo.engine.controller.Command;
+import com.adgsoftware.mydomo.engine.controller.CommandListener;
+import com.adgsoftware.mydomo.engine.controller.Controller;
+
 /*
  * #%L
  * MyDomoEngine
@@ -22,10 +26,6 @@ package com.adgsoftware.mydomo.engine.connector;
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
-
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
-import com.adgsoftware.mydomo.engine.controller.Status;
 
 public interface Commander {
 
@@ -50,19 +50,19 @@ public interface Commander {
 	 * @param command the command to send
 	 * @return the result of the command
 	 */
-	public abstract void sendCommand(String command, CommandListener resultListener);
+	public abstract void sendCommand(Command command, CommandListener resultListener);
 
 	/**
 	 * Add a controller which will be able to use this commander.
 	 * @param controller
 	 */
-	public abstract void addControllerToExecute(Controller<? extends Status> controller);
+	public abstract void addControllerToExecute(Controller controller);
 
 	/**
 	 * Remove a controller which is able to use this commander.
 	 * @param controller
 	 */
-	public abstract void removeControllerToExecute(Controller<? extends Status> controller);
+	public abstract void removeControllerToExecute(Controller controller);
 
 	/**
 	 * Add a connectionListener.
@@ -75,58 +75,4 @@ public interface Commander {
 	 * @param connectionListener
 	 */
 	public abstract void removeConnectionListener(ConnectionListener connectionListener);
-
-	/**
-	 * Return the ip of the open server.
-	 * @return the ip of the open server.
-	 */
-	public String getIp();
-
-	/**
-	 * Define the ip of the open server.
-	 * @param ip the ip of the open server.
-	 */
-	public void setIp(String ip);
-
-	/**
-	 * Return the port of the open server.
-	 * @return the port of the open server.
-	 */
-	public int getPort();
-
-	/**
-	 * Define the port of the open server.
-	 * @param port the port of the open server.
-	 */
-	public void setPort(int port);
-
-	/**
-	 * Return the timeout of the connection to open server in millisecond.
-	 * @return the timeout of the connection to open server in millisecond.
-	 */
-	public int getTimeout();
-
-	/**
-	 * Define the timeout of the connection to open server in millisecond.
-	 * @param timeout the timeout of the connection to open server in millisecond.
-	 */
-	public void setTimeout(int timeout);
-
-	/**
-	 * Define the gateway password
-	 * @param password
-	 */
-	public void setPasswordOpen(Integer password);
-	
-	public String createActionMessage(Status newWhat, String where, String who);
-	
-	/**
-	 * Create the open message for status.
-	 * @return open message.
-	 */
-	public String createStatusMessage(String where, String who);
-	
-	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension);
-	
-	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus);
 }

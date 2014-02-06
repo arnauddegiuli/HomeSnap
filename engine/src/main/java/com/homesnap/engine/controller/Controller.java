@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.adgsoftware.mydomo.engine.connector.CommandListener;
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.oldconnector.CommandListener;
+import com.adgsoftware.mydomo.engine.oldconnector.CommandResult;
 import com.homesnap.engine.controller.state.State;
 import com.homesnap.engine.controller.state.StateName;
 import com.homesnap.engine.controller.state.StateValue;

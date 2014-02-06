@@ -1,5 +1,8 @@
 package com.adgsoftware.mydomo.engine.controller;
 
+import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,9 +26,8 @@ package com.adgsoftware.mydomo.engine.controller;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.connector.CommandResult;
 
-public interface StatusListener<T extends Status> {
+public interface StatusListener {
 
-	public void onStatus(T status, CommandResult result);
+	public void onStatus(State status, CommandResult result);
 }

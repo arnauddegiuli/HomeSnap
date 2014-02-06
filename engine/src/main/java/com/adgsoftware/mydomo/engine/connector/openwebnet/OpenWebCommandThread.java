@@ -24,8 +24,8 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  */
 
 import com.adgsoftware.mydomo.engine.Log;
-import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
+import com.adgsoftware.mydomo.engine.controller.CommandListener;
 
 /**
  * Manage the connection in a new thread to be asynchrone and avoid blocking process. 
@@ -65,22 +65,22 @@ public class OpenWebCommandThread implements Runnable {
 					return;
 				}
 
-				if (Command.ACK.equals(msg)){
+				if (OpenWebNetConstant.ACK.equals(msg)){
 					log.finest(Log.Session.Command, "Command sent.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(Command.ACK, CommandResultStatus.ok));
+						resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.ACK, CommandResultStatus.ok));
 					}
 					return;
-				} else if (Command.NACK.equals(msg)){
+				} else if (OpenWebNetConstant.NACK.equals(msg)){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(Command.NACK, CommandResultStatus.nok));
+						resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.NACK, CommandResultStatus.nok));
 					}
 					return;
 				} else { // First return was information. The next should be acknowledgment
 					String actionReturn = msg;
 					msg = commander.readMessage();
-					if(Command.ACK.equals(msg)){
+					if(OpenWebNetConstant.ACK.equals(msg)){
 						log.finest(Log.Session.Command, "Command sent.");
 						if (resultListener != null) {
 							resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.ok));
@@ -97,7 +97,7 @@ public class OpenWebCommandThread implements Runnable {
 			} else { // connection closed...
 				log.severe(Log.Session.Command, "Command failed (Connection closed).");
 				if (resultListener != null) {
-					resultListener.onCommand(new CommandResultImpl(Command.NACK, CommandResultStatus.nok));
+					resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.NACK, CommandResultStatus.nok));
 				}
 				return;
 			}

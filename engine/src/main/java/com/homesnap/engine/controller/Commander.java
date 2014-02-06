@@ -1,7 +1,7 @@
 package com.homesnap.engine.controller;
 
-import com.adgsoftware.mydomo.engine.connector.CommandListener;
-import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.oldconnector.CommandListener;
+import com.adgsoftware.mydomo.engine.oldconnector.ConnectionListener;
 
 /**
  * Monitor listens event from the open server. Each time open

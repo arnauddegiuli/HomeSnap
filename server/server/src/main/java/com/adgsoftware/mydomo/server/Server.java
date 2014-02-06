@@ -33,7 +33,7 @@ import java.net.Socket;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
 
 public class Server implements Runnable {
 

@@ -32,11 +32,11 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.controller.automation.Automation;
-import com.adgsoftware.mydomo.engine.controller.automation.Automation.AutomationStatus;
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.house.House;
+import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
+import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation.AutomationStatus;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.PersistenceService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;

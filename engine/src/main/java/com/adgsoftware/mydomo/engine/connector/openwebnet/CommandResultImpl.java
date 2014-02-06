@@ -1,6 +1,5 @@
 package com.adgsoftware.mydomo.engine.connector.openwebnet;
 
-import java.util.List;
 import java.util.logging.Level;
 
 import com.adgsoftware.mydomo.engine.Log;
@@ -8,7 +7,11 @@ import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.what.impl.StringValue;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 
 /*
  * #%L
@@ -41,14 +44,14 @@ public class CommandResultImpl implements CommandResult {
 	private String commandResult;
 	private CommandResultStatus status;
 	private Log log = new Log();
-	private Command parser;
+	private OpenWebNetConstant parser;
 	
 	public CommandResultImpl(String commandResult, CommandResultStatus status) {
 		this.commandResult = commandResult;
 		this.status = status;
-		if (commandResult != null &&!Command.ACK.equals(commandResult) && !Command.NACK.equals(commandResult)) {
+		if (commandResult != null &&!OpenWebNetConstant.ACK.equals(commandResult) && !OpenWebNetConstant.NACK.equals(commandResult)) {
 			try {
-				parser = Command.getCommandAnalyser(commandResult);
+				parser = OpenWebNetConstant.getCommandAnalyser(commandResult);
 			} catch (ParseException e) {
 				log.log(Session.Command, Level.SEVERE, "Unknown command result [" + commandResult + "].");
 			}
@@ -64,38 +67,36 @@ public class CommandResultImpl implements CommandResult {
 	}
 
 	@Override
-	public String getWhat() {
+	public State getWhat(StateName name) {
 		if (parser != null) {
-			return parser.getWhatFromCommand();
+			if (StateName.STATUS.equals(name)) {
+				return new State(StateName.STATUS, new StringValue(parser.getWhatFromCommand()));
+				// TODO manage different type.
+			}
+			return null;
+			// TODO manage dimension
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public String getWho() {
+	public Who getWho() {
 		if (parser != null) {
-			return parser.getWhoFromCommand();
+			return Who.valueOf(parser.getWhoFromCommand()); // TODO revoir ca!
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public String getWhere() {
+	public Where getWhere() {
 		if (parser != null) {
-			return parser.getWhereFromCommand();
+			String where = parser.getWhereFromCommand();
+			return new Where(where, where);
 		} else {
 			return null;
 		}
 	}
 
-	@Override
-	public List<DimensionValue> getDimensionList() {
-		if (parser != null) {
-			return parser.getDimensionListFromCommand();
-		} else {
-			return null;
-		}
-	}
 }

@@ -24,14 +24,14 @@ package com.adgsoftware.mydomo.engine.services.impl;
  */
 
 
-import com.adgsoftware.mydomo.engine.connector.Commander;
-import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
-import com.adgsoftware.mydomo.engine.connector.Monitor;
-import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebCommanderImpl;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebMonitorImpl;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldconnector.Commander;
+import com.adgsoftware.mydomo.engine.oldconnector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.oldconnector.Monitor;
+import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebCommanderImpl;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebMonitorImpl;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 
 public class OpenWebNetControllerService implements ControllerService {

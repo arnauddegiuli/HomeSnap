@@ -23,10 +23,10 @@ package com.adgsoftware.mydomo.engine.services;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
-import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldconnector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 /**
  * ControllerService implements feature about controller. 

@@ -27,9 +27,9 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
 public class AutomationSimulator implements ControllerSimulator {

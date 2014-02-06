@@ -27,11 +27,11 @@ package com.adgsoftware.mydomo.server.controllermodules.heating;
 import java.text.MessageFormat;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone.HeatingZoneDimension;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone.HeatingZoneDimension;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.DesiredTemperature;
+import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.MeasureTemperature;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class HeatingCommand {

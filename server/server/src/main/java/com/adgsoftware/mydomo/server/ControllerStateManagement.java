@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
+import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 

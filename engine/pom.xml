@@ -81,7 +81,10 @@
 				<configuration>
 					<licenseName>gpl</licenseName>
 					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
-					<exclude>org/json/*.java,org/json/zip/*.java</exclude>
+					<excludes>
+						<exclude>org/json/*.java</exclude>/
+						<exclude>org/json/zip/*.java</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>

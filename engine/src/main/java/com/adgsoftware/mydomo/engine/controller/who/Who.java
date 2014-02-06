@@ -1,0 +1,12 @@
+package com.adgsoftware.mydomo.engine.controller.who;
+
+public enum Who {
+
+	LIGHT,
+	SCENARIO,
+	AUTOMATION,
+	POWER_MANAGEMENT,
+	HEATING_ADJUSTMENT,
+	MULTIMEDIA, GATEWAY,SOUND_SYSTEM,
+	DIAGNOSTIC_OF_HEATING_ADJUSTMENT;
+}

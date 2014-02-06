@@ -41,6 +41,14 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<licenseName>gpl_v2</licenseName>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	
@@ -53,6 +61,10 @@
 	    <developer>
 	        <name>Arnaud de Giuli</name>
 	        <email>arnaud.degiuli@free.fr</email>
+	    </developer>
+	    <developer>
+	        <name>Olivier Driesbach</name>
+	        <email></email>
 	    </developer>
 	</developers>
 </project>

@@ -24,8 +24,8 @@ package com.adgsoftware.mydomo.engine.test;
  */
 
 
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
+import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 

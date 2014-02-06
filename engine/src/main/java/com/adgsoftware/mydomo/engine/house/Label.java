@@ -36,9 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.adgsoftware.mydomo.engine.JsonSerializable;
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.LabelList;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.LabelList;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 /**
  * Label contains controller. It is a logical list of controller.

@@ -25,7 +25,9 @@ package com.adgsoftware.mydomo.engine.connector;
 
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 
 /**
  * Each time a monitor session ( {@link Monitor} ) get a message and isn't able to 
@@ -35,5 +37,5 @@ import com.adgsoftware.mydomo.engine.controller.DimensionValue;
  */
 public interface UnknownControllerListener {
 
-	public void foundUnknownController(String who, String where, String what, String dimensionCode, List<DimensionValue> dimensionList);
+	public void foundUnknownController(Who who, Where where, State what);
 }

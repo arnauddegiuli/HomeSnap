@@ -23,8 +23,8 @@ package com.adgsoftware.mydomo.engine.script;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.Status;
+import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
+import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 public class ScriptExecutor {
 

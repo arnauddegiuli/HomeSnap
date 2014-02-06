@@ -23,7 +23,6 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  * #L%
  */
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,16 +33,14 @@ import java.util.List;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
-import com.adgsoftware.mydomo.engine.connector.CommandListener;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.controller.Command;
+import com.adgsoftware.mydomo.engine.controller.CommandListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
-import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
-import com.adgsoftware.mydomo.engine.controller.DimensionValue;
-import com.adgsoftware.mydomo.engine.controller.Status;
 
 public class OpenWebCommanderImpl implements Commander {
-	
+
 	Socket socket;
 	Log log = new Log();
 	BufferedReader input = null;
@@ -52,7 +49,6 @@ public class OpenWebCommanderImpl implements Commander {
 	private int port;
 	private int timeout = 5000;
 	private Integer passwordOpen;
-
 	List<ConnectionListener> connectionListenerList = new ArrayList<ConnectionListener>();
 
 	/**
@@ -67,19 +63,35 @@ public class OpenWebCommanderImpl implements Commander {
 		this.passwordOpen = passwordOpen;
 	}
 
+	/**
+	 * Return the ip of the open server.
+	 * @return the ip of the open server.
+	 */
 	public String getIp() {
 		return ip;
 	}
 
+	/**
+	 * Define the ip of the open server.
+	 * @param ip the ip of the open server.
+	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 		close();
 	}
 
+	/**
+	 * Return the port of the open server.
+	 * @return the port of the open server.
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * Define the port of the open server.
+	 * @param port the port of the open server.
+	 */
 	public void setPort(int port) {
 		this.port = port;
 		close();
@@ -114,21 +126,7 @@ public class OpenWebCommanderImpl implements Commander {
 	}
 
 	@Override
-	public void sendCommand(String command, CommandListener resultListener){
-
-//		try { TODO check command!!!!
-//			openWebNet = new OpenWebNet(comandoOpen);
-//			if(openWebNet.isErrorFrame()){
-//				ClientFrame.scriviSulLog("ERRATA frame open "+comandoOpen+", la invio comunque!!!",1,0,0);
-//			}else{
-//				ClientFrame.scriviSulLog("CREATO oggetto OpenWebNet "+openWebNet.getFrameOpen(),1,0,0);
-//			}
-//		}catch(Exception e){
-//			ClientFrame.scriviSulLog("ERRORE nella creazione dell'oggetto OpenWebNet "+comandoOpen,1,0,0);
-//			System.out.println("Eccezione in GestioneSocketComandi durante la creazione del'oggetto OpenWebNet");
-//			e.printStackTrace();
-//		}
-
+	public void sendCommand(Command command, CommandListener resultListener){
 		synchronized (this) {
 			if (!isConnected()) { // If socket close? => init connection.
 				new Thread(new OpenWebConnectThread(this)).start(); // Open connection in thread to avoid blocking user!
@@ -142,7 +140,7 @@ public class OpenWebCommanderImpl implements Commander {
 		}	
 
 		// Send asynchronously the command!
-		new Thread(new OpenWebCommandThread(this, command, resultListener)).start();
+		new Thread(new OpenWebCommandThread(this, createMessage(command), resultListener)).start();
 	}
 
 	void writeMessage(String message) {
@@ -200,7 +198,7 @@ public class OpenWebCommanderImpl implements Commander {
 	}
 
 	@Override
-	public void addControllerToExecute(Controller<? extends Status> controller) {
+	public void addControllerToExecute(Controller controller) {
 		controller.setServer(this);
 	}
 
@@ -224,17 +222,26 @@ public class OpenWebCommanderImpl implements Commander {
 		connectionListenerList.add(connectionListener);
 	}
 
-	@Override
+	/**
+	 * Return the timeout of the connection to open server in millisecond.
+	 * @return the timeout of the connection to open server in millisecond.
+	 */
 	public int getTimeout() {
 		return timeout;
 	}
 
-	@Override
+	/**
+	 * Define the timeout of the connection to open server in millisecond.
+	 * @param timeout the timeout of the connection to open server in millisecond.
+	 */
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
 
-	@Override
+	/**
+	 * Define the gateway password
+	 * @param password
+	 */
 	public void setPasswordOpen(Integer password) {
 		this.passwordOpen = password;
 	}
@@ -242,54 +249,53 @@ public class OpenWebCommanderImpl implements Commander {
 	public Integer getPasswordOpen() {
 		return passwordOpen;
 	}
-	
+
 	/**
-	 * Create the open message for action.
-	 * @return open message.
+	 * Create the open message for action or status.
+	 * @return open web net message.
 	 */
-	public String createActionMessage(Status newWhat, String where, String who) {
-		if (where == null) {
+	public String createMessage(Command command) {
+		if (command.getWhere() == null && command.getWhere().getTo() == null) {
 			throw new IllegalArgumentException("Controller must contain an address with where");
 		}
-		return MessageFormat.format(Command.COMMAND, new Object[] {who, newWhat.getCode(), where}); 
-	}
-	
-	/**
-	 * Create the open message for status.
-	 * @return open message.
-	 */
-	public String createStatusMessage(String where, String who) {
-		if (where == null) {
-			throw new IllegalArgumentException("Controller must contain an address with where");
-		}
-		return MessageFormat.format(Command.STATUS, new Object[] {who, where}); 
-	}
-	
-	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension) {
-		if (where == null) {
-			throw new IllegalArgumentException("Controller must contain a where.");
-		}
-		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {who, where, dimension.getCode()}); 
-	}
-	
-	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus) {
-		if (where == null) {
-			throw new IllegalArgumentException("Controller must contain a where.");
-		}
 		
-		StringBuilder sb = new StringBuilder();
-		for (DimensionValue dimension : dimensionStatus.getValueList()) {
-			sb.append(dimension.getValue());
-			sb.append(Command.DIMENSION_SEPARATOR);
+		String who = ControllerType.toOpenWebNet(command.getWho());
+		String where = command.getWhere().getTo();
+		if (command.isActionCommand()) {
+			String what = command.getWhat().getValue().getValue(); // TODO manage mapping + manage dimension
+			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, what, where});	
+		} else {
+			return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
+			// TODO manage dimension!	
 		}
-		sb.setLength(sb.length()-1);
-		
-		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()}); 
+		 
 	}
+
+//	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension) {
+//		if (where == null) {
+//			throw new IllegalArgumentException("Controller must contain a where.");
+//		}
+//		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {who, where, dimension.getCode()}); 
+//	}
+//	
+//	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus) {
+//		if (where == null) {
+//			throw new IllegalArgumentException("Controller must contain a where.");
+//		}
+//		
+//		StringBuilder sb = new StringBuilder();
+//		for (DimensionValue dimension : dimensionStatus.getValueList()) {
+//			sb.append(dimension.getValue());
+//			sb.append(Command.DIMENSION_SEPARATOR);
+//		}
+//		sb.setLength(sb.length()-1);
+//		
+//		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()}); 
+//	}
 
 	@Override
 	public void removeControllerToExecute(
-			Controller<? extends Status> controller) {
+			Controller controller) {
 		controller.setServer(null);
 		
 	}
