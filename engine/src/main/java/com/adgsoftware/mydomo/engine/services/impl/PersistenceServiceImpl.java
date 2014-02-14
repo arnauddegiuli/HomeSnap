@@ -24,10 +24,10 @@ package com.adgsoftware.mydomo.engine.services.impl;
  */
 
 
-import java.io.InputStream;
 import java.io.FileNotFoundException;
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -39,11 +39,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.PersistenceService;
 
@@ -100,7 +99,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 			sb.append(label.getId());
 			sb.append("\">");
 			// Save controller
-			for (Controller<? extends Status> controller : label.getControllerList()) {
+			for (Controller controller : label.getControllerList()) {
 				// Save address
 				sb.append("<controller where=\"");
 				if (controller.getWhere() != null) {
@@ -128,7 +127,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 			sb.append("\" id=\"");
 			sb.append(label.getId());
 			sb.append("\">");
-			for (Controller<? extends Status> controller : label) {
+			for (Controller controller : label) {
 				
 				sb.append("<controllerLink where=\"");
 				
@@ -151,7 +150,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 		private House house = new House();
 		private Group currentGroup;
 		private Label currentLabel;
-		private Hashtable<String, Controller<? extends Status>> controllerList = new Hashtable<String, Controller<? extends Status>>();
+		private Hashtable<String, Controller> controllerList = new Hashtable<String, Controller>();
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
@@ -173,11 +172,11 @@ public class PersistenceServiceImpl implements PersistenceService {
 					String clazzStr = attributes.getValue("class");
 					String title =  attributes.getValue("title");
 					@SuppressWarnings("unchecked")
-					Class<? extends Controller<?>> clazz = (Class<? extends Controller<?>>) Class.forName(clazzStr);
-					Controller<?> c = (Controller<?>) controllerService.createController(clazz, where);
+					Class<? extends Controller> clazz = (Class<? extends Controller>) Class.forName(clazzStr);
+					Controller c = (Controller) controllerService.createController(clazz, where);
 					c.setTitle(title);
 					currentGroup.add(c);
-					controllerList.put(c.getWhere(), c);
+					controllerList.put(c.getWhere().getTo(), c);
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}

@@ -7,10 +7,9 @@ Bundle-Activator: com.adgsoftware.mydomo.server.controllermodules.light.LightMod
 Import-Package: com.adgsoftware.mydomo.engine,
  com.adgsoftware.mydomo.engine.connector.openwebnet,
  com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
- com.adgsoftware.mydomo.engine.controller,
- com.adgsoftware.mydomo.engine.controller.light,
  com.adgsoftware.mydomo.server,
  com.adgsoftware.mydomo.server.controllermodules,
+ com.adgsoftware.mydomo.engine.connector.openwebnet.light
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

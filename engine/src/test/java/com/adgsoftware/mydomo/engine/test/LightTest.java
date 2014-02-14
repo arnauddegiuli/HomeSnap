@@ -27,12 +27,12 @@ package com.adgsoftware.mydomo.engine.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.oldconnector.CommandResult;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.ControllerChangeListener;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
+import com.adgsoftware.mydomo.engine.controller.what.State;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
@@ -48,12 +48,10 @@ public class LightTest {
 		
 		// Listener will make us availabe to wait response from server
 		light.addControllerChangeListener(new ControllerChangeListener() {
-			
-			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onWhatChangeError(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus, CommandResult result) {
+			public void onWhatChangeError(Controller controller,
+					State oldStatus, State newStatus, CommandResult result) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
 					System.out.println("Unlock...");
@@ -62,8 +60,8 @@ public class LightTest {
 			}
 			
 			@Override
-			public void onWhatChange(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus) {
+			public void onWhatChange(Controller controller,
+					State oldStatus, State newStatus) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
 					System.out.println("Unlock...");
@@ -84,11 +82,11 @@ public class LightTest {
 		}
 		
 		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_OFF , light.getWhat());
+		Assert.assertNotNull(light.getStatus());
+		Assert.assertEquals(LightStateValue.LIGHT_OFF , light.getStatus());
 		
 		// Now set the value to ON
-		light.setWhat(LightStatus.LIGHT_ON);
+		light.setStatus(LightStateValue.LIGHT_ON);
 		System.out.println("Wait...");
 		
 		// Wait the response from the server
@@ -102,11 +100,11 @@ public class LightTest {
 		}
 		
 		// Check that after the server response now the status is ON
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_ON , light.getWhat());
+		Assert.assertNotNull(light.getStatus());
+		Assert.assertEquals(LightStateValue.LIGHT_ON , light.getStatus());
 		
 		// Switch off again
-		light.setWhat(LightStatus.LIGHT_OFF);
+		light.setStatus(LightStateValue.LIGHT_OFF);
 		System.out.println("Wait...");
 		
 		try {
@@ -118,11 +116,10 @@ public class LightTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertNotNull(light.getWhat());
-		Assert.assertEquals(LightStatus.LIGHT_OFF , light.getWhat());
+		Assert.assertNotNull(light.getStatus());
+		Assert.assertEquals(LightStateValue.LIGHT_OFF , light.getStatus());
 		
 		System.out.println("Finish...");
 
-		
 	}
 }

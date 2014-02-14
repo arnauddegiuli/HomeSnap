@@ -36,9 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.adgsoftware.mydomo.engine.JsonSerializable;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.LabelList;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.controller.Controller;
 
 /**
  * Label contains controller. It is a logical list of controller.
@@ -50,7 +48,7 @@ import com.adgsoftware.mydomo.engine.oldcontroller.Status;
  *
  */
 public class Label  
-implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
+implements Serializable, JsonSerializable, List<Controller> {
 
 	protected static final String JSON_ID = "id";
 
@@ -58,7 +56,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 	private static final long serialVersionUID = 1L;
 	
 //	private List<Label> subLabelList = new ArrayList<Label>();
-	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
+	private List<Controller> controllerList = new ArrayList<Controller>();
 	private String title;
 	private String description;
 	private String id;
@@ -118,7 +116,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 	 * @param object
 	 * @return
 	 */
-	public boolean add(Controller<? extends Status> object) {
+	public boolean add(Controller object) {
 		if (!controllerList.contains(object)) { // To break the loop with Controller.add
 			boolean result = controllerList.add(object);
 			object.getLabels().add(this);
@@ -128,32 +126,32 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		}
 	}
 
-	public void add(int location, Controller<? extends Status> object) {
+	public void add(int location, Controller object) {
 		if (!controllerList.contains(object)) {
 			controllerList.add(location, object);
 			object.getLabels().add(this);
 		}
 	}
 
-	public boolean addAll(Collection<? extends Controller<? extends Status>> arg0) {
-		for (Controller<? extends Status> controller : arg0) {
+	public boolean addAll(Collection<? extends Controller> arg0) {
+		for (Controller controller : arg0) {
 			controller.getLabels().add(this);
 		}
 		return controllerList.addAll(arg0);
 	}
 
-	public boolean addAll(int arg0, Collection<? extends Controller<? extends Status>> arg1) {
-		for (Controller<? extends Status> controller : arg1) {
+	public boolean addAll(int arg0, Collection<? extends Controller> arg1) {
+		for (Controller controller : arg1) {
 			controller.getLabels().add(this);
 		}
 		return controllerList.addAll(arg0, arg1);
 	}
 
 	public void clear() {
-		List<Controller<? extends Status>>  backupControllerList = new ArrayList<Controller<? extends Status>>(controllerList.size());
+		List<Controller>  backupControllerList = new ArrayList<Controller>(controllerList.size());
 		backupControllerList.addAll(controllerList);
 		controllerList.clear();
-		for (Controller<? extends Status> controller : backupControllerList) {
+		for (Controller controller : backupControllerList) {
 			controller.getLabels().remove(this);
 		}
 	}
@@ -166,7 +164,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return controllerList.containsAll(arg0);
 	}
 
-	public Controller<? extends Status> get(int location) {
+	public Controller get(int location) {
 		return controllerList.get(location);
 	}
 
@@ -178,7 +176,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return controllerList.isEmpty();
 	}
 
-	public Iterator<Controller<? extends Status>> iterator() {
+	public Iterator<Controller> iterator() {
 		return controllerList.iterator();
 	}
 
@@ -186,15 +184,15 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return controllerList.lastIndexOf(object);
 	}
 
-	public ListIterator<Controller<? extends Status>> listIterator() {
+	public ListIterator<Controller> listIterator() {
 		return controllerList.listIterator();
 	}
 
-	public ListIterator<Controller<? extends Status>> listIterator(int location) {
+	public ListIterator<Controller> listIterator(int location) {
 		return controllerList.listIterator(location);
 	}
 
-	public Controller<? extends Status> remove(int location) {
+	public Controller remove(int location) {
 		controllerList.get(location).getLabels().remove(this);
 		return controllerList.remove(location);
 	}
@@ -203,7 +201,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		boolean result = false;
 		if (controllerList.contains(object)) {
 			result = controllerList.remove(object);
-			((Controller<?>) object).getLabels().remove(this);
+			((Controller) object).getLabels().remove(this);
 		}
 		return result;
 	}
@@ -211,7 +209,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 	public boolean removeAll(Collection<?> arg0) {
 		boolean result = true;
 		for (Object object : controllerList) {
-			if (object instanceof Controller<?>) {
+			if (object instanceof Controller) {
 				result &= remove(object);
 			}
 		}
@@ -222,7 +220,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return controllerList.retainAll(arg0);
 	}
 
-	public Controller<? extends Status> set(int location, Controller<? extends Status> object) {
+	public Controller set(int location, Controller object) {
 		controllerList.get(location).getLabels().remove(this); // Remove the link of the previous controller
 		object.getLabels().add(this);
 		return controllerList.set(location, object);
@@ -232,7 +230,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return controllerList.size();
 	}
 
-	public List<Controller<? extends Status>> subList(int start, int end) {
+	public List<Controller> subList(int start, int end) {
 		return controllerList.subList(start, end);
 	}
 
@@ -287,7 +285,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		return getTitle();
 	}
 
-	public List<Controller<? extends Status>> getControllerList() {
+	public List<Controller> getControllerList() {
 		return controllerList;
 	}
 
@@ -301,7 +299,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		label.put("icon", icon);
 		JSONArray controllers = new JSONArray();
 
-		for (Controller<? extends Status> controller : getControllerList()) {
+		for (Controller controller : getControllerList()) {
 			controllers.put(controller.getWhere());
 		}
 		return label;
@@ -322,7 +320,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 		for (int i = 0; i < controllers.length(); i++) {
 			String where = controllers.getString(i);
 			boolean found = false;
-			for (Controller<?> controller : getControllerList()) {
+			for (Controller controller : getControllerList()) {
 				if(where.equals(controller.getWhere())) {
 					found = true;
 				}
@@ -331,7 +329,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 			if (!found) {
 				if (house != null) {
 					for (Group group : house.getGroups()) {
-						for (Controller<? extends Status> controller : group.getControllerList()) {
+						for (Controller controller : group.getControllerList()) {
 							if (where.equals(controller.getWhere())) {
 								add(controller);
 								break;
@@ -342,7 +340,7 @@ implements Serializable, JsonSerializable, List<Controller<? extends Status>> {
 			}
 		}
 		// Remove controller from label
-		for (Controller<?> controller : getControllerList()) {
+		for (Controller controller : getControllerList()) {
 			boolean found = false;
 			for (int i = 0; i < controllers.length(); i++) {
 				String where = controllers.getString(i);

@@ -130,13 +130,13 @@ implements Monitor {
 			} else if (parser.isGroupCommand()) {
 				// We send command to group address
 				for (Controller<? extends Status> controller : controllerList) {
-					for (Label label : controller.getLabels()) {
-						if (label.getId().equals(parser.getGroupFromCommand()) &&
-								controller.getWho().equals(who)) {
-							known = true;
-							changeWhat(controller, what);	
-						}
-					}
+//					for (Label label : controller.getLabels()) {
+//						if (label.getId().equals(parser.getGroupFromCommand()) &&
+//								controller.getWho().equals(who)) {
+//							known = true;
+//							changeWhat(controller, what);	
+//						}
+//					}
 				}
 			} else if (parser.isEnvironmentCommand()) {
 				String environment = parser.getEnvironmentFromCommand();

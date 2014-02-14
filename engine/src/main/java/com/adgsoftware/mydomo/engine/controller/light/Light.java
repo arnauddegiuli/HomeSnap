@@ -97,6 +97,10 @@ public class Light extends Controller {
 		return (LightStateValue) get(StateName.STATUS);
 	}
 
+	public void setStatus(LightStateValue status) {
+		set(StateName.STATUS, status);
+	}
+
 	@Override
 	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
 		Map<StateName, Class<? extends StateValue>> m = new HashMap<StateName, Class<? extends StateValue>>();
@@ -108,6 +112,7 @@ public class Light extends Controller {
 	public Who getWho() {
 		return Who.LIGHT;
 	}
+
 
 
 	@Override

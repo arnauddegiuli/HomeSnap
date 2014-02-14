@@ -27,9 +27,10 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
 public class AutomationSimulator implements ControllerSimulator {
@@ -39,17 +40,17 @@ public class AutomationSimulator implements ControllerSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			Command parser = Command.getCommandAnalyser(command);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
 			String what = parser.getWhatFromCommand();
 			String where = parser.getWhereFromCommand();
-			if (Automation.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
-					|| Automation.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
-					|| Automation.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
+			if (Automation.AutomationState.AUTOMATION_DOWN.getValue().equals(what)
+					|| Automation.AutomationState.AUTOMATION_STOP.getValue().equals(what)
+					|| Automation.AutomationState.AUTOMATION_UP.getValue().equals(what)) {
 				statusList.put(where, what);
-				return Command.ACK;
+				return CommandConstant.ACK;
 			} else {
 				System.out.println("Command not supported [" + command + "]");
-				return Command.NACK;
+				return CommandConstant.NACK;
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -62,14 +63,14 @@ public class AutomationSimulator implements ControllerSimulator {
 	public String status(String command) {
 		String where;
 		try {
-			where = Command.getCommandAnalyser(command).getWhereFromCommand();
+			where = CommandConstant.getCommandAnalyser(command).getWhereFromCommand();
 			String what = statusList.get(where);
 			if (what == null) {
-				what = Automation.AutomationStatus.AUTOMATION_STOP.getCode();
+				what = Automation.AutomationState.AUTOMATION_STOP.getValue();
 				statusList.put(where, what);
 			}
 
-			return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, what, where} ) + Command.ACK;
+			return MessageFormat.format(CommandConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, what, where} ) + CommandConstant.ACK;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,6 +81,6 @@ public class AutomationSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return Command.WHO_AUTOMATION;
+		return OpenWebNetWho.WHO_AUTOMATION;
 	}
 }

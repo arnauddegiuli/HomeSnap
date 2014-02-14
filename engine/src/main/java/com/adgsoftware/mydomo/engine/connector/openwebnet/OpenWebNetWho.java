@@ -25,7 +25,7 @@ import com.adgsoftware.mydomo.engine.controller.who.Who;
  * #L%
  */
 
-public class ControllerType {
+public class OpenWebNetWho {
 
 	// WHO 28 €
 	public final static String WHO_SCENARIO = "0";
@@ -38,7 +38,7 @@ public class ControllerType {
 	public final static String WHO_SOUND_SYSTEM = "16";
 	public final static String WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT = "1004";
 	
-	public static String toOpenWebNet(Who who) {
+	public static String convert(Who who) {
 		switch (who) {
 		case AUTOMATION:
 			return WHO_AUTOMATION;
@@ -61,7 +61,7 @@ public class ControllerType {
 		}
 	}
 	
-	public static Who fromOpenWebNet(String who) {
+	public static Who convert(String who) {
 		if (WHO_SCENARIO.equals(who)) {
 			return Who.SCENARIO;
 		} else if (WHO_LIGHTING.equals(who)) {

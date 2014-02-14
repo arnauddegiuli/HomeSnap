@@ -65,22 +65,22 @@ public class OpenWebCommandThread implements Runnable {
 					return;
 				}
 
-				if (OpenWebNetConstant.ACK.equals(msg)){
+				if (CommandConstant.ACK.equals(msg)){
 					log.finest(Log.Session.Command, "Command sent.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.ACK, CommandResultStatus.ok));
+						resultListener.onCommand(new CommandResultImpl(CommandConstant.ACK, CommandResultStatus.ok));
 					}
 					return;
-				} else if (OpenWebNetConstant.NACK.equals(msg)){
+				} else if (CommandConstant.NACK.equals(msg)){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.NACK, CommandResultStatus.nok));
+						resultListener.onCommand(new CommandResultImpl(CommandConstant.NACK, CommandResultStatus.nok));
 					}
 					return;
 				} else { // First return was information. The next should be acknowledgment
 					String actionReturn = msg;
 					msg = commander.readMessage();
-					if(OpenWebNetConstant.ACK.equals(msg)){
+					if(CommandConstant.ACK.equals(msg)){
 						log.finest(Log.Session.Command, "Command sent.");
 						if (resultListener != null) {
 							resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.ok));
@@ -97,7 +97,7 @@ public class OpenWebCommandThread implements Runnable {
 			} else { // connection closed...
 				log.severe(Log.Session.Command, "Command failed (Connection closed).");
 				if (resultListener != null) {
-					resultListener.onCommand(new CommandResultImpl(OpenWebNetConstant.NACK, CommandResultStatus.nok));
+					resultListener.onCommand(new CommandResultImpl(CommandConstant.NACK, CommandResultStatus.nok));
 				}
 				return;
 			}

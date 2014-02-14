@@ -27,12 +27,12 @@ package com.adgsoftware.mydomo.engine.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.oldconnector.CommandResult;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.ControllerChangeListener;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
-import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
-import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation.AutomationStatus;
+import com.adgsoftware.mydomo.engine.connector.CommandResult;
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.ControllerChangeListener;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation.AutomationState;
+import com.adgsoftware.mydomo.engine.controller.what.State;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
@@ -48,12 +48,10 @@ public class AutomationTest {
 		
 		// Listener will make us availabe to wait response from server
 		automation.addControllerChangeListener(new ControllerChangeListener() {
-			
-			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onWhatChangeError(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus, CommandResult result) {
+			public void onWhatChangeError(Controller controller,
+					State oldStatus, State newStatus, CommandResult result) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
 					System.out.println("Unlock...");
@@ -62,8 +60,8 @@ public class AutomationTest {
 			}
 			
 			@Override
-			public void onWhatChange(Controller<? extends Status> controller,
-					Status oldStatus, Status newStatus) {
+			public void onWhatChange(Controller controller,
+					State oldStatus, State newStatus) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
 					System.out.println("Unlock...");
@@ -84,11 +82,11 @@ public class AutomationTest {
 		}
 		
 		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
-		Assert.assertNotNull(automation.getWhat());
-		Assert.assertEquals(AutomationStatus.AUTOMATION_STOP , automation.getWhat());
+		Assert.assertNotNull(automation.getStatus());
+		Assert.assertEquals(AutomationState.AUTOMATION_STOP , automation.getStatus());
 		
 		// Now set the value to AUTOMATION_DOWN
-		automation.setWhat(AutomationStatus.AUTOMATION_DOWN);
+		automation.setStatus(AutomationState.AUTOMATION_DOWN);
 		System.out.println("Wait...");
 		
 		// Wait the response from the server
@@ -102,11 +100,11 @@ public class AutomationTest {
 		}
 		
 		// Check that after the server response now the status is ON
-		Assert.assertNotNull(automation.getWhat());
-		Assert.assertEquals(AutomationStatus.AUTOMATION_DOWN , automation.getWhat());
+		Assert.assertNotNull(automation.getStatus());
+		Assert.assertEquals(AutomationState.AUTOMATION_DOWN , automation.getStatus());
 		
 		// Switch UP now again
-		automation.setWhat(AutomationStatus.AUTOMATION_UP);
+		automation.setStatus(AutomationState.AUTOMATION_UP);
 		System.out.println("Wait...");
 		
 		try {
@@ -118,11 +116,11 @@ public class AutomationTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertNotNull(automation.getWhat());
-		Assert.assertEquals(AutomationStatus.AUTOMATION_UP , automation.getWhat());
+		Assert.assertNotNull(automation.getStatus());
+		Assert.assertEquals(AutomationState.AUTOMATION_UP , automation.getStatus());
 
 		// Switch OFF now again
-		automation.setWhat(AutomationStatus.AUTOMATION_STOP);
+		automation.setStatus(AutomationState.AUTOMATION_STOP);
 		System.out.println("Wait...");
 		
 		try {
@@ -134,8 +132,8 @@ public class AutomationTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertNotNull(automation.getWhat());
-		Assert.assertEquals(AutomationStatus.AUTOMATION_STOP , automation.getWhat());
+		Assert.assertNotNull(automation.getStatus());
+		Assert.assertEquals(AutomationState.AUTOMATION_STOP , automation.getStatus());
 
 		
 		System.out.println("Finish...");

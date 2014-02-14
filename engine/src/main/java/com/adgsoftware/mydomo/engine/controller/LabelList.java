@@ -1,4 +1,4 @@
-package com.adgsoftware.mydomo.engine.oldcontroller;
+package com.adgsoftware.mydomo.engine.controller;
 
 /*
  * #%L
@@ -39,10 +39,10 @@ import com.adgsoftware.mydomo.engine.house.Label;
  */
 public class LabelList implements List<Label> {
 	
-	private Controller<? extends Status> controller;
+	private Controller controller;
 	private List<Label> labelList = new ArrayList<Label>();
 	
-	public LabelList(Controller<? extends Status> controller) {
+	public LabelList(Controller controller) {
 		this.controller = controller;
 	}
 	

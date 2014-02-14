@@ -87,7 +87,7 @@ public class OpenWebConnectThread implements Runnable {
 						
 					log.finest(Log.Session.Command, " ----- Step Connection ----- ");
 					String msg = commander.readMessage();
-					if (!OpenWebNetConstant.ACK.equals(msg)) {
+					if (!CommandConstant.ACK.equals(msg)) {
 						// Bad return message
 						log.severe(Log.Session.Command, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
 						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
@@ -96,7 +96,7 @@ public class OpenWebConnectThread implements Runnable {
 					}
 
 					log.finest(Log.Session.Command, "----- Step Identification -----");
-					commander.writeMessage(OpenWebNetConstant.COMMAND_SESSION);
+					commander.writeMessage(CommandConstant.COMMAND_SESSION);
 
 					if(commander.getPasswordOpen() != null){
 						log.finest(Log.Session.Command, "----- Step authentification -----");
@@ -112,7 +112,7 @@ public class OpenWebConnectThread implements Runnable {
 					log.finest(Log.Session.Command, "----- Step Final -----");
 					msg = commander.readMessage();
 
-					if (!OpenWebNetConstant.ACK.equals(msg)) {		       	
+					if (!CommandConstant.ACK.equals(msg)) {		       	
 						log.severe(Log.Session.Command, "Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
 						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
 						commander.close();

@@ -23,14 +23,12 @@ package com.adgsoftware.mydomo.engine.controller;
  * #L%
  */
 
-import java.io.Serializable;
-
 import com.adgsoftware.mydomo.engine.connector.CommandResult;
 import com.adgsoftware.mydomo.engine.controller.what.State;
 
 
 /** ControllerChangeListener. */
-public interface ControllerChangeListener extends Serializable {
+public interface ControllerChangeListener {
 	/**
 	 * @param controller
 	 *            the controller that changed.

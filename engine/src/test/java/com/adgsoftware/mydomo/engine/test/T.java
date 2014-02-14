@@ -24,8 +24,8 @@ package com.adgsoftware.mydomo.engine.test;
  */
 
 
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 
@@ -42,7 +42,7 @@ public class T {
 		
 		final Light light = s.createController(Light.class, "42");
 		
-		light.setWhat(LightStatus.LIGHT_OFF);
+		light.setStatus(LightStateValue.LIGHT_OFF);
 
 		
 	}

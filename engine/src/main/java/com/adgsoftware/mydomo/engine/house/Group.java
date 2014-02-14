@@ -38,8 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.adgsoftware.mydomo.engine.JsonSerializable;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.controller.Controller;
 
 /**
  * Group represent a physical model of controller group. 
@@ -53,7 +52,7 @@ implements Serializable, JsonSerializable {
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
-	private List<Controller<? extends Status>> controllerList = new ArrayList<Controller<? extends Status>>();
+	private List<Controller> controllerList = new ArrayList<Controller>();
 	private String title;
 	private String description;
 	private String id;
@@ -85,23 +84,23 @@ implements Serializable, JsonSerializable {
 		this.description = description;
 	}
 
-	public List<Controller<? extends Status>> getControllerList() {
+	public List<Controller> getControllerList() {
 		return controllerList;
 	}
 	
-	public boolean add(Controller<? extends Status> object) {
+	public boolean add(Controller object) {
 		return controllerList.add(object);
 	}
 
-	public void add(int location, Controller<? extends Status> object) {
+	public void add(int location, Controller object) {
 		controllerList.add(location, object);
 	}
 
-	public boolean addAll(Collection<? extends Controller<? extends Status>> arg0) {
+	public boolean addAll(Collection<? extends Controller> arg0) {
 		return controllerList.addAll(arg0);
 	}
 
-	public boolean addAll(int arg0, Collection<? extends Controller<? extends Status>> arg1) {
+	public boolean addAll(int arg0, Collection<? extends Controller> arg1) {
 		return controllerList.addAll(arg0, arg1);
 	}
 
@@ -117,7 +116,7 @@ implements Serializable, JsonSerializable {
 		return controllerList.containsAll(arg0);
 	}
 
-	public Controller<?> get(int location) {
+	public Controller get(int location) {
 		return controllerList.get(location);
 	}
 
@@ -129,7 +128,7 @@ implements Serializable, JsonSerializable {
 		return controllerList.isEmpty();
 	}
 
-	public Iterator<Controller<? extends Status>> iterator() {
+	public Iterator<Controller> iterator() {
 		return controllerList.iterator();
 	}
 
@@ -137,15 +136,15 @@ implements Serializable, JsonSerializable {
 		return controllerList.lastIndexOf(object);
 	}
 
-	public ListIterator<Controller<? extends Status>> listIterator() {
+	public ListIterator<Controller> listIterator() {
 		return controllerList.listIterator();
 	}
 
-	public ListIterator<Controller<? extends Status>> listIterator(int location) {
+	public ListIterator<Controller> listIterator(int location) {
 		return controllerList.listIterator(location);
 	}
 
-	public Controller<?> remove(int location) {
+	public Controller remove(int location) {
 		return controllerList.remove(location);
 	}
 
@@ -161,7 +160,7 @@ implements Serializable, JsonSerializable {
 		return controllerList.retainAll(arg0);
 	}
 
-	public Controller<?> set(int location, Controller<Status> object) {
+	public Controller set(int location, Controller object) {
 		return controllerList.set(location, object);
 	}
 
@@ -169,7 +168,7 @@ implements Serializable, JsonSerializable {
 		return controllerList.size();
 	}
 
-	public List<Controller<? extends Status>> subList(int start, int end) {
+	public List<Controller> subList(int start, int end) {
 		return controllerList.subList(start, end);
 	}
 
@@ -219,7 +218,7 @@ implements Serializable, JsonSerializable {
 			.put("description", getDescription());
 
 		JSONArray controllers = new JSONArray();
-		for (Controller<? extends Status> controller : getControllerList()) {
+		for (Controller controller : getControllerList()) {
 			controllers.put(controller.toJson());
 		}
 		group.put("controllers", controllers);
@@ -240,7 +239,7 @@ implements Serializable, JsonSerializable {
 		for (int i = 0; i < controllers.length(); i++) {
 			JSONObject c = controllers.getJSONObject(i);
 			String whereString = c.getString("where");
-			for (Controller<?> controller : getControllerList()) {
+			for (Controller controller : getControllerList()) {
 				if (whereString.equals(controller.getWhere())) {
 					controller.fromJson(c);
 				}

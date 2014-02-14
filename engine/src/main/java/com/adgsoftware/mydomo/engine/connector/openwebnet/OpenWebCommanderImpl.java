@@ -35,9 +35,12 @@ import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.connector.Commander;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
 import com.adgsoftware.mydomo.engine.controller.Command;
 import com.adgsoftware.mydomo.engine.controller.CommandListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
 
 public class OpenWebCommanderImpl implements Commander {
 
@@ -259,39 +262,31 @@ public class OpenWebCommanderImpl implements Commander {
 			throw new IllegalArgumentException("Controller must contain an address with where");
 		}
 		
-		String who = ControllerType.toOpenWebNet(command.getWho());
+		String who = OpenWebNetWho.convert(command.getWho());
 		String where = command.getWhere().getTo();
 		if (command.isActionCommand()) {
-			String what = command.getWhat().getValue().getValue(); // TODO manage mapping + manage dimension
-			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, what, where});	
+			if (StateName.STATUS.equals(command.getWhat().getName())) {
+				return MessageFormat.format(CommandConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat()), where});
+			} else { // Dimension
+				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat()); 
+				StringBuilder sb = new StringBuilder();
+				for (DimensionValue dimension : dimensionStatus.getValueList()) {
+					sb.append(dimension.getValue());
+					sb.append(CommandConstant.DIMENSION_SEPARATOR);
+				}
+				sb.setLength(sb.length()-1);
+				
+				return MessageFormat.format(CommandConstant.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()});
+			}
 		} else {
-			return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
-			// TODO manage dimension!	
+			if (StateName.STATUS.equals(command.getWhat().getName())) {
+				return MessageFormat.format(CommandConstant.STATUS, new Object[] {who, where});
+			} else {
+				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat());
+				return MessageFormat.format(CommandConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
+			}
 		}
-		 
 	}
-
-//	public String createDimensionStatusMessage(String where, String who, DimensionStatus dimension) {
-//		if (where == null) {
-//			throw new IllegalArgumentException("Controller must contain a where.");
-//		}
-//		return MessageFormat.format(Command.DIMENSION_STATUS, new Object[] {who, where, dimension.getCode()}); 
-//	}
-//	
-//	public String createDimensionActionMessage(String where, String who, DimensionStatus dimensionStatus) {
-//		if (where == null) {
-//			throw new IllegalArgumentException("Controller must contain a where.");
-//		}
-//		
-//		StringBuilder sb = new StringBuilder();
-//		for (DimensionValue dimension : dimensionStatus.getValueList()) {
-//			sb.append(dimension.getValue());
-//			sb.append(Command.DIMENSION_SEPARATOR);
-//		}
-//		sb.setLength(sb.length()-1);
-//		
-//		return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()}); 
-//	}
 
 	@Override
 	public void removeControllerToExecute(

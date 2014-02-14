@@ -1,5 +1,9 @@
 package com.adgsoftware.mydomo.engine.services;
 
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.controller.Controller;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,10 +27,6 @@ package com.adgsoftware.mydomo.engine.services;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldconnector.ConnectionListener;
-import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 /**
  * ControllerService implements feature about controller. 
@@ -43,7 +43,7 @@ public interface ControllerService {
 	 * @param where the address of the device
 	 * @return the new created and initialized controller
 	 */
-	public abstract <T extends Controller<? extends Status>> T createController(
+	public abstract <T extends Controller> T createController(
 			Class<T> clazz, String where);
 	
 	public abstract boolean isCommanderConnected();

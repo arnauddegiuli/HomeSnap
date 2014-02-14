@@ -23,10 +23,15 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  * #L%
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 
-public class OpenWebNetConstant {
+public class CommandConstant {
 	// Standard *WHO*WHAT*WHERE##
 	// Status request *#WHO*WHERE##
 	// Dimension request *#WHO*WHERE*DIMENSION##
@@ -50,13 +55,13 @@ public class OpenWebNetConstant {
 
 
 	// private constructor
-	private OpenWebNetConstant(String command) throws ParseException {parser = CommandParser.parse(command);}
+	private CommandConstant(String command) throws ParseException {parser = CommandParser.parse(command);}
 
 	private CommandParser parser;
 
-	public static OpenWebNetConstant getCommandAnalyser(String command) throws ParseException {
+	public static CommandConstant getCommandAnalyser(String command) throws ParseException {
 		try {
-			return new OpenWebNetConstant(command);
+			return new CommandConstant(command);
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 			throw e;
@@ -109,5 +114,15 @@ public class OpenWebNetConstant {
 
 	public SpecialCommand getSpecialCommand() {
 		return new SpecialCommand(parser);
+	}
+	
+	public List<DimensionValue> getDimensionListFromCommand() {
+		List<DimensionValue> dimensionList = new ArrayList<DimensionValue>();
+		for (String dimension : parser.getDimensionList()) {
+			DimensionValue d = new DimensionValueImpl();
+			d.setValue(dimension);
+			dimensionList.add(d);
+		}
+		return dimensionList;
 	}
 }

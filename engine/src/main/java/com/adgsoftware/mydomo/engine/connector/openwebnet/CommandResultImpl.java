@@ -44,14 +44,14 @@ public class CommandResultImpl implements CommandResult {
 	private String commandResult;
 	private CommandResultStatus status;
 	private Log log = new Log();
-	private OpenWebNetConstant parser;
+	private CommandConstant parser;
 	
 	public CommandResultImpl(String commandResult, CommandResultStatus status) {
 		this.commandResult = commandResult;
 		this.status = status;
-		if (commandResult != null &&!OpenWebNetConstant.ACK.equals(commandResult) && !OpenWebNetConstant.NACK.equals(commandResult)) {
+		if (commandResult != null &&!CommandConstant.ACK.equals(commandResult) && !CommandConstant.NACK.equals(commandResult)) {
 			try {
-				parser = OpenWebNetConstant.getCommandAnalyser(commandResult);
+				parser = CommandConstant.getCommandAnalyser(commandResult);
 			} catch (ParseException e) {
 				log.log(Session.Command, Level.SEVERE, "Unknown command result [" + commandResult + "].");
 			}

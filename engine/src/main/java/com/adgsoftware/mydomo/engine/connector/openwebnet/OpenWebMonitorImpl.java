@@ -129,10 +129,10 @@ implements Monitor {
 	
 	protected void onMessageReceipt(String message) {
 		try {
-			OpenWebNetConstant parser = OpenWebNetConstant.getCommandAnalyser(message);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(message);
 			Where where = new Where(parser.getWhereFromCommand(), parser.getWhereFromCommand());
 			com.adgsoftware.mydomo.engine.controller.what.State what = new com.adgsoftware.mydomo.engine.controller.what.State(StateName.STATUS, new StringValue(parser.getWhatFromCommand())); // TODO mapping WHAT
-			Who who = ControllerType.fromOpenWebNet(parser.getWhoFromCommand());
+			Who who = OpenWebNetWho.convert(parser.getWhoFromCommand());
 			boolean known = false;
 			// TODO manage message on other bus
 			if (parser.isGeneralCommand()) {
@@ -179,7 +179,7 @@ implements Monitor {
 		}
 	}
 
-	private boolean updateController(Who who, com.adgsoftware.mydomo.engine.controller.what.State what, Where where, String message, OpenWebNetConstant parser) {
+	private boolean updateController(Who who, com.adgsoftware.mydomo.engine.controller.what.State what, Where where, String message, CommandConstant parser) {
 		boolean known = false;
 		if (what != null) {
 			// Manage what command
@@ -275,7 +275,7 @@ implements Monitor {
 			
 				log.finest(Log.Session.Monitor, "----- Step Connection ----- ");
 				String msg = read();
-				if (!OpenWebNetConstant.ACK.equals(msg)) {
+				if (!CommandConstant.ACK.equals(msg)) {
 					// Bad return message
 					log.severe(Log.Session.Monitor, "Bad message [" + msg + "] received from [" + ip + "]");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
@@ -284,7 +284,7 @@ implements Monitor {
 				}
 
 				log.finest(Log.Session.Monitor, "----- Step Identification -----");
-				write(OpenWebNetConstant.MONITOR_SESSION);
+				write(CommandConstant.MONITOR_SESSION);
 
 				if(passwordOpen != null){
 					msg = read();
@@ -300,7 +300,7 @@ implements Monitor {
 				log.finest(Log.Session.Monitor, "----- Step Final -----");
 				msg = read();
 
-				if (!OpenWebNetConstant.ACK.equals(msg)) {		       	
+				if (!CommandConstant.ACK.equals(msg)) {		       	
 					log.severe(Log.Session.Monitor, "Problem during connection to [" + ip + "] with message [" + msg + "]");
 					callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
 					this.resetSocket();

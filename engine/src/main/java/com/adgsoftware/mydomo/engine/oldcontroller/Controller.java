@@ -60,7 +60,7 @@ public abstract class Controller<T extends Status> implements Serializable, Json
 	private String description; // string describing the controller
 	protected transient Commander server;
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
-	private LabelList labelList = new LabelList(this);
+//	private LabelList labelList = null; // new LabelList(this);
 
 	/**
 	 * Return the address of the targeted device
@@ -248,14 +248,14 @@ public abstract class Controller<T extends Status> implements Serializable, Json
 		this.title = name;
 	}
 
-	/**
-	 * Return the list of label associated to this component.
-	 * 
-	 * @return list of label.
-	 */
-	public LabelList getLabels() {
-		return labelList;
-	}
+//	/**
+//	 * Return the list of label associated to this component.
+//	 * 
+//	 * @return list of label.
+//	 */
+//	public LabelList getLabels() {
+//		return labelList;
+//	}
 
 	/**
 	 * Return the description of the controller

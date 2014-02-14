@@ -31,8 +31,8 @@ import java.net.Socket;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 
 public class CommandSession implements Runnable {
 	private Socket client; // liaison avec client
@@ -107,10 +107,10 @@ public class CommandSession implements Runnable {
 				fini = true;
 			}
 			else {
-				String result = Command.NACK;
-				Command parser;
+				String result = CommandConstant.NACK;
+				CommandConstant parser;
 				try {
-					parser = Command.getCommandAnalyser(lue);
+					parser = CommandConstant.getCommandAnalyser(lue);
 					if (parser.isStandardCommand() || parser.isDimensionCommand()) {
 						result = ControllerStateManagement.executeCommand(lue);
 					} else {

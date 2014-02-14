@@ -27,9 +27,10 @@ package com.adgsoftware.mydomo.server.controllermodules.light;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.light.LightStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
 public class LightSimulator implements ControllerSimulator {
@@ -39,16 +40,16 @@ public class LightSimulator implements ControllerSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			Command parser = Command.getCommandAnalyser(command);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
 			String what = parser.getWhatFromCommand();
 			String where = parser.getWhereFromCommand();
-			if (Light.LightStatus.LIGHT_OFF.getCode().equals(what)
-					|| Light.LightStatus.LIGHT_ON.getCode().equals(what)) {
+			if (LightStatus.LIGHT_OFF.getCode().equals(what)
+					|| LightStatus.LIGHT_ON.getCode().equals(what)) {
 				statusList.put(where, what);
-				return Command.ACK;
+				return CommandConstant.ACK;
 			} else {
 				System.out.println("Command not supported [" + command + "]");
-				return Command.NACK;
+				return CommandConstant.NACK;
 			}
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -60,15 +61,15 @@ public class LightSimulator implements ControllerSimulator {
 	@Override
 	public String status(String command) {
 		try {
-			Command parser = Command.getCommandAnalyser(command);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
 			String where = parser.getWhereFromCommand();
 			String what = statusList.get(where);
 			if (what == null) {
-				what = Light.LightStatus.LIGHT_OFF.getCode();
+				what = LightStatus.LIGHT_OFF.getCode();
 				statusList.put(where, what);
 			}
 
-			return MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, what, where} ) + Command.ACK;
+			return MessageFormat.format(CommandConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, what, where} ) + CommandConstant.ACK;
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,6 +79,6 @@ public class LightSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return Command.WHO_LIGHTING;
+		return OpenWebNetWho.WHO_LIGHTING;
 	}
 }

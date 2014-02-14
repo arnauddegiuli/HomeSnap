@@ -29,18 +29,20 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.ValveStatusEnum;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset.Mode;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.DesiredTemperature;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.MeasureTemperature;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.ProbeStatus;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.SetOffset;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.ValvesStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.HeatingZoneDimension;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.Offset;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.Offset.Mode;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.ValveStatusEnum;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.dimension.DesiredTemperature;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.dimension.MeasureTemperature;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.dimension.ProbeStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.dimension.SetOffset;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.dimension.ValvesStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.Command;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 
 public class HeatingSimulator implements ControllerDimensionSimulator {
@@ -51,21 +53,21 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			Command parser = Command.getCommandAnalyser(command);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
 			String what = parser.getDimensionFromCommand();
 			String where = parser.getWhereFromCommand();
 			String dimensionStr = parser.getDimensionFromCommand();
-			if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what) ||
-				HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what) ||
-				HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what) ||
-				HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(what) ||
-				HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(what)) {
+			if (HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(what) ||
+				HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(what) ||
+				HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(what) ||
+				HeatingZoneDimension.PROBE_STATUS.getCode().equals(what) ||
+				HeatingZoneDimension.VALVE_STATUS.getCode().equals(what)) {
 				
 				dimensionCache.put(where
 						+ "-" + dimensionStr, parser.getDimensionListFromCommand());
-				return Command.ACK;
+				return CommandConstant.ACK;
 			} else {
-				return Command.NACK;
+				return CommandConstant.NACK;
 			}
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -77,11 +79,11 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 	@Override
 	public String status(String command) {
 		try {
-			Command parser = Command.getCommandAnalyser(command);
+			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
 			String where = parser.getWhereFromCommand();
 			String dimensionStr = parser.getDimensionFromCommand();
 			List<DimensionValue> dimensionList;
-			if (HeatingZone.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
+			if (HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
 				
 				dimensionList = dimensionCache.get(where
 						+ "-" + dimensionStr);
@@ -92,7 +94,7 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 					dimensionList = dt.getValueList();
 					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
 				}
-			} else if (HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
+			} else if (HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
 				dimensionList = dimensionCache.get(where
 						+ "-" + dimensionStr);
 				if (dimensionList == null) {
@@ -101,24 +103,24 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 					dimensionList = so.getValueList();
 					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
 				}
-			} else if (HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
+			} else if (HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
 					dimensionStr)) {
 				MeasureTemperature mt = new MeasureTemperature();
 				mt.setMeasuredTemperature(18d);
 				dimensionList = mt.getValueList();
-			} else if (HeatingZone.HeatingZoneDimension.PROBE_STATUS.getCode().equals(
+			} else if (HeatingZoneDimension.PROBE_STATUS.getCode().equals(
 					dimensionStr)) {
 				// TODO
 				ProbeStatus ps = new ProbeStatus();
 				dimensionList = null;
-			} else if (HeatingZone.HeatingZoneDimension.VALVE_STATUS.getCode().equals(
+			} else if (HeatingZoneDimension.VALVE_STATUS.getCode().equals(
 					dimensionStr)) {
 				ValvesStatus vs = new ValvesStatus();
 				vs.setHeatingValveStatus(ValveStatusEnum.OFF);
 				vs.setConditioningValveStatus(ValveStatusEnum.OFF);
 				dimensionList = vs.getValueList();
 			}  else {
-				return Command.NACK;
+				return CommandConstant.NACK;
 			}
 	
 			if (dimensionList == null) {
@@ -129,12 +131,12 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 			StringBuilder sb = new StringBuilder();
 			for (DimensionValue dimension : dimensionList) {
 				sb.append(dimension.getValue());
-				sb.append(Command.DIMENSION_SEPARATOR);
+				sb.append(CommandConstant.DIMENSION_SEPARATOR);
 			}
 			sb.setLength(sb.length() - 1);
-			return MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {
-					Command.WHO_HEATING_ADJUSTMENT, where, dimensionStr, sb.toString() })
-					+ Command.ACK;
+			return MessageFormat.format(CommandConstant.DIMENSION_COMMAND, new Object[] {
+					OpenWebNetWho.WHO_HEATING_ADJUSTMENT, where, dimensionStr, sb.toString() })
+					+ CommandConstant.ACK;
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -144,6 +146,6 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 
 	@Override
 	public String getWho() {
-		return Command.WHO_HEATING_ADJUSTMENT;
+		return OpenWebNetWho.WHO_HEATING_ADJUSTMENT;
 	}	
 }

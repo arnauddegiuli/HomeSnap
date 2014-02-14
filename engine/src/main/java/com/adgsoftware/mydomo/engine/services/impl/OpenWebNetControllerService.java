@@ -24,14 +24,14 @@ package com.adgsoftware.mydomo.engine.services.impl;
  */
 
 
-import com.adgsoftware.mydomo.engine.oldconnector.Commander;
-import com.adgsoftware.mydomo.engine.oldconnector.ConnectionListener;
-import com.adgsoftware.mydomo.engine.oldconnector.Monitor;
-import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebCommanderImpl;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebMonitorImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
+import com.adgsoftware.mydomo.engine.connector.Commander;
+import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
+import com.adgsoftware.mydomo.engine.connector.Monitor;
+import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebCommanderImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebMonitorImpl;
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.services.ControllerService;
 
 public class OpenWebNetControllerService implements ControllerService {
@@ -59,7 +59,7 @@ public class OpenWebNetControllerService implements ControllerService {
 	 * @see com.adgsoftware.mydomo.engine.services.ControllerService#createController(com.adgsoftware.mydomo.engine.Category, java.lang.String)
 	 */
 	@Override
-	public <T extends Controller<? extends Status>> T createController(
+	public <T extends Controller> T createController(
 			Class<T> clazz, String where) {
 		
 		T controller = null;
@@ -74,7 +74,7 @@ public class OpenWebNetControllerService implements ControllerService {
 			if ( com != null )  {
 				com.addControllerToExecute(controller);
 			}
-			controller.setWhere(where);
+			controller.setWhere(new Where(where, where));
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -122,20 +122,20 @@ public class OpenWebNetControllerService implements ControllerService {
 
 	@Override
 	public void setIp(String ip) {
-		this.getOpenWebCommand().setIp(ip);
-		this.getOpenWebMonitor().setIp(ip);
+		((OpenWebCommanderImpl) this.getOpenWebCommand()).setIp(ip);
+		((OpenWebMonitorImpl) this.getOpenWebMonitor()).setIp(ip);
 	}
 
 	@Override
 	public void setPort(int port) {
-		this.getOpenWebCommand().setPort(port);
-		this.getOpenWebMonitor().setPort(port);
+		((OpenWebCommanderImpl) this.getOpenWebCommand()).setPort(port);
+		((OpenWebMonitorImpl) this.getOpenWebMonitor()).setPort(port);
 	}
 	
 	@Override
 	public void setPassword(Integer password) {
-		this.getOpenWebCommand().setPasswordOpen(password);
-		this.getOpenWebMonitor().setPasswordOpen(password);
+		((OpenWebCommanderImpl) this.getOpenWebCommand()).setPasswordOpen(password);
+		((OpenWebMonitorImpl) this.getOpenWebMonitor()).setPasswordOpen(password);
 	}
 
 	@Override

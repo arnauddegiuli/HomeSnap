@@ -1,5 +1,28 @@
 package com.adgsoftware.mydomo.engine.controller;
 
+/*
+ * #%L
+ * MyDomoEngine
+ * %%
+ * Copyright (C) 2011 - 2014 A. de Giuli
+ * %%
+ * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+ * 
+ *     MyDomo is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     MyDomo is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +45,6 @@ import com.adgsoftware.mydomo.engine.controller.what.StateName;
 import com.adgsoftware.mydomo.engine.controller.what.StateValue;
 import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.controller.who.Who;
-import com.adgsoftware.mydomo.engine.oldcontroller.LabelList;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
 public abstract class Controller implements JsonSerializable, Serializable {
 
@@ -35,7 +56,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	private String description; // string describing the controller
 	protected transient Commander server;
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
-	private LabelList labelList = null; // new LabelList(this); TODO replugger sur les label
+	private LabelList labelList = new LabelList(this);
 	/** List of all states with their class types to prevent from set a state with an invalid value */
 	private Map<StateName, Class<? extends StateValue>> stateTypes;
 	/** List of all states with their values which represents the current status of a device */
