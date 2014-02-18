@@ -9,7 +9,6 @@ import com.adgsoftware.mydomo.engine.connector.CommandResultStatus;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.what.State;
 import com.adgsoftware.mydomo.engine.controller.what.StateName;
-import com.adgsoftware.mydomo.engine.controller.what.impl.StringValue;
 import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.controller.who.Who;
 
@@ -69,8 +68,9 @@ public class CommandResultImpl implements CommandResult {
 	@Override
 	public State getWhat(StateName name) {
 		if (parser != null) {
+			
 			if (StateName.STATUS.equals(name)) {
-				return new State(StateName.STATUS, new StringValue(parser.getWhatFromCommand()));
+				return new State(StateName.STATUS, StatusMapping.convert(getWho(), parser.getWhatFromCommand())); // TODO revoir les getWho()
 				// TODO manage different type.
 			}
 			return null;
@@ -83,7 +83,7 @@ public class CommandResultImpl implements CommandResult {
 	@Override
 	public Who getWho() {
 		if (parser != null) {
-			return Who.valueOf(parser.getWhoFromCommand()); // TODO revoir ca!
+			return OpenWebNetWho.convert(parser.getWhoFromCommand()); // TODO revoir ca!
 		} else {
 			return null;
 		}

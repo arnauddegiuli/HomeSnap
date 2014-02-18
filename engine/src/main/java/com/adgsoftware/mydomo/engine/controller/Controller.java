@@ -125,6 +125,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 					new CommandListener() {
 						@Override
 						public void onCommand(CommandResult commandResult) {
+							// TODO tester que le type du status match avec ceux supporté!
 							waitingResult = false;
 							commandListener.onCommand(commandResult);
 						}
@@ -150,6 +151,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 					@Override
 					public void onCommand(CommandResult result) {
 						waitingResult = false;
+						// TODO tester que le type du status match avec ceux supporté!
 						if (CommandResultStatus.ok.equals(result.getStatus())) {
 							// Return the status of the controller from the server
 							State status = result.getWhat(stateName);

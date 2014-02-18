@@ -266,7 +266,7 @@ public class OpenWebCommanderImpl implements Commander {
 		String where = command.getWhere().getTo();
 		if (command.isActionCommand()) {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(CommandConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat()), where});
+				return MessageFormat.format(CommandConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat().getValue()), where});
 			} else { // Dimension
 				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat()); 
 				StringBuilder sb = new StringBuilder();

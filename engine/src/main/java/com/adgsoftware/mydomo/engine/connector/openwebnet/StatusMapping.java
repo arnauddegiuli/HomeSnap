@@ -24,19 +24,29 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  */
 
 import com.adgsoftware.mydomo.engine.connector.openwebnet.light.LightStatus;
-import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.what.StateValue;
 import com.adgsoftware.mydomo.engine.controller.who.Who;
 
 public class StatusMapping {
 
-	public static String convert(Who who, State state) {
+	public static String convert(Who who, StateValue stateValue) {
 		switch (who) {
 		case LIGHT:
-			return LightStatus.fromValue(state.getValue()).getCode(); // TODO manage null
+			return LightStatus.fromValue(stateValue).getCode(); // TODO manage null
 		default:
-			return state.getValue().getValue(); // TODO mapping
+			return stateValue.getValue(); // TODO mapping
 		}
 			
+		
+	}
+	
+	public static StateValue convert(Who who, String code) {
+		switch (who) {
+		case LIGHT:
+			return LightStatus.fromValue(code).getValue(); // TODO manage null
+		default:
+			return null; // TODO mapping
+		}
 		
 	}
 }

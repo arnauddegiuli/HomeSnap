@@ -43,7 +43,6 @@ import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.CommandListener;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.what.StateName;
-import com.adgsoftware.mydomo.engine.controller.what.impl.StringValue;
 import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.controller.who.Who;
 import com.adgsoftware.mydomo.engine.house.Label;
@@ -131,8 +130,9 @@ implements Monitor {
 		try {
 			CommandConstant parser = CommandConstant.getCommandAnalyser(message);
 			Where where = new Where(parser.getWhereFromCommand(), parser.getWhereFromCommand());
-			com.adgsoftware.mydomo.engine.controller.what.State what = new com.adgsoftware.mydomo.engine.controller.what.State(StateName.STATUS, new StringValue(parser.getWhatFromCommand())); // TODO mapping WHAT
 			Who who = OpenWebNetWho.convert(parser.getWhoFromCommand());
+			com.adgsoftware.mydomo.engine.controller.what.State what = new com.adgsoftware.mydomo.engine.controller.what.State(StateName.STATUS,  StatusMapping.convert(who, parser.getWhatFromCommand())); // TODO mapping WHAT
+
 			boolean known = false;
 			// TODO manage message on other bus
 			if (parser.isGeneralCommand()) {
@@ -184,7 +184,7 @@ implements Monitor {
 		if (what != null) {
 			// Manage what command
 			for (Controller controller : controllerList) {
-				if (who.equals(controller.getWho()) && where.equals(controller.getWhere())) {
+				if (who.equals(controller.getWho()) && where.getTo().equals(controller.getWhere().getTo())) {
 					known = true;
 					controller.changeState(what);
 				}

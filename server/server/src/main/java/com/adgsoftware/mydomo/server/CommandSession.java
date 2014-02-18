@@ -39,7 +39,7 @@ public class CommandSession implements Runnable {
 	private BufferedReader depuisClient; // réception de requête
 	private PrintWriter versClient; // envoi des réponses
 	private Log log = new Log();
-	
+
 	public CommandSession(Socket client, BufferedReader depuisClient, PrintWriter versClient) {
 		this.client = client;
 		this.depuisClient = depuisClient;
@@ -51,53 +51,53 @@ public class CommandSession implements Runnable {
 		versClient.flush();
 		log.fine(Session.Command, "FROM COMMAND SERVER: " + msg);
 	}
-	
+
 	private String read(){
-	    int indice = 0;
-	    boolean exit = false;
-	    char respond[] = new char[1024];
+		int indice = 0;
+		boolean exit = false;
+		char respond[] = new char[1024];
 		char c = ' ';
 		int ci = 0;
 		String responseString = null;
-		
-    	try{
-	    	do { 
-	    		if(client != null && !client.isInputShutdown()) {
-	    			ci = depuisClient.read();		    		
-		    		if (ci == -1) {
-		    			log.finest(Session.Command, "End of read from command client socket.");
-			  			client = null;
-			  			break;
-			        } else { 
-			        	c = (char) ci;			        				        
-					    if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
-					    	respond[indice] = c;
-					    	exit = true;
-					    	log.finest(Log.Session.Command, "End of message from command client socket [" + new String(respond) + "].");
-					    	break;
-					    } else {
-					    	respond[indice] = c;
-					    	indice = indice + 1;
-					    } 
-			        }
-	    		} else {
-	    			stop();
-	    			break;
-	    		}
-	        } while(true); 
-		}catch(IOException e){
+
+		try{
+			do {
+				if(client != null && !client.isInputShutdown()) {
+					ci = depuisClient.read();
+					if (ci == -1) {
+						log.finest(Session.Command, "End of read from command client socket.");
+						client = null;
+						break;
+					} else { 
+						c = (char) ci;
+						if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
+							respond[indice] = c;
+							exit = true;
+							log.finest(Log.Session.Command, "End of message from command client socket [" + new String(respond) + "].");
+							break;
+						} else {
+							respond[indice] = c;
+							indice = indice + 1;
+						} 
+					}
+				} else {
+					stop();
+					break;
+				}
+			} while(true); 
+		} catch(IOException e) {
 			log.severe(Session.Command, "Socket not available");
-	    }
-		
+		}
+
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
-		
+
 		log.fine(Log.Session.Command, "FROM COMMAND CLIENT: " + responseString);
-		
+
 		return responseString;
-    }
-	
+	}
+
 	public void run() {
 		boolean fini = false; // drapeau
 		String lue; // la requête
@@ -136,7 +136,5 @@ public class CommandSession implements Runnable {
 			log.severe(Session.Command, "Exception à la fermeture d'une connexion : "
 					+ e.getMessage());
 		}
-		
-		
 	}
 }

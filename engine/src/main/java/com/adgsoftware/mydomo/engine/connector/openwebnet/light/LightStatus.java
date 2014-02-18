@@ -74,6 +74,10 @@ public enum LightStatus {
 	public String getCode() {
 		return code;
 	}
+	
+	public StateValue getValue() {
+		return value;
+	}
 
 	public static LightStatus fromValue(String code) {
 		for (LightStatus light: LightStatus.values()) {
