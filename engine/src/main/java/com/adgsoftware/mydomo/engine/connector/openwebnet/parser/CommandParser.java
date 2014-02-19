@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandEnum;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.WhereType;
 
 public class CommandParser implements CommandParserConstants {
@@ -105,8 +107,14 @@ public class CommandParser implements CommandParserConstants {
                 }
         }
 
-        public List<String> getDimensionList() {
-                return dimensionList;
+        public List<DimensionValue> getDimensionList() {
+    		List<DimensionValue> dimensionList2 = new ArrayList<DimensionValue>();
+    		for (String dimension : dimensionList) {
+    			DimensionValue d = new DimensionValueImpl();
+    			d.setValue(dimension);
+    			dimensionList2.add(d);
+    		}
+    		return dimensionList2;
         }
 
   final private void parseOneLine() throws ParseException {

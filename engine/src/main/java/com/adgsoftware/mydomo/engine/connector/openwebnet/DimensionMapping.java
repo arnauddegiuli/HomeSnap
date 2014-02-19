@@ -31,7 +31,6 @@ public class DimensionMapping {
 
 	public static DimensionStatus convert(State state) {
 		DimensionStatus ds = GatewayDimension.fromValue(state.getName()).createDimensionStatus();
-		
 //		ds.setValueList(dimensionList); TODO manage values
 		return ds;
 	}
@@ -39,4 +38,10 @@ public class DimensionMapping {
 	public static String getOpenWebNetCode(State state) {
 		return GatewayDimension.fromValue(state.getName()).getCode();
 	}
+	
+	public static State convert(DimensionStatus dimension) {
+		return new State(GatewayDimension.fromValue(dimension.getCode()).getName(), null); // TODO manage value
+		
+	}
+	
 }

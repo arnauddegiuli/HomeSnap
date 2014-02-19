@@ -23,9 +23,10 @@
 
 import org.junit.Test;
 
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
 import com.adgsoftware.mydomo.webserver.servlet.house.HouseServiceImpl;
 import com.adgsoftware.mydomo.webserver.utils.JSonTools;
 
@@ -53,12 +54,12 @@ public class SerializationTest {
 		
 		Light li = new Light();
 		li.setTitle("toto");
-		li.setWhere("12");
+		li.setWhere(new Where("12","12"));
 		label.add(li);
 			
 		Light li2 = new Light();
 		li2.setTitle("Light 2");
-		li2.setWhere("13");
+		li2.setWhere(new Where("13","13"));
 		label.add(li2);
 		
 		label = new Label();

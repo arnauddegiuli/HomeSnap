@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
@@ -93,8 +94,8 @@ public class ControllerStateManagement {
 	 */
 	public synchronized static String executeCommand(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String who = parser.getWhoFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String who = parser.getWho();
 			String result;
 			ControllerSimulator cc;
 			synchronized (controllerCommandList) {
@@ -110,12 +111,12 @@ public class ControllerStateManagement {
 						result = cdc.execute(command);
 					} else {
 						System.out.println("Command not supported [" + command + "]");
-						result = CommandConstant.NACK;
+						result = OpenWebNetConstant.NACK;
 					}
 				
 			}
 			
-			if (!CommandConstant.NACK.equalsIgnoreCase(result)) {
+			if (!OpenWebNetConstant.NACK.equalsIgnoreCase(result)) {
 				synchronized (monitorList) {
 					// Monitor session closed is only detected when we try to lunch a command on it
 					// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
@@ -143,8 +144,8 @@ public class ControllerStateManagement {
 	 */
 	public synchronized static String executeStatus(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String who = parser.getWhoFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String who = parser.getWho();
 			ControllerSimulator cc;
 			
 			synchronized (controllerCommandList) {
@@ -160,7 +161,7 @@ public class ControllerStateManagement {
 						return cdc.status(command);
 					} else {
 						System.out.println("Command not supported [" + command + "]");
-						return CommandConstant.NACK;
+						return OpenWebNetConstant.NACK;
 					}
 				}
 			}}

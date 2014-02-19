@@ -23,51 +23,31 @@ package com.adgsoftware.mydomo.engine.connector.openwebnet;
  * #L%
  */
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.what.StateName;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 
-public class CommandConstant {
-	// Standard *WHO*WHAT*WHERE##
-	// Status request *#WHO*WHERE##
-	// Dimension request *#WHO*WHERE*DIMENSION##
-	// Dimension write *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
+public class OpenWebNetCommand {
 
-	public final static String ACK = "*#*1##";
-	public final static String NACK = "*#*0##";
-
-	public final static String COMMAND_SESSION = "*99*0##";
-	public final static String MONITOR_SESSION = "*99*1##";
-
-	public final static String COMMAND = "*{0}*{1}*{2}##"; // *WHO*WHAT*WHERE##
-	public final static String STATUS = "*#{0}*{1}##"; // *#WHO*WHERE##
-	public final static String DIMENSION_STATUS = "*#{0}*{1}*{2}##"; // *#WHO*WHERE*DIMENSION##
-																		// =>
-																		// response:
-																		// *#WHO#*WHERE*WHATDIMENSION*VAL1*...*VALn##
-	public final static String DIMENSION_COMMAND = "*#{0}*{1}*#{2}*{3}##"; // *#WHO*WHERE*#WHATDIMENSION*DIMESION1*...*Dimensionn##
-	public final static String DIMENSION_SEPARATOR = "*";
-
-
-
-	// private constructor
-	private CommandConstant(String command) throws ParseException {parser = CommandParser.parse(command);}
-
+	private String command;
 	private CommandParser parser;
 
-	public static CommandConstant getCommandAnalyser(String command) throws ParseException {
+	public OpenWebNetCommand(String command) throws ParseException {
 		try {
-			return new CommandConstant(command);
+			parser = CommandParser.parse(command);
 		} catch (ParseException e) {
 			System.out.println("Invalid command [" + command + "].");
 			throw e;
 		}
 	}
-	
+
 	public boolean isStandardCommand() {
 		return CommandEnum.STANDARD_COMMAND.equals(parser.getType());
 	}
@@ -88,41 +68,39 @@ public class CommandConstant {
 		return WhereType.ENVIRONMENT.equals(parser.getWho());
 	}
 
-	public String getWhatFromCommand() {
-		return parser.getWhat();
+	public State getWhat() { // TODO change name => remove command
+		return new State(StateName.STATUS, StatusMapping.convert(getWho(), parser.getWhat()));
 	}
 
-	public String getWhoFromCommand() {
-		return parser.getWho();
+	public Who getWho() {
+		return OpenWebNetWho.convert(parser.getWho());
 	}
 
-	public String getWhereFromCommand() {
-		return parser.getWhere();
+	public Where getWhere() {
+		String where = parser.getWhere();
+		return new Where(where, where);
+
 	}
 
-	public String getDimensionFromCommand() {
-		return parser.getDimension();
-	}
-
-	public String getGroupFromCommand() {
+	public String getGroup() {
 		return parser.getGroup();
 	}
 
-	public String getEnvironmentFromCommand() {
+	public String getEnvironment() {
 		return parser.getEnvironment();
 	}
 
 	public SpecialCommand getSpecialCommand() {
 		return new SpecialCommand(parser);
 	}
-	
-	public List<DimensionValue> getDimensionListFromCommand() {
-		List<DimensionValue> dimensionList = new ArrayList<DimensionValue>();
-		for (String dimension : parser.getDimensionList()) {
-			DimensionValue d = new DimensionValueImpl();
-			d.setValue(dimension);
-			dimensionList.add(d);
-		}
-		return dimensionList;
+
+	public State getDimension() {
+		String code = parser.getDimension();
+		List<DimensionValue> dimensionList = parser.getDimensionList();
+		return DimensionMapping.convert(new DimensionStatusImpl(dimensionList, code));
+	}
+
+	public String toString() {
+		return command;
 	}
 }

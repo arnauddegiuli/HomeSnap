@@ -266,24 +266,24 @@ public class OpenWebCommanderImpl implements Commander {
 		String where = command.getWhere().getTo();
 		if (command.isActionCommand()) {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(CommandConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat().getValue()), where});
+				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat().getValue()), where});
 			} else { // Dimension
 				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat()); 
 				StringBuilder sb = new StringBuilder();
 				for (DimensionValue dimension : dimensionStatus.getValueList()) {
 					sb.append(dimension.getValue());
-					sb.append(CommandConstant.DIMENSION_SEPARATOR);
+					sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
 				}
 				sb.setLength(sb.length()-1);
 				
-				return MessageFormat.format(CommandConstant.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()});
+				return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()});
 			}
 		} else {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(CommandConstant.STATUS, new Object[] {who, where});
+				return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
 			} else {
 				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat());
-				return MessageFormat.format(CommandConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
+				return MessageFormat.format(OpenWebNetConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
 			}
 		}
 	}

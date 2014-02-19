@@ -2,12 +2,11 @@ package com.adgsoftware.mydomo.webserver.rest.listener;
 
 import java.util.Map;
 
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.Verb;
@@ -48,9 +47,9 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onControllerByLabel(String labelId, String where) {
 		Label l = getLabel(labelId);
-		for (Controller<? extends Status> controller : l.getControllerList()) {
+		for (Controller controller : l.getControllerList()) {
 			if (controller.getWhere().equals(where)) {
-				setResult(JSonTools.toJson(controller));
+				setResult(controller.toJson().toString());
 				return;
 			}
 		}
@@ -70,11 +69,11 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onControllerByGroup(String groupId, String where) {
 		Group g = getGroup(groupId);
-		for (Controller<? extends Status> controller : g.getControllerList()) {
+		for (Controller controller : g.getControllerList()) {
 			if (controller.getWhere() == null) {
 				// TODO log warning!
 			} else if (controller.getWhere().equals(where)) {
-				setResult(JSonTools.toJson(controller));
+				setResult(controller.toJson().toString());
 				return;
 			}
 		}
@@ -84,17 +83,17 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onController(String where) {
 		for (Group g : getHouse().getGroups()) {
-			for (Controller<? extends Status> controller : g.getControllerList()) {
+			for (Controller controller : g.getControllerList()) {
 				if (controller.getWhere().equals(where)) {
-					setResult(JSonTools.toJson(controller));
+					setResult(controller.toJson().toString());
 					return;
 				}
 			}
 		}
 		for (Label l : getHouse().getLabels()) {
-			for (Controller<? extends Status> controller : l.getControllerList()) {
+			for (Controller controller : l.getControllerList()) {
 				if (controller.getWhere().equals(where)) {
-					setResult(JSonTools.toJson(controller));
+					setResult(controller.toJson().toString());
 					return;
 				}
 			}
@@ -103,7 +102,7 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatus status) throws UnsupportedRestOperation {
+	public void onLightStatus(String where, LightStateValue status) throws UnsupportedRestOperation {
 		throw new UnsupportedRestOperation(getUri(), Verb.GET);
 	}
 }

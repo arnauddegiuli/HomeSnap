@@ -27,9 +27,10 @@ package com.adgsoftware.mydomo.server.controllermodules.light;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.light.LightStatus;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
 
@@ -40,16 +41,16 @@ public class LightSimulator implements ControllerSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String what = parser.getWhatFromCommand();
-			String where = parser.getWhereFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String what = parser.getWhat();
+			String where = parser.getWhere();
 			if (LightStatus.LIGHT_OFF.getCode().equals(what)
 					|| LightStatus.LIGHT_ON.getCode().equals(what)) {
 				statusList.put(where, what);
-				return CommandConstant.ACK;
+				return OpenWebNetConstant.ACK;
 			} else {
 				System.out.println("Command not supported [" + command + "]");
-				return CommandConstant.NACK;
+				return OpenWebNetConstant.NACK;
 			}
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -61,15 +62,15 @@ public class LightSimulator implements ControllerSimulator {
 	@Override
 	public String status(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String where = parser.getWhereFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String where = parser.getWhere();
 			String what = statusList.get(where);
 			if (what == null) {
 				what = LightStatus.LIGHT_OFF.getCode();
 				statusList.put(where, what);
 			}
 
-			return MessageFormat.format(CommandConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, what, where} ) + CommandConstant.ACK;
+			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, what, where} ) + OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
 			e.printStackTrace();

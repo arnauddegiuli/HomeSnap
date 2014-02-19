@@ -27,8 +27,9 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 import java.text.MessageFormat;
 import java.util.Hashtable;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerSimulator;
@@ -40,17 +41,17 @@ public class AutomationSimulator implements ControllerSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String what = parser.getWhatFromCommand();
-			String where = parser.getWhereFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String what = parser.getWhat();
+			String where = parser.getWhere();
 			if (Automation.AutomationState.AUTOMATION_DOWN.getValue().equals(what)
 					|| Automation.AutomationState.AUTOMATION_STOP.getValue().equals(what)
 					|| Automation.AutomationState.AUTOMATION_UP.getValue().equals(what)) {
 				statusList.put(where, what);
-				return CommandConstant.ACK;
+				return OpenWebNetConstant.ACK;
 			} else {
 				System.out.println("Command not supported [" + command + "]");
-				return CommandConstant.NACK;
+				return OpenWebNetConstant.NACK;
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -63,14 +64,14 @@ public class AutomationSimulator implements ControllerSimulator {
 	public String status(String command) {
 		String where;
 		try {
-			where = CommandConstant.getCommandAnalyser(command).getWhereFromCommand();
+			where = CommandParser.parse(command).getWhere();
 			String what = statusList.get(where);
 			if (what == null) {
 				what = Automation.AutomationState.AUTOMATION_STOP.getValue();
 				statusList.put(where, what);
 			}
 
-			return MessageFormat.format(CommandConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, what, where} ) + CommandConstant.ACK;
+			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, what, where} ) + OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

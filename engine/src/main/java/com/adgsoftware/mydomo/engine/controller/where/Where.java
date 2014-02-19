@@ -45,7 +45,6 @@ public class Where {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
 		result = prime * result + ((to == null) ? 0 : to.hashCode());
 		return result;
 	}
@@ -59,11 +58,6 @@ public class Where {
 		if (getClass() != obj.getClass())
 			return false;
 		Where other = (Where) obj;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		} else if (!from.equals(other.from))
-			return false;
 		if (to == null) {
 			if (other.to != null)
 				return false;
@@ -71,6 +65,7 @@ public class Where {
 			return false;
 		return true;
 	}
+
 	
 	
 }

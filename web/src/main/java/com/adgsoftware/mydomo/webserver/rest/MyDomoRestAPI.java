@@ -1,6 +1,7 @@
 package com.adgsoftware.mydomo.webserver.rest;
 
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
+
 
 public interface MyDomoRestAPI {
 
@@ -12,5 +13,5 @@ public interface MyDomoRestAPI {
 	public void onGroup(String groupId) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation;
 	public void onControllerByGroup(String groupId, String where) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation;
 	public void onController(String where) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation;
-	public void onLightStatus(String where, LightStatus status) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation;
+	public void onLightStatus(String where, LightStateValue status) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation;
 }

@@ -5,11 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.adgsoftware.mydomo.engine.controller.light.Light;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Icon;
 import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
 import com.adgsoftware.mydomo.engine.services.PersistenceService;
 import com.adgsoftware.mydomo.engine.services.impl.OpenWebNetControllerService;
 import com.adgsoftware.mydomo.engine.services.impl.PersistenceServiceImpl;
@@ -92,17 +93,17 @@ public class HouseServiceImpl {
 
 		Light li = new Light();
 		li.setTitle("toto");
-		li.setWhere("12");
+		li.setWhere(new Where("12", "12"));
 		label.add(li);
 
 		Light li2 = new Light();
 		li2.setTitle("Light 2");
-		li2.setWhere("13");
+		li2.setWhere(new Where("13","13"));
 		label.add(li2);
 
 		Light li3 = new Light();
 		li3.setTitle("Light 3");
-		li3.setWhere("14");
+		li3.setWhere(new Where("14","14"));
 		label.add(li3);
 
 		label = new Label();
@@ -113,7 +114,7 @@ public class HouseServiceImpl {
 
 		Light li4 = new Light();
 		li4.setTitle("Light ch2");
-		li4.setWhere("15");
+		li4.setWhere(new Where("15","15"));
 		label.add(li4);
 
 		label = new Label();
@@ -124,7 +125,7 @@ public class HouseServiceImpl {
 
 		Light li5 = new Light();
 		li5.setTitle("Light Cuisine");
-		li5.setWhere("16");
+		li5.setWhere(new Where("16", "16"));
 		label.add(li5);
 
 		Group group1 = new Group();

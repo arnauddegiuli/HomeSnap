@@ -60,44 +60,44 @@ public class OpenWebCommandThread implements Runnable {
 				if(msg == null){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(null, CommandResultStatus.error));
+						resultListener.onCommand(new OpenWebNetCommandResult(null, CommandResultStatus.error));
 					}
 					return;
 				}
 
-				if (CommandConstant.ACK.equals(msg)){
+				if (OpenWebNetConstant.ACK.equals(msg)){
 					log.finest(Log.Session.Command, "Command sent.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(CommandConstant.ACK, CommandResultStatus.ok));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.ACK, CommandResultStatus.ok));
 					}
 					return;
-				} else if (CommandConstant.NACK.equals(msg)){
+				} else if (OpenWebNetConstant.NACK.equals(msg)){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(CommandConstant.NACK, CommandResultStatus.nok));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok));
 					}
 					return;
 				} else { // First return was information. The next should be acknowledgment
 					String actionReturn = msg;
 					msg = commander.readMessage();
-					if(CommandConstant.ACK.equals(msg)){
+					if(OpenWebNetConstant.ACK.equals(msg)){
 						log.finest(Log.Session.Command, "Command sent.");
 						if (resultListener != null) {
-							resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.ok));
+							resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.ok));
 						}
 						return;
 					}
 
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new CommandResultImpl(actionReturn, CommandResultStatus.error));
+						resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.error));
 					}
 					return;
 				}
 			} else { // connection closed...
 				log.severe(Log.Session.Command, "Command failed (Connection closed).");
 				if (resultListener != null) {
-					resultListener.onCommand(new CommandResultImpl(CommandConstant.NACK, CommandResultStatus.nok));
+					resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok));
 				}
 				return;
 			}

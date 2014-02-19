@@ -33,7 +33,7 @@ import java.net.Socket;
 
 import com.adgsoftware.mydomo.engine.Log;
 import com.adgsoftware.mydomo.engine.Log.Session;
-import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
 
 public class Server implements Runnable {
 
@@ -77,43 +77,43 @@ public class Server implements Runnable {
 					versClient = new PrintWriter(new OutputStreamWriter(
 							s.getOutputStream()), true);
 					// Welcome ack
-					write(Session.Server, CommandConstant.ACK, versClient);
+					write(Session.Server, OpenWebNetConstant.ACK, versClient);
 					String sessionType = read(s, depuisClient);
-					if (CommandConstant.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
+					if (OpenWebNetConstant.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
 						if (password != null) {
 							write(Session.Monitor, "*#" + nonce + "##", versClient);
 							String result = read(s, depuisClient);
 							if (!"*#25280520##".equals(result)) {
 								log.fine(Session.Monitor, "Password error..."); 
-								write(Session.Monitor, CommandConstant.NACK, versClient);
+								write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
 								break;
 							}
 						}
 						
 						log.fine(Session.Monitor, "Start Monitor Session..."); 
-						write(Session.Monitor, CommandConstant.ACK, versClient);
+						write(Session.Monitor, OpenWebNetConstant.ACK, versClient);
 						ControllerStateManagement.registerMonitorSession(
 								new MonitorSession(s, versClient)
 						);
 
-					} else if (CommandConstant.COMMAND_SESSION
+					} else if (OpenWebNetConstant.COMMAND_SESSION
 							.equalsIgnoreCase(sessionType)) {
 						if (password != null) {
 							write(Session.Monitor, "*#" + nonce + "##", versClient);
 							String result = read(s, depuisClient);
 							if (!"*#25280520##".equals(result)) {
 								log.fine(Session.Monitor, "Password error..."); 
-								write(Session.Monitor, CommandConstant.NACK, versClient);
+								write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
 								break;
 							}
 						}
 						log.fine(Session.Command, "Start Command Session...");
-						write(Session.Command, CommandConstant.ACK, versClient);
+						write(Session.Command, OpenWebNetConstant.ACK, versClient);
 						new Thread(new CommandSession(s, depuisClient,
 								versClient)).start();
 
 					} else {
-						write(Session.Server, CommandConstant.NACK, versClient);
+						write(Session.Server, OpenWebNetConstant.NACK, versClient);
 					}
 				} catch (IOException e) {
 					try {

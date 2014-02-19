@@ -34,7 +34,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetCommand;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
@@ -44,6 +45,7 @@ import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.dimension.Firm
 import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.dimension.IpAddress;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.dimension.Model;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.dimension.Time;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
 import com.adgsoftware.mydomo.engine.controller.gateway.Version;
 import com.adgsoftware.mydomo.server.controllermodules.ControllerDimensionSimulator;
@@ -57,33 +59,33 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	@Override
 	public String execute(String command) {
 		try {
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String what = parser.getDimensionFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String what = parser.getDimension();
 
 			if (GatewayDimension.TIME.getCode().equals(what)) {
 				// define time... nothing to do except if you want change your
 				// system hours
-				return CommandConstant.ACK;
+				return OpenWebNetConstant.ACK;
 			} else if (GatewayDimension.DATE.getCode().equals(
 					what)) {
 				// define date... nothing to do except if you want change your
 				// system hours
-				return CommandConstant.ACK;
+				return OpenWebNetConstant.ACK;
 			} else if (GatewayDimension.DATETIME.getCode().equals(
 					what)) {
 				// define date... nothing to do except if you want change your
 				// system hours
-				return CommandConstant.ACK;
+				return OpenWebNetConstant.ACK;
 			} else if (GatewayDimension.IP_ADDRESS.getCode().equals(
 					what)) {
 				String where = GATEWAY_ADDRESS; // Gateway has no address! => can only manage connected gateway
-				String dimension = parser.getDimensionFromCommand();
+				String dimension = parser.getDimension();
 
 				dimensionCache.put(where + "-" + dimension,
-						parser.getDimensionListFromCommand());
-				return CommandConstant.ACK;
+						parser.getDimensionList());
+				return OpenWebNetConstant.ACK;
 			} else {
-				return CommandConstant.NACK;
+				return OpenWebNetConstant.NACK;
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -96,8 +98,8 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	public String status(String command) {
 		try {
 			String where = GATEWAY_ADDRESS;
-			CommandConstant parser = CommandConstant.getCommandAnalyser(command);
-			String dimensionStr = parser.getDimensionFromCommand();
+			CommandParser parser = CommandParser.parse(command);
+			String dimensionStr = parser.getDimension();
 			List<DimensionValue> dimensionList;
 			if (GatewayDimension.TIME.getCode().equals(dimensionStr)) {
 				Time t = new Time();
@@ -178,7 +180,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 				dt.setTime(new Date());
 				dimensionList = dt.getValueList();
 			}  else {
-				return CommandConstant.NACK;
+				return OpenWebNetConstant.NACK;
 			}
 	
 			if (dimensionList == null) {
@@ -189,12 +191,12 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			StringBuilder sb = new StringBuilder();
 			for (DimensionValue dimension : dimensionList) {
 				sb.append(dimension.getValue());
-				sb.append(CommandConstant.DIMENSION_SEPARATOR);
+				sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
 			}
 			sb.setLength(sb.length() - 1);
-			return MessageFormat.format(CommandConstant.DIMENSION_COMMAND, new Object[] {
+			return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
 					OpenWebNetWho.WHO_GATEWAY, where, dimensionStr, sb.toString() })
-					+ CommandConstant.ACK;
+					+ OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

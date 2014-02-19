@@ -39,26 +39,27 @@ import com.adgsoftware.mydomo.engine.controller.who.Who;
 /**
  * CommandResult is the result of a command sent to gateway.
  */
-public class CommandResultImpl implements CommandResult {
+public class OpenWebNetCommandResult implements CommandResult {
 	private String commandResult;
+	private OpenWebNetCommand command;
 	private CommandResultStatus status;
 	private Log log = new Log();
-	private CommandConstant parser;
 	
-	public CommandResultImpl(String commandResult, CommandResultStatus status) {
+	public OpenWebNetCommandResult(String commandResult, CommandResultStatus status) {
 		this.commandResult = commandResult;
-		this.status = status;
-		if (commandResult != null &&!CommandConstant.ACK.equals(commandResult) && !CommandConstant.NACK.equals(commandResult)) {
+		if (! (OpenWebNetConstant.ACK.equals(commandResult) ||
+				OpenWebNetConstant.NACK.equals(commandResult))) {
 			try {
-				parser = CommandConstant.getCommandAnalyser(commandResult);
+				command = new OpenWebNetCommand(commandResult);
 			} catch (ParseException e) {
-				log.log(Session.Command, Level.SEVERE, "Unknown command result [" + commandResult + "].");
+				log.log(Session.Command, Level.WARNING, "Unknown message received [" + commandResult +"]. Message dropped.");
 			}
 		}
+		this.status = status;
 	}
 
 	public String getResult() {
-		return commandResult;
+		return commandResult.toString();
 	}
 
 	public CommandResultStatus getStatus() {
@@ -67,14 +68,13 @@ public class CommandResultImpl implements CommandResult {
 
 	@Override
 	public State getWhat(StateName name) {
-		if (parser != null) {
+		if (command != null) {
 			
 			if (StateName.STATUS.equals(name)) {
-				return new State(StateName.STATUS, StatusMapping.convert(getWho(), parser.getWhatFromCommand())); // TODO revoir les getWho()
-				// TODO manage different type.
+				return command.getWhat();
+			} else {
+				return command.getDimension();
 			}
-			return null;
-			// TODO manage dimension
 		} else {
 			return null;
 		}
@@ -82,8 +82,8 @@ public class CommandResultImpl implements CommandResult {
 
 	@Override
 	public Who getWho() {
-		if (parser != null) {
-			return OpenWebNetWho.convert(parser.getWhoFromCommand()); // TODO revoir ca!
+		if (command != null) {
+			return command.getWho();
 		} else {
 			return null;
 		}
@@ -91,12 +91,10 @@ public class CommandResultImpl implements CommandResult {
 
 	@Override
 	public Where getWhere() {
-		if (parser != null) {
-			String where = parser.getWhereFromCommand();
-			return new Where(where, where);
+		if (command != null) {
+			return command.getWhere();
 		} else {
 			return null;
 		}
 	}
-
 }

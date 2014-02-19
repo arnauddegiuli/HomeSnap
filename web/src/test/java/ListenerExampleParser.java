@@ -1,5 +1,5 @@
 
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
 import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
@@ -50,7 +50,7 @@ public class ListenerExampleParser implements MyDomoRestAPI {
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatus status)
+	public void onLightStatus(String where, LightStateValue status)
 			throws UnsupportedRestOperation, RestOperationException,
 			MissingParameterRestOperation {
 		System.out.println("Changement de lumière [where:" + where + "] - [status:" + status.name() + "]");

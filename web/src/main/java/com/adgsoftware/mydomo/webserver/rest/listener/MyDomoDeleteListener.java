@@ -2,12 +2,11 @@ package com.adgsoftware.mydomo.webserver.rest.listener;
 
 import java.util.Map;
 
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
 import com.adgsoftware.mydomo.engine.house.Group;
 import com.adgsoftware.mydomo.engine.house.House;
 import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light.LightStatus;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
 import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
@@ -46,7 +45,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	public void onControllerByLabel(String labelId, String where) throws RestOperationException {
 		Label l = getLabel(labelId);
 		if (l != null) {
-			for (Controller<? extends Status> controller : l.getControllerList()) {
+			for (Controller controller : l.getControllerList()) {
 				if(controller.getWhere().equals(where)) {
 					l.remove(controller);
 					return;
@@ -77,7 +76,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	public void onControllerByGroup(String groupId, String where) throws RestOperationException {
 		Group g = getGroup(groupId);
 		if (g != null) {
-			for (Controller<? extends Status> controller : g.getControllerList()) {
+			for (Controller controller : g.getControllerList()) {
 				if(controller.getWhere().equals(where)) {
 					g.remove(controller);
 					return;
@@ -95,7 +94,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatus status) throws UnsupportedRestOperation {
+	public void onLightStatus(String where, LightStateValue status) throws UnsupportedRestOperation {
 		throw new UnsupportedRestOperation(getUri(), Verb.DELETE);
 	}
 }

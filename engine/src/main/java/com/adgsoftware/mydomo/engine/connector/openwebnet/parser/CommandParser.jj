@@ -88,8 +88,14 @@ public class CommandParser
 		}
 	}
 
-	public List<String> getDimensionList() {
-		return dimensionList;
+	public List<DimensionValue> getDimensionList() {
+		List<DimensionValue> dimensionList2 = new ArrayList<DimensionValue>();
+		for (String dimension : dimensionList) {
+			DimensionValue d = new DimensionValueImpl();
+			d.setValue(dimension);
+			dimensionList2.add(d);
+		}
+		return dimensionList2;
 	}
 }
 

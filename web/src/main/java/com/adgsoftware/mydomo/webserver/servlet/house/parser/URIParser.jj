@@ -6,7 +6,7 @@ options
 PARSER_BEGIN(UriParser)
 package com.adgsoftware.mydomo.webserver.servlet.house.parser;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStatus;
+import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
 import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
 import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
 import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
@@ -116,7 +116,7 @@ DELETE
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatus status) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
+	public void onLightStatus(String where, LightStateValue status) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 		listener.onLightStatus(where, status);
 	}
 }
@@ -209,11 +209,11 @@ void light(String where) throws UnsupportedRestOperation, RestOperationException
 }
 {
 	"/" (
-			<ON> <EOF> {onLightStatus(where, LightStatus.LIGHT_ON);}
-		|	<OFF> <EOF> {onLightStatus(where, LightStatus.LIGHT_OFF);}
+			<ON> <EOF> {onLightStatus(where, LightStateValue.LIGHT_ON);}
+		|	<OFF> <EOF> {onLightStatus(where, LightStateValue.LIGHT_OFF);}
 		)
-	| "?what=on" {onLightStatus(where, LightStatus.LIGHT_ON);}
-	| "?what=off" {onLightStatus(where, LightStatus.LIGHT_OFF);}
+	| "?what=on" {onLightStatus(where, LightStateValue.LIGHT_ON);}
+	| "?what=off" {onLightStatus(where, LightStateValue.LIGHT_OFF);}
 }
 
 void automation():

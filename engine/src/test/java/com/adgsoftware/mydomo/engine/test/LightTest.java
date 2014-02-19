@@ -69,8 +69,7 @@ public class LightTest {
 				}
 			}
 		});
-		
-		
+
 		// First we just wait 1 second to be sure the controller is initialize 
 		try {
 			synchronized (lock) {
@@ -80,19 +79,17 @@ public class LightTest {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
 		Assert.assertNotNull(light.getStatus());
 		Assert.assertEquals(LightStateValue.LIGHT_OFF , light.getStatus());
-		
+
 		// Now set the value to ON
 		light.setStatus(LightStateValue.LIGHT_ON);
-		System.out.println("Wait...");
-		
 		// Wait the response from the server
 		try {
 			synchronized (lock) {
-				
+				System.out.println("Wait...");	
 				lock.wait();
 			}
 		} catch (InterruptedException e) {
@@ -102,14 +99,12 @@ public class LightTest {
 		// Check that after the server response now the status is ON
 		Assert.assertNotNull(light.getStatus());
 		Assert.assertEquals(LightStateValue.LIGHT_ON , light.getStatus());
-		
+
 		// Switch off again
 		light.setStatus(LightStateValue.LIGHT_OFF);
-		System.out.println("Wait...");
-		
 		try {
 			synchronized (lock) {
-				
+				System.out.println("Wait...");
 				lock.wait();
 			}
 		} catch (InterruptedException e) {
