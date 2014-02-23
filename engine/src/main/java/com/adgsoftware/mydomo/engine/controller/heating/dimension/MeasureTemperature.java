@@ -1,5 +1,10 @@
 package com.adgsoftware.mydomo.engine.controller.heating.dimension;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.HeatingZoneDimension;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,11 +28,6 @@ package com.adgsoftware.mydomo.engine.controller.heating.dimension;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone;
-
 public class MeasureTemperature extends DimensionStatusImpl {
 
 	private int TEMPERATURE_POS = 0;
@@ -36,7 +36,7 @@ public class MeasureTemperature extends DimensionStatusImpl {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl() // T: temperature not adjust by local offset. Composed by 4 digit: c1c2c3c4 included between "0050" (5° temperature) and "0400" (40° temperature). c1 is always equals to 0, it indicates a positive temperature. The c2c3 couple indicates the temperature between [05°-40°]. c4 indicates the decimal Celsius degree by 0.5° step.
 				},
-				HeatingZone.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode()
+				HeatingZoneDimension.MEASURE_TEMPERATURE.getCode()
 		);
 	}
 

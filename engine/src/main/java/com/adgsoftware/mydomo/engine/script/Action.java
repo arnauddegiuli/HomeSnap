@@ -1,5 +1,7 @@
 package com.adgsoftware.mydomo.engine.script;
 
+import com.adgsoftware.mydomo.engine.controller.Controller;
+import com.adgsoftware.mydomo.engine.controller.what.State;
 /*
  * #%L
  * MyDomoEngine
@@ -24,24 +26,22 @@ package com.adgsoftware.mydomo.engine.script;
  */
 
 
-import com.adgsoftware.mydomo.engine.oldcontroller.Controller;
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
 
-public class Action<T extends Status> {
+public class Action {
 
-	private T status;
-	private Controller<T> controller;
+	private State status;
+	private Controller controller;
 
-	public Action(T status, Controller<T> controller) {
+	public Action(State status, Controller controller) {
 		this.status = status;
 		this.controller = controller;
 	}
 
-	public Controller<T> getController() {
+	public Controller getController() {
 		return controller;
 	}
 
-	public T getStatus() {
+	public State getStatus() {
 		return status;
 	}
 }

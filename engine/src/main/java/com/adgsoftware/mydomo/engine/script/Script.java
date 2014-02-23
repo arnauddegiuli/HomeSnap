@@ -26,13 +26,11 @@ package com.adgsoftware.mydomo.engine.script;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.oldcontroller.Status;
-
 public class Script {
 
-	private List<Action<? extends Status>> actionList = new ArrayList<Action<? extends Status>>();
+	private List<Action> actionList = new ArrayList<Action>();
 	
-	public List<Action<? extends Status>> getActionList() {
+	public List<Action> getActionList() {
 		return actionList;
 	}
 }

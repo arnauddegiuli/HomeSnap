@@ -1,5 +1,10 @@
 package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,10 +28,6 @@ package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
 
 public class MacAddress extends DimensionStatusImpl {
 
@@ -38,7 +39,7 @@ public class MacAddress extends DimensionStatusImpl {
 				new DimensionValueImpl(),
 				new DimensionValueImpl(),
 				new DimensionValueImpl()
-				}, Gateway.GatewayDimension.MAC_ADDRESS.getCode());
+				}, GatewayDimension.MAC_ADDRESS.getCode());
 	}
 
 	public byte[] getIpAddress() {

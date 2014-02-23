@@ -27,10 +27,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
 
 public class UpTime extends DimensionStatusImpl {
 	
@@ -46,7 +46,7 @@ public class UpTime extends DimensionStatusImpl {
 				new DimensionValueImpl(), // Min
 				new DimensionValueImpl(), // Seconds
 				},
-			Gateway.GatewayDimension.UPTIME.getCode()
+			GatewayDimension.UPTIME.getCode()
 		);
 	}
 	

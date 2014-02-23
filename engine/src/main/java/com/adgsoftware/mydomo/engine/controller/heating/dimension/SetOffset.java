@@ -1,5 +1,12 @@
 package com.adgsoftware.mydomo.engine.controller.heating.dimension;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.HeatingZoneDimension;
+import com.adgsoftware.mydomo.engine.controller.heating.Offset;
+import com.adgsoftware.mydomo.engine.controller.heating.Offset.Mode;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,13 +30,6 @@ package com.adgsoftware.mydomo.engine.controller.heating.dimension;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.Offset.Mode;
-
 public class SetOffset extends DimensionStatusImpl {
 
 	private int LOCAL_OFFSET_POS = 0;
@@ -38,7 +38,7 @@ public class SetOffset extends DimensionStatusImpl {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl()  // OL: Local Offset
 				},
-				HeatingZone.HeatingZoneDimension.LOCAL_OFFSET.getCode()
+				HeatingZoneDimension.LOCAL_OFFSET.getCode()
 		);
 	}
 

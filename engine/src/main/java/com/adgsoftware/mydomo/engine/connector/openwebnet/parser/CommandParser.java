@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.adgsoftware.mydomo.engine.connector.openwebnet.CommandEnum;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.WhereType;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
 import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.WhereType;
 
 public class CommandParser implements CommandParserConstants {
         private String who;

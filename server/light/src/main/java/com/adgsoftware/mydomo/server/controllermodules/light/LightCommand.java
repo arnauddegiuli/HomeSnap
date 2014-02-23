@@ -26,8 +26,9 @@ package com.adgsoftware.mydomo.server.controllermodules.light;
 
 import java.text.MessageFormat;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldcontroller.light.Light;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.light.LightStatus;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class LightCommand {
@@ -36,10 +37,10 @@ public class LightCommand {
 	static final String[] functions = { "on", "off" };
 	
 	public String on(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, Light.LightStatus.LIGHT_ON.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatus.LIGHT_ON.getCode(), address} ));
 	}
 	
 	public String off(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_LIGHTING, Light.LightStatus.LIGHT_OFF.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatus.LIGHT_OFF.getCode(), address} ));
 	}
 }

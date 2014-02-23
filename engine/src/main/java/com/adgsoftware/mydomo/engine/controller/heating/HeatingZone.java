@@ -26,8 +26,6 @@ package com.adgsoftware.mydomo.engine.controller.heating;
 
 import java.util.Map;
 
-import com.adgsoftware.mydomo.engine.Log;
-import com.adgsoftware.mydomo.engine.Log.Session;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.what.StateName;
 import com.adgsoftware.mydomo.engine.controller.what.StateValue;
@@ -38,7 +36,6 @@ public class HeatingZone extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
-	private Log log = new Log();
 	
 	
 	public enum ZoneStatus implements StateValue {

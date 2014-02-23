@@ -1,5 +1,10 @@
 package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,10 +28,6 @@ package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
 
 public class Model extends DimensionStatusImpl {
 	
@@ -45,7 +46,7 @@ public class Model extends DimensionStatusImpl {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl(), // Model
 				},
-			Gateway.GatewayDimension.MODEL.getCode()
+			GatewayDimension.MODEL.getCode()
 		);
 	}
 	

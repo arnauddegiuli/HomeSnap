@@ -28,11 +28,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.WhereType;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.CommandParser;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.parser.ParseException;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.WhereType;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.CommandParser;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.parser.ParseException;
+
 
 public class ParserTest {
 	
@@ -164,7 +164,7 @@ public class ParserTest {
 	@Test
 	public void dimensionReadListTest() throws ParseException {
 		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
-		List<DimensionValue> l = Command.getCommandAnalyser("*#4*6*0*0226##").getDimensionListFromCommand();
+		List<DimensionValue> l = CommandParser.parse("*#4*6*0*0226##").getDimensionList();
 		Assert.assertEquals(1, l.size());
 		Assert.assertEquals("0226", l.get(0).getValue());
 	}
@@ -172,14 +172,14 @@ public class ParserTest {
 	@Test
 	public void heatingDimension20Test() throws ParseException {
 		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
-		Command p = Command.getCommandAnalyser("*#4*9#1*20*1##");
+		CommandParser p = CommandParser.parse("*#4*9#1*20*1##");
 
-		Assert.assertEquals("1", p.getSpecialCommand().getActuator());
-		Assert.assertEquals("9", p.getSpecialCommand().getZone());
+		Assert.assertEquals("1", p.getActuator());
+		Assert.assertEquals("9", p.getZone());
 
-		Assert.assertEquals("20", p.getDimensionFromCommand());
+		Assert.assertEquals("20", p.getDimension());
 
-		List<DimensionValue> l = p.getDimensionListFromCommand();
+		List<DimensionValue> l = p.getDimensionList();
 		Assert.assertEquals(1, l.size());
 		Assert.assertEquals("1", l.get(0).getValue());
 	}

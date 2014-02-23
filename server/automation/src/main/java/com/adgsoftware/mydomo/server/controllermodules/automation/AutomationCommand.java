@@ -25,8 +25,10 @@ package com.adgsoftware.mydomo.server.controllermodules.automation;
 
 import java.text.MessageFormat;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldcontroller.automation.Automation;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.automation.AutomationStatus;
+import com.adgsoftware.mydomo.engine.controller.automation.Automation;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class AutomationCommand {
@@ -35,14 +37,14 @@ public class AutomationCommand {
 	static final String[] functions = { "up", "down", "stop" };
 	
 	public String up(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, Automation.AutomationStatus.AUTOMATION_UP.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_UP.getCode(), address} ));
 	}
 	
 	public String down(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, Automation.AutomationStatus.AUTOMATION_DOWN.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_DOWN.getCode(), address} ));
 	}
 	
 	public String stop(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.COMMAND, new Object[] {Command.WHO_AUTOMATION, Automation.AutomationStatus.AUTOMATION_STOP.getCode(), address} ));	
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_STOP.getCode(), address} ));	
 	}
 }

@@ -27,11 +27,12 @@ package com.adgsoftware.mydomo.server.controllermodules.heating;
 import java.text.MessageFormat;
 import java.util.List;
 
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.Command;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingZone.HeatingZoneDimension;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.DesiredTemperature;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.dimension.MeasureTemperature;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetConstant;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebNetWho;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.heating.HeatingZoneDimension;
+import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
+import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
 import com.adgsoftware.mydomo.server.ControllerStateManagement;
 
 public class HeatingCommand {
@@ -51,7 +52,7 @@ public class HeatingCommand {
 		DesiredTemperature dt = new DesiredTemperature();
 		dt.setDesiredTemperature(temperature);
 		dt.setMode(1);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
 	}
 	
 	/**
@@ -64,14 +65,14 @@ public class HeatingCommand {
 	public String currentTemperature(double temperature, String address) {
 		MeasureTemperature dt = new MeasureTemperature();
 		dt.setMeasuredTemperature(temperature);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(Command.DIMENSION_COMMAND, new Object[] {Command.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE.getCode(), formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE.getCode(), formatDimension(dt.getValueList())}));
 	}
 	
 	private String formatDimension(List<DimensionValue> valueList) {
 		StringBuilder sb = new StringBuilder();
 		for (DimensionValue value : valueList) {
 			sb.append(value.getValue());
-			sb.append(Command.DIMENSION_SEPARATOR);
+			sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
 		}
 		
 		if (sb.length() > 0) {

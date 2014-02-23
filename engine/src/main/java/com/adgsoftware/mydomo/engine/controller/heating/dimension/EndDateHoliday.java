@@ -26,10 +26,10 @@ package com.adgsoftware.mydomo.engine.controller.heating.dimension;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.heating.HeatingCentral;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.controller.heating.HeatingCentral.CentralHeatingDimension;
 
 public class EndDateHoliday extends DimensionStatusImpl {
 	private int DAYOFWEEK_POS = 0;
@@ -44,7 +44,7 @@ public class EndDateHoliday extends DimensionStatusImpl {
 				new DimensionValueImpl(), // Month
 				new DimensionValueImpl()  // Year
 				},
-				HeatingCentral.CentralHeatingDimension.END_DATE_HOLIDAY.getCode()
+				CentralHeatingDimension.END_DATE_HOLIDAY.getCode()
 		);
 	}
 	

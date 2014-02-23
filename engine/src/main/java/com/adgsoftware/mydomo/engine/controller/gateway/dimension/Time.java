@@ -27,10 +27,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
+
 
 public class Time extends DimensionStatusImpl {
 	
@@ -46,7 +47,7 @@ public class Time extends DimensionStatusImpl {
 				new DimensionValueImpl(), // Seconds
 				new DimensionValueImpl()  // Timezone
 				},
-				Gateway.GatewayDimension.TIME.getCode()
+				GatewayDimension.TIME.getCode()
 		);
 	}
 	

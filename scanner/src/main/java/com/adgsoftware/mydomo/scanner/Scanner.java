@@ -24,12 +24,13 @@ package com.adgsoftware.mydomo.scanner;
  */
 
 import java.text.MessageFormat;
-import java.util.List;
 
-import com.adgsoftware.mydomo.engine.oldconnector.Monitor;
-import com.adgsoftware.mydomo.engine.oldconnector.UnknownControllerListener;
-import com.adgsoftware.mydomo.engine.oldconnector.openwebnet.OpenWebMonitorImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.Monitor;
+import com.adgsoftware.mydomo.engine.connector.UnknownControllerListener;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.OpenWebMonitorImpl;
+import com.adgsoftware.mydomo.engine.controller.what.State;
+import com.adgsoftware.mydomo.engine.controller.where.Where;
+import com.adgsoftware.mydomo.engine.controller.who.Who;
 
 
 public class Scanner {
@@ -39,15 +40,10 @@ public class Scanner {
 		
 		Monitor monitor = new OpenWebMonitorImpl(host, port, password);
 		monitor.addUnknownControllerListener(new UnknownControllerListener() {
-			
+
 			@Override
-			public void foundUnknownController(String who, String where, String what,
-					String dimensionCode, List<DimensionValue> dimensionList) {
-				StringBuilder sb = new StringBuilder();
-				for (DimensionValue dimValue : dimensionList) {
-					sb.append("\n\t\t - value[").append(dimValue.getValue()).append("]");
-				}
-				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : dimensionCode [{3}] : {4}\n", who, where, what, dimensionCode, sb.toString()));
+			public void foundUnknownController(Who who, Where where, State what) {
+				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}] : {4}\n", who, where.getTo(), what.getName().getName(), what.getValue().getValue()));
 			}
 		});
 	}

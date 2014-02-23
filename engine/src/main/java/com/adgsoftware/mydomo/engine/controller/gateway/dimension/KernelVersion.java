@@ -1,5 +1,11 @@
 package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
 
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionStatusImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValue;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.adgsoftware.mydomo.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.adgsoftware.mydomo.engine.controller.gateway.Version;
+
 /*
  * #%L
  * MyDomoEngine
@@ -23,12 +29,6 @@ package com.adgsoftware.mydomo.engine.controller.gateway.dimension;
  * #L%
  */
 
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionStatusImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValue;
-import com.adgsoftware.mydomo.engine.oldcontroller.DimensionValueImpl;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Gateway;
-import com.adgsoftware.mydomo.engine.oldcontroller.gateway.Version;
-
 public class KernelVersion extends DimensionStatusImpl {
 	
 	private int VERSION_POS = 0;
@@ -41,7 +41,7 @@ public class KernelVersion extends DimensionStatusImpl {
 				new DimensionValueImpl(), // Release
 				new DimensionValueImpl()  // Build
 				},
-			Gateway.GatewayDimension.KERNEL_VERSION.getCode()
+			GatewayDimension.KERNEL_VERSION.getCode()
 		);
 	}
 	
