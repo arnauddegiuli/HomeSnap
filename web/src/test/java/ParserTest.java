@@ -27,12 +27,12 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
-import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
-import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
-import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
-import com.adgsoftware.mydomo.webserver.servlet.house.parser.ParseException;
-import com.adgsoftware.mydomo.webserver.servlet.house.parser.UriParser;
+import com.homesnap.webserver.rest.MissingParameterRestOperation;
+import com.homesnap.webserver.rest.MyDomoRestAPI;
+import com.homesnap.webserver.rest.RestOperationException;
+import com.homesnap.webserver.rest.UnsupportedRestOperation;
+import com.homesnap.webserver.servlet.house.parser.ParseException;
+import com.homesnap.webserver.servlet.house.parser.UriParser;
 
 
 public class ParserTest {

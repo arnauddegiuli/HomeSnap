@@ -1,0 +1,71 @@
+package com.homesnap.engine.controller.where;
+
+/*
+ * #%L
+ * MyDomoEngine
+ * %%
+ * Copyright (C) 2011 - 2014 A. de Giuli
+ * %%
+ * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+ * 
+ *     MyDomo is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     MyDomo is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+public class Where {
+
+	private String from;
+	private String to;
+	
+	public Where(String from, String to) {
+		this.from = from;
+		this.to = to;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Where other = (Where) obj;
+		if (to == null) {
+			if (other.to != null)
+				return false;
+		} else if (!to.equals(other.to))
+			return false;
+		return true;
+	}
+
+	
+	
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.adgsoftware.mydomo" android:versionCode="1"
+	package="com.homesnap" android:versionCode="1"
 	android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -9,20 +9,20 @@
 	
 	<application android:icon="@drawable/icon" android:label="@string/app_name" android:allowBackup="true">
 		<activity android:label="@string/app_name"
-			android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:name="com.adgsoftware.mydomo.android.ui.activities.LabelsActivity">
+			android:launchMode="singleInstance" android:alwaysRetainTaskState="true" android:name="com.homesnap.android.ui.activities.LabelsActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.ControllersActivity"></activity>
-		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.EditControllerActivity"></activity>
-		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.LabelDetailsActivity"></activity>
-		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.LabelDetailsGridActivity"></activity>
-		<activity android:name="com.adgsoftware.mydomo.andcom.adgsoftware.mydomo.android.ui.activities.todo.ScenarioActivityity"></activity>
-		<activity android:name="com.adgsoftware.mydomo.android.ui.activities.SettingsActivity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.ControllersActivity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.EditControllerActivity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.LabelDetailsActivity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.LabelDetailsGridActivity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.todo.ScenarioActivityity"></activity>
+		<activity android:name="com.homesnap.android.ui.activities.SettingsActivity"></activity>
 		<activity android:name=".ui.activities.todo.ScenarioActivity"></activity>
 		
-		<service android:name="com.adgsoftware.mydomo.android.service.MyDomoServiceImpl"/>
+		<service android:name="com.homesnap.android.service.MyDomoServiceImpl"/>
 	</application>
 </manifest>

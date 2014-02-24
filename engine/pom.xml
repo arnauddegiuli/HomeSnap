@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.adgsoftware.mydomo.engine</groupId>
+	<groupId>com.homesnap.engine</groupId>
 	<artifactId>engine</artifactId>
 	<packaging>jar</packaging>
-	<name>MyDomoEngine</name>
+	<name>HomeSnapEngine</name>
 	<description>Engine to send command to My Home gateway with open web protocol</description>
 
 	<parent>
-		<groupId>com.adgsoftware.mydomo</groupId>
-		<artifactId>mydomoSolution</artifactId>
+		<groupId>com.homesnap</groupId>
+		<artifactId>homesnapSolution</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -39,22 +39,22 @@
 						<Bundle-Description></Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Export-Package>com.adgsoftware.mydomo.engine;uses:="com.adgsoftware.mydomo.engine.controller",
-								 com.adgsoftware.mydomo.engine.connector,
-								 com.adgsoftware.mydomo.engine.connector.openwebnet,
-								 com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
-								 com.adgsoftware.mydomo.engine.controller,
-								 com.adgsoftware.mydomo.engine.controller.automation,
-								 com.adgsoftware.mydomo.engine.controller.gateway,
-								 com.adgsoftware.mydomo.engine.controller.gateway.dimension,
-								 com.adgsoftware.mydomo.engine.controller.heating,
-								 com.adgsoftware.mydomo.engine.controller.heating.dimension,
-								 com.adgsoftware.mydomo.engine.controller.light;uses:="com.adgsoftware.mydomo.engine.controller",
-								 com.adgsoftware.mydomo.engine.controller.outlet,
-								 com.adgsoftware.mydomo.engine.house,
-								 com.adgsoftware.mydomo.engine.script,
-								 com.adgsoftware.mydomo.engine.services,
-								 com.adgsoftware.mydomo.engine.services.impl,
+						<Export-Package>com.homesnap.engine;uses:="com.homesnap.engine.controller",
+								 com.homesnap.engine.connector,
+								 com.homesnap.engine.connector.openwebnet,
+								 com.homesnap.engine.connector.openwebnet.parser,
+								 com.homesnap.engine.controller,
+								 com.homesnap.engine.controller.automation,
+								 com.homesnap.engine.controller.gateway,
+								 com.homesnap.engine.controller.gateway.dimension,
+								 com.homesnap.engine.controller.heating,
+								 com.homesnap.engine.controller.heating.dimension,
+								 com.homesnap.engine.controller.light;uses:="com.homesnap.engine.controller",
+								 com.homesnap.engine.controller.outlet,
+								 com.homesnap.engine.house,
+								 com.homesnap.engine.script,
+								 com.homesnap.engine.services,
+								 com.homesnap.engine.services.impl,
 								 org.json,
 								 org.json.zip
 						</Export-Package>

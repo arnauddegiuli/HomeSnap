@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.adgsoftware.mydomo.server.commandmodules</groupId>
+	<groupId>com.homesnap.server.commandmodules</groupId>
 	<artifactId>automation</artifactId>
 	<packaging>bundle</packaging>
-	<name>MyDomoServerAutomationModule</name>
+	<name>HomeSnapServerAutomationModule</name>
 	<description>My Home virtual server pluggin interfaces</description>
 
 	<parent>
-		<groupId>com.adgsoftware.mydomo.server</groupId>
+		<groupId>com.homesnap.server</groupId>
 		<artifactId>simulationServer</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -27,16 +27,16 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.automation.AutomationModuleActivator</Bundle-Activator>
-						<Import-Package>com.adgsoftware.mydomo.engine.controller,
-							com.adgsoftware.mydomo.engine.connector.openwebnet,
-							com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
-							com.adgsoftware.mydomo.server.controllermodules,
-							com.adgsoftware.mydomo.engine,
-							com.adgsoftware.mydomo.engine.controller.automation,
-							com.adgsoftware.mydomo.server, org.osgi.framework</Import-Package>
+						<Bundle-Activator>com.homesnap.server.controllermodules.automation.AutomationModuleActivator</Bundle-Activator>
+						<Import-Package>com.homesnap.engine.controller,
+							com.homesnap.engine.connector.openwebnet,
+							com.homesnap.engine.connector.openwebnet.parser,
+							com.homesnap.server.controllermodules,
+							com.homesnap.engine,
+							com.homesnap.engine.controller.automation,
+							com.homesnap.server, org.osgi.framework</Import-Package>
 						<Export-Package></Export-Package>
-						<Require-Bundle>com.adgsoftware.mydomo.engine</Require-Bundle>
+						<Require-Bundle>com.homesnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -104,17 +104,17 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.engine</groupId>
+			<groupId>com.homesnap.engine</groupId>
 			<artifactId>engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
+			<groupId>com.homesnap.server.controllermodules</groupId>
 			<artifactId>controllerModules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.server</groupId>
+			<groupId>com.homesnap.server</groupId>
 			<artifactId>server</artifactId>
 			<version>${project.version}</version>
 		</dependency>

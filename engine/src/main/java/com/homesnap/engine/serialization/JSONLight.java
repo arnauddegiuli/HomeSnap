@@ -33,7 +33,7 @@
 //
 //import org.json.JSONObject;
 //
-//import com.adgsoftware.mydomo.engine.controller.light.Light;
+//import com.homesnap.engine.controller.light.Light;
 //import com.homesnap.engine.controller.light.LightController;
 //import com.homesnap.engine.controller.light.LightStatus;
 //import com.homesnap.engine.controller.state.StateName;

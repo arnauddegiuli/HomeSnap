@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.adgsoftware.mydomo.server</groupId>
+	<groupId>com.homesnap.server</groupId>
 	<artifactId>simulationServer</artifactId>
 	<name>MyDomoSimulationGateway</name>
 	<packaging>pom</packaging>
 
 		<parent>
-			<groupId>com.adgsoftware.mydomo</groupId>
-			<artifactId>mydomoSolution</artifactId>
+			<groupId>com.homesnap</groupId>
+			<artifactId>homesnapSolution</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</parent>
 

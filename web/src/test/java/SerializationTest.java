@@ -23,12 +23,12 @@
 
 import org.junit.Test;
 
-import com.adgsoftware.mydomo.engine.controller.light.Light;
-import com.adgsoftware.mydomo.engine.controller.where.Where;
-import com.adgsoftware.mydomo.engine.house.House;
-import com.adgsoftware.mydomo.engine.house.Label;
-import com.adgsoftware.mydomo.webserver.servlet.house.HouseServiceImpl;
-import com.adgsoftware.mydomo.webserver.utils.JSonTools;
+import com.homesnap.engine.controller.light.Light;
+import com.homesnap.engine.controller.where.Where;
+import com.homesnap.engine.house.House;
+import com.homesnap.engine.house.Label;
+import com.homesnap.webserver.servlet.house.HouseServiceImpl;
+import com.homesnap.webserver.utils.JSonTools;
 
 
 public class SerializationTest {

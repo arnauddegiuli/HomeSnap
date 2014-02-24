@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.adgsoftware.mydomo.webserver</groupId>
+	<groupId>com.homesnap.webserver</groupId>
 	<artifactId>webserver</artifactId>
 	<packaging>bundle</packaging>
 
 	<parent>
-		<groupId>com.adgsoftware.mydomo</groupId>
-		<artifactId>mydomoSolution</artifactId>
+		<groupId>com.homesnap</groupId>
+		<artifactId>homesnapSolution</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>MyDomoWebServer</name>
-	<description>My Home Web Server to pilot domotic</description>
+	<name>HomeSnapWebServer</name>
+	<description>Homes Snap Web Server to pilot domotic</description>
 
 	<!-- Build Configuration -->
 	<build>
@@ -29,15 +29,15 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.adgsoftware.mydomo.webserver.Activator</Bundle-Activator>
-						<Import-Package>com.adgsoftware.mydomo.engine.connector,
-							 com.adgsoftware.mydomo.engine.connector.openwebnet,
-							 com.adgsoftware.mydomo.engine.controller,
-							 com.adgsoftware.mydomo.engine.controller.light,
-							 com.adgsoftware.mydomo.engine.controller.automation,
-							 com.adgsoftware.mydomo.engine.house,
-							 com.adgsoftware.mydomo.engine.services,
-							 com.adgsoftware.mydomo.engine.services.impl,
+						<Bundle-Activator>com.homesnap.webserver.Activator</Bundle-Activator>
+						<Import-Package>com.homesnap.engine.connector,
+							 com.homesnap.engine.connector.openwebnet,
+							 com.homesnap.engine.controller,
+							 com.homesnap.engine.controller.light,
+							 com.homesnap.engine.controller.automation,
+							 com.homesnap.engine.house,
+							 com.homesnap.engine.services,
+							 com.homesnap.engine.services.impl,
 							 org.json,
 							 org.json.zip,
 							 javax.servlet;version="2.6.0",
@@ -115,7 +115,7 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-		    <groupId>com.adgsoftware.mydomo.engine</groupId>
+		    <groupId>com.homesnap.engine</groupId>
 		    <artifactId>engine</artifactId>
 		    <version>0.0.1-SNAPSHOT</version>
 		</dependency>

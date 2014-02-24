@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
+	<groupId>com.homesnap.server.controllermodules</groupId>
 	<artifactId>heating</artifactId>
 	<packaging>bundle</packaging>
-	<name>MyDomoServerHeatingModule</name>
-	<description>My Home virtual server pluggin heating device</description>
+	<name>HomeSnapServerHeatingModule</name>
+	<description>Home Snap virtual server pluggin heating device</description>
 
 	<parent>
-		<groupId>com.adgsoftware.mydomo.server</groupId>
+		<groupId>com.homesnap.server</groupId>
 		<artifactId>simulationServer</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -27,19 +27,19 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.adgsoftware.mydomo.server.controllermodules.heating.HeatingModuleActivator</Bundle-Activator>
-						<Import-Package>com.adgsoftware.mydomo.engine,
-							 com.adgsoftware.mydomo.engine.connector.openwebnet,
-							 com.adgsoftware.mydomo.engine.connector.openwebnet.parser,
-							 com.adgsoftware.mydomo.engine.controller,
-							 com.adgsoftware.mydomo.engine.controller.heating,
-							 com.adgsoftware.mydomo.engine.controller.heating.dimension,
-							 com.adgsoftware.mydomo.server,
-							 com.adgsoftware.mydomo.server.controllermodules,
+						<Bundle-Activator>com.homesnap.server.controllermodules.heating.HeatingModuleActivator</Bundle-Activator>
+						<Import-Package>com.homesnap.engine,
+							 com.homesnap.engine.connector.openwebnet,
+							 com.homesnap.engine.connector.openwebnet.parser,
+							 com.homesnap.engine.controller,
+							 com.homesnap.engine.controller.heating,
+							 com.homesnap.engine.controller.heating.dimension,
+							 com.homesnap.server,
+							 com.homesnap.server.controllermodules,
 							 org.osgi.framework
  						</Import-Package>
-						<Export-Package>com.adgsoftware.mydomo.server.controllermodules.heating</Export-Package>
-						<Require-Bundle>com.adgsoftware.mydomo.engine</Require-Bundle>
+						<Export-Package>com.homesnap.server.controllermodules.heating</Export-Package>
+						<Require-Bundle>com.homesnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -107,17 +107,17 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.engine</groupId>
+			<groupId>com.homesnap.engine</groupId>
 			<artifactId>engine</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.server.controllermodules</groupId>
+			<groupId>com.homesnap.server.controllermodules</groupId>
 			<artifactId>controllerModules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.server</groupId>
+			<groupId>com.homesnap.server</groupId>
 			<artifactId>server</artifactId>
 			<version>${project.version}</version>
 		</dependency>

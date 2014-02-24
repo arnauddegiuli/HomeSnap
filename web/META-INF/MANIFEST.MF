@@ -3,24 +3,24 @@ Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoWebServer
 Bundle-SymbolicName: MyDomoWebServer
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.adgsoftware.mydomo.webserver.Activator
+Bundle-Activator: com.homesnap.webserver.Activator
 Export-Package: .,
- com.adgsoftware.mydomo.webserver,
- com.adgsoftware.mydomo.webserver.rest,
- com.adgsoftware.mydomo.webserver.rest.listener,
- com.adgsoftware.mydomo.webserver.servlet.house,
- com.adgsoftware.mydomo.webserver.servlet.house.parser,
- com.adgsoftware.mydomo.webserver.utils
+ com.homesnap.webserver,
+ com.homesnap.webserver.rest,
+ com.homesnap.webserver.rest.listener,
+ com.homesnap.webserver.servlet.house,
+ com.homesnap.webserver.servlet.house.parser,
+ com.homesnap.webserver.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
-Import-Package: com.adgsoftware.mydomo.engine.connector,
- com.adgsoftware.mydomo.engine.connector.openwebnet,
- com.adgsoftware.mydomo.engine.controller,
- com.adgsoftware.mydomo.engine.controller.automation,
- com.adgsoftware.mydomo.engine.controller.light,
- com.adgsoftware.mydomo.engine.house,
- com.adgsoftware.mydomo.engine.services,
- com.adgsoftware.mydomo.engine.services.impl,
+Import-Package: com.homesnap.engine.connector,
+ com.homesnap.engine.connector.openwebnet,
+ com.homesnap.engine.controller,
+ com.homesnap.engine.controller.automation,
+ com.homesnap.engine.controller.light,
+ com.homesnap.engine.house,
+ com.homesnap.engine.services,
+ com.homesnap.engine.services.impl,
  javax.servlet;version="2.6.0",
  javax.servlet.http;version="2.6.0",
  org.json,

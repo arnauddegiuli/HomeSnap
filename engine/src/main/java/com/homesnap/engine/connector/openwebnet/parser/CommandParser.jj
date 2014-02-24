@@ -1,0 +1,207 @@
+options
+{
+    LOOKAHEAD=2;
+    STATIC=false;
+}
+PARSER_BEGIN(CommandParser)
+package com.homesnap.engine.connector.openwebnet.parser;
+
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.homesnap.engine.CommandEnum;
+import com.homesnap.engine.connector.openwebnet.WhereType;
+
+public class CommandParser
+{
+	private String who;
+	private String what;
+	private String where;
+	private String dimension;
+	private CommandEnum type;
+	private WhereType whereType;
+	private String bus = "0";
+	private String environment;
+	private String group;
+	private String point;
+	private String actuator;
+	private String zone;
+	private List<String> dimensionList = new ArrayList<String>();
+	
+	public static CommandParser parse(String command) throws ParseException 
+	{
+		CommandParser parser = new CommandParser(new ByteArrayInputStream(command.getBytes()));
+		parser.parseOneLine();
+		return parser;
+	}
+
+	public String getWho() {
+		return who;
+	}
+
+	public String getWhat() {
+		return what;
+	}
+
+	public String getWhere() {
+		return where;
+	}
+
+	public String getDimension() {
+		return dimension;
+	}
+
+	public CommandEnum getType() {
+		return type;
+	}
+
+	public WhereType getWhereType() {
+		return whereType;
+	}
+
+	public String getBus() {
+		return bus;
+	}
+
+	public String getEnvironment() {
+		return environment;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public String getPoint() {
+		return point;
+	}
+
+	public String getActuator() {
+		return actuator;
+	}
+
+	public String getZone() {
+		if (zone==null) {
+			return point;
+		} else {
+			return zone;
+		}
+	}
+
+	public List<DimensionValue> getDimensionList() {
+		List<DimensionValue> dimensionList2 = new ArrayList<DimensionValue>();
+		for (String dimension : dimensionList) {
+			DimensionValue d = new DimensionValueImpl();
+			d.setValue(dimension);
+			dimensionList2.add(d);
+		}
+		return dimensionList2;
+	}
+}
+
+PARSER_END(CommandParser)
+SKIP :
+{
+    " "
+|   "\r"
+|   "\t"
+}
+TOKEN:
+{
+
+    < VAL: (["0"-"9"])+ >
+|   < EOL: "\n" >
+}
+private void parseOneLine():
+{
+}
+{
+		// Standard          *WHO*WHAT*WHERE##
+		// Status request    *#WHO*WHERE##
+		// Dimension request *#WHO*WHERE*DIMENSION## || *#WHO*WHERE*DIMENSION#VAL1*VAL2*...VALn##
+		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
+		               
+
+
+ "*#" other() {return;}
+ | "*" standard() {return;}
+ | <EOF> {return;}
+
+}
+
+void standard():
+{
+    Token who;
+    Token what;
+    String where;
+}
+{
+	who=<VAL> "*" what=<VAL> where=where() "##" {this.type=CommandEnum.STANDARD_COMMAND; this.who = who.toString(); this.what=what.toString(); this.where = where;}
+}
+
+void other():
+{
+    Token who;
+    String where;
+    Token dimension;
+    Token val;
+}
+{
+	 (who=<VAL> where=where() {this.who = who.toString(); this.where=where;}
+	 	( "##" {this.type=CommandEnum.STANDARD_STATUS;}
+	 	| dimension() {}
+	 	)
+	 ) |
+	 // Gateway special case => no where
+	 (who=<VAL> "**" {this.who = who.toString();  this.where=""; /* Gateway case */}
+	  dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();} 
+	  | "#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 
+	      ("*" val=<VAL> {this.dimensionList.add(val.toString());}
+	      )*
+	      "##" {String str =""; for (int i = 0; i < dimensionList.size(); i++) {str = str + ";" + dimensionList.get(i);} }
+	 )
+}
+
+void dimension():
+{
+Token dimension;
+Token val;
+}
+{
+	  "*" dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();}
+	  	("*" val=<VAL> {this.dimensionList.add(val.toString());}
+      	)*
+      	"##" {}
+	| "*#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 
+      ("*" val=<VAL> {this.dimensionList.add(val.toString());}
+      )*
+      "##" {}
+
+}
+
+
+		// Standard          *[1-9][1-9]
+		// General           *0
+		// Environment       *[1-9]
+		// Group             *#[1-9]
+		// For heating:      *[0-99#1-9] actuator from zone
+		//                   *[0-99#0] all actuator from zone
+		//                   *[0#0] all actuator from all zone
+String where():
+{
+Token environment;
+Token group;
+Token bus;
+}
+{
+   "*#" group=<VAL> {this.whereType=WhereType.GROUP; this.group=group.toString(); }
+    (
+    	"#4#" bus=<VAL> {this.whereType = WhereType.GROUPONLOCALBUS; this.group=group.toString(); this.bus=bus.toString(); return "#" + this.group + "#4#" + this.bus;}
+    	| {return "#"+group;}
+    )
+   | "*" environment=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERAL;} else if(environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENT; this.environment=environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} }
+   		("#4#" bus=<VAL> {if ("0".equals(environment.toString())) {this.whereType = WhereType.GENERALONLOCALBUS;} else if (environment.toString().length() == 1) {this.whereType=WhereType.ENVIRONMENTONLOCALBUS; this.environment= environment.toString();} else {this.point=environment.toString();this.whereType=WhereType.POINTTOPOINT;} this.bus=bus.toString(); return environment.toString() + "#4#" + bus.toString();}
+    	|"#"group=<VAL> {this.whereType = WhereType.SPECIAL_HEATING; this.actuator = group.toString(); this.zone=environment.toString(); return this.zone + "#" + this.actuator;}
+    	| {return environment.toString();}
+    	)
+}

@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.adgsoftware.mydomo.scanner</groupId>
+	<groupId>com.homesnap.scanner</groupId>
 	<artifactId>scanner</artifactId>
 	<name>OpenWebNetScanner</name>
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.adgsoftware.mydomo</groupId>
-		<artifactId>mydomoSolution</artifactId>
+		<groupId>com.homesnap</groupId>
+		<artifactId>homesnapSolution</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -87,7 +87,7 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.adgsoftware.mydomo.engine</groupId>
+			<groupId>com.homesnap.engine</groupId>
 			<artifactId>engine</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

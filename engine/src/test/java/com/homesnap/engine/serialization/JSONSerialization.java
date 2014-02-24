@@ -27,8 +27,8 @@
 //import org.junit.Assert;
 //import org.junit.Test;
 //
-//import com.adgsoftware.mydomo.engine.connector.openwebnet.light.LightStatus;
-//import com.adgsoftware.mydomo.engine.controller.light.Light;
+//import com.homesnap.engine.connector.openwebnet.light.LightStatus;
+//import com.homesnap.engine.controller.light.Light;
 //
 //
 ///**

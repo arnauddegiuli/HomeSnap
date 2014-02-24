@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MyDomoServerDeviceModuleInterface
-Bundle-SymbolicName: com.adgsoftware.mydomo.server.controllermodules
+Bundle-SymbolicName: com.homesnap.server.controllermodules
 Bundle-Version: 0.1
-Export-Package: com.adgsoftware.mydomo.server.controllermodules
+Export-Package: com.homesnap.server.controllermodules
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.adgsoftware.mydomo.engine.controller,
+Import-Package: com.homesnap.engine.controller,
  org.osgi.framework

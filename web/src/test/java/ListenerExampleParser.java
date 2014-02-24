@@ -1,9 +1,9 @@
 
-import com.adgsoftware.mydomo.engine.controller.light.Light.LightStateValue;
-import com.adgsoftware.mydomo.webserver.rest.MissingParameterRestOperation;
-import com.adgsoftware.mydomo.webserver.rest.MyDomoRestAPI;
-import com.adgsoftware.mydomo.webserver.rest.RestOperationException;
-import com.adgsoftware.mydomo.webserver.rest.UnsupportedRestOperation;
+import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.webserver.rest.MissingParameterRestOperation;
+import com.homesnap.webserver.rest.MyDomoRestAPI;
+import com.homesnap.webserver.rest.RestOperationException;
+import com.homesnap.webserver.rest.UnsupportedRestOperation;
 
 
 public class ListenerExampleParser implements MyDomoRestAPI {
