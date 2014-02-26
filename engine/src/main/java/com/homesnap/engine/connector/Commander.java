@@ -30,49 +30,50 @@ import com.homesnap.engine.controller.Controller;
 public interface Commander {
 
 	/**
-	 * Connect to the open server.
+	 * Connect the commander instance to the bus.
+	 * @return <code>true</code> if the connection has been established and <code>false</code> otherwise.
 	 */
-	public abstract void connect();
-	
-	/**
-	 * Return true if connected to the open server.
-	 * @return true if connected to the open server.
-	 */
-	public abstract boolean isConnected();
+	public boolean connect();
 
 	/**
-	 * Close connection to the open server.
+	 * Disconnect the commander instance from the bus.
 	 */
-	public abstract void close();
+	public void disconnect();
+	
+	/**
+	 * Indicates if the commander instance is connected
+	 * @return <code>true</code> if connected and <code>false</code> otherwise.
+	 */
+	public boolean isConnected();
 
 	/**
 	 * Send a command to the open server.
 	 * @param command the command to send
 	 * @return the result of the command
 	 */
-	public abstract void sendCommand(Command command, CommandListener resultListener);
+	public void sendCommand(Command command, CommandListener resultListener);
 
 	/**
 	 * Add a controller which will be able to use this commander.
 	 * @param controller
 	 */
-	public abstract void addControllerToExecute(Controller controller);
+	public void addControllerToExecute(Controller controller);
 
 	/**
 	 * Remove a controller which is able to use this commander.
 	 * @param controller
 	 */
-	public abstract void removeControllerToExecute(Controller controller);
+	public void removeControllerToExecute(Controller controller);
 
 	/**
 	 * Add a connectionListener.
 	 * @param connectionListener
 	 */
-	public abstract void addConnectionListener(ConnectionListener connectionListener);
+	public void addConnectionListener(ConnectionListener connectionListener);
 
 	/**
 	 * Remove a connectionListener.
 	 * @param connectionListener
 	 */
-	public abstract void removeConnectionListener(ConnectionListener connectionListener);
+	public void removeConnectionListener(ConnectionListener connectionListener);
 }

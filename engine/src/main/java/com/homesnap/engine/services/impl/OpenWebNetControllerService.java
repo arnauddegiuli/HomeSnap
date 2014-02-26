@@ -102,11 +102,11 @@ public class OpenWebNetControllerService implements ControllerService {
 	
 	public void onDestroy() {
 		if (monitor != null) {
-			monitor.close();
+			monitor.disconnect();
 		}
 		
 		if (commander != null) {
-			commander.close();
+			commander.disconnect();
 		}
 	}
 

@@ -78,7 +78,7 @@ public class OpenWebConnectThread implements Runnable {
 				} catch (Exception e){
 					log.severe(Log.Session.Command, "Impossible to connect to the server ["+ commander.getIp() +":"+ commander.getPort()+"]:" + e.getMessage());
 					if (commander.socket!=null && commander.socket.isConnected()) {
-						commander.close();
+						commander.disconnect();
 					}
 					return false;
 				}
@@ -91,7 +91,7 @@ public class OpenWebConnectThread implements Runnable {
 						// Bad return message
 						log.severe(Log.Session.Command, "Bad message [" + msg + "] received from [" + commander.getIp() + "]");
 						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-						commander.close();
+						commander.disconnect();
 						return false;
 					}
 
@@ -115,7 +115,7 @@ public class OpenWebConnectThread implements Runnable {
 					if (!OpenWebNetConstant.ACK.equals(msg)) {		       	
 						log.severe(Log.Session.Command, "Problem during connection to [" + commander.getIp() + "] with message [" + msg + "]");
 						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.WrongAcknowledgement);
-						commander.close();
+						commander.disconnect();
 						return false;
 					}
 
