@@ -312,7 +312,7 @@ implements Monitor {
 	 * Close the socket and stop the thread.
 	 */
 	@Override
-	public void close(){
+	public void disconnect(){
 		tryToConnect = false; // get out of the thread by stopping try to reconnect the monitor.
 		resetSocket();
 	}

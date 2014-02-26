@@ -80,7 +80,7 @@ public class OpenWebCommanderImpl implements Commander {
 	 */
 	public void setIp(String ip) {
 		this.ip = ip;
-		close();
+		disconnect();
 	}
 
 	/**
@@ -97,19 +97,20 @@ public class OpenWebCommanderImpl implements Commander {
 	 */
 	public void setPort(int port) {
 		this.port = port;
-		close();
+		disconnect();
 	}
 
 	/**
 	 * Asynchrone connection
 	 */
-	public void connect() { 
+	public boolean connect() { 
 		// TODO manage if we start another thread by call connect again...
 		new Thread(new OpenWebConnectThread(this)).start(); // Make connection in thread to avoid blocking the user!
+		return false;
 	}
 
 	@Override
-	public void close() {
+	public void disconnect() {
 		if(socket != null){
 			try {
 				socket.close();
@@ -168,7 +169,7 @@ public class OpenWebCommanderImpl implements Commander {
 					ci = input.read();
 					if (ci == -1) {
 						log.finest(Log.Session.Command, "End of read from command server socket.");
-						close();
+						disconnect();
 						break;
 					} else { 
 						c = (char) ci;
@@ -183,7 +184,7 @@ public class OpenWebCommanderImpl implements Commander {
 						}
 					}
 				} else {
-					close();
+					disconnect();
 					break;
 				}
 			} while(true); 
@@ -211,7 +212,7 @@ public class OpenWebCommanderImpl implements Commander {
 			if (socket.isConnected()) {
 				return true;		
 			} else {
-				close();
+				disconnect();
 				return false;
 			}
 		} else {

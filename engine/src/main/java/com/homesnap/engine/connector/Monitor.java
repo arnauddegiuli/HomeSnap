@@ -36,67 +36,67 @@ import com.homesnap.engine.controller.Controller;
 public interface Monitor {
 
 	/**
-	 * Connect to the open server.
-	 * @return true if connected to the open server
+	 * Connect the monitor instance to the bus.
+	 * @return <code>true</code> if the connection has been established and <code>false</code> otherwise.
 	 */
-	public abstract boolean connect();
+	public boolean connect();
 
 	/**
-	 * Close connection to the open server.
+	 * Disconnect the monitor instance from the bus.
 	 */
-	public abstract void close();
+	public void disconnect();
+	
+	/**
+	 * Indicates if the monitor instance is connected
+	 * @return <code>true</code> if connected and <code>false</code> otherwise.
+	 */
+	public boolean isConnected();
 
 	/**
 	 * Register controller to listen event.
 	 * @param controller
 	 */
-	public abstract void addControllerToMonitor(Controller controller);
+	public void addControllerToMonitor(Controller controller);
 
 	/**
 	 * Remove controller which listen event.
 	 * @param controller
 	 */
-	public abstract void removeControllerToMonitor(Controller controller);
+	public void removeControllerToMonitor(Controller controller);
 
 	/**
 	 * Add a {@link ConnectionListener}
 	 * @param connectionListener
 	 */
-	public abstract void addConnectionListener(ConnectionListener connectionListener);
+	public void addConnectionListener(ConnectionListener connectionListener);
 
 	/**
 	 * Remove a {@link ConnectionListener}
 	 * @param connectionListener
 	 */
-	public abstract void removeConnectionListener(ConnectionListener connectionListener);
+	public void removeConnectionListener(ConnectionListener connectionListener);
 
 	/**
 	 * Add a {@link CommandListener}
 	 * @param commandListener
 	 */
-	public abstract void addControllerStatusListener(CommandListener commandListener);
+	public void addControllerStatusListener(CommandListener commandListener);
 
 	/**
 	 * Remove a {@link CommandListener}
 	 * @param commandListener
 	 */
-	public abstract void removeControllerStatusListener(CommandListener commandListener);
+	public void removeControllerStatusListener(CommandListener commandListener);
 
 	/**
 	 * Add an {@link UnknownControllerListener}
 	 * @param unknownControllerListener
 	 */
-	public abstract void addUnknownControllerListener(UnknownControllerListener unknownControllerListener);
+	public void addUnknownControllerListener(UnknownControllerListener unknownControllerListener);
 
 	/**
 	 * Remove an {@link UnknownControllerListener}
 	 * @param unknownControllerListener
 	 */
-	public abstract void removeUnknownControllerListener(UnknownControllerListener unknownControllerListener);
-
-	/**
-	 * Return true if connected to the open server.
-	 * @return true if connected to the open server.
-	 */
-	public abstract boolean isConnected();
+	public void removeUnknownControllerListener(UnknownControllerListener unknownControllerListener);
 }
