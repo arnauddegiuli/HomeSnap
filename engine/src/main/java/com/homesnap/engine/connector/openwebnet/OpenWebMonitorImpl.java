@@ -126,6 +126,7 @@ implements Monitor {
 	
 	protected void onMessageReceipt(String message) {
 		try {
+			log.log(Session.Monitor, Level.FINE, "Message receiver ["+ message +"]");
 			OpenWebNetCommand command = new OpenWebNetCommand(message);
 			if (!(command.isDimensionCommand() || command.isStandardCommand())) {
 				log.log(Session.Monitor, Level.SEVERE, "Message received [" + message +"] don't match with standard command or dimension command.");
