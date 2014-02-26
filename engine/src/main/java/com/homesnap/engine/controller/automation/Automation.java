@@ -24,9 +24,6 @@ package com.homesnap.engine.controller.automation;
  */
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONObject;
 
 import com.homesnap.engine.controller.Controller;
@@ -71,10 +68,8 @@ public class Automation extends Controller {
 	}
 
 	@Override
-	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
-		Map<StateName, Class<? extends StateValue>> m = new HashMap<StateName, Class<? extends StateValue>>();
-		m.put(StateName.STATUS, LightStateValue.class);
-		return m;
+	protected void initStateTypes() {
+		declareState(StateName.STATUS, LightStateValue.class);
 	}
 
 	@Override
@@ -112,6 +107,4 @@ public class Automation extends Controller {
 		setTitle(jsonObject.getString("title"));
 		setDescription(jsonObject.getString("description"));
 	}
-
-
 }

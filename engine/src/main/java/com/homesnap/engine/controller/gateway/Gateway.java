@@ -25,8 +25,6 @@ package com.homesnap.engine.controller.gateway;
 
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.bind.UnmarshalException;
 
@@ -37,7 +35,6 @@ import com.homesnap.engine.controller.gateway.dimension.DateValue;
 import com.homesnap.engine.controller.gateway.dimension.IpAddress;
 import com.homesnap.engine.controller.gateway.dimension.VersionValue;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.StringValue;
 import com.homesnap.engine.controller.who.Who;
 
@@ -83,21 +80,18 @@ public class Gateway extends Controller {
 	}
 	
 	@Override
-	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
-		Map<StateName, Class<? extends StateValue>> m = new HashMap<StateName, Class<? extends StateValue>>();
-		m.put(GatewayStateName.DATE, DateValue.class);
-		m.put(GatewayStateName.DATETIME, DateValue.class);
-		m.put(GatewayStateName.DISTRIBUTION_VERSION, VersionValue.class);
-		m.put(GatewayStateName.FIRMWARE_VERSION, VersionValue.class);
-		m.put(GatewayStateName.IP_ADDRESS, IpAddress.class);
-		m.put(GatewayStateName.KERNEL_VERSION, VersionValue.class);
-		m.put(GatewayStateName.MAC_ADDRESS, IpAddress.class);
-		m.put(GatewayStateName.MODEL, StringValue.class);
-		m.put(GatewayStateName.NETMASK, IpAddress.class);
-		m.put(GatewayStateName.TIME, DateValue.class);
-		m.put(GatewayStateName.UPTIME, DateValue.class);
-		
-		return m;
+	protected void initStateTypes() {
+		declareState(GatewayStateName.DATE, DateValue.class);
+		declareState(GatewayStateName.DATETIME, DateValue.class);
+		declareState(GatewayStateName.DISTRIBUTION_VERSION, VersionValue.class);
+		declareState(GatewayStateName.FIRMWARE_VERSION, VersionValue.class);
+		declareState(GatewayStateName.IP_ADDRESS, IpAddress.class);
+		declareState(GatewayStateName.KERNEL_VERSION, VersionValue.class);
+		declareState(GatewayStateName.MAC_ADDRESS, IpAddress.class);
+		declareState(GatewayStateName.MODEL, StringValue.class);
+		declareState(GatewayStateName.NETMASK, IpAddress.class);
+		declareState(GatewayStateName.TIME, DateValue.class);
+		declareState(GatewayStateName.UPTIME, DateValue.class);
 	}
 
 	@Override

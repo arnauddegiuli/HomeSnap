@@ -66,9 +66,26 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * Constructor.
 	 */
 	protected Controller() {
-		stateTypes = getSupportedStateTypes();
+		initStateTypes();
 	}
-
+	
+	/**
+	 * Initialises the state names withtypes in order to prevent from a wrong assigment when the {@link #set(String, StateValue)} method is called.
+	 * @return A map of all the states types supported by this controller, where the key is the state name and the value associated is a {@link StateValue} class
+	 */
+	protected abstract void initStateTypes();
+	
+	/**
+	 * Declares one state that the controller instance manages.
+	 * This method must be called during the {@link #initStateTypes()} phase
+	 * All declared states will prevent from a wrong assigment when the {@link #set(String, StateValue)} method is called.
+	 * @param state The state name
+	 * @param stateClass The {@link StateValue} class of that state
+	 */
+	protected void declareState(StateName state, Class<? extends StateValue> stateClass) {
+		stateTypes.put(state, stateClass);
+	}
+	
 	/**
 	 * Return true if controller is waiting information from gateway
 	 * @return
@@ -389,21 +406,12 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 
 	/**
-	 * Return the states types in order to prevent from a wrong assigment when
-	 * the {@link #set(String, StateValue)} method is called.
-	 * @return A map of all the states types supported by this controller, where
-	 * the key is the state name and the value associated is a {@link StateValue} class
-	 */
-	protected abstract Map<StateName, Class<? extends StateValue>> getSupportedStateTypes();
-
-	/**
 	 * Check that a class value is compatible with a state.
 	 * For state names which are not defined by this controller, the result is always <true>.
 	 * @param state The state name to check
 	 * @param value The value of the state
 	 * @return <code>true</code> if the instance of the state value's class is assignable from the one which is defined by this controller and <code>false</code> otherwise
-	 * @throws NullPointerException if the state is null
-	 * @throws NullPointerException if the value is null
+	 * @throws NullPointerException if the state and/or the value is null
 	 */
 	private boolean checkStateValue(StateName state, StateValue value) {
 		if (state == null) {

@@ -24,9 +24,6 @@ package com.homesnap.engine.controller.light;
  */
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.bind.UnmarshalException;
 
 import org.json.JSONObject;
@@ -102,18 +99,9 @@ public class Light extends Controller {
 	}
 
 	@Override
-	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
-		Map<StateName, Class<? extends StateValue>> m = new HashMap<StateName, Class<? extends StateValue>>();
-		m.put(StateName.STATUS, LightStateValue.class);
-		return m;
-	}
-
-	@Override
 	public Who getWho() {
 		return Who.LIGHT;
 	}
-
-
 
 	@Override
 	public JSONObject toJson() {
@@ -141,5 +129,10 @@ public class Light extends Controller {
 		} else {
 			throw new UnmarshalException("Error when deserialized status from JSON object (" + jsonObject.toString() + ")");
 		}
+	}
+	
+	@Override
+	protected void initStateTypes() {
+		declareState(StateName.STATUS, LightStateValue.class);
 	}
 }

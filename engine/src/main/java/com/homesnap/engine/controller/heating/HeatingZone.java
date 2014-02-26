@@ -24,8 +24,6 @@ package com.homesnap.engine.controller.heating;
  */
 
 
-import java.util.Map;
-
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
@@ -117,6 +115,11 @@ public class HeatingZone extends Controller {
 		return (DoubleValue) get(HeatingStateName.MEASURE_TEMPERATURE);
 	}
 
+	@Override
+	protected void initStateTypes() {
+		// TODO Auto-generated method stub
+	}
+
 //	public ValvesStatus getValvesStatus() {
 //		(ValvesStatus) get(HeatingStateName.VALVE_STATUS);
 //	}
@@ -130,10 +133,4 @@ public class HeatingZone extends Controller {
 //			}
 //		});
 //	}
-
-	@Override
-	protected Map<StateName, Class<? extends StateValue>> getSupportedStateTypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
