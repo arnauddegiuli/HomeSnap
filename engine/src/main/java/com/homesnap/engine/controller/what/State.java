@@ -23,21 +23,52 @@ package com.homesnap.engine.controller.what;
  * #L%
  */
 
-public final class State { // Représente une état transmis dans une commande,
-							// dedans il y a le stateName (enum) et sa valeur.
-
+public final class State {
+	
+	/**
+	 * The name of the state  
+	 */
 	private StateName name;
+	private StateNameEnum nameEnum;
+	
+	/**
+	 * The value of the state
+	 */
 	private StateValue value;
 
+	/**
+	 * 
+	 * @param state
+	 * @param value
+	 */
 	public State(StateName state, StateValue value) {
 		this.name = state;
 		this.value = value;
 	}
+	public State(StateNameEnum state, StateValue value) {
+		this.nameEnum = state;
+		this.value = value;
+	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public StateName getName() {
 		return name;
 	}
+	public StateNameEnum getNameEnum() {
+		return nameEnum;
+	}
 
+	public void setNameEnum(StateNameEnum nameEnum) {
+		this.nameEnum = nameEnum;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public StateValue getValue() {
 		return value;
 	}
