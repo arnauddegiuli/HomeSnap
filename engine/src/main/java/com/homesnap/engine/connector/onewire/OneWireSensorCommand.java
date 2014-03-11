@@ -5,6 +5,7 @@ import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.OneWireSensor;
 import com.homesnap.engine.controller.Command;
 import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.StateValue;
 
 /**
  * 
@@ -51,8 +52,23 @@ public abstract class OneWireSensorCommand<S extends OneWireSensor> {
 			adapter.endExclusive();
 		}
 	}
-	
-	public abstract Object read(State state, S sensor, byte[] deviceState) throws OneWireException;
-	
+
+	/**
+	 * 
+	 * @param state
+	 * @param sensor
+	 * @param deviceState
+	 * @return
+	 * @throws OneWireException
+	 */
+	public abstract StateValue read(State state, S sensor, byte[] deviceState) throws OneWireException;
+
+	/**
+	 * 
+	 * @param state
+	 * @param sensor
+	 * @param deviceState
+	 * @throws OneWireException
+	 */
 	public abstract void write(State state, S sensor, byte[] deviceState) throws OneWireException;
 }

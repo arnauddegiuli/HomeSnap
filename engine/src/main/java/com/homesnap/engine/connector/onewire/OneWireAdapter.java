@@ -26,11 +26,14 @@ import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.controller.Command;
 import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.clock.ClockSensor.ClockSensorStateName;
+import com.homesnap.engine.controller.temperature.TemperatureSensor.TemperatureSensorStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateNameEnum;
+import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.what.impl.DoubleValue;
-import com.homesnap.engine.controller.what.impl.StringValue;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -261,40 +264,45 @@ class OneWireAdapter implements Monitor, Commander {
 		new OneWireSensorCommand<ClockContainer>(adapter, command, container) {
 
 			@Override
-			public Object read(State state, ClockContainer sensor, byte[] deviceState) throws OneWireException {
+			public StateValue read(State state, ClockContainer sensor, byte[] deviceState) throws OneWireException {
 				
-				Object result;
-				switch (state.getNameEnum()) {
-					case ALARM: {
-						// TODO Faire un DateUtil
-						long time = sensor.getClockAlarm(deviceState);
-						result = new StringValue(new SimpleDateFormat(DEFAULT_TIME_PATTERN).format(new Date(time)));
-						break;
-					}
+				StateValue result = null;
+				if (state.getName() instanceof ClockSensorStateName) {
 					
-					case DATE:
-					case TIME:
-					case DATE_TIME: {
-						String pattern;
-						if (StateNameEnum.DATE.equals(state.getName())) {
-							pattern = DEFAULT_DATE_PATTERN;
-						}
-						if (StateNameEnum.TIME.equals(state.getName())) {
-							pattern = DEFAULT_TIME_PATTERN;
-						}
-						if (StateNameEnum.DATE_TIME.equals(state.getName())) {
-							pattern = DEFAULT_DATE_TIME_PATTERN;
-						}
-						else {
-							throw new IllegalArgumentException("StateName is not supported : "+ state.getName());
+					ClockSensorStateName stateName = (ClockSensorStateName) state.getName();
+					switch (stateName) {
+						case ALARM: {
+							// TODO Faire un DateUtil
+							long time = sensor.getClockAlarm(deviceState);
+							result = new DateValue(new Date(time));
+							break;
 						}
 						
-						long time = sensor.getClock(deviceState);
-						result = new StringValue(new SimpleDateFormat(pattern).format(new Date(time)));
-						break;
-					}
-					default: {
-						result = null;
+						case DATE:
+						case TIME:
+						case DATE_TIME: {
+//							String pattern;
+//							if (StateNameEnum.DATE.equals(state.getName())) {
+//								pattern = DEFAULT_DATE_PATTERN;
+//							}
+//							if (StateNameEnum.TIME.equals(state.getName())) {
+//								pattern = DEFAULT_TIME_PATTERN;
+//							}
+//							if (StateNameEnum.DATE_TIME.equals(state.getName())) {
+//								pattern = DEFAULT_DATE_TIME_PATTERN;
+//							}
+//							else {
+//								throw new IllegalArgumentException("StateName is not supported : "+ state.getName());
+//							}
+							
+							long time = sensor.getClock(deviceState);
+							result = new DateValue(new Date(time));
+//							result = new StringValue(new SimpleDateFormat(pattern).format(new Date(time)));
+							break;
+						}
+						default: {
+							result = null;
+						}
 					}
 				}
 				return result;
@@ -303,49 +311,53 @@ class OneWireAdapter implements Monitor, Commander {
 			@Override
 			public void write(State state, ClockContainer sensor, byte[] deviceState) throws OneWireException {
 				
-				switch (state.getNameEnum()) {
-					case ALARM: {
-						Date newDate;
-						try {
-							newDate = new SimpleDateFormat(DEFAULT_TIME_PATTERN).parse(state.getValue().getValue());
-							sensor.setClockAlarm(newDate.getTime(), deviceState);
-						} catch (ParseException e) {
-							// TODO
-							e.printStackTrace();
-						}
-						break;
-					}
+				if (state.getName() instanceof ClockSensorStateName) {
 					
-					case DATE:
-					case TIME:
-					case DATE_TIME: {
-						String pattern;
-						if (StateNameEnum.DATE.equals(state.getName())) {
-							pattern = DEFAULT_DATE_PATTERN;
-						}
-						if (StateNameEnum.TIME.equals(state.getName())) {
-							pattern = DEFAULT_TIME_PATTERN;
-						}
-						if (StateNameEnum.DATE_TIME.equals(state.getName())) {
-							pattern = DEFAULT_DATE_TIME_PATTERN;
-						}
-						else {
-							throw new IllegalArgumentException("StateName is not supported : "+ state.getName());
+					ClockSensorStateName stateName = (ClockSensorStateName) state.getName();
+					switch (stateName) {
+						case ALARM: {
+							Date newDate;
+							try {
+								newDate = new SimpleDateFormat(DEFAULT_TIME_PATTERN).parse(state.getValue().getValue());
+								sensor.setClockAlarm(newDate.getTime(), deviceState);
+							} catch (ParseException e) {
+								// TODO
+								e.printStackTrace();
+							}
+							break;
 						}
 						
-						Date newDate;
-						try {
-							newDate = new SimpleDateFormat(pattern).parse(state.getValue().getValue());
-							sensor.setClock(newDate.getTime(), deviceState);
-						} catch (ParseException e) {
-							// TODO
-							e.printStackTrace();
+						case DATE:
+						case TIME:
+						case DATE_TIME: {
+							String pattern;
+							if (StateNameEnum.DATE.equals(state.getName())) {
+								pattern = DEFAULT_DATE_PATTERN;
+							}
+							if (StateNameEnum.TIME.equals(state.getName())) {
+								pattern = DEFAULT_TIME_PATTERN;
+							}
+							if (StateNameEnum.DATE_TIME.equals(state.getName())) {
+								pattern = DEFAULT_DATE_TIME_PATTERN;
+							}
+							else {
+								throw new IllegalArgumentException("StateName is not supported : "+ state.getName());
+							}
+							
+							Date newDate;
+							try {
+								newDate = new SimpleDateFormat(pattern).parse(state.getValue().getValue());
+								sensor.setClock(newDate.getTime(), deviceState);
+							} catch (ParseException e) {
+								// TODO
+								e.printStackTrace();
+							}
+							break;
 						}
-						break;
+						default: {
+						}
 					}
-					default: {
-					}
-				}				
+				}
 			}
 			
 		}.send();
@@ -356,28 +368,32 @@ class OneWireAdapter implements Monitor, Commander {
 		new OneWireSensorCommand<TemperatureContainer>(adapter, command, container) {
 			
 			@Override
-			public Object read(State state, TemperatureContainer sensor, byte[] deviceState) throws OneWireException {
+			public StateValue read(State state, TemperatureContainer sensor, byte[] deviceState) throws OneWireException {
 				
-				Object result;
-				switch (state.getNameEnum()) {
-					case HIGHEST_TEMP: {
-						result = new DoubleValue(sensor.getMaxTemperature());
-						break;
-					}
-					case LOWEST_TEMP: {
-						result = new DoubleValue(sensor.getMinTemperature());
-						break;
-					}
-					case ALARM_HIGH: {
-						result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_HIGH, deviceState));
-						break;
-					}
-					case ALARM_LOW: {
-						result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_LOW, deviceState));
-						break;
-					}
-					default: {
-						result = null;
+				StateValue result = null;
+				if (state.getName() instanceof TemperatureSensorStateName) {
+					
+					TemperatureSensorStateName stateName = (TemperatureSensorStateName) state.getName();
+					switch (stateName) {
+						case ALARM_HIGH: {
+							result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_HIGH, deviceState));
+							break;
+						}
+						case ALARM_LOW: {
+							result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_LOW, deviceState));
+							break;
+						}
+						case HIGHEST_TEMP: {
+							result = new DoubleValue(sensor.getMaxTemperature());
+							break;
+						}
+						case LOWEST_TEMP: {
+							result = new DoubleValue(sensor.getMinTemperature());
+							break;
+						}
+						default: {
+							result = null;
+						}
 					}
 				}
 				return result;
@@ -386,18 +402,23 @@ class OneWireAdapter implements Monitor, Commander {
 			@Override
 			public void write(State state, TemperatureContainer sensor, byte[] deviceState) throws OneWireException {
 				
-				switch (state.getNameEnum()) {
-					case ALARM_HIGH: {
-						sensor.setTemperatureAlarm(TemperatureContainer.ALARM_HIGH,
-								((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
-						break;
-					}
-					case ALARM_LOW: {
-						sensor.setTemperatureAlarm(TemperatureContainer.ALARM_LOW,
-								((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
-						break;
-					}
-					default: {
+				if (state.getName() instanceof TemperatureSensorStateName) {
+					
+					TemperatureSensorStateName stateName = (TemperatureSensorStateName) state.getName();
+					switch (stateName) {
+						case ALARM_HIGH: {
+							sensor.setTemperatureAlarm(TemperatureContainer.ALARM_HIGH,
+									((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
+							break;
+						}
+						case ALARM_LOW: {
+							sensor.setTemperatureAlarm(TemperatureContainer.ALARM_LOW,
+									((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
+							break;
+						}
+						default: {
+							// TODO log.debug()
+						}
 					}
 				}
 			}

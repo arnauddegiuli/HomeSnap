@@ -29,7 +29,6 @@ public final class State {
 	 * The name of the state  
 	 */
 	private StateName name;
-	private StateNameEnum nameEnum;
 	
 	/**
 	 * The value of the state
@@ -45,10 +44,6 @@ public final class State {
 		this.name = state;
 		this.value = value;
 	}
-	public State(StateNameEnum state, StateValue value) {
-		this.nameEnum = state;
-		this.value = value;
-	}
 
 	/**
 	 * 
@@ -56,13 +51,6 @@ public final class State {
 	 */
 	public StateName getName() {
 		return name;
-	}
-	public StateNameEnum getNameEnum() {
-		return nameEnum;
-	}
-
-	public void setNameEnum(StateNameEnum nameEnum) {
-		this.nameEnum = nameEnum;
 	}
 
 	/**
