@@ -269,7 +269,7 @@ public class OpenWebCommanderImpl implements Commander {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
 				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat().getValue()), where});
 			} else { // Dimension
-				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat()); 
+				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWho(), command.getWhat()); 
 				StringBuilder sb = new StringBuilder();
 				for (DimensionValue dimension : dimensionStatus.getValueList()) {
 					sb.append(dimension.getValue());
@@ -283,7 +283,7 @@ public class OpenWebCommanderImpl implements Commander {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
 				return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
 			} else {
-				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWhat());
+				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWho(), command.getWhat());
 				return MessageFormat.format(OpenWebNetConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
 			}
 		}

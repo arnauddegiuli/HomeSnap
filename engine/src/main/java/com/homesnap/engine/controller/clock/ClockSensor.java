@@ -42,6 +42,6 @@ public class ClockSensor extends Controller  {
 
 	@Override
 	public Who getWho() {
-		return null;
+		return Who.CLOCK_SENSOR;
 	}
 }

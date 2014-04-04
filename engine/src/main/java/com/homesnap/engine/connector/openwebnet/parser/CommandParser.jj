@@ -10,7 +10,9 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.homesnap.engine.CommandEnum;
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
+import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 
 public class CommandParser
@@ -118,7 +120,8 @@ private void parseOneLine():
 {
 		// Standard          *WHO*WHAT*WHERE##
 		// Status request    *#WHO*WHERE##
-		// Dimension request *#WHO*WHERE*DIMENSION## || *#WHO*WHERE*DIMENSION#VAL1*VAL2*...VALn##
+		// Dimension request *#WHO*WHERE*DIMENSION##
+		// Dimension read *#WHO*WHERE*DIMENSION#VAL1*VAL2*...VALn##
 		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
 		               
 
@@ -169,7 +172,7 @@ Token val;
 }
 {
 	  "*" dimension=<VAL> {this.type=CommandEnum.DIMENSION_STATUS;this.dimension=dimension.toString();}
-	  	("*" val=<VAL> {this.dimensionList.add(val.toString());}
+	  	("*" val=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimensionList.add(val.toString());}
       	)*
       	"##" {}
 	| "*#" dimension=<VAL> {this.type=CommandEnum.DIMENSION_COMMAND;this.dimension=dimension.toString();} 

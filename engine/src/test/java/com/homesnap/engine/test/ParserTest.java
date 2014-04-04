@@ -28,6 +28,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
@@ -42,6 +43,7 @@ public class ParserTest {
 		String standard = "*1*1*12##";
 		CommandParser p  = CommandParser.parse(standard);
 		Assert.assertEquals("1", p.getWho());
+		Assert.assertEquals(CommandEnum.STANDARD_COMMAND, p.getType());
 		
 		// Space case..
 		String gatewayStatusCommand = "*#13**0##";
@@ -140,6 +142,7 @@ public class ParserTest {
 		String status = "*#1*12##";
 		CommandParser p  = CommandParser.parse(status);
 		Assert.assertEquals("12", p.getWhere());
+		Assert.assertEquals(CommandEnum.STANDARD_STATUS, p.getType());
 	}
 	
 	@Test
@@ -155,6 +158,8 @@ public class ParserTest {
 		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
 		String dimensionCommand = "*#12*1*#1*02*11*05*2012##";
 		CommandParser p  = CommandParser.parse(dimensionCommand);
+		Assert.assertEquals(CommandEnum.DIMENSION_COMMAND, p.getType());
+		Assert.assertNotEquals(CommandEnum.STANDARD_COMMAND, p.getType());
 		Assert.assertEquals("1", p.getDimension());
 		Assert.assertEquals(4, p.getDimensionList().size());
 		Assert.assertEquals("02", p.getDimensionList().get(0).getValue());
@@ -171,9 +176,12 @@ public class ParserTest {
 	
 	@Test
 	public void heatingDimension20Test() throws ParseException {
-		// Dimension read *#WHO*WHERE*DIMENSION*VAL1*VAL2*...*VALn##
+		// Dimension write   *#WHO*WHERE*#DIMENSION*VAL1*VAL2*...*VALn##
+		
 		CommandParser p = CommandParser.parse("*#4*9#1*20*1##");
-
+		
+		Assert.assertEquals(CommandEnum.DIMENSION_COMMAND, p.getType());
+		
 		Assert.assertEquals("1", p.getActuator());
 		Assert.assertEquals("9", p.getZone());
 

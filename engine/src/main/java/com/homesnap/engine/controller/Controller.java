@@ -58,7 +58,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
 	private LabelList labelList = new LabelList(this);
 	/** List of all states with their class types to prevent from set a state with an invalid value */
-	private Map<StateName, Class<? extends StateValue>> stateTypes;
+	private Map<StateName, Class<? extends StateValue>> stateTypes = new HashMap<StateName, Class<? extends StateValue>>();
 	/** List of all states with their values which represents the current status of a device */
 	private Map<StateName, StateValue> stateList = new HashMap<StateName, StateValue>();
 
@@ -256,68 +256,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-//	/**
-//	 * Get the {@link DimensionStatus} of the device by sending the command on
-//	 * the bus.
-//	 * 
-//	 * @param clazzkey)(
-//	 *            class of the dimensionStatus of the device.
-//	 * @return the dimension status
-//	 */
-//	protected <D extends DimensionStatus> void getDimensionStatus(Class<D> clazz, DimensionStatusListener<D> listener) {
-//		try {
-//			D result = clazz.newInstance();
-//			executeStatus(result, listener);
-//		} catch (InstantiationException e) {
-//			e.printStackTrace();
-//			listener.onDimensionStatus(null, new DefaultCommandResult(null, CommandResultStatus.error));
-//		} catch (IllegalAccessException e) {
-//			e.printStackTrace(); // FIXME log and not stacktrace
-//			listener.onDimensionStatus(null, new DefaultCommandResult(null, CommandResultStatus.error));
-//		}
-//	}
-//
-//	/**
-//	 * Define the {@link Status} of the device.
-//	 * @param what {@link Status} of the device.
-//	 */
-//	protected void setDimensionStatus(final DimensionStatus dimensionStatus) {
-//		executeAction(dimensionStatus, new CommandListener() {
-//			@Override
-//			public void onCommand(CommandResult result) {
-//				if (CommandResultStatus.ok.equals(result.getStatus())) {
-//					list.put(dimensionStatus.getCode(), dimensionStatus); // I do it here and not in monitor because too difficult to recreate the good dimension later....
-//				//	notifyDimensionChange(dimensionStatus); // done when come back from monitor
-//				} else {
-//					// Error...
-//					notifyDimensionChangeError(dimensionStatus, result);
-//				}
-//			}
-//		});
-//	}
-//
-//	/**
-//	 * Define the new {@link DimensionStatus} of the device
-//	 * without sent the command on the bus.
-//	 * @param newWhat {@link DimensionStatus} of the device.
-//	 */
-//	public void changeDimensionStatus(DimensionStatus dimensionStatus) {
-//		if (dimensionStatus != null) {
-//			list.put(dimensionStatus.getCode(), dimensionStatus); // First because sometime unlock thread in listener...
-//			notifyDimensionChange(dimensionStatus);
-//		}
-//	}
-//
-//	/**
-//	 * Get the {@link DimensionStatus} of the device
-//	 * without sent the command on the bus.
-//	 * @param code code of the dimensionStatus of the device.
-//	 * @return the dimension status
-//	 */
-//	public DimensionStatus getDimensionStatusFromCache(String code) {
-//		return list.get(code);
-//	}
 
 	/**
 	 * Return the value of a state of the status.

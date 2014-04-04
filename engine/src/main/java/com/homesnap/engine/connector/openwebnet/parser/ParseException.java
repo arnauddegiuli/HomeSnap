@@ -2,29 +2,6 @@
 /* JavaCCOptions:KEEP_LINE_COL=null */
 package com.homesnap.engine.connector.openwebnet.parser;
 
-/*
- * #%L
- * MyDomoEngine
- * %%
- * Copyright (C) 2011 - 2013 A. de Giuli
- * %%
- * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
- * 
- *     MyDomo is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- * 
- *     MyDomo is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License
- *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
- * #L%
- */
-
 /**
  * This exception is thrown when parse errors are encountered.
  * You can explicitly create objects of this exception type by
@@ -207,4 +184,4 @@ public class ParseException extends Exception {
    }
 
 }
-/* JavaCC - OriginalChecksum=7f2f8e32693dccced5a58e837e368748 (do not edit this line) */
+/* JavaCC - OriginalChecksum=2061fe5f3030caf23ef6d216e2b39216 (do not edit this line) */

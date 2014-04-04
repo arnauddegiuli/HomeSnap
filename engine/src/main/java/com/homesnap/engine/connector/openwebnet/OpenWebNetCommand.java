@@ -97,7 +97,7 @@ public class OpenWebNetCommand {
 	public State getDimension() {
 		String code = parser.getDimension();
 		List<DimensionValue> dimensionList = parser.getDimensionList();
-		return DimensionMapping.convert(new DimensionStatusImpl(dimensionList, code));
+		return DimensionMapping.convert(parser.getWho(), new DimensionStatusImpl(dimensionList, code));
 	}
 
 	public String toString() {

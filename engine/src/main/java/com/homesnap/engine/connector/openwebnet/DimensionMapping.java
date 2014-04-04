@@ -25,11 +25,13 @@ package com.homesnap.engine.connector.openwebnet;
 
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.who.Who;
 
 public class DimensionMapping {
 
-	public static DimensionStatus convert(State state) {
+	public static DimensionStatus convert(Who w, State state) {
 		DimensionStatus ds = GatewayDimension.fromValue(state.getName()).createDimensionStatus();
 //		ds.setValueList(dimensionList); TODO manage values
 		return ds;
@@ -39,9 +41,13 @@ public class DimensionMapping {
 		return GatewayDimension.fromValue(state.getName()).getCode();
 	}
 	
-	public static State convert(DimensionStatus dimension) {
-		return new State(GatewayDimension.fromValue(dimension.getCode()).getName(), null); // TODO manage value
-		
+	public static State convert(String w, DimensionStatus dimension) {
+		// TODO transform OpenWebNetWho en enum
+		if (OpenWebNetWho.WHO_HEATING_ADJUSTMENT.equals(w)) {
+			return new State(HeatingZoneDimension.fromValue(dimension.getCode()).getName(), null); // TODO manage value
+		} else {
+			return new State(GatewayDimension.fromValue(dimension.getCode()).getName(), null); // TODO manage value
+		}
 	}
 	
 }
