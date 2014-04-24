@@ -1,4 +1,4 @@
-package com.homesnap.engine.connector.openwebnet;
+package com.homesnap.engine.connector.openwebnet.convert;
 
 import com.homesnap.engine.controller.who.Who;
 

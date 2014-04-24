@@ -43,7 +43,10 @@ public class Scanner {
 
 			@Override
 			public void foundUnknownController(Who who, Where where, State what) {
-				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}] : {4}\n", who, where.getTo(), what.getName().getName(), what.getValue().getValue()));
+				String whereStr = where != null ? where.getTo() : "null";
+				String whatStr = what == null ? "null": what.getName() == null ? "null" : what.getName().getName();
+				String valueStr = what == null ? "null": what.getValue() == null ? "null" : what.getValue().getValue();
+				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}]\n", who, whereStr, whatStr, valueStr));
 			}
 		});
 	}

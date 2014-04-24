@@ -1,4 +1,4 @@
-package com.homesnap.engine.network;
+package com.homesnap.engine.connector.knxnetip.network;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

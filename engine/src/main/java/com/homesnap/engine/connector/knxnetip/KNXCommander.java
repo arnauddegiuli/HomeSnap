@@ -18,6 +18,7 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.ConnectionListener;
+import com.homesnap.engine.connector.knxnetip.network.NetworkConfig;
 import com.homesnap.engine.controller.Command;
 import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
@@ -25,7 +26,6 @@ import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
-import com.homesnap.engine.network.NetworkConfig;
 
 /**
  * 

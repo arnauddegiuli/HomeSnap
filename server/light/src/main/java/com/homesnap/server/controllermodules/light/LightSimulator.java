@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 import java.util.Hashtable;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.light.LightStatus;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;

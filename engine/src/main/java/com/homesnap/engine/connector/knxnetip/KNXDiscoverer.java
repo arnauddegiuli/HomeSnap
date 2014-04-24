@@ -17,7 +17,7 @@ import tuwien.auto.calimero.knxnetip.util.HPAI;
 import tuwien.auto.calimero.link.medium.KNXMediumSettings;
 import tuwien.auto.calimero.link.medium.TPSettings;
 
-import com.homesnap.engine.network.NetworkConfig;
+import com.homesnap.engine.connector.knxnetip.network.NetworkConfig;
 
 /**
  * 

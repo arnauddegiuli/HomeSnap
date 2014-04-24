@@ -27,7 +27,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +34,10 @@ import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.ConnectionListener;
-import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
-import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.controller.Command;
 import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.what.StateName;
 
 public class OpenWebCommanderImpl implements Commander {
 
@@ -144,7 +141,7 @@ public class OpenWebCommanderImpl implements Commander {
 		}	
 
 		// Send asynchronously the command!
-		new Thread(new OpenWebCommandThread(this, createMessage(command), resultListener)).start();
+		new Thread(new OpenWebCommandThread(this, new OpenWebNetCommand(command).toString(), resultListener)).start();
 	}
 
 	void writeMessage(String message) {
@@ -252,41 +249,6 @@ public class OpenWebCommanderImpl implements Commander {
 
 	public Integer getPasswordOpen() {
 		return passwordOpen;
-	}
-
-	/**
-	 * Create the open message for action or status.
-	 * @return open web net message.
-	 */
-	public String createMessage(Command command) {
-		if (command.getWhere() == null && command.getWhere().getTo() == null) {
-			throw new IllegalArgumentException("Controller must contain an address with where");
-		}
-		
-		String who = OpenWebNetWho.convert(command.getWho());
-		String where = command.getWhere().getTo();
-		if (command.isActionCommand()) {
-			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, StatusMapping.convert(command.getWho(), command.getWhat().getValue()), where});
-			} else { // Dimension
-				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWho(), command.getWhat()); 
-				StringBuilder sb = new StringBuilder();
-				for (DimensionValue dimension : dimensionStatus.getValueList()) {
-					sb.append(dimension.getValue());
-					sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
-				}
-				sb.setLength(sb.length()-1);
-				
-				return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()});
-			}
-		} else {
-			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
-			} else {
-				DimensionStatus dimensionStatus = DimensionMapping.convert(command.getWho(), command.getWhat());
-				return MessageFormat.format(OpenWebNetConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
-			}
-		}
 	}
 
 	@Override

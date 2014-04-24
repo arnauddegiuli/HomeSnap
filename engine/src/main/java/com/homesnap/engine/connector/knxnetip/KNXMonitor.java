@@ -23,9 +23,9 @@ import tuwien.auto.calimero.link.medium.TPSettings;
 import com.homesnap.engine.connector.ConnectionListener;
 import com.homesnap.engine.connector.Monitor;
 import com.homesnap.engine.connector.UnknownControllerListener;
+import com.homesnap.engine.connector.knxnetip.network.NetworkConfig;
 import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.network.NetworkConfig;
 
 /**
  * 

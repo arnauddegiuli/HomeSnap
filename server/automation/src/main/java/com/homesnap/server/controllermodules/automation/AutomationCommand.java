@@ -26,8 +26,8 @@ package com.homesnap.server.controllermodules.automation;
 import java.text.MessageFormat;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatus;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.controller.automation.Automation;
 import com.homesnap.server.ControllerStateManagement;
 

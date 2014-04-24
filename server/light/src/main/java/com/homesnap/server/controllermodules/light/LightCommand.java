@@ -27,7 +27,7 @@ package com.homesnap.server.controllermodules.light;
 import java.text.MessageFormat;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.light.LightStatus;
 import com.homesnap.server.ControllerStateManagement;
 

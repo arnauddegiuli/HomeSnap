@@ -31,8 +31,8 @@ import java.net.Socket;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 
 public class CommandSession implements Runnable {

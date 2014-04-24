@@ -25,6 +25,7 @@ package com.homesnap.engine.controller.heating;
 
 
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.heating.statevalue.Offset;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.DoubleValue;
@@ -36,101 +37,83 @@ public class HeatingZone extends Controller {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public enum ZoneStatus implements StateValue {
-		
-		HEATING_GENERIC_HOLIDAY_DAILY("315"); 
-		
-		private String value;
-		private ZoneStatus(String value) {
-			this.value = value;
-		}
-		
+	public enum HeatingZoneStatus implements StateValue {
+		HEATING_MODE,
+		THERMAL_PROTECTION
+		; 
+
+		@Override
 		public String getValue() {
-			return value;
+			return name();
 		}
+		
 	}
 	
-	public enum HeatingStateName implements StateName {
-		MEASURE_TEMPERATURE("0"), 
-		FAN_COIL_SPEED("11"),
-		PROBE_STATUS("12"),
-		LOCAL_OFFSET("13"),
-		SET_TEMPERATURE("14"),
-		VALVE_STATUS("19"),
-		ACTUATOR_STATUS("20");
-		
-		private String name;
-		private HeatingStateName(String name) {
-			this.name = name;
-		}
+	public enum ZoneStateName implements StateName {
+		MEASURE_TEMPERATURE, 
+// TODO		FAN_COIL_SPEED,
+// TODO		PROBE_STATUS,
+		LOCAL_OFFSET,
+		SET_TEMPERATURE_HEATING, 
+		SET_TEMPERATURE_CONDITIONAL, 
+		SET_TEMPERATURE_GENERIC;
+// TODO		VALVE_STATUS,
+// TODO		ACTUATOR_STATUS;
 		
 		public String getName() {
-			return name;
+			return name();
 		}
-
-//		public static HeatingZoneDimension fromValue(String code) {
-//			for (HeatingZoneDimension gd : HeatingZoneDimension.values()) {
-//				if (gd.getCode().equals(code))
-//					return gd;
-//			}
-//			
-//			return null;
-//		}
 	}
 
 	@Override
 	public Who getWho() {
 		return Who.HEATING_ADJUSTMENT;
 	}
-	
-//	@Override TODO monter status au dessus?
-	public ZoneStatus getStatus() {
-		return (ZoneStatus) get(HeatingStateName.STATUS);
+
+	public HeatingZoneStatus getStatus() {
+		return (HeatingZoneStatus) get(ZoneStateName.STATUS);
 	}
 
-	/**
-	 * Asynchronously method to get value.
-	 * @param mode
-	 * @param callback the method to call when result will be available
-	 */
-	public DoubleValue getDesiredTemperature(final HeatingModeEnum mode) {
-		// TODO manage heating mode
-		return (DoubleValue) get(HeatingStateName.SET_TEMPERATURE);
-	}
-	
-	/**
-	 * Define the desired temperature. Value can be not be change instantly: it will send order
-	 * to server. Only when monitor session will get the change, this will affect this controller.
-	 * @param temperature
-	 * @param mode
-	 */
-	public void setDesiredTemperature(DoubleValue temperature, HeatingModeEnum mode) {
-		set(HeatingStateName.SET_TEMPERATURE, temperature);
+	public void setStatus(HeatingZoneStatus value) {
+		set(ZoneStateName.STATUS, value);
 	}
 
-	/**
-	 * A
-	 */
+	public DoubleValue getHeatingDesiredTemperature() {
+		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_HEATING);
+	}
+
+	public DoubleValue getConditionalDesiredTemperature() {
+		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_CONDITIONAL);
+	}
+
+	public DoubleValue getGenericDesiredTemperature() {
+		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_GENERIC);
+	}
+
+	public void setOffset(Offset offset) {
+		set(ZoneStateName.LOCAL_OFFSET, offset);
+	}
+
+	public Offset getOffset() {
+		return (Offset) get(ZoneStateName.LOCAL_OFFSET);
+	}
+
 	public DoubleValue getMeasureTemperature() {
-		return (DoubleValue) get(HeatingStateName.MEASURE_TEMPERATURE);
+		return (DoubleValue) get(ZoneStateName.MEASURE_TEMPERATURE);
 	}
 
 	@Override
 	protected void initStateTypes() {
-		// TODO Auto-generated method stub
+		declareState(ZoneStateName.STATUS, HeatingZoneStatus.class);
+//		declareState(ZoneStateName.ACTUATOR_STATUS, stateClass);
+//		declareState(ZoneStateName.FAN_COIL_SPEED, );
+		declareState(ZoneStateName.LOCAL_OFFSET, Offset.class);
+		declareState(ZoneStateName.MEASURE_TEMPERATURE, DoubleValue.class);
+//		declareState(ZoneStateName.PROBE_STATUS, );
+		declareState(ZoneStateName.SET_TEMPERATURE_CONDITIONAL, DoubleValue.class);
+		declareState(ZoneStateName.SET_TEMPERATURE_GENERIC, DoubleValue.class);
+		declareState(ZoneStateName.SET_TEMPERATURE_HEATING, DoubleValue.class);
+//		declareState(ZoneStateName.VALVE_STATUS, );
 	}
 
-//	public ValvesStatus getValvesStatus() {
-//		(ValvesStatus) get(HeatingStateName.VALVE_STATUS);
-//	}
-//	
-//	public void getSetOffset(final DimensionStatusCallback<SetOffset> callback) {
-//		getDimensionStatus(SetOffset.class, new DimensionStatusListener<SetOffset>() {
-//			@Override
-//			public void onDimensionStatus(SetOffset status,
-//					CommandResult result) {
-//				callback.value(status);
-//			}
-//		});
-//	}
 }

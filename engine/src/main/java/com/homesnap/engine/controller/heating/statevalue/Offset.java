@@ -1,4 +1,6 @@
-package com.homesnap.engine.controller.heating.dimension;
+package com.homesnap.engine.controller.heating.statevalue;
+
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -23,6 +25,30 @@ package com.homesnap.engine.controller.heating.dimension;
  * #L%
  */
 
-public class ProbeStatus {
+public class Offset implements StateValue{
 
+	public enum Mode {
+		ON, OFF, PROTECTION;
+	}
+	
+	private Mode mode;
+	private int degree;
+	
+	public Offset(Mode mode, int degree) {
+		this.mode = mode;
+		this.degree = degree;
+	}
+
+	public Mode getMode() {
+		return mode;
+	}
+	
+	public int getDegree() {
+		return degree;
+	}
+
+	@Override
+	public String getValue() {
+		return mode.name() + " - " + getDegree();
+	}
 }

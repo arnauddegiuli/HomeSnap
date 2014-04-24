@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.heating;
+package com.homesnap.engine.connector.openwebnet.heating;
 
 /*
  * #%L
@@ -28,7 +28,7 @@ import java.util.Date;
 
 import com.homesnap.engine.controller.what.StateName;
 
-public class HeatingCentral extends HeatingZone {
+public class HeatingCentral {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;

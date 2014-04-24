@@ -6,6 +6,8 @@ import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
+import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
@@ -73,7 +75,11 @@ public class OpenWebNetCommandResult implements CommandResult {
 			if (StateName.STATUS.equals(name)) {
 				return command.getWhat();
 			} else {
-				return command.getDimension();
+				try {
+					return command.getDimension();
+				} catch (UnknownState e) {
+					return null;
+				}
 			}
 		} else {
 			return null;

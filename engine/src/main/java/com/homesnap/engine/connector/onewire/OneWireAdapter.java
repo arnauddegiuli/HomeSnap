@@ -30,7 +30,6 @@ import com.homesnap.engine.controller.clock.ClockSensor.ClockSensorStateName;
 import com.homesnap.engine.controller.temperature.TemperatureSensor.TemperatureSensorStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.StateNameEnum;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.what.impl.DoubleValue;
@@ -330,23 +329,9 @@ class OneWireAdapter implements Monitor, Commander {
 						case DATE:
 						case TIME:
 						case DATE_TIME: {
-							String pattern;
-							if (StateNameEnum.DATE.equals(state.getName())) {
-								pattern = DEFAULT_DATE_PATTERN;
-							}
-							if (StateNameEnum.TIME.equals(state.getName())) {
-								pattern = DEFAULT_TIME_PATTERN;
-							}
-							if (StateNameEnum.DATE_TIME.equals(state.getName())) {
-								pattern = DEFAULT_DATE_TIME_PATTERN;
-							}
-							else {
-								throw new IllegalArgumentException("StateName is not supported : "+ state.getName());
-							}
-							
 							Date newDate;
 							try {
-								newDate = new SimpleDateFormat(pattern).parse(state.getValue().getValue());
+								newDate = new SimpleDateFormat(DEFAULT_DATE_TIME_PATTERN).parse(state.getValue().getValue());
 								sensor.setClock(newDate.getTime(), deviceState);
 							} catch (ParseException e) {
 								// TODO

@@ -28,11 +28,11 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
-import com.homesnap.engine.controller.heating.dimension.DesiredTemperature;
-import com.homesnap.engine.controller.heating.dimension.MeasureTemperature;
+import com.homesnap.engine.controller.heating.statevalue.DesiredTemperatureValue;
+import com.homesnap.engine.controller.heating.statevalue.MeasureTemperature;
 import com.homesnap.server.ControllerStateManagement;
 
 public class HeatingCommand {
@@ -49,7 +49,7 @@ public class HeatingCommand {
 	 * @return
 	 */
 	public String desiredTemperature(double temperature, String address) {
-		DesiredTemperature dt = new DesiredTemperature();
+		DesiredTemperatureValue dt = new DesiredTemperatureValue();
 		dt.setDesiredTemperature(temperature);
 		dt.setMode(1);
 		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
