@@ -2,12 +2,12 @@ package com.homesnap.engine.connector.openwebnet.convert;
 
 import java.text.MessageFormat;
 
+import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
 import com.homesnap.engine.connector.openwebnet.light.LightStatus;
-import com.homesnap.engine.controller.Command;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;

@@ -23,13 +23,13 @@ package com.homesnap.engine.connector.openwebnet.automation;
  * #L%
  */
 
-import com.homesnap.engine.controller.automation.Automation;
+import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
 import com.homesnap.engine.controller.what.StateValue;
 
 public enum AutomationStatus {
-	AUTOMATION_UP("1", Automation.AutomationState.AUTOMATION_UP),
-	AUTOMATION_DOWN("2", Automation.AutomationState.AUTOMATION_DOWN),
-	AUTOMATION_STOP("0", Automation.AutomationState.AUTOMATION_STOP);
+	AUTOMATION_UP("1", AutomationStatusValue.UP),
+	AUTOMATION_DOWN("2", AutomationStatusValue.DOWN),
+	AUTOMATION_STOP("0", AutomationStatusValue.STOP);
 	
 	private String code;
 	private StateValue value;

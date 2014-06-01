@@ -1,16 +1,13 @@
 package com.homesnap.engine.controller.what.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.homesnap.engine.controller.what.StateValue;
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
 public class DateValue implements StateValue {
+
+	private String DATE_PATTERN = "dd-MM-yyyy";
 	
 	/** */
 	private Date value;
@@ -25,6 +22,10 @@ public class DateValue implements StateValue {
 
 	@Override
 	public String getValue() {
-		return String.valueOf(value);
+		return new SimpleDateFormat(DATE_PATTERN).format(value);
+	}
+
+	public Date getDate() {
+		return value;
 	}
 }

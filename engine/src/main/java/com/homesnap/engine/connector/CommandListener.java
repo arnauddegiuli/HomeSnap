@@ -1,4 +1,5 @@
-package com.homesnap.engine.controller;
+package com.homesnap.engine.connector;
+
 
 /*
  * #%L
@@ -23,19 +24,16 @@ package com.homesnap.engine.controller;
  * #L%
  */
 
-import com.homesnap.engine.connector.CommandResult;
-import com.homesnap.engine.controller.what.State;
+/**
+ * Command listener manage commandResult.
+ * CommandResult is the result of a command send to gateway.
+ */
+public interface CommandListener {
 
-
-/** ControllerChangeListener. */
-public interface ControllerChangeListener {
 	/**
-	 * @param controller
-	 *            the controller that changed.
+	 * Raise each time a result from a command is received.
+	 * @param commandResult
 	 */
-	void onStateChange(Controller controller,
-			State oldStatus, State newStatus);
-
-	void onStateChangeError(Controller controller,
-			State oldStatus, State newStatus, CommandResult result);
+	 public void onCommand(CommandResult commandResult);
+	 
 }

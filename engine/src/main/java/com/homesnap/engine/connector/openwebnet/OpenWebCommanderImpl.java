@@ -32,11 +32,11 @@ import java.util.List;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
+import com.homesnap.engine.connector.Command;
+import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.ConnectionListener;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
-import com.homesnap.engine.controller.Command;
-import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
 
 public class OpenWebCommanderImpl implements Commander {

@@ -35,11 +35,13 @@ import javax.xml.bind.UnmarshalException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
+import com.homesnap.engine.connector.Command;
+import com.homesnap.engine.connector.Command.Type;
+import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.DefaultCommandResult;
-import com.homesnap.engine.controller.Command.Type;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
@@ -68,7 +70,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	protected Controller() {
 		initStateTypes();
 	}
-	
+
 	/**
 	 * Initialises the state names withtypes in order to prevent from a wrong assigment when the {@link #set(String, StateValue)} method is called.
 	 * @return A map of all the states types supported by this controller, where the key is the state name and the value associated is a {@link StateValue} class
@@ -207,19 +209,19 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 	}
 
-	private void notifyWhatChange(State oldStatus, State newStatus) {
+	private void notifyStateChange(State oldStatus, State newStatus) {
 		synchronized (controllerChangeListenerList) {
 			for (ControllerChangeListener listener : controllerChangeListenerList) {
-				listener.onWhatChange(this, oldStatus, newStatus);
+				listener.onStateChange(this, oldStatus, newStatus);
 			}
 		}
 	}
 
-	private void notifyWhatChangeError(State oldStatus, State newStatus,
+	private void notifyStateChangeError(State oldStatus, State newStatus,
 			CommandResult result) {
 		synchronized (controllerChangeListenerList) {
 			for (ControllerChangeListener listener : controllerChangeListenerList) {
-				listener.onWhatChangeError(this, oldStatus, newStatus, result);
+				listener.onStateChangeError(this, oldStatus, newStatus, result);
 			}
 		}
 	}
@@ -324,7 +326,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 					// Error
 					// what = oldStatus; => it will be done with changeWhat by
 					// the monitor listener
-					notifyWhatChangeError(oldStatus, newStatus, result);
+					notifyStateChangeError(oldStatus, newStatus, result);
 				}
 			}
 		});
@@ -340,7 +342,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	public void changeState(State newWhat) {
 		State oldWhat = new State(newWhat.getName(), stateList.get(newWhat.getName()));
 		stateList.put(newWhat.getName(), newWhat.getValue());
-		notifyWhatChange(oldWhat, newWhat);
+		notifyStateChange(oldWhat, newWhat);
 	}
 
 	/**
@@ -377,6 +379,10 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		controllerJson.put("who", getWho())
 				 .put("title", getTitle())
 				 .put("description", getDescription());
+		if (getWhere() != null) {
+			controllerJson.put("from", getWhere().getFrom())
+				 .put("to", getWhere().getTo());
+		}
 		JSONObject states = new JSONObject();
 		if (! stateList.isEmpty()) {
 			for (Entry<StateName, StateValue> entry : stateList.entrySet()) {
@@ -391,10 +397,27 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
 		setTitle(jsonObject.getString("title"));
 		setDescription(jsonObject.getString("description"));
-//		JSONObject states = jsonObject.getJSONObject("states");
-//		for (String key : states.keySet()) {
-//			// TODO manage type statesList.put(key, states.get(key));
-//			
-//		} 
+
+		String from = jsonObject.getString("from");
+		String to = jsonObject.getString("to");
+		if (!"null".equals(String.valueOf(from)) && !"null".equals(String.valueOf(to)) ) {
+			setWhere(new Where(from,to));
+		} else if (!"null".equals(String.valueOf(from))) {
+			setWhere(new Where(from, from));
+		} else if (!"null".equals(String.valueOf(to))) {
+			setWhere(new Where(to, to));
+		}
+
+		JSONObject states = jsonObject.getJSONObject("states");
+		for (final String key: states.keySet()) {
+			StateName name = new StateName() {
+				@Override
+				public String getName() {
+					return key;
+				}
+			};
+//			TODO stateTypes.get(key)
+//			stateList.put(name, null);
+		}
 	}
 }

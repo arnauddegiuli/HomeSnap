@@ -1,6 +1,7 @@
-package com.homesnap.engine.controller;
+package com.homesnap.engine.controller.gateway.statevalue;
 
-import com.homesnap.engine.connector.CommandResult;
+import com.homesnap.engine.controller.gateway.Version;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -25,16 +26,26 @@ import com.homesnap.engine.connector.CommandResult;
  * #L%
  */
 
-/**
- * Command listener manage commandResult.
- * CommandResult is the result of a command send to gateway.
- */
-public interface CommandListener {
 
-	/**
-	 * Raise each time a result from a command is received.
-	 * @param commandResult
-	 */
-	 public void onCommand(CommandResult commandResult);
-	 
+public class VersionValue implements StateValue {
+
+	private Version version;
+	
+	public VersionValue() {
+	}
+	
+	public Version getVersion() {
+		return version;
+	}
+	
+	public void setVersion(Version version) {
+		this.version = version;
+	}
+
+	@Override
+	public String getValue() {
+		return "".concat(String.valueOf(version.getVersion()))
+				.concat(".").concat(String.valueOf(version.getRelease()))
+				.concat(".").concat(String.valueOf(version.getBuild()));
+	}
 }

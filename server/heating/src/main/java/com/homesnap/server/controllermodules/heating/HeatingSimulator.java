@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
@@ -43,7 +44,6 @@ import com.homesnap.engine.connector.openwebnet.heating.dimension.SetOffset;
 import com.homesnap.engine.connector.openwebnet.heating.dimension.ValvesStatus;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.Command;
 import com.homesnap.server.controllermodules.ControllerDimensionSimulator;
 
 public class HeatingSimulator implements ControllerDimensionSimulator {

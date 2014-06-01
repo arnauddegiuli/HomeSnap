@@ -1,7 +1,5 @@
 package com.homesnap.engine.connector;
 
-import com.homesnap.engine.controller.Command;
-import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
 
 /*

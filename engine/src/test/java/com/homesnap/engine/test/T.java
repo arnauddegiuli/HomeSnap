@@ -25,7 +25,7 @@ package com.homesnap.engine.test;
 
 
 import com.homesnap.engine.controller.light.Light;
-import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.services.ControllerService;
 import com.homesnap.engine.services.impl.OpenWebNetControllerService;
 
@@ -42,7 +42,7 @@ public class T {
 		
 		final Light light = s.createController(Light.class, "42");
 		
-		light.setStatus(LightStateValue.LIGHT_OFF);
+		light.setStatus(LightStatusValue.LIGHT_OFF);
 
 		
 	}

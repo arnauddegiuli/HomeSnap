@@ -3,7 +3,7 @@ package com.homesnap.engine.connector.onewire;
 import com.dalsemi.onewire.OneWireException;
 import com.dalsemi.onewire.adapter.DSPortAdapter;
 import com.dalsemi.onewire.container.OneWireSensor;
-import com.homesnap.engine.controller.Command;
+import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateValue;
 

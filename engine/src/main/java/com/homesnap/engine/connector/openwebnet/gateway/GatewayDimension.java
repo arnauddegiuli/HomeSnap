@@ -35,21 +35,21 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.NetMask;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.UpTime;
-import com.homesnap.engine.controller.gateway.Gateway;
+import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
 import com.homesnap.engine.controller.what.StateName;
 
 public enum GatewayDimension {
-	DATE("1", Gateway.GatewayStateName.DATE, Date.class),
-	DATETIME("22", Gateway.GatewayStateName.DATETIME, DateTime.class),
-	DISTRIBUTION_VERSION("24", Gateway.GatewayStateName.DISTRIBUTION_VERSION, DistributionVersion.class),
-	FIRMWARE_VERSION("16", Gateway.GatewayStateName.FIRMWARE_VERSION, FirmwareVersion.class),
-	IP_ADDRESS("10", Gateway.GatewayStateName.IP_ADDRESS, IpAddress.class),
-	KERNEL_VERSION("23", Gateway.GatewayStateName.KERNEL_VERSION, KernelVersion.class),
-	MAC_ADDRESS("12", Gateway.GatewayStateName.MAC_ADDRESS, MacAddress.class),
-	MODEL("15", Gateway.GatewayStateName.MODEL, Model.class),
-	NETMASK("11", Gateway.GatewayStateName.NETMASK, NetMask.class),
-	TIME("0", Gateway.GatewayStateName.TIME, Time.class),
-	UPTIME("19", Gateway.GatewayStateName.UPTIME, UpTime.class);
+	DATE("1", GatewayStateName.DATE, Date.class),
+	DATETIME("22", GatewayStateName.DATETIME, DateTime.class),
+	DISTRIBUTION_VERSION("24", GatewayStateName.DISTRIBUTION_VERSION, DistributionVersion.class),
+	FIRMWARE_VERSION("16", GatewayStateName.FIRMWARE_VERSION, FirmwareVersion.class),
+	IP_ADDRESS("10", GatewayStateName.IP_ADDRESS, IpAddress.class),
+	KERNEL_VERSION("23", GatewayStateName.KERNEL_VERSION, KernelVersion.class),
+	MAC_ADDRESS("12", GatewayStateName.MAC_ADDRESS, MacAddress.class),
+	MODEL("15", GatewayStateName.MODEL, Model.class),
+	NETMASK("11", GatewayStateName.NETMASK, NetMask.class),
+	TIME("0", GatewayStateName.TIME, Time.class),
+	UPTIME("19", GatewayStateName.UPTIME, UpTime.class);
 	
 	private String openWebNetCode;
 	private StateName name;

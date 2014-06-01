@@ -31,8 +31,6 @@ import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
-import com.homesnap.engine.controller.heating.statevalue.DesiredTemperatureValue;
-import com.homesnap.engine.controller.heating.statevalue.MeasureTemperature;
 import com.homesnap.server.ControllerStateManagement;
 
 public class HeatingCommand {

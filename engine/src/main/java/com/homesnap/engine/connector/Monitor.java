@@ -23,7 +23,6 @@ package com.homesnap.engine.connector;
  * #L%
  */
 
-import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
 
 /**

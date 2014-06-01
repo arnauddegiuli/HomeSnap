@@ -24,13 +24,9 @@ package com.homesnap.engine.controller.automation;
  */
 
 
-import org.json.JSONObject;
-
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
 
@@ -39,72 +35,21 @@ public class Automation extends Controller {
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
-	// AUTOMATION
-	public enum AutomationState implements StateValue {
-		AUTOMATION_STOP("stop"), AUTOMATION_UP("up"), AUTOMATION_DOWN("down");
-		
-		private String value;
-		private AutomationState(String code) {
-			this.value = code;
-		}
-
-		@Override
-		public String getValue() {
-			return value;
-		}
-	}
-
 	@Override
 	public Who getWho() {
 		return Who.AUTOMATION;
 	}
 
-	public AutomationState getStatus() {
-		return (AutomationState) get(StateName.STATUS);	
+	public AutomationStatusValue getStatus() {
+		return (AutomationStatusValue) get(StateName.STATUS);	
 	}
 
-	public void setStatus(AutomationState status) {
+	public void setStatus(AutomationStatusValue status) {
 		set(StateName.STATUS, status);	
 	}
 
 	@Override
 	protected void initStateTypes() {
-		declareState(StateName.STATUS, LightStateValue.class);
-	}
-
-	@Override
-	public JSONObject toJson() {
-		AutomationState what = getStatus();
-		String strStatus = null;
-		if (AutomationState.AUTOMATION_STOP == what) {
-			strStatus = "stop";
-		} else if (AutomationState.AUTOMATION_DOWN == what) {
-			strStatus = "down";
-		} else if (AutomationState.AUTOMATION_UP == what) {
-			strStatus = "up";
-		}
-		JSONObject lightJson = new JSONObject();
-		lightJson.put("where", getWhere())
-				 .put("what", strStatus)
-				 .put("title", getTitle())
-				 .put("description", getDescription());
-		return lightJson; // TODO labels are lost...
-	}
-
-	@Override
-	public void fromJson(JSONObject jsonObject) {
-		setWhere(new Where(jsonObject.getString("where"),jsonObject.getString("where")));
-		Object what = jsonObject.get("what");
-		if ("up".equals(what)) {
-			set(StateName.STATUS, AutomationState.AUTOMATION_UP);	
-		} else if ("down".equals(what)) {
-			set(StateName.STATUS, AutomationState.AUTOMATION_DOWN);
-		} else if ("stop".equals(what)) {
-			set(StateName.STATUS, AutomationState.AUTOMATION_STOP);
-		} else {
-			// TODO message: status unknown or undefined
-		}
-		setTitle(jsonObject.getString("title"));
-		setDescription(jsonObject.getString("description"));
+		declareState(StateName.STATUS, AutomationStatusValue.class);
 	}
 }

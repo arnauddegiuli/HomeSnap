@@ -26,15 +26,11 @@ package com.homesnap.engine.controller.gateway;
 
 import java.util.Date;
 
-import javax.xml.bind.UnmarshalException;
-
-import org.json.JSONObject;
-
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.gateway.dimension.DateValue;
-import com.homesnap.engine.controller.gateway.dimension.IpAddress;
-import com.homesnap.engine.controller.gateway.dimension.VersionValue;
-import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
+import com.homesnap.engine.controller.gateway.statevalue.IpAddressValue;
+import com.homesnap.engine.controller.gateway.statevalue.VersionValue;
+import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.what.impl.StringValue;
 import com.homesnap.engine.controller.who.Who;
 
@@ -43,53 +39,21 @@ public class Gateway extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
-	
-	public enum GatewayStateName implements StateName {
-		DATE("date"),
-		DATETIME("datetime"),
-		DISTRIBUTION_VERSION("distributionVersion"),
-		FIRMWARE_VERSION("firmwareVersion"),
-		IP_ADDRESS("ipAddress"),
-		KERNEL_VERSION("kernelVersion"),
-		MAC_ADDRESS("macAddress"),
-		MODEL("model"),
-		NETMASK("netMask"),
-		TIME("time"),
-		UPTIME("uptime");
-		
-		private String name;
-		private GatewayStateName(String name) {
-			this.name = name;
-		}
-		
-		@Override
-		public String getName() {
-			return name;
-		}
-		
-		public static GatewayStateName fromValue(String code) {
-			for (GatewayStateName gd : GatewayStateName.values()) {
-				if (gd.getName().equals(code))
-					return gd;
-			}
-			return null;
-		}
-	}
-	
+
 	public Gateway() {
 	}
-	
+
 	@Override
 	protected void initStateTypes() {
 		declareState(GatewayStateName.DATE, DateValue.class);
 		declareState(GatewayStateName.DATETIME, DateValue.class);
 		declareState(GatewayStateName.DISTRIBUTION_VERSION, VersionValue.class);
 		declareState(GatewayStateName.FIRMWARE_VERSION, VersionValue.class);
-		declareState(GatewayStateName.IP_ADDRESS, IpAddress.class);
+		declareState(GatewayStateName.IP_ADDRESS, IpAddressValue.class);
 		declareState(GatewayStateName.KERNEL_VERSION, VersionValue.class);
-		declareState(GatewayStateName.MAC_ADDRESS, IpAddress.class);
+		declareState(GatewayStateName.MAC_ADDRESS, IpAddressValue.class);
 		declareState(GatewayStateName.MODEL, StringValue.class);
-		declareState(GatewayStateName.NETMASK, IpAddress.class);
+		declareState(GatewayStateName.NETMASK, IpAddressValue.class);
 		declareState(GatewayStateName.TIME, DateValue.class);
 		declareState(GatewayStateName.UPTIME, DateValue.class);
 	}
@@ -103,18 +67,17 @@ public class Gateway extends Controller {
 		return ((DateValue) get(GatewayStateName.DATE)).getDate();
 	}
 
-	public void setDate(java.util.Date newDate) {
-		DateValue dv = new DateValue();
-		dv.setDate(newDate);
+	public void setDate(Date newDate) {
+		DateValue dv = new DateValue(newDate);
 		set(GatewayStateName.DATE, dv);
 	}
 	
 	public byte[] getIpAddress() {
-		return ((IpAddress) get(GatewayStateName.IP_ADDRESS)).getIpAddress();
+		return ((IpAddressValue) get(GatewayStateName.IP_ADDRESS)).getIpAddress();
 	}
 	
 	public byte[] getNetMask() {
-		return ((IpAddress) get(GatewayStateName.NETMASK)).getIpAddress();
+		return ((IpAddressValue) get(GatewayStateName.NETMASK)).getIpAddress();
 	}
 	
 	public String getDeviceType() {
@@ -136,96 +99,5 @@ public class Gateway extends Controller {
 
 	public Version getDistributionVersion() {
 		return ((VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION)).getVersion();
-	}
-
-	@Override
-	public JSONObject toJson() {
-		JSONObject gatewayJson = super.toJson();
-// TODO finish asynchrounously call... since we need to refactor dimension controller, I don't finish now.
-//		final boolean dateReady = false;
-//		final Date date;
-//		final String dateValue;
-//		getDate(new DimensionStatusListener<Date>() {
-//			@Override
-//			public void onDimensionStatus(Date status, CommandResult result) {
-//				date = status;
-//				dateReady = true;
-//				
-//			}
-//		});
-//		final boolean dateTimeReady = false;
-//		final DateTime dateTime;
-//		final String dateTimeValue;
-//		getDateTime(new DimensionStatusListener<DateTime>() {
-//			@Override
-//			public void onDimensionStatus(DateTime status, CommandResult result) {
-//				dateTime = status;
-//				dateTimeReady = true;
-//				
-//			}
-//		});
-//		final boolean timeReady = false;
-//		final Time time;
-//		final String timeValue;
-//		getTime(new DimensionStatusListener<Time>() {
-//			@Override
-//			public void onDimensionStatus(Time status, CommandResult result) {
-//				time = status;
-//				timeReady = true;
-//				
-//			}
-//		});
-//		final boolean upTimeReady = false;
-//		final Time upTime;
-//		final String upTimeValue;
-//		getTime(new DimensionStatusListener<Time>() {
-//			@Override
-//			public void onDimensionStatus(Time status, CommandResult result) {
-//				upTime = status;
-//				upTimeReady = true;
-//				
-//			}
-//		});
-//		long startTime = System.currentTimeMillis();
-//		long currentTime = startTime;
-//		while ((!dateReady || !dateTimeReady || !timeReady || !upTimeReady)
-//			&& ((currentTime-startTime) > 4000)) { // 4s timeout
-//			// wait
-//			wait(100);
-//			currentTime = System.currentTimeMillis();
-//		}
-//		if (date != null) {
-//			dateValue = new SimpleDateFormat("dd-MM-yyyy").format(date.getDate());
-//		}
-//		if (dateTime != null) {
-//			dateTimeValue = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(dateTime.getDate());
-//		}
-//		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-//		if (time != null) {
-//			timeValue = sdf.format(time.getTime());
-//		}
-//		if (upTime != null) {
-//			upTimeValue = sdf.format(upTime.getTime());
-//		}
-
-//		gatewayJson.put("where", getWhere())
-//				 .put("what", "NONE")
-//				 .put("date", dateValue)
-//				 .put("datetime",dateTimeValue)
-//				 .put("deviceType", getDeviceType())
-//				 .put("distributionVersion", getDistributionVersion().toString())
-//				 .put("firmwareVersion", getFirmwareVersion().toString())
-//				 .put("ipAddress", getIpAddress())
-//				 .put("kernelVersion", getKernelVersion().toString())
-//				 .put("netMask", getNetMask());
-//				 .put("time",timeValue)
-//				 .put("upTime",upTimeValue);
-		return gatewayJson;
-	}
-
-	@Override
-	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
-		super.fromJson(jsonObject);
-//		setWhere(jsonObject.getString("where"));
 	}
 }

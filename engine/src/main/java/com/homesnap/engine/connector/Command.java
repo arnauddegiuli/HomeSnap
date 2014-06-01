@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller;
+package com.homesnap.engine.connector;
 
 /*
  * #%L

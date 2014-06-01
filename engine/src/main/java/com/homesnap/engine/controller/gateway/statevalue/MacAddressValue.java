@@ -1,4 +1,5 @@
-package com.homesnap.engine.controller.gateway.dimension;
+package com.homesnap.engine.controller.gateway.statevalue;
+
 
 /*
  * #%L
@@ -23,29 +24,35 @@ package com.homesnap.engine.controller.gateway.dimension;
  * #L%
  */
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
+import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
 import com.homesnap.engine.controller.what.StateValue;
 
-public class DateValue implements StateValue {
+public class MacAddressValue implements StateValue {
+
+	private byte[] macAdress = new byte[] {0, 0, 0, 0, 0, 0};
 	
-	public DateValue() {
-	}
-	
-	public Date getDate() {
-		return null;
-	}
-	
-	public void setDate(Date date) {
-		Calendar c = new GregorianCalendar();
-		c.setTime(date);
+	public MacAddressValue() {
 	}
 
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return "".concat(String.valueOf(macAdress[0]))
+				.concat(".").concat(String.valueOf(macAdress[1]))
+				.concat(".").concat(String.valueOf(macAdress[2]))
+				.concat(".").concat(String.valueOf(macAdress[3]))
+				.concat(".").concat(String.valueOf(macAdress[4]))
+				.concat(".").concat(String.valueOf(macAdress[5]));
+	}
+
+	public byte[] getMacAddress() {
+		return macAdress;
+	}
+
+	public void setMacAddress(byte[] address) throws IncorrectMacAddressException {
+		if (address == null || address.length != 6) {
+			throw new IncorrectMacAddressException();
+		} else {
+			macAdress = address;
+		}
 	}
 }

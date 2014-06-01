@@ -31,7 +31,7 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.ControllerChangeListener;
 import com.homesnap.engine.controller.light.Light;
-import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.services.ControllerService;
 import com.homesnap.engine.services.impl.OpenWebNetControllerService;
@@ -50,7 +50,7 @@ public class LightTest {
 		light.addControllerChangeListener(new ControllerChangeListener() {
 
 			@Override
-			public void onWhatChangeError(Controller controller,
+			public void onStateChangeError(Controller controller,
 					State oldStatus, State newStatus, CommandResult result) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
@@ -60,7 +60,7 @@ public class LightTest {
 			}
 			
 			@Override
-			public void onWhatChange(Controller controller,
+			public void onStateChange(Controller controller,
 					State oldStatus, State newStatus) {
 				synchronized (lock) {
 					// When response from server is here we unlock the thread
@@ -82,10 +82,10 @@ public class LightTest {
 
 		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
 		Assert.assertNotNull(light.getStatus());
-		Assert.assertEquals(LightStateValue.LIGHT_OFF , light.getStatus());
+		Assert.assertEquals(LightStatusValue.LIGHT_OFF , light.getStatus());
 
 		// Now set the value to ON
-		light.setStatus(LightStateValue.LIGHT_ON);
+		light.setStatus(LightStatusValue.LIGHT_ON);
 		// Wait the response from the server
 		try {
 			synchronized (lock) {
@@ -98,10 +98,10 @@ public class LightTest {
 		
 		// Check that after the server response now the status is ON
 		Assert.assertNotNull(light.getStatus());
-		Assert.assertEquals(LightStateValue.LIGHT_ON , light.getStatus());
+		Assert.assertEquals(LightStatusValue.LIGHT_ON , light.getStatus());
 
 		// Switch off again
-		light.setStatus(LightStateValue.LIGHT_OFF);
+		light.setStatus(LightStatusValue.LIGHT_OFF);
 		try {
 			synchronized (lock) {
 				System.out.println("Wait...");
@@ -112,7 +112,7 @@ public class LightTest {
 		}
 		
 		Assert.assertNotNull(light.getStatus());
-		Assert.assertEquals(LightStateValue.LIGHT_OFF , light.getStatus());
+		Assert.assertEquals(LightStatusValue.LIGHT_OFF , light.getStatus());
 		
 		System.out.println("Finish...");
 

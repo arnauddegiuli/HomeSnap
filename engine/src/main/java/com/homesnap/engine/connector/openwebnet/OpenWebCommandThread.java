@@ -24,8 +24,8 @@ package com.homesnap.engine.connector.openwebnet;
  */
 
 import com.homesnap.engine.Log;
+import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.CommandResultStatus;
-import com.homesnap.engine.controller.CommandListener;
 
 /**
  * Manage the connection in a new thread to be asynchrone and avoid blocking process. 

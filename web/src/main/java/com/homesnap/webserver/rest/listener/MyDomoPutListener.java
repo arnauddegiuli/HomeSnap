@@ -116,7 +116,7 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 			result.addControllerChangeListener(new ControllerChangeListener() {
 				
 				@Override
-				public void onWhatChangeError(Controller controller,
+				public void onStateChangeError(Controller controller,
 						State oldStatus, State newStatus, CommandResult result) {
 					synchronized (this) {
 						this.notify();
@@ -124,7 +124,7 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 				}
 				
 				@Override
-				public void onWhatChange(Controller controller,
+				public void onStateChange(Controller controller,
 						State oldStatus, State newStatus) {
 					synchronized (this) {
 						this.notify();

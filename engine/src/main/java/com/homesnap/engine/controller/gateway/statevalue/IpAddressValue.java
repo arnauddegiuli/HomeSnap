@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.gateway.dimension;
+package com.homesnap.engine.controller.gateway.statevalue;
 
 /*
  * #%L
@@ -23,34 +23,33 @@ package com.homesnap.engine.controller.gateway.dimension;
  * #L%
  */
 
+import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
 import com.homesnap.engine.controller.what.StateValue;
 
-public class IpAddress implements StateValue {
+public class IpAddressValue implements StateValue {
 
-	public IpAddress() {
+	private byte[] ipAdress = new byte[] {0, 0, 0, 0};
+	
+	public IpAddressValue() {
 	}
 
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return "".concat(String.valueOf(ipAdress[0]))
+				.concat(".").concat(String.valueOf(ipAdress[1]))
+				.concat(".").concat(String.valueOf(ipAdress[2]))
+				.concat(".").concat(String.valueOf(ipAdress[3]));
 	}
 
 	public byte[] getIpAddress() {
-		byte[] address = new byte[] {
-//				getByteValue(0),
-//				getByteValue(1),
-//				getByteValue(2),
-//				getByteValue(3)
-		};
-		
-		return address;
+		return ipAdress;
 	}
 
-	public void setIpAddress(byte[] address) {
-//		setByteValue(address[0], 0, 0);
-//		setByteValue(address[1], 1, 0);
-//		setByteValue(address[2], 2, 0);
-//		setByteValue(address[3], 3, 0);
+	public void setIpAddress(byte[] address) throws IncorrectIpV4AddressException {
+		if (address == null || address.length != 6) {
+			throw new IncorrectIpV4AddressException();
+		} else {
+			ipAdress = address;
+		}
 	}
 }

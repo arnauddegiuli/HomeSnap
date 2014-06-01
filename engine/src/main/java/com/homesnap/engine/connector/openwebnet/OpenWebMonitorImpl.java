@@ -35,6 +35,7 @@ import java.util.logging.Level;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
+import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.ConnectionListener;
 import com.homesnap.engine.connector.ConnectionStatusEnum;
 import com.homesnap.engine.connector.Monitor;
@@ -42,7 +43,6 @@ import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.house.Label;

@@ -1,8 +1,8 @@
 package com.homesnap.engine.controller.clock;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.gateway.dimension.DateValue;
 import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.who.Who;
 
 /**
@@ -42,6 +42,7 @@ public class ClockSensor extends Controller  {
 
 	@Override
 	public Who getWho() {
-		return Who.CLOCK_SENSOR;
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

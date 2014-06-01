@@ -14,13 +14,13 @@ import tuwien.auto.calimero.link.medium.TPSettings;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 
+import com.homesnap.engine.connector.Command;
+import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.ConnectionListener;
 import com.homesnap.engine.connector.knxnetip.network.NetworkConfig;
-import com.homesnap.engine.controller.Command;
-import com.homesnap.engine.controller.CommandListener;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
