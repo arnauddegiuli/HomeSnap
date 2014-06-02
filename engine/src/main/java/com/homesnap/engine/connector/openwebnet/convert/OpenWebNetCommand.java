@@ -77,7 +77,7 @@ public class OpenWebNetCommand {
 	}
 
 	public State getWhat() { // TODO change name => remove command
-		return new State(StateName.STATUS, Convert.convert(getWho(), parser.getWhat()));
+		return new State(StateName.STATUS, Convert.convertStatus(getWho(), parser.getWhat()));
 	}
 
 	public Who getWho() {

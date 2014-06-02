@@ -30,9 +30,6 @@ import com.homesnap.engine.controller.what.StateName;
 
 public class HeatingCentral {
 
-	/** uuid */
-	private static final long serialVersionUID = 1L;
-
 	// HEATING
 	public enum HeatingStateName implements StateName {
 		HEATING_CONDITIONING_ON("heating_conditioning_on"),

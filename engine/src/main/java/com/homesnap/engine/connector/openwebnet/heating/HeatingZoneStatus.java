@@ -6,6 +6,7 @@ import com.homesnap.engine.controller.what.StateValue;
 public enum HeatingZoneStatus {
 
 	HEATING_MOD("1", HeatingZone.HeatingZoneStatus.HEATING_MODE),
+	HEATING_OFF("303", HeatingZone.HeatingZoneStatus.OFF),
 	THERMAL_PROTECTION("202", HeatingZone.HeatingZoneStatus.THERMAL_PROTECTION);
 
 	private String code;

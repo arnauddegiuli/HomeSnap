@@ -39,7 +39,8 @@ public class HeatingZone extends Controller {
 	
 	public enum HeatingZoneStatus implements StateValue {
 		HEATING_MODE,
-		THERMAL_PROTECTION
+		THERMAL_PROTECTION,
+		OFF
 		; 
 
 		@Override

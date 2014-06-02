@@ -7,6 +7,7 @@ import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
 import com.homesnap.engine.connector.openwebnet.light.LightStatus;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
@@ -29,7 +30,7 @@ public class Convert {
 		String where = command.getWhere().getTo();
 		if (command.isActionCommand()) {
 			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, convert(command.getWho(), command.getWhat().getValue()), where});
+				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, convertStatus(command.getWho(), command.getWhat().getValue()), where});
 			} else { // Dimension
 				DimensionStatus dimensionStatus = convert(command.getWho(), command.getWhat()); 
 				StringBuilder sb = new StringBuilder();
@@ -73,10 +74,12 @@ public class Convert {
 	}
 	
 	
-	private static String convert(Who who, StateValue stateValue) {
+	private static String convertStatus(Who who, StateValue stateValue) {
 		switch (who) {
 		case LIGHT:
 			return LightStatus.fromValue(stateValue).getCode(); // TODO manage null
+		case HEATING_ADJUSTMENT:
+			return HeatingZoneStatus.fromValue(stateValue).getCode();
 		default:
 			return stateValue.getValue(); // TODO mapping
 		}
@@ -84,10 +87,12 @@ public class Convert {
 		
 	}
 	
-	protected static StateValue convert(Who who, String code) {
+	protected static StateValue convertStatus(Who who, String code) {
 		switch (who) {
 		case LIGHT:
 			return LightStatus.fromValue(code).getValue(); // TODO manage null
+		case HEATING_ADJUSTMENT:
+			return HeatingZoneStatus.fromValue(code).getValue();
 		default:
 			return null; // TODO mapping
 		}
