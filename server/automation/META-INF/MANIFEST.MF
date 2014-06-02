@@ -15,4 +15,4 @@ Import-Package: com.homesnap.engine,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.homesnap.server.controllermodules.automation
-Require-Bundle: com.homesnap.engine
+Require-Bundle: com.homesnap.engine,com.homesnap.server

@@ -28,10 +28,10 @@ import java.text.MessageFormat;
 import java.util.Hashtable;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
+import com.homesnap.engine.connector.openwebnet.automation.AutomationStatus;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.automation.Automation;
 import com.homesnap.server.controllermodules.ControllerSimulator;
 
 public class AutomationSimulator implements ControllerSimulator {
@@ -44,9 +44,9 @@ public class AutomationSimulator implements ControllerSimulator {
 			CommandParser parser = CommandParser.parse(command);
 			String what = parser.getWhat();
 			String where = parser.getWhere();
-			if (Automation.AutomationState.AUTOMATION_DOWN.getValue().equals(what)
-					|| Automation.AutomationState.AUTOMATION_STOP.getValue().equals(what)
-					|| Automation.AutomationState.AUTOMATION_UP.getValue().equals(what)) {
+			if (AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
+					|| AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
+					|| AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
 				statusList.put(where, what);
 				return OpenWebNetConstant.ACK;
 			} else {
@@ -67,7 +67,7 @@ public class AutomationSimulator implements ControllerSimulator {
 			where = CommandParser.parse(command).getWhere();
 			String what = statusList.get(where);
 			if (what == null) {
-				what = Automation.AutomationState.AUTOMATION_STOP.getValue();
+				what = AutomationStatus.AUTOMATION_STOP.getCode();
 				statusList.put(where, what);
 			}
 

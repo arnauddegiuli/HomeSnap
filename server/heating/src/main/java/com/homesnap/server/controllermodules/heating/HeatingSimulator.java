@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;

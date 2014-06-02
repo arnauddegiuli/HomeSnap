@@ -30,9 +30,6 @@
 						<Bundle-Activator>com.homesnap.server.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
 						<Import-Package>com.homesnap.engine,
 							 com.homesnap.engine.connector.openwebnet,
-							 com.homesnap.engine.controller,
-							 com.homesnap.engine.controller.gateway,
-							 com.homesnap.engine.controller.gateway.dimension,
 							 com.homesnap.server,
 							 com.homesnap.server.controllermodules,
 							 org.osgi.framework

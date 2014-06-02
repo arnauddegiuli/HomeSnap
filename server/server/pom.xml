@@ -29,12 +29,8 @@
 						<Bundle-Activator>com.homesnap.server.MyDomoServerActivator</Bundle-Activator>
 						<Import-Package>
 							com.homesnap.engine,
-							com.homesnap.engine.controller,
 							com.homesnap.engine.connector.openwebnet,
 							com.homesnap.engine.connector.openwebnet.parser,
-							com.homesnap.engine.controller.gateway,
-							com.homesnap.engine.controller.gateway.dimension,
-							com.homesnap.engine.controller.light,
 							com.homesnap.server.controllermodules,
 							org.osgi.framework
 						</Import-Package>

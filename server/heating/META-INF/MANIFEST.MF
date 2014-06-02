@@ -7,9 +7,8 @@ Bundle-Activator: com.homesnap.server.controllermodules.heating.HeatingModuleAct
 Import-Package: com.homesnap.engine,
  com.homesnap.engine.connector.openwebnet,
  com.homesnap.engine.connector.openwebnet.parser,
- com.homesnap.engine.controller,
- com.homesnap.engine.controller.heating,
- com.homesnap.engine.controller.heating.dimension,
+ com.homesnap.engine.connector.openwebnet.heating,
+ com.homesnap.engine.connector.openwebnet.heating.dimension,
  com.homesnap.server,
  com.homesnap.server.controllermodules,
  org.osgi.framework

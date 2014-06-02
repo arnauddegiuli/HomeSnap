@@ -6,13 +6,10 @@ Bundle-Version: 0.1
 Bundle-Activator: com.homesnap.server.MyDomoServerActivator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.homesnap.engine,
-com.homesnap.engine.controller,
+Import-Package:
+com.homesnap.engine,
 com.homesnap.engine.connector.openwebnet,
 com.homesnap.engine.connector.openwebnet.parser,
-com.homesnap.engine.controller.gateway,
-com.homesnap.engine.controller.gateway.dimension,
-com.homesnap.engine.controller.light,
 com.homesnap.server.controllermodules,
 org.osgi.framework
 Export-Package: com.homesnap.server
