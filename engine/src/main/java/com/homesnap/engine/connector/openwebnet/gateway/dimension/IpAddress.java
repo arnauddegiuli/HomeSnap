@@ -4,6 +4,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -56,5 +57,17 @@ public class IpAddress extends DimensionStatusImpl {
 		setByteValue(address[1], 1, 0);
 		setByteValue(address[2], 2, 0);
 		setByteValue(address[3], 3, 0);
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

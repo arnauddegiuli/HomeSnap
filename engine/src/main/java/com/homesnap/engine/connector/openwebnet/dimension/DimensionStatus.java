@@ -26,8 +26,12 @@ package com.homesnap.engine.connector.openwebnet.dimension;
 
 import java.util.List;
 
+import com.homesnap.engine.controller.what.StateValue;
+
 public interface DimensionStatus {
 	public List<DimensionValue> getValueList();
+	public StateValue getStateValue();
 	public void setValueList(List<DimensionValue> dimensionList);
+	public void setValueList(StateValue value);
 	public String getCode();
 }

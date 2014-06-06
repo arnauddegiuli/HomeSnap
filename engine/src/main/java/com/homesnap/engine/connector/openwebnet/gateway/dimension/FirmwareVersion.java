@@ -5,6 +5,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
 import com.homesnap.engine.controller.gateway.Version;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -66,5 +67,17 @@ public class FirmwareVersion extends DimensionStatusImpl {
 		setIntValue(version.getVersion(), VERSION_POS, 2);
 		setIntValue(version.getRelease(), RELEASE_POS, 2);
 		setIntValue(version.getBuild(), BUILD_POS, 2);
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

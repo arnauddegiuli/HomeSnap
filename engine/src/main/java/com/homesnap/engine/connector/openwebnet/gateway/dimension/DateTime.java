@@ -30,6 +30,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.controller.what.StateValue;
 
 public class DateTime extends DimensionStatusImpl {
 	
@@ -83,5 +84,17 @@ public class DateTime extends DimensionStatusImpl {
 		setIntValue(c.get(Calendar.MINUTE), MINUTES_POS, 2);
 		setIntValue(c.get(Calendar.SECOND), SECONDS_POS, 2);
 		setTimeZoneValue(c.getTimeZone(), TIMEZONE_POS);
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

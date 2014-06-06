@@ -4,6 +4,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -74,5 +75,17 @@ public class Model extends DimensionStatusImpl {
 	
 	public void setModel(int model) {
 		setIntValue(model, MODEL_POS, 0);
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

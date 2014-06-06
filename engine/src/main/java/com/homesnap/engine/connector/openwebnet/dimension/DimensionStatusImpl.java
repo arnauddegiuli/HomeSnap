@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
-public class DimensionStatusImpl implements DimensionStatus {
+public abstract class DimensionStatusImpl implements DimensionStatus {
 
 	private List<DimensionValue> dimensionList;
 	private String what;

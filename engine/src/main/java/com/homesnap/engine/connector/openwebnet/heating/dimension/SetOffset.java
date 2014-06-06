@@ -6,6 +6,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.Offset;
 import com.homesnap.engine.connector.openwebnet.heating.Offset.Mode;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -98,5 +99,17 @@ public class SetOffset extends DimensionStatusImpl {
 		}
 		
 		setStringValue(val, LOCAL_OFFSET_POS);
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

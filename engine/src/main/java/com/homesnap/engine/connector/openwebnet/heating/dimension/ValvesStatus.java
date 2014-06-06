@@ -5,6 +5,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.ValveStatusEnum;
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -97,5 +98,17 @@ public class ValvesStatus extends DimensionStatusImpl {
 		default:
 			return ValveStatusEnum.Unknown;
 		}
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -23,13 +23,9 @@ package com.homesnap.engine.connector.openwebnet.convert;
  * #L%
  */
 
-import java.util.List;
-
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
-import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
-import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.engine.controller.what.State;
@@ -103,9 +99,7 @@ public class OpenWebNetCommand {
 	}
 
 	public State getDimension() throws UnknownState {
-		String code = parser.getDimension();
-		List<DimensionValue> dimensionList = parser.getDimensionList();
-		return Convert.convert(getWho(), new DimensionStatusImpl(dimensionList, code));
+		return Convert.convert(getWho(),  parser.getDimension(), parser.getDimensionList());
 	}
 
 	public String toString() {

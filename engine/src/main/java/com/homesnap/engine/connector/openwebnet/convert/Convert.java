@@ -1,12 +1,14 @@
 package com.homesnap.engine.connector.openwebnet.convert;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
 import com.homesnap.engine.connector.openwebnet.light.LightStatus;
 import com.homesnap.engine.controller.what.State;
@@ -58,19 +60,73 @@ public class Convert {
 	
 	
 	private static DimensionStatus convert(Who w, State state) {
-		DimensionStatus ds = GatewayDimension.fromValue(state.getName()).createDimensionStatus();
-//		ds.setValueList(dimensionList); TODO manage values
+		DimensionStatus ds = null;
+		switch (w) {
+		case AUTOMATION:
+			break;
+		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
+			break;
+		case GATEWAY:
+			ds = GatewayDimension.fromValue(state.getName()).createDimensionStatus();
+//			ds.setValueList(dimensionList); TODO manage values
+			break;
+		case HEATING_ADJUSTMENT:
+			ds=HeatingZoneDimension.fromState(state);
+			break;
+		case LIGHT:
+			break;
+		case MULTIMEDIA:
+			break;
+		case POWER_MANAGEMENT:
+			break;
+		case SCENARIO:
+			break;
+		case SOUND_SYSTEM:
+			break;
+		default:
+//			throw new UnknownState(); UnknownWho
+		}
+		
 		return ds;
 	}
 	
-	protected static State convert(Who w, DimensionStatus dimension) throws UnknownState {
-		// TODO transform OpenWebNetWho en enum
-		throw new UnknownState();
-//		if (OpenWebNetWho.WHO_HEATING_ADJUSTMENT.equals(w)) {
-//			return new State(null, null); new State(HeatingZoneDimension.fromValue(dimension.getCode()).getCode(), null); // TODO manage value
-//		} else {
-//			return new State(GatewayDimension.fromValue(dimension.getCode()).getName(), null); // TODO manage value
-//		}
+	protected static State convert(Who w, String code, List<DimensionValue> dimensionList) throws UnknownState {
+		DimensionStatus dimension;
+		switch (w) {
+		case AUTOMATION:
+			throw new UnknownState();
+//			break;
+		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
+			throw new UnknownState();
+//			break;
+		case GATEWAY:
+			GatewayDimension gd = GatewayDimension.fromValue(code);
+			dimension = gd.createDimensionStatus();
+			dimension.setValueList(dimensionList);
+			return new State(gd.getName(), dimension.getStateValue());
+		case HEATING_ADJUSTMENT:
+			HeatingZoneDimension hd = HeatingZoneDimension.fromValue(code);
+			dimension = hd.createDimensionStatus();
+			dimension.setValueList(dimensionList);
+			return new State(hd.getName(), dimension.getStateValue());
+		case LIGHT:
+			throw new UnknownState();
+//			break;
+		case MULTIMEDIA:
+			throw new UnknownState();
+//			break;
+		case POWER_MANAGEMENT:
+			throw new UnknownState();
+//			break;
+		case SCENARIO:
+			throw new UnknownState();
+//			break;
+		case SOUND_SYSTEM:
+			throw new UnknownState();
+//			break;
+		default:
+			throw new UnknownState();
+		}
 	}
 	
 	

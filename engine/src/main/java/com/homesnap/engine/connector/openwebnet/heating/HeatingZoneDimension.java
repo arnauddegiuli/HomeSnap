@@ -1,5 +1,14 @@
 package com.homesnap.engine.connector.openwebnet.heating;
 
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
+import com.homesnap.engine.connector.openwebnet.heating.dimension.DesiredTemperature;
+import com.homesnap.engine.connector.openwebnet.heating.dimension.MeasureTemperature;
+import com.homesnap.engine.connector.openwebnet.heating.dimension.SetOffset;
+import com.homesnap.engine.connector.openwebnet.heating.dimension.ValvesStatus;
+import com.homesnap.engine.controller.heating.HeatingZone;
+import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.StateName;
+
 /*
  * #%L
  * MyDomoEngine
@@ -25,17 +34,22 @@ package com.homesnap.engine.connector.openwebnet.heating;
 
 
 public enum HeatingZoneDimension {
-	MEASURE_TEMPERATURE("0"), 
-	FAN_COIL_SPEED("11"),
-	PROBE_STATUS("12"),
-	LOCAL_OFFSET("13"),
-	SET_TEMPERATURE("14"),
-	VALVE_STATUS("19"),
-	ACTUATOR_STATUS("20");
+	MEASURE_TEMPERATURE("0", HeatingZone.ZoneStateName.MEASURE_TEMPERATURE, MeasureTemperature.class), 
+	FAN_COIL_SPEED("11", HeatingZone.ZoneStateName.MEASURE_TEMPERATURE, MeasureTemperature.class),
+	PROBE_STATUS("12", HeatingZone.ZoneStateName.MEASURE_TEMPERATURE, MeasureTemperature.class),
+	LOCAL_OFFSET("13", HeatingZone.ZoneStateName.LOCAL_OFFSET, SetOffset.class),
+	SET_TEMPERATURE("14", HeatingZone.ZoneStateName.SET_TEMPERATURE_HEATING, DesiredTemperature.class),
+	VALVE_STATUS("19", HeatingZone.ZoneStateName.MEASURE_TEMPERATURE, ValvesStatus.class),
+	ACTUATOR_STATUS("20", HeatingZone.ZoneStateName.MEASURE_TEMPERATURE, MeasureTemperature.class);
 	
 	private String code;
-	private HeatingZoneDimension(String code) {
+	private StateName name;
+	private Class<? extends DimensionStatus> clazz;
+	
+	private HeatingZoneDimension(String code, StateName name, Class<? extends DimensionStatus> clazz) {
 		this.code = code;
+		this.name = name;
+		this.clazz = clazz;
 	}
 	
 	public String getCode() {
@@ -50,4 +64,46 @@ public enum HeatingZoneDimension {
 		
 		return null;
 	}
+	
+	public static State fromDimensionValue(DimensionStatus value) {
+		for (HeatingZoneDimension gd : HeatingZoneDimension.values()) {
+			if (gd.getCode().equals(value.getCode())) {
+				return new State(HeatingZoneDimension.fromValue(value.getCode()).getName(), null);
+			}
+		}
+		return null;
+	}
+	
+	public static DimensionStatus fromState(State value) {
+		StateName name = value.getName();	
+		if (name == null) {
+			return null;
+		}
+		for (HeatingZoneDimension gd : HeatingZoneDimension.values()) {
+			if (gd.getName().getName().equals(name.getName())) {
+				DimensionStatus result = gd.createDimensionStatus();
+				result.setValueList(value.getValue());
+			}
+		}
+		return null;
+	}
+
+	public DimensionStatus createDimensionStatus() {
+		try {
+			return clazz.newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			return null;
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+	}
+	
+	public StateName getName() {
+		return name;
+	}
+
+	
+	
 }

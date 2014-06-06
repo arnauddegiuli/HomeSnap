@@ -30,7 +30,7 @@ public interface StateName {
 	public StateName STATUS = new StateName() {
 		@Override
 		public String getName() {
-			return "status";
+			return "STATUS";
 		}
 	};
 	

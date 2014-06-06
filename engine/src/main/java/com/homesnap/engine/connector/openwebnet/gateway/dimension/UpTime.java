@@ -31,6 +31,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.controller.what.StateValue;
 
 
 public class UpTime extends DimensionStatusImpl {
@@ -59,5 +60,17 @@ public class UpTime extends DimensionStatusImpl {
 		c.set(Calendar.SECOND, getIntValue(SECONDS_POS));
 		
 		return c.getTime();
+	}
+
+	@Override
+	public StateValue getStateValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setValueList(StateValue value) {
+		// TODO Auto-generated method stub
+		
 	}
 }
