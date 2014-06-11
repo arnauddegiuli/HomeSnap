@@ -42,6 +42,7 @@ import com.homesnap.engine.connector.Monitor;
 import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
+import com.homesnap.engine.connector.openwebnet.convert.UnknownWho;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.where.Where;
@@ -187,10 +188,12 @@ implements Monitor {
 			log.log(Session.Monitor, Level.WARNING, "Unknown message received [" + message +"]. Message dropped.");
 		} catch (UnknownState e) {
 			log.log(Session.Monitor, Level.WARNING, "Unknown state received [" + message +"]. Message dropped.");
+		} catch (UnknownWho e) {
+			log.log(Session.Monitor, Level.WARNING, "Unknown who received [" + message +"]. Message dropped.");
 		}
 	}
 
-	private boolean updateController(Where where, OpenWebNetCommand command) throws UnknownState {
+	private boolean updateController(Where where, OpenWebNetCommand command) throws UnknownState, UnknownWho {
 		boolean known = false;
 		com.homesnap.engine.controller.what.State what;
 		

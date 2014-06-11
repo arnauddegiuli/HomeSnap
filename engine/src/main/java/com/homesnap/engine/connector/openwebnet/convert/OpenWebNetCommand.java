@@ -73,7 +73,12 @@ public class OpenWebNetCommand {
 	}
 
 	public State getWhat() { // TODO change name => remove command
-		return new State(StateName.STATUS, Convert.convertStatus(getWho(), parser.getWhat()));
+		try {
+			return new State(StateName.STATUS, Convert.convertStatus(getWho(), parser.getWhat()));
+		} catch (UnknownState e) {
+			// TODO log
+			return null;
+		}
 	}
 
 	public Who getWho() {
@@ -98,8 +103,8 @@ public class OpenWebNetCommand {
 		return new SpecialCommand(parser);
 	}
 
-	public State getDimension() throws UnknownState {
-		return Convert.convert(getWho(),  parser.getDimension(), parser.getDimensionList());
+	public State getDimension() throws UnknownState, UnknownWho {
+		return Convert.convertDimension(getWho(),  parser.getDimension(), parser.getDimensionList());
 	}
 
 	public String toString() {

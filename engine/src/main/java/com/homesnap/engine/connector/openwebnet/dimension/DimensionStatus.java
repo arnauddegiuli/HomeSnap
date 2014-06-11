@@ -28,10 +28,10 @@ import java.util.List;
 
 import com.homesnap.engine.controller.what.StateValue;
 
-public interface DimensionStatus {
+public interface DimensionStatus<T extends StateValue> {
 	public List<DimensionValue> getValueList();
-	public StateValue getStateValue();
+	public T getStateValue();
 	public void setValueList(List<DimensionValue> dimensionList);
-	public void setValueList(StateValue value);
+	public void setValueList(T value);
 	public String getCode();
 }

@@ -29,10 +29,10 @@ import java.util.GregorianCalendar;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.DateValue;
 
 
-public class EndDateHoliday extends DimensionStatusImpl {
+public class EndDateHoliday extends DimensionStatusImpl<DateValue> {
 	private int DAYOFWEEK_POS = 0;
 	private int DAY_POS = 1;
 	private int MONTH_POS = 2;
@@ -45,7 +45,7 @@ public class EndDateHoliday extends DimensionStatusImpl {
 				new DimensionValueImpl(), // Month
 				new DimensionValueImpl()  // Year
 				},
-				"0" // TODO HeatingZoneDimension.END_DATE_HOLIDAY.getCode()
+				"0"
 		);
 	}
 	
@@ -71,14 +71,12 @@ public class EndDateHoliday extends DimensionStatusImpl {
 	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public DateValue getStateValue() {
+		return new DateValue(getDate());
 	}
 
 	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
+	public void setValueList(DateValue value) {
+		setTime(value.getDate());
 	}
 }

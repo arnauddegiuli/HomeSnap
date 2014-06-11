@@ -28,7 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
-public abstract class DimensionStatusImpl implements DimensionStatus {
+import com.homesnap.engine.controller.what.StateValue;
+
+public abstract class DimensionStatusImpl<T extends StateValue> implements DimensionStatus<T> {
 
 	private List<DimensionValue> dimensionList;
 	private String what;

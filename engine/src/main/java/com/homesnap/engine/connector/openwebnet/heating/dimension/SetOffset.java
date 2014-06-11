@@ -32,7 +32,7 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 
 
-public class SetOffset extends DimensionStatusImpl {
+public class SetOffset extends DimensionStatusImpl<com.homesnap.engine.controller.heating.statevalue.Offset> {
 
 	private int LOCAL_OFFSET_POS = 0;
 	
@@ -102,14 +102,14 @@ public class SetOffset extends DimensionStatusImpl {
 	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public com.homesnap.engine.controller.heating.statevalue.Offset getStateValue() {
+		Offset os = getLocalOffset();
+		return null; // TODO new com.homesnap.engine.controller.heating.statevalue.Offset(os.getMode(), os.getDegree());
 	}
 
 	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
+	public void setValueList(com.homesnap.engine.controller.heating.statevalue.Offset value) {
+//		setLocalOffset(new Offset(value.getMode()., value.getDegree()));
 		
 	}
 }

@@ -18,63 +18,84 @@ import com.homesnap.engine.controller.who.Who;
 
 public class Convert {
 
-
 	/**
 	 * Create the open message for action or status.
+	 * 
 	 * @return open web net message.
 	 */
 	protected final static String createMessage(Command command) {
 		if (command.getWhere() == null && command.getWhere().getTo() == null) {
-			throw new IllegalArgumentException("Controller must contain an address with where");
+			throw new IllegalArgumentException("Command must contain a where");
 		}
-		
-		String who = OpenWebNetWho.convert(command.getWho());
-		String where = command.getWhere().getTo();
-		if (command.isActionCommand()) {
-			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {who, convertStatus(command.getWho(), command.getWhat().getValue()), where});
-			} else { // Dimension
-				DimensionStatus dimensionStatus = convert(command.getWho(), command.getWhat()); 
-				StringBuilder sb = new StringBuilder();
-				for (DimensionValue dimension : dimensionStatus.getValueList()) {
-					sb.append(dimension.getValue());
-					sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
+
+		try {
+			String who = OpenWebNetWho.convert(command.getWho());
+			String where = command.getWhere().getTo();
+			State what = command.getWhat();
+			if (command.isActionCommand()) {
+				if (StateName.STATUS.equals(what.getName())) {
+					return MessageFormat.format(
+						OpenWebNetConstant.COMMAND,
+						new Object[] {
+								who,
+								convertStatus(command.getWho(), what.getValue()),
+								where 
+						}
+					);
+				} else { // Dimension
+					DimensionStatus<?> dimensionStatus = convertDimension(command.getWho(), what);
+					StringBuilder sb = new StringBuilder();
+					for (DimensionValue dimension : dimensionStatus.getValueList()) {
+						sb.append(dimension.getValue());
+						sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
+					}
+					sb.setLength(sb.length() - 1);
+
+					return MessageFormat.format(
+							OpenWebNetConstant.DIMENSION_COMMAND,
+							new Object[] { who, where, dimensionStatus.getCode(), sb.toString() }
+					);
 				}
-				sb.setLength(sb.length()-1);
-				
-				return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {who, where, dimensionStatus.getCode(), sb.toString()});
-			}
-		} else {
-			if (StateName.STATUS.equals(command.getWhat().getName())) {
-				return MessageFormat.format(OpenWebNetConstant.STATUS, new Object[] {who, where});
 			} else {
-				DimensionStatus dimensionStatus = convert(command.getWho(), command.getWhat());
-				return MessageFormat.format(OpenWebNetConstant.DIMENSION_STATUS, new Object[] {who, where, dimensionStatus.getCode()});
+				if (StateName.STATUS.equals(what.getName())) {
+					return MessageFormat.format(OpenWebNetConstant.STATUS,
+							new Object[] { who, where });
+				} else {
+					DimensionStatus<?> dimensionStatus = convertDimension(command.getWho(), what);
+					return MessageFormat.format(
+							OpenWebNetConstant.DIMENSION_STATUS, new Object[] {
+									who, where, dimensionStatus.getCode() });
+				}
 			}
+		} catch (UnknownState e) {
+			throw new IllegalArgumentException("Controller status unsupported [" + command.getWhat().getName() + "]");
+		} catch (UnknownWho e) {
+			throw new IllegalArgumentException("Controller Who unsupported. [" + command.getWho() + "]");
 		}
 	}
-	
-//	public Command createCommand(String message) {
-//	TODO plus tard mettre l'inverse ici (actuellement dans monitor)	
-//	}
-	
-	
-	private static DimensionStatus convert(Who w, State state) {
-		DimensionStatus ds = null;
+
+	// public Command createCommand(String message) {
+	// TODO plus tard mettre l'inverse ici (actuellement dans monitor)
+	// }
+
+	private static DimensionStatus<?> convertDimension(Who w, State state)
+			throws UnknownState, UnknownWho {
+		DimensionStatus<?> ds = null;
 		switch (w) {
 		case AUTOMATION:
 			break;
 		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
 			break;
 		case GATEWAY:
-			ds = GatewayDimension.fromValue(state.getName()).createDimensionStatus();
-//			ds.setValueList(dimensionList); TODO manage values
+			ds = GatewayDimension.fromValue(state.getName())
+					.createDimensionStatus();
+			// ds.setValueList(dimensionList); TODO manage values
 			break;
 		case HEATING_ADJUSTMENT:
-			ds=HeatingZoneDimension.fromState(state);
+			ds = HeatingZoneDimension.fromState(state);
 			break;
 		case LIGHT:
-			break;
+			throw new UnknownState(); // Only status manage by light: no dimension
 		case MULTIMEDIA:
 			break;
 		case POWER_MANAGEMENT:
@@ -84,21 +105,22 @@ public class Convert {
 		case SOUND_SYSTEM:
 			break;
 		default:
-//			throw new UnknownState(); UnknownWho
+			throw new UnknownWho();
 		}
-		
+
 		return ds;
 	}
-	
-	protected static State convert(Who w, String code, List<DimensionValue> dimensionList) throws UnknownState {
-		DimensionStatus dimension;
+
+	protected static State convertDimension(Who w, String code,
+			List<DimensionValue> dimensionList) throws UnknownState, UnknownWho {
+		DimensionStatus<?> dimension;
 		switch (w) {
 		case AUTOMATION:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		case GATEWAY:
 			GatewayDimension gd = GatewayDimension.fromValue(code);
 			dimension = gd.createDimensionStatus();
@@ -110,48 +132,57 @@ public class Convert {
 			dimension.setValueList(dimensionList);
 			return new State(hd.getName(), dimension.getStateValue());
 		case LIGHT:
-			throw new UnknownState();
-//			break;
+			throw new UnknownState(); // Only status manage by light: no dimension
 		case MULTIMEDIA:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		case POWER_MANAGEMENT:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		case SCENARIO:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		case SOUND_SYSTEM:
-			throw new UnknownState();
-//			break;
+			throw new UnknownWho();
+			// break;
 		default:
-			throw new UnknownState();
+			throw new UnknownWho();
 		}
 	}
-	
-	
-	private static String convertStatus(Who who, StateValue stateValue) {
+
+	private static String convertStatus(Who who, StateValue stateValue)
+			throws UnknownState, UnknownWho {
 		switch (who) {
 		case LIGHT:
-			return LightStatus.fromValue(stateValue).getCode(); // TODO manage null
+			LightStatus ls = LightStatus.fromValue(stateValue);
+			if (ls == null) {
+				throw new UnknownState();
+			} else {
+				return ls.getCode();
+			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(stateValue).getCode();
 		default:
-			return stateValue.getValue(); // TODO mapping
+			throw new UnknownWho();
 		}
-			
-		
 	}
-	
-	protected static StateValue convertStatus(Who who, String code) {
+
+	protected static StateValue convertStatus(Who who, String code)
+			throws UnknownState {
 		switch (who) {
 		case LIGHT:
-			return LightStatus.fromValue(code).getValue(); // TODO manage null
+			LightStatus ls = LightStatus.fromValue(code);
+			if (ls == null) {
+				throw new UnknownState();
+
+			} else {
+				return ls.getValue();
+			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(code).getValue();
 		default:
-			return null; // TODO mapping
+			return null;
 		}
-		
+
 	}
 }

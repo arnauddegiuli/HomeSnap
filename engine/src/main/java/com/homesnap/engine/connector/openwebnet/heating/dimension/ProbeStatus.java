@@ -24,5 +24,5 @@ package com.homesnap.engine.connector.openwebnet.heating.dimension;
  */
 
 public class ProbeStatus {
-
+// TODO manage probe status
 }
