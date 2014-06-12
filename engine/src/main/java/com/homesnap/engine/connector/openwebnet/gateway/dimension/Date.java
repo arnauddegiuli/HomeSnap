@@ -30,10 +30,10 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.DateValue;
 
 
-public class Date extends DimensionStatusImpl {
+public class Date extends DimensionStatusImpl<DateValue> {
 	
 	private int DAYOFWEEK_POS = 0;
 	private int DAY_POS = 1;
@@ -51,7 +51,7 @@ public class Date extends DimensionStatusImpl {
 		);
 	}
 	
-	public java.util.Date getDate() {
+	private java.util.Date getDate() {
 		Calendar c = new GregorianCalendar();
 		c.set(Calendar.DAY_OF_WEEK, getIntValue(DAYOFWEEK_POS));
 		c.set(Calendar.DAY_OF_MONTH, getIntValue(DAY_POS));
@@ -64,7 +64,7 @@ public class Date extends DimensionStatusImpl {
 		return c.getTime();
 	}
 	
-	public void setTime(java.util.Date date) {
+	private void setTime(java.util.Date date) {
 		Calendar c = new GregorianCalendar();
 		c.setTime(date);
 		setIntValue(c.get(Calendar.DAY_OF_WEEK), DAYOFWEEK_POS, 2);
@@ -74,14 +74,12 @@ public class Date extends DimensionStatusImpl {
 	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public DateValue getStateValue() {
+		return new DateValue(getDate());
 	}
 
 	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
+	public void setValueList(DateValue value) {
+		setTime(value.getDate());
 	}
 }

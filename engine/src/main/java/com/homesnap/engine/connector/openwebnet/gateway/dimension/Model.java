@@ -4,7 +4,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.StringValue;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 
 
-public class Model extends DimensionStatusImpl {
+public class Model extends DimensionStatusImpl<StringValue> {
 	
 	private int MODEL_POS = 0;
 	
@@ -50,42 +50,33 @@ public class Model extends DimensionStatusImpl {
 			GatewayDimension.MODEL.getCode()
 		);
 	}
-	
-	public String getModel() {
+
+	@Override
+	public StringValue getStateValue() {
 		int model = getIntValue(MODEL_POS);
 		switch (model) {
 		case MHSERVER:
-			return "MHServer";
+			return new StringValue("MHServer");
 		case MH200:
-			return "MH200";
+			return new StringValue("MH200");
 		case F452:
-			return "F452";
+			return new StringValue("F452");
 		case F452V:
-			return "F452V";
+			return new StringValue("F452V");
 		case MHServer2:
-			return "MHServer2";
+			return new StringValue("MHServer2");
 		case H4684:
-			return "H4684";
+			return new StringValue("H4684");
 		case ADGTESTSERVER:
-			return "ADG test Server";
+			return new StringValue("ADG test Server");
 		default:
-			return "Unknown";
+			return new StringValue("Unknown");
 		}
 	}
-	
-	public void setModel(int model) {
-		setIntValue(model, MODEL_POS, 0);
-	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
+	public void setValueList(StringValue value) {
+		// TODO normalement impossible => lecture seule
+		setIntValue(Integer.parseInt(value.getValue()), MODEL_POS, 0);
 	}
 }

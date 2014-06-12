@@ -1,10 +1,15 @@
 package com.homesnap.engine.connector.openwebnet.gateway.dimension;
 
+import java.util.logging.Level;
+
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
+import com.homesnap.engine.controller.what.impl.IpAddressValue;
 
 /*
  * #%L
@@ -30,7 +35,9 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 
 
-public class NetMask extends DimensionStatusImpl {
+public class NetMask extends DimensionStatusImpl<IpAddressValue> {
+
+	private Log log = new Log();
 
 	public NetMask() {
 		super(new DimensionValue[] {
@@ -41,33 +48,28 @@ public class NetMask extends DimensionStatusImpl {
 				}, GatewayDimension.NETMASK.getCode());
 	}
 
-	public byte[] getNetMask() {
-		byte[] address = new byte[] {
-				getByteValue(0),
-				getByteValue(1),
-				getByteValue(2),
-				getByteValue(3)
-		};
-		
+	@Override
+	public IpAddressValue getStateValue() {
+		IpAddressValue address = new IpAddressValue();
+		try {
+			address.setIpAddress( new byte[] {
+					getByteValue(0),
+					getByteValue(1),
+					getByteValue(2),
+					getByteValue(3)
+			});
+		} catch (IncorrectIpV4AddressException e) {
+			log.log(Session.Server, Level.SEVERE, "Wrong Netmask."); // Impossible normally...
+		}
 		return address;
 	}
 
-	public void setNetMask(byte[] address) {
+	@Override
+	public void setValueList(IpAddressValue value) {
+		byte[] address = value.getIpAddress();
 		setByteValue(address[0], 0, 0);
 		setByteValue(address[1], 1, 0);
 		setByteValue(address[2], 2, 0);
 		setByteValue(address[3], 3, 0);
-	}
-
-	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
 	}
 }

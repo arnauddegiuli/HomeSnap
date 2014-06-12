@@ -37,6 +37,7 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.UpTime;
 import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
 import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.StateValue;
 
 public enum GatewayDimension {
 	DATE("1", GatewayStateName.DATE, Date.class),
@@ -53,14 +54,15 @@ public enum GatewayDimension {
 	
 	private String openWebNetCode;
 	private StateName name;
-	private Class<? extends DimensionStatus> clazz;
-	private GatewayDimension(String code, StateName name, Class<? extends DimensionStatus> clazz) {
+	private Class<? extends DimensionStatus<? extends StateValue>> clazz;
+
+	private GatewayDimension(String code, StateName name, Class<? extends DimensionStatus<? extends StateValue>> clazz) {
 		this.openWebNetCode = code;
 		this.name = name;
 		this.clazz = clazz;
 	}
 	
-	public DimensionStatus createDimensionStatus() {
+	public DimensionStatus<? extends StateValue> createDimensionStatus() {
 		try {
 			return clazz.newInstance();
 		} catch (InstantiationException e) {

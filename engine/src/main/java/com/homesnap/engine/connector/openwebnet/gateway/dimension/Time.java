@@ -24,17 +24,16 @@ package com.homesnap.engine.connector.openwebnet.gateway.dimension;
  */
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.TimeValue;
 
 
-public class Time extends DimensionStatusImpl {
+public class Time extends DimensionStatusImpl<TimeValue> {
 	
 	private int HOURS_POS = 0;
 	private int MINUTES_POS = 1;
@@ -52,36 +51,19 @@ public class Time extends DimensionStatusImpl {
 		);
 	}
 	
-	public Date getTime() {
-		Calendar c = new GregorianCalendar();
-		c.set(Calendar.HOUR, getIntValue(HOURS_POS));
-		c.set(Calendar.MINUTE, getIntValue(MINUTES_POS));
-		c.set(Calendar.SECOND, getIntValue(SECONDS_POS));
-		c.setTimeZone(getTimeZoneValue(TIMEZONE_POS));
-		c.set(Calendar.DAY_OF_MONTH, 0);
-		c.set(Calendar.MONTH, 0);
-		c.set(Calendar.YEAR, 0);
-		return c.getTime();
+
+	@Override
+	public TimeValue getStateValue() {
+		return new TimeValue(getIntValue(HOURS_POS), getIntValue(MINUTES_POS), getIntValue(SECONDS_POS), getTimeZoneValue(TIMEZONE_POS));
 	}
-	
-	public void setTime(Date date) {
+
+	@Override
+	public void setValueList(TimeValue value) {
 		Calendar c = new GregorianCalendar();
-		c.setTime(date);
+		c.setTime(value.getTime());
 		setIntValue(c.get(Calendar.HOUR), HOURS_POS, 2);
 		setIntValue(c.get(Calendar.MINUTE), MINUTES_POS, 2);
 		setIntValue(c.get(Calendar.SECOND), SECONDS_POS, 2);
 		setTimeZoneValue(c.getTimeZone(), TIMEZONE_POS);
-	}
-
-	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
 	}
 }

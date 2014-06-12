@@ -1,10 +1,15 @@
 package com.homesnap.engine.connector.openwebnet.gateway.dimension;
 
+import java.util.logging.Level;
+
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
+import com.homesnap.engine.controller.what.impl.MacAddressValue;
 
 /*
  * #%L
@@ -30,7 +35,9 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 
 
-public class MacAddress extends DimensionStatusImpl {
+public class MacAddress extends DimensionStatusImpl<MacAddressValue> {
+
+	private Log log = new Log();
 
 	public MacAddress() {
 		super(new DimensionValue[] {
@@ -43,37 +50,33 @@ public class MacAddress extends DimensionStatusImpl {
 				}, GatewayDimension.MAC_ADDRESS.getCode());
 	}
 
-	public byte[] getIpAddress() {
-		byte[] address = new byte[] {
-				getByteValue(0),
-				getByteValue(1),
-				getByteValue(2),
-				getByteValue(3),
-				getByteValue(4),
-				getByteValue(5)
-		};
-		
+	@Override
+	public MacAddressValue getStateValue() {
+		MacAddressValue address = new MacAddressValue();
+		try {
+			address.setMacAddress( new byte[] {
+					getByteValue(0),
+					getByteValue(1),
+					getByteValue(2),
+					getByteValue(3),
+					getByteValue(4),
+					getByteValue(5)
+			});
+		} catch (IncorrectMacAddressException e) {
+			log.log(Session.Server, Level.SEVERE, "Wrong Mac address."); // Impossible normally...
+		}
 		return address;
 	}
 
-	public void setIpAddress(byte[] address) {
+	@Override
+	public void setValueList(MacAddressValue value) {
+		// TODO normalement impossible => lecture seule
+		byte[] address = value.getMacAddress();
 		setByteValue(address[0], 0, 0);
 		setByteValue(address[1], 1, 0);
 		setByteValue(address[2], 2, 0);
 		setByteValue(address[3], 3, 0);
 		setByteValue(address[4], 4, 0);
 		setByteValue(address[5], 5, 0);
-	}
-
-	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
 	}
 }

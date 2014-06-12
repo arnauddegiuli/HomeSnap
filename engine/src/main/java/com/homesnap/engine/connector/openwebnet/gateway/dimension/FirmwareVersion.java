@@ -4,8 +4,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.gateway.Version;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.VersionValue;
 
 /*
  * #%L
@@ -31,7 +30,7 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 
 
-public class FirmwareVersion extends DimensionStatusImpl {
+public class FirmwareVersion extends DimensionStatusImpl<VersionValue> {
 	
 	private int VERSION_POS = 0;
 	private int RELEASE_POS = 1;
@@ -46,38 +45,21 @@ public class FirmwareVersion extends DimensionStatusImpl {
 			GatewayDimension.FIRMWARE_VERSION.getCode()
 		);
 	}
-	
-	public Version getVersion() {
-		
+
+	@Override
+	public VersionValue getStateValue() {
 		int version = getIntValue(VERSION_POS);
 		int release = getIntValue(RELEASE_POS);
 		int build = getIntValue(BUILD_POS);
-		
-		Version ver = new Version();
-		ver.setVersion(version);
-		ver.setRelease(release);
-		ver.setBuild(build);
-		
-		return ver;
-		
-	}
-	
-	public void setVersion(Version version) {
-		
-		setIntValue(version.getVersion(), VERSION_POS, 2);
-		setIntValue(version.getRelease(), RELEASE_POS, 2);
-		setIntValue(version.getBuild(), BUILD_POS, 2);
+
+		return new VersionValue(version, release, build);
 	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
-		
+	public void setValueList(VersionValue value) {
+		// TODO normalement impossible => lecture seule
+		setIntValue(value.getVersion(), VERSION_POS, 2);
+		setIntValue(value.getRelease(), RELEASE_POS, 2);
+		setIntValue(value.getBuild(), BUILD_POS, 2);
 	}
 }

@@ -24,8 +24,10 @@ public class Convert {
 	 * @return open web net message.
 	 */
 	protected final static String createMessage(Command command) {
-		if (command.getWhere() == null && command.getWhere().getTo() == null) {
-			throw new IllegalArgumentException("Command must contain a where");
+		if (command.getWhere() == null || command.getWhere().getTo() == null) {
+			if (command.getWho() != Who.GATEWAY) {
+				throw new IllegalArgumentException("Command must contain a where");
+			}
 		}
 
 		try {

@@ -31,6 +31,7 @@ import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.connector.openwebnet.OpenWebCommanderImpl;
 import com.homesnap.engine.connector.openwebnet.OpenWebMonitorImpl;
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.gateway.Gateway;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.services.ControllerService;
 

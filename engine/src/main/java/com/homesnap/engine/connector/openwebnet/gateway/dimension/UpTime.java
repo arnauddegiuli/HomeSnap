@@ -31,10 +31,10 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.DateValue;
 
 
-public class UpTime extends DimensionStatusImpl {
+public class UpTime extends DimensionStatusImpl<DateValue> {
 	
 	private int DAY_POS = 0;
 	private int HOURS_POS = 1;
@@ -52,7 +52,7 @@ public class UpTime extends DimensionStatusImpl {
 		);
 	}
 	
-	public Date getTime() {
+	private Date getTime() {
 		Calendar c = new GregorianCalendar();
 		c.set(Calendar.DAY_OF_MONTH, getIntValue(DAY_POS));
 		c.set(Calendar.HOUR, getIntValue(HOURS_POS));
@@ -63,14 +63,13 @@ public class UpTime extends DimensionStatusImpl {
 	}
 
 	@Override
-	public StateValue getStateValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public DateValue getStateValue() {
+		return new DateValue(getTime());
 	}
 
 	@Override
-	public void setValueList(StateValue value) {
-		// TODO Auto-generated method stub
+	public void setValueList(DateValue value) {
+		// TODO normalement impossible => lecture seule
 		
 	}
 }

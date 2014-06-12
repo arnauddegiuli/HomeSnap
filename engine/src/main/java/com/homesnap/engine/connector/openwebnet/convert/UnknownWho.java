@@ -1,6 +1,6 @@
 package com.homesnap.engine.connector.openwebnet.convert;
 
-public class UnknownState extends Exception {
+public class UnknownWho extends Exception {
 
 	/**
 	 * 

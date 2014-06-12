@@ -6,6 +6,7 @@ Bundle-Version: 0.1
 Bundle-Activator: com.homesnap.server.controllermodules.gateway.GatewayModuleActivator
 Import-Package: com.homesnap.engine,
  com.homesnap.engine.connector.openwebnet,
+ com.homesnap.engine.controller.what.impl,
  com.homesnap.server,
  com.homesnap.server.controllermodules,
  org.osgi.framework

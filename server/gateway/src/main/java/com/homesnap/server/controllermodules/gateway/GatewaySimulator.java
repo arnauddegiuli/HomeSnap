@@ -29,8 +29,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -42,11 +44,18 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.DateTime;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DistributionVersion;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.FirmwareVersion;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.IpAddress;
+import com.homesnap.engine.connector.openwebnet.gateway.dimension.MacAddress;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.gateway.Version;
+import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
+import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
+import com.homesnap.engine.controller.what.impl.DateValue;
+import com.homesnap.engine.controller.what.impl.IpAddressValue;
+import com.homesnap.engine.controller.what.impl.MacAddressValue;
+import com.homesnap.engine.controller.what.impl.TimeValue;
+import com.homesnap.engine.controller.what.impl.VersionValue;
 import com.homesnap.server.controllermodules.ControllerDimensionSimulator;
 
 public class GatewaySimulator implements ControllerDimensionSimulator {
@@ -102,81 +111,93 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			List<DimensionValue> dimensionList;
 			if (GatewayDimension.TIME.getCode().equals(dimensionStr)) {
 				Time t = new Time();
-				t.setTime(new Date());
+				Calendar c = new GregorianCalendar();
+				t.setValueList(new TimeValue(c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), c.getTimeZone()));
 				dimensionList = t.getValueList();
 			} else if (GatewayDimension.DATE.getCode().equals(dimensionStr)) {
 				com.homesnap.engine.connector.openwebnet.gateway.dimension.Date d = new com.homesnap.engine.connector.openwebnet.gateway.dimension.Date();
-				d.setTime(new Date());
+				d.setValueList(new DateValue(new Date()));
 				dimensionList = d.getValueList();
 			} else if (GatewayDimension.DATETIME.getCode().equals(
 					dimensionStr)) {
 				DateTime dt = new DateTime();
-				dt.setTime(new Date());
+				dt.setValueList(new DateValue(new Date()));
 				dimensionList = dt.getValueList();
 			} else if (GatewayDimension.IP_ADDRESS.getCode().equals(
 					dimensionStr)) {
 				dimensionList = dimensionCache.get(where
 						+ "-" + dimensionStr);
 				if (dimensionList == null) {
-					IpAddress i = new IpAddress();
+					IpAddressValue i = new IpAddressValue();
 					InetAddress a = getIp();
 					if (a!=null) { 
 						i.setIpAddress(a.getAddress());
 					} else {
 						i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});		
 					}
-					dimensionList = i.getValueList();
+					IpAddress i2 = new IpAddress();
+					i2.setValueList(i);
+					dimensionList = i2.getValueList();
 				}
 			} else if (GatewayDimension.NETMASK.getCode().equals(
 					dimensionStr)) {
 				dimensionList = dimensionCache.get(where
 						+ "-" + dimensionStr);
 				if (dimensionList == null) {
-					IpAddress i = new IpAddress();
+					IpAddressValue i = new IpAddressValue();
 					byte[] a = getNetmask();
 					if (a!=null) { 
 						i.setIpAddress(a);
 					} else {
 						i.setIpAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1});		
 					}
-					dimensionList = i.getValueList();
+					IpAddress i2 = new IpAddress();
+					i2.setValueList(i);
+					dimensionList = i2.getValueList();
+				}
+			} else if (GatewayDimension.MAC_ADDRESS.getCode().equals(
+					dimensionStr)) {
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					MacAddressValue i = new MacAddressValue();
+					byte[] a = getMacAddress();
+					if (a!=null) { 
+						i.setMacAddress(a);
+					} else {
+						i.setMacAddress(new byte[] {Byte.parseByte("120"), Byte.parseByte("120"), 0, 1, 0, 1});		
+					}
+					MacAddress i2 = new MacAddress();
+					i2.setValueList(i);
+					dimensionList = i2.getValueList();
 				}
 			} else if (GatewayDimension.FIRMWARE_VERSION.getCode().equals(
 					dimensionStr)) {
 				FirmwareVersion f = new FirmwareVersion();
-				Version version = new Version();
-				version.setBuild(19);
-				version.setRelease(05);
-				version.setVersion(78);
-				f.setVersion(version);
+				VersionValue version = new VersionValue(19,5,78);
+				f.setValueList(version);
 				dimensionList = f.getValueList();
 			} else if (GatewayDimension.DISTRIBUTION_VERSION.getCode().equals(
 					dimensionStr)) {
 				DistributionVersion f = new DistributionVersion();
-				Version version = new Version();
-				version.setBuild(19);
-				version.setRelease(05);
-				version.setVersion(78);
-				f.setVersion(version);
+				VersionValue version = new VersionValue(19,5,78);
+				f.setValueList(version);
 				dimensionList = f.getValueList();
 			} else if (GatewayDimension.KERNEL_VERSION.getCode().equals(
 					dimensionStr)) {
 				FirmwareVersion f = new FirmwareVersion();
-				Version version = new Version();
-				version.setBuild(19);
-				version.setRelease(05);
-				version.setVersion(78);
-				f.setVersion(version);
+				VersionValue version = new VersionValue(19,5,78);
+				f.setValueList(version);
 				dimensionList = f.getValueList();
 			} else if (GatewayDimension.MODEL.getCode().equals(
 					dimensionStr)) {
 				Model f = new Model();
-				f.setModel(Model.ADGTESTSERVER);
+				f.setValueList(new com.homesnap.engine.controller.what.impl.StringValue("" + Model.ADGTESTSERVER));
 				dimensionList = f.getValueList();
 			} else if (GatewayDimension.UPTIME.getCode().equals(
 					dimensionStr)) {
 				DateTime dt = new DateTime();
-				dt.setTime(new Date());
+				dt.setValueList(new DateValue(new Date()));
 				dimensionList = dt.getValueList();
 			}  else {
 				return OpenWebNetConstant.NACK;
@@ -197,6 +218,14 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 					OpenWebNetWho.WHO_GATEWAY, where, dimensionStr, sb.toString() })
 					+ OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IncorrectIpV4AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IncorrectMacAddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -263,5 +292,27 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 		
 	}
 	
-	
+	private byte[] getMacAddress() {
+		try {
+			byte[] prefix=null;
+			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); 
+			while (e.hasMoreElements()){ 
+			  Enumeration<InetAddress> i = e.nextElement().getInetAddresses(); 
+			  while (i.hasMoreElements()){ 
+			    InetAddress a = i.nextElement(); 
+			    if (a.isLoopbackAddress()) {
+			    	prefix = NetworkInterface.getByInetAddress(a).getHardwareAddress();
+			    } else {
+			    	prefix = NetworkInterface.getByInetAddress(a).getHardwareAddress();
+			    	break;
+			    }
+			  } 
+			}
+			return prefix;
+		} catch (SocketException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 }

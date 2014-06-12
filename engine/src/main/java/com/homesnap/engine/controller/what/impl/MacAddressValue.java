@@ -1,4 +1,5 @@
-package com.homesnap.engine.controller.gateway.statevalue;
+package com.homesnap.engine.controller.what.impl;
+
 
 /*
  * #%L
@@ -23,33 +24,35 @@ package com.homesnap.engine.controller.gateway.statevalue;
  * #L%
  */
 
-import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
+import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
 import com.homesnap.engine.controller.what.StateValue;
 
-public class IpAddressValue implements StateValue {
+public class MacAddressValue implements StateValue {
 
-	private byte[] ipAdress = new byte[] {0, 0, 0, 0};
+	private byte[] macAdress = new byte[] {0, 0, 0, 0, 0, 0};
 	
-	public IpAddressValue() {
+	public MacAddressValue() {
 	}
 
 	@Override
 	public String getValue() {
-		return "".concat(String.valueOf(ipAdress[0]))
-				.concat(".").concat(String.valueOf(ipAdress[1]))
-				.concat(".").concat(String.valueOf(ipAdress[2]))
-				.concat(".").concat(String.valueOf(ipAdress[3]));
+		return "".concat(String.valueOf(macAdress[0]))
+				.concat(".").concat(String.valueOf(macAdress[1]))
+				.concat(".").concat(String.valueOf(macAdress[2]))
+				.concat(".").concat(String.valueOf(macAdress[3]))
+				.concat(".").concat(String.valueOf(macAdress[4]))
+				.concat(".").concat(String.valueOf(macAdress[5]));
 	}
 
-	public byte[] getIpAddress() {
-		return ipAdress;
+	public byte[] getMacAddress() {
+		return macAdress;
 	}
 
-	public void setIpAddress(byte[] address) throws IncorrectIpV4AddressException {
+	public void setMacAddress(byte[] address) throws IncorrectMacAddressException {
 		if (address == null || address.length != 6) {
-			throw new IncorrectIpV4AddressException();
+			throw new IncorrectMacAddressException();
 		} else {
-			ipAdress = address;
+			macAdress = address;
 		}
 	}
 }

@@ -28,10 +28,11 @@ import java.util.Date;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
-import com.homesnap.engine.controller.gateway.statevalue.IpAddressValue;
-import com.homesnap.engine.controller.gateway.statevalue.VersionValue;
 import com.homesnap.engine.controller.what.impl.DateValue;
+import com.homesnap.engine.controller.what.impl.IpAddressValue;
 import com.homesnap.engine.controller.what.impl.StringValue;
+import com.homesnap.engine.controller.what.impl.VersionValue;
+import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
 
@@ -63,6 +64,11 @@ public class Gateway extends Controller {
 		return Who.GATEWAY;
 	}
 
+	@Override
+	public Where getWhere() {
+		return new Where("", "");
+	}
+
 	public Date getDate() {
 		return ((DateValue) get(GatewayStateName.DATE)).getDate();
 	}
@@ -75,29 +81,28 @@ public class Gateway extends Controller {
 	public byte[] getIpAddress() {
 		return ((IpAddressValue) get(GatewayStateName.IP_ADDRESS)).getIpAddress();
 	}
-	
+
 	public byte[] getNetMask() {
 		return ((IpAddressValue) get(GatewayStateName.NETMASK)).getIpAddress();
 	}
-	
+
 	public String getDeviceType() {
 		return get(GatewayStateName.MODEL).getValue();
 	}
-	
-	public Version getFirmwareVersion() {
-		return ((VersionValue) get(GatewayStateName.FIRMWARE_VERSION)).getVersion();
-	}
-	
-	public void getUpTime() {
-		// TODO finir
-		get(GatewayStateName.UPTIME);
+
+	public VersionValue getFirmwareVersion() {
+		return (VersionValue) get(GatewayStateName.FIRMWARE_VERSION);
 	}
 
-	public Version getKernelVersion() {
-		return ((VersionValue) get(GatewayStateName.KERNEL_VERSION)).getVersion();
+	public DateValue getUpTime() {
+		return (DateValue) get(GatewayStateName.UPTIME);
 	}
 
-	public Version getDistributionVersion() {
-		return ((VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION)).getVersion();
+	public VersionValue getKernelVersion() {
+		return (VersionValue) get(GatewayStateName.KERNEL_VERSION);
+	}
+
+	public VersionValue getDistributionVersion() {
+		return (VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION);
 	}
 }

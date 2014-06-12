@@ -64,8 +64,10 @@ public enum LightStatus {
 
 	LIGHT_FORCE_ON("1000#1", LightStatusValue.LIGHT_FORCE_ON),
 	LIGHT_FORCE_OFF("1000#0", LightStatusValue.LIGHT_FORCE_OFF);
-	private String code;
-	private StateValue value;
+
+	private String code; // OpenWebNet code
+	private StateValue value; // SnapHome code
+
 	private LightStatus(String code, StateValue value) {
 		this.code = code;
 		this.value = value;
