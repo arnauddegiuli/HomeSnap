@@ -20,8 +20,24 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.11</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>tuwien.auto</groupId>
+			<artifactId>calimero</artifactId>
+			<version>2.0.4</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/calimero-2.0.4.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>com.dalsemi</groupId>
+			<artifactId>onewire</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/OneWireAPI.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -40,25 +56,25 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Export-Package>com.homesnap.engine;uses:="com.homesnap.engine.controller",
-								 com.homesnap.engine.connector,
-								 com.homesnap.engine.connector.openwebnet,
-								 com.homesnap.engine.connector.openwebnet.parser,
-								 com.homesnap.engine.connector.openwebnet.convert,
-								 com.homesnap.engine.controller,
-								 com.homesnap.engine.controller.automation,
-								 com.homesnap.engine.controller.gateway,
-								 com.homesnap.engine.controller.gateway.dimension,
-								 com.homesnap.engine.controller.heating,
-								 com.homesnap.engine.controller.heating.dimension,
-								 com.homesnap.engine.controller.light;uses:="com.homesnap.engine.controller",
-								 com.homesnap.engine.controller.outlet,
+							com.homesnap.engine.connector,
+							com.homesnap.engine.connector.openwebnet,
+							com.homesnap.engine.connector.openwebnet.parser,
+							com.homesnap.engine.connector.openwebnet.convert,
+							com.homesnap.engine.controller,
+							com.homesnap.engine.controller.automation,
+							com.homesnap.engine.controller.gateway,
+							com.homesnap.engine.controller.gateway.dimension,
+							com.homesnap.engine.controller.heating,
+							com.homesnap.engine.controller.heating.dimension,
+							com.homesnap.engine.controller.light;uses:="com.homesnap.engine.controller",
+							com.homesnap.engine.controller.outlet,
 
-								 com.homesnap.engine.house,
-								 com.homesnap.engine.script,
-								 com.homesnap.engine.services,
-								 com.homesnap.engine.services.impl,
-								 org.json,
-								 org.json.zip
+							com.homesnap.engine.house,
+							com.homesnap.engine.script,
+							com.homesnap.engine.services,
+							com.homesnap.engine.services.impl,
+							org.json,
+							org.json.zip
 						</Export-Package>
 					</instructions>
 				</configuration>
@@ -74,7 +90,7 @@
 				</configuration>
 			</plugin>
 
-			
+
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -84,7 +100,8 @@
 					<licenseName>gpl</licenseName>
 					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
 					<excludes>
-						<exclude>org/json/*.java</exclude>/
+						<exclude>org/json/*.java</exclude>
+						/
 						<exclude>org/json/zip/*.java</exclude>
 					</excludes>
 				</configuration>

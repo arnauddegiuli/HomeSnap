@@ -5,7 +5,7 @@
 
 	<groupId>com.homesnap</groupId>
 	<artifactId>homesnapSolution</artifactId>
-	<name>MyHomeSolution</name>
+	<name>HomeSnapSolution</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 

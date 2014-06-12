@@ -5,7 +5,7 @@
 
 	<groupId>com.homesnap.server</groupId>
 	<artifactId>simulationServer</artifactId>
-	<name>MyDomoSimulationGateway</name>
+	<name>HomeSnapSimulationGateway</name>
 	<packaging>pom</packaging>
 
 		<parent>
