@@ -3,7 +3,7 @@ package com.homesnap.webserver.rest.listener;
 import java.util.Map;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
@@ -94,7 +94,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStateValue status) throws UnsupportedRestOperation {
+	public void onLightStatus(String where, LightStatusValue status) throws UnsupportedRestOperation {
 		throw new UnsupportedRestOperation(getUri(), Verb.DELETE);
 	}
 }

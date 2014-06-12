@@ -7,7 +7,7 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.ControllerChangeListener;
 import com.homesnap.engine.controller.light.Light;
-import com.homesnap.engine.controller.light.Light.LightStateValue;
+import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.services.ControllerService;
@@ -89,14 +89,14 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	}
 	
 	@Override
-	public void onLightStatus(String where, LightStateValue status) throws RestOperationException {
+	public void onLightStatus(String where, LightStatusValue status) throws RestOperationException {
 		
 		Light l = getLight(where);
 		synchronized (this) {
-			if (LightStateValue.LIGHT_ON.equals(status)) {
-				l.setStatus(LightStateValue.LIGHT_ON);
-			} else if (LightStateValue.LIGHT_OFF.equals(status)) {
-				l.setStatus(LightStateValue.LIGHT_OFF);
+			if (LightStatusValue.LIGHT_ON.equals(status)) {
+				l.setStatus(LightStatusValue.LIGHT_ON);
+			} else if (LightStatusValue.LIGHT_OFF.equals(status)) {
+				l.setStatus(LightStatusValue.LIGHT_OFF);
 			}
 			
 			try {
