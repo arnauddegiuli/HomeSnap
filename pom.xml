@@ -16,6 +16,10 @@
 		<!-- <module>web</module> For the moment pb with eclipse version not found in official maven repository... -->
 	</modules>
 
+	<properties>
+		<licence.plugin.version>1.7</licence.plugin.version>
+		<file.encoding>UTF-8</file.encoding>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
 		</dependencies>
@@ -44,7 +48,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.5</version>
+				<version>${licence.plugin.version}</version>
 				<configuration>
 					<licenseName>gpl_v2</licenseName>
 				</configuration>

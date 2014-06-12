@@ -38,11 +38,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<licenseName>gpl</licenseName>
-					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
-				</configuration>
+				<version>${licence.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>first</id>
@@ -50,6 +46,12 @@
 							<goal>update-file-header</goal>
 						</goals>
 						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>gpl</licenseName>
+							<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+							<canUpdateCopyright>true</canUpdateCopyright>
+							<canUpdateDescription>true</canUpdateDescription>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

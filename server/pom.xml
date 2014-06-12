@@ -23,11 +23,12 @@
 		<module>automation</module>
 	</modules>
 
+	<properties>
+		<file.encoding>UTF-8</file.encoding>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
-
-
-
 		</dependencies>
 	</dependencyManagement>
 

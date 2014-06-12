@@ -87,6 +87,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
@@ -95,16 +96,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<licenseName>gpl</licenseName>
-					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
-					<excludes>
-						<exclude>org/json/*.java</exclude>
-						/
-						<exclude>org/json/zip/*.java</exclude>
-					</excludes>
-				</configuration>
+				<version>${licence.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>first</id>
@@ -112,6 +104,18 @@
 							<goal>update-file-header</goal>
 						</goals>
 						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>gpl</licenseName>
+							<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+							<canUpdateCopyright>true</canUpdateCopyright>
+							<canUpdateDescription>true</canUpdateDescription>
+							<roots>
+								<root>src/main/java</root>
+							</roots>
+							<excludes>
+								<exclude>org/json/**</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
