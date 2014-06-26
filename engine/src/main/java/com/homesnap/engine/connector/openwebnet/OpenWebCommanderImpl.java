@@ -129,6 +129,10 @@ public class OpenWebCommanderImpl implements Commander {
 
 	@Override
 	public void sendCommand(Command command, CommandListener resultListener){
+		sendCommand(new OpenWebNetCommand(command).toString(), resultListener);
+	}
+
+	public void sendCommand(String command,  CommandListener resultListener) {
 		synchronized (this) {
 			if (!isConnected()) { // If socket close? => init connection.
 				new Thread(new OpenWebConnectThread(this)).start(); // Open connection in thread to avoid blocking user!
@@ -142,9 +146,8 @@ public class OpenWebCommanderImpl implements Commander {
 		}	
 
 		// Send asynchronously the command!
-		new Thread(new OpenWebCommandThread(this, new OpenWebNetCommand(command).toString(), resultListener)).start();
+		new Thread(new OpenWebCommandThread(this, command, resultListener)).start();		
 	}
-
 	void writeMessage(String message) {
 		if (output != null) { // No output can mean no server is responding
 			output.write(message);

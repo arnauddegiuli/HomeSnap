@@ -82,6 +82,6 @@ public class AutomationSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_AUTOMATION;
+		return OpenWebNetWho.WHO_AUTOMATION.getValue();
 	}
 }

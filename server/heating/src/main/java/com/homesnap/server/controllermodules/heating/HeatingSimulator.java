@@ -145,6 +145,6 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_HEATING_ADJUSTMENT;
+		return OpenWebNetWho.WHO_HEATING_ADJUSTMENT.getValue();
 	}	
 }

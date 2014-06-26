@@ -28,7 +28,7 @@ package com.homesnap.engine.controller.gateway;
 import java.util.Date;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
+import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
 import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.what.impl.IpAddressValue;
 import com.homesnap.engine.controller.what.impl.StringValue;

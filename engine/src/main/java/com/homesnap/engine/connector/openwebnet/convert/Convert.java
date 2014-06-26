@@ -55,7 +55,7 @@ public class Convert {
 		}
 
 		try {
-			String who = OpenWebNetWho.convert(command.getWho());
+			String who = OpenWebNetWho.convert(command.getWho()).getValue();
 			String where = command.getWhere().getTo();
 			State what = command.getWhat();
 			if (command.isActionCommand()) {
@@ -130,6 +130,8 @@ public class Convert {
 			break;
 		case SOUND_SYSTEM:
 			break;
+		case ENERGY_MANAGEMENT:
+			break;
 		default:
 			throw new UnknownWho();
 		}
@@ -171,6 +173,8 @@ public class Convert {
 		case SOUND_SYSTEM:
 			throw new UnknownWho();
 			// break;
+		case ENERGY_MANAGEMENT:
+			throw new UnknownWho();
 		default:
 			throw new UnknownWho();
 		}
@@ -188,6 +192,7 @@ public class Convert {
 			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(stateValue).getCode();
+		case ENERGY_MANAGEMENT:
 		default:
 			throw new UnknownWho();
 		}
@@ -206,6 +211,8 @@ public class Convert {
 			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(code).getValue();
+		case ENERGY_MANAGEMENT:
+			
 		default:
 			return null;
 		}

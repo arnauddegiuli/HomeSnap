@@ -8,7 +8,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
-import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
+import com.homesnap.engine.controller.what.impl.IncorrectMacAddressException;
 import com.homesnap.engine.controller.what.impl.MacAddressValue;
 
 /*

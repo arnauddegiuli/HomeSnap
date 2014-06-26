@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.gateway;
+package com.homesnap.engine.controller.what.impl;
 
 /*
  * #%L
@@ -24,7 +24,7 @@ package com.homesnap.engine.controller.gateway;
  * #L%
  */
 
-public class IncorrectMacAddressException extends Exception {
+public class IncorrectIpV4AddressException extends Exception {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;

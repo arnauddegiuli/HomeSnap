@@ -24,7 +24,6 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
-import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
 import com.homesnap.engine.controller.what.StateValue;
 
 public class IpAddressValue implements StateValue {

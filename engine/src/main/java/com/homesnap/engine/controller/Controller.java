@@ -387,7 +387,8 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		JSONObject states = new JSONObject();
 		if (! stateList.isEmpty()) {
 			for (Entry<StateName, StateValue> entry : stateList.entrySet()) {
-				states.put(entry.getKey().getName(), entry.getValue().getValue());
+				StateValue sv = entry.getValue();
+				states.put(entry.getKey().getName(), sv == null ? null : sv.getValue());
 			}
 		}
 		controllerJson.put("states", states);
@@ -410,15 +411,28 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 
 		JSONObject states = jsonObject.getJSONObject("states");
-		for (final String key: states.keySet()) {
-			StateName name = new StateName() {
+		for (final String name: states.keySet()) {
+			String value = states.getString(name);
+			StateName sname = new StateName() {
+				
 				@Override
 				public String getName() {
-					return key;
+					return name;
 				}
 			};
-//			TODO stateTypes.get(key)
-//			stateList.put(name, null);
+//			StateValue svalue; Les valeurs sont en lecture seul???
+//			try {
+//				svalue = stateTypes.get(sname).newInstance();
+//				svalue.setValue(value);
+//				stateList.put(sname, svalue);
+//			} catch (InstantiationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IllegalAccessException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			
 		}
 	}
 }

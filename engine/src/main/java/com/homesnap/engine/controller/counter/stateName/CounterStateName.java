@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.gateway;
+package com.homesnap.engine.controller.counter.stateName;
 
 /*
  * #%L
@@ -24,9 +24,29 @@ package com.homesnap.engine.controller.gateway;
  * #L%
  */
 
-public class IncorrectIpV4AddressException extends Exception {
+import com.homesnap.engine.controller.what.StateName;
 
-	/** serial uid */
-	private static final long serialVersionUID = 1L;
-
+public enum CounterStateName implements StateName {
+	ACTIVE_POWER,
+	TOTALE,
+	PER_MONTH,
+	CURRENT_MONTH,
+	CURRENT_DAY,
+	KERNEL_VERSION;
+	
+	private CounterStateName() {
+	}
+	
+	@Override
+	public String getName() {
+		return name();
+	}
+	
+	public static CounterStateName fromValue(String code) {
+		for (CounterStateName gd : CounterStateName.values()) {
+			if (gd.getName().equals(code))
+				return gd;
+		}
+		return null;
+	}
 }

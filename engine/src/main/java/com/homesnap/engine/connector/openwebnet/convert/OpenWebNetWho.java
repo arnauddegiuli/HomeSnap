@@ -26,20 +26,42 @@ import com.homesnap.engine.controller.who.Who;
  * #L%
  */
 
-public class OpenWebNetWho {
+public enum OpenWebNetWho {
 
 	// WHO 28 €
-	public final static String WHO_SCENARIO = "0";
-	public final static String WHO_LIGHTING = "1";
-	public final static String WHO_AUTOMATION = "2";
-	public final static String WHO_POWER_MANAGEMENT = "3";
-	public final static String WHO_HEATING_ADJUSTMENT = "4";
-	public final static String WHO_MULTIMEDIA = "7";
-	public final static String WHO_GATEWAY = "13";
-	public final static String WHO_SOUND_SYSTEM = "16";
-	public final static String WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT = "1004";
+	WHO_SCENARIO("0"),
+	WHO_LIGHTING("1"),
+	WHO_AUTOMATION("2"),
+	WHO_POWER_MANAGEMENT("3"),
+	WHO_HEATING_ADJUSTMENT("4"),
+	WHO_BURGLAR_ALARM("5"), // not supported
+	WHO_DOOR_ENTRY("6"), // not supported
+	WHO_MULTIMEDIA("7"),
+	WHO_AUXILIARY("9"), // not supported
+	WHO_GATEWAY("13"),
+	WHO_LIGHT_SHUTTERS_ACTUATORS_LOCK("14"), // not supported
+	WHO_CEN_SCENARIO_SCHEDULER_SWITCH("15"), // not supported
+	WHO_SOUND_SYSTEM("16"),
+	WHO_SCENARIO_PROGRAMMING("17"), // not supported
+	WHO_ENERGY_MANAGEMENT("18"),
+	WHO_LIGHT_MANAGEMENT("24"), // not supported
+	WHO_CEN_SCENARIO_SCHEDULER_BUTTONS("25"), // not supported
+	WHO_DIAGNOSTIC("1000"), // not supported
+	WHO_AUTOMATION_DIAGNOSTIC("1001"), // not supported
+	WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT("1004"),
+	WHO_DEVICE_DIAGNOSTIC("1013"); // not supported
+
+	private String code;
+
+	private OpenWebNetWho(String code) {
+		this.code = code;
+	}
+
+	public String getValue() {
+		return code;
+	}
 	
-	public static String convert(Who who) {
+	public static OpenWebNetWho convert(Who who) {
 		switch (who) {
 		case AUTOMATION:
 			return WHO_AUTOMATION;
@@ -57,12 +79,23 @@ public class OpenWebNetWho {
 			return WHO_SCENARIO;
 		case SOUND_SYSTEM:
 			return WHO_SOUND_SYSTEM;
+		case ENERGY_MANAGEMENT:
+			return WHO_ENERGY_MANAGEMENT;
 		default:
 			throw new UnsupportedOperationException(who.name() + " is not supported with OpenWebNet.");
 		}
 	}
 	
-	public static Who convert(String who) {
+	public static Who convert(String w) {
+
+		OpenWebNetWho who = null;
+		for (OpenWebNetWho ow : OpenWebNetWho.values()) {
+			if (ow.getValue() == w) {
+				who = ow;
+				break;
+			}
+		}
+		
 		if (WHO_SCENARIO.equals(who)) {
 			return Who.SCENARIO;
 		} else if (WHO_LIGHTING.equals(who)) {
@@ -79,10 +112,12 @@ public class OpenWebNetWho {
 			return Who.GATEWAY;
 		} else if (WHO_SOUND_SYSTEM.equals(who)) {
 			return Who.SOUND_SYSTEM;
+		} else if (WHO_ENERGY_MANAGEMENT.equals(who)) { 
+			return Who.ENERGY_MANAGEMENT;
 		} else if (WHO_DIAGNOSTIC_OF_HEATING_ADJUSTMENT.equals(who)) {
 			return Who.DIAGNOSTIC_OF_HEATING_ADJUSTMENT;
 		} else {
-			throw new UnsupportedOperationException(who + " is not supported with OpenWebNet.");
+			throw new UnsupportedOperationException(w + " is not supported with OpenWebNet.");
 		}
 	}
 }

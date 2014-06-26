@@ -1,6 +1,5 @@
 package com.homesnap.engine.controller.what.impl;
 
-
 /*
  * #%L
  * HomeSnapEngine
@@ -25,34 +24,9 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
-import com.homesnap.engine.controller.what.StateValue;
+public class IncorrectMacAddressException extends Exception {
 
-public class MacAddressValue implements StateValue {
+	/** serial uid */
+	private static final long serialVersionUID = 1L;
 
-	private byte[] macAdress = new byte[] {0, 0, 0, 0, 0, 0};
-	
-	public MacAddressValue() {
-	}
-
-	@Override
-	public String getValue() {
-		return "".concat(String.valueOf(macAdress[0]))
-				.concat(".").concat(String.valueOf(macAdress[1]))
-				.concat(".").concat(String.valueOf(macAdress[2]))
-				.concat(".").concat(String.valueOf(macAdress[3]))
-				.concat(".").concat(String.valueOf(macAdress[4]))
-				.concat(".").concat(String.valueOf(macAdress[5]));
-	}
-
-	public byte[] getMacAddress() {
-		return macAdress;
-	}
-
-	public void setMacAddress(byte[] address) throws IncorrectMacAddressException {
-		if (address == null || address.length != 6) {
-			throw new IncorrectMacAddressException();
-		} else {
-			macAdress = address;
-		}
-	}
 }

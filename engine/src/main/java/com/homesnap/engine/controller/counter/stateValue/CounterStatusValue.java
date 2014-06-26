@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.gateway.statename;
+package com.homesnap.engine.controller.counter.stateValue;
 
 /*
  * #%L
@@ -24,34 +24,15 @@ package com.homesnap.engine.controller.gateway.statename;
  * #L%
  */
 
-import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.StateValue;
 
-public enum GatewayStateName implements StateName {
-	DATE,
-	DATETIME,
-	DISTRIBUTION_VERSION,
-	FIRMWARE_VERSION,
-	IP_ADDRESS,
-	KERNEL_VERSION,
-	MAC_ADDRESS,
-	MODEL,
-	NETMASK,
-	TIME,
-	UPTIME;
+public enum CounterStatusValue implements StateValue {
 	
-	private GatewayStateName() {
-	}
-	
+	COUNTER_ON,
+	COUNTER_OFF;
+
 	@Override
-	public String getName() {
+	public String getValue() {
 		return name();
-	}
-	
-	public static GatewayStateName fromValue(String code) {
-		for (GatewayStateName gd : GatewayStateName.values()) {
-			if (gd.getName().equals(code))
-				return gd;
-		}
-		return null;
 	}
 }

@@ -49,9 +49,9 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.gateway.IncorrectIpV4AddressException;
-import com.homesnap.engine.controller.gateway.IncorrectMacAddressException;
 import com.homesnap.engine.controller.what.impl.DateValue;
+import com.homesnap.engine.controller.what.impl.IncorrectIpV4AddressException;
+import com.homesnap.engine.controller.what.impl.IncorrectMacAddressException;
 import com.homesnap.engine.controller.what.impl.IpAddressValue;
 import com.homesnap.engine.controller.what.impl.MacAddressValue;
 import com.homesnap.engine.controller.what.impl.TimeValue;
@@ -234,7 +234,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_GATEWAY;
+		return OpenWebNetWho.WHO_GATEWAY.getValue();
 	}
 	
 	private InetAddress getIp() {

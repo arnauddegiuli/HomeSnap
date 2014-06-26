@@ -80,6 +80,6 @@ public class LightSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_LIGHTING;
+		return OpenWebNetWho.WHO_LIGHTING.getValue();
 	}
 }

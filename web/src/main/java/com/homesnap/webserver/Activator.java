@@ -55,7 +55,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 
 //		System.out.print(context.);
-		System.setProperty("jetty.home.bundle", "MyDomoWebServer");
+		System.setProperty("jetty.home.bundle", "HomeSnapWebServer");
 
 		// register the service
 

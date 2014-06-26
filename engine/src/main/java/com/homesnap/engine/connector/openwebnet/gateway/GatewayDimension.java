@@ -36,7 +36,7 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.NetMask;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.UpTime;
-import com.homesnap.engine.controller.gateway.statename.GatewayStateName;
+import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 

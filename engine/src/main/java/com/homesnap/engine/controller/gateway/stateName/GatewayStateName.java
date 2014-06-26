@@ -1,5 +1,4 @@
-package com.homesnap.engine.controller.what.impl;
-
+package com.homesnap.engine.controller.gateway.stateName;
 
 /*
  * #%L
@@ -25,34 +24,34 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.StateName;
 
-public class MacAddressValue implements StateValue {
-
-	private byte[] macAdress = new byte[] {0, 0, 0, 0, 0, 0};
+public enum GatewayStateName implements StateName {
+	DATE,
+	DATETIME,
+	DISTRIBUTION_VERSION,
+	FIRMWARE_VERSION,
+	IP_ADDRESS,
+	KERNEL_VERSION,
+	MAC_ADDRESS,
+	MODEL,
+	NETMASK,
+	TIME,
+	UPTIME;
 	
-	public MacAddressValue() {
+	private GatewayStateName() {
 	}
-
+	
 	@Override
-	public String getValue() {
-		return "".concat(String.valueOf(macAdress[0]))
-				.concat(".").concat(String.valueOf(macAdress[1]))
-				.concat(".").concat(String.valueOf(macAdress[2]))
-				.concat(".").concat(String.valueOf(macAdress[3]))
-				.concat(".").concat(String.valueOf(macAdress[4]))
-				.concat(".").concat(String.valueOf(macAdress[5]));
+	public String getName() {
+		return name();
 	}
-
-	public byte[] getMacAddress() {
-		return macAdress;
-	}
-
-	public void setMacAddress(byte[] address) throws IncorrectMacAddressException {
-		if (address == null || address.length != 6) {
-			throw new IncorrectMacAddressException();
-		} else {
-			macAdress = address;
+	
+	public static GatewayStateName fromValue(String code) {
+		for (GatewayStateName gd : GatewayStateName.values()) {
+			if (gd.getName().equals(code))
+				return gd;
 		}
+		return null;
 	}
 }
