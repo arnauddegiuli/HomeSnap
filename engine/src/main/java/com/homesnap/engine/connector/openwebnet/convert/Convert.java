@@ -29,6 +29,7 @@ import java.util.List;
 
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
+import com.homesnap.engine.connector.openwebnet.automation.AutomationStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
@@ -190,6 +191,13 @@ public class Convert {
 			} else {
 				return ls.getCode();
 			}
+		case AUTOMATION:
+			AutomationStatus as = AutomationStatus.fromValue(stateValue);
+			if (as == null) {
+				throw new UnknownState();
+			} else {
+				return as.getCode();
+			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(stateValue).getCode();
 		case ENERGY_MANAGEMENT:
@@ -208,6 +216,14 @@ public class Convert {
 
 			} else {
 				return ls.getValue();
+			}
+		case AUTOMATION:
+			AutomationStatus as = AutomationStatus.fromValue(code);
+			if (as == null) {
+				throw new UnknownState();
+
+			} else {
+				return as.getValue();
 			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(code).getValue();
