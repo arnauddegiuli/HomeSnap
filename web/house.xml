@@ -1,1 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?><house><groups><group title="Group 1" id="1"><controller where="com.homesnap.engine.controller.where.Where@63f" title="Dressing" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@640" title="Suite Parentale" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@641" title="Couloir Suite Parentale" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@642" title="Douche]" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@643" title="Miroir Douche" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@1f" title="" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 2" id="2"><controller where="com.homesnap.engine.controller.where.Where@65e" title="Bureau" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 3" id="3"><controller where="com.homesnap.engine.controller.where.Where@67d" title="Cellier" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@67e" title="WC du bas" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@681" title="Vide Poche" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 4" id="4"><controller where="com.homesnap.engine.controller.where.Where@69c" title="Entrée" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@69d" title="Salon" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@69e" title="Escalier" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@69f" title="Mur télé" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 5" id="5"><controller where="com.homesnap.engine.controller.where.Where@6bb" title="Salle à manger" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6bc" title="Ilot Cuisine" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6bd" title="Cuisine" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 6" id="6"><controller where="com.homesnap.engine.controller.where.Where@6da" title="Chambre Tom" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6dc" title="Chambre Marius" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6dd" title="Dressing Garçon" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6df" title="Chambre Loïs" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 7" id="7"><controller where="com.homesnap.engine.controller.where.Where@6f9" title="Salle de Bain" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6fa" title="Miroir Salle de Bain" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@6fb" title="WC du haut" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 8" id="8"><controller where="com.homesnap.engine.controller.where.Where@718" title="Couloir du haut" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@719" title="Salle de jeux" class="com.homesnap.engine.controller.light.Light"/></group><group title="Group 9" id="9"><controller where="com.homesnap.engine.controller.where.Where@737" title="Extérieur 1" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@738" title="Extérieur 2" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@739" title="Extérieur 3" class="com.homesnap.engine.controller.light.Light"/><controller where="com.homesnap.engine.controller.where.Where@73a" title="Extérieur 4" class="com.homesnap.engine.controller.light.Light"/></group></groups><labels><label title="Chambre Tom" id="ch1"><controllerLink where="com.homesnap.engine.controller.where.Where@6da"/></label><label title="Chambre Marius" id="ch2"><controllerLink where="com.homesnap.engine.controller.where.Where@6dc"/></label><label title="Salon" id="sal"><controllerLink where="com.homesnap.engine.controller.where.Where@69d"/></label></labels></house>
+<?xml version="1.0" encoding="utf-8"?>
+<house>
+	<groups>
+		<group title="Group 1" id="1">
+			<controller where="11" title="Dressing"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="12" title="Suite Parentale"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="13" title="Couloir Suite Parentale"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="14" title="Douche]"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="15" title="Miroir Douche"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 2" id="2">
+			<controller where="21" title="Bureau"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 3" id="3">
+			<controller where="31" title="Cellier"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="32" title="WC du bas"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="35" title="Vide Poche"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 4" id="4">
+			<controller where="41" title="Entrée"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="42" title="Salon"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="43" title="Escalier"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="44" title="Mur télé"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 5" id="5">
+			<controller where="51" title="Salle à manger"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="52" title="Ilot Cuisine"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="53" title="Cuisine"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 6" id="6">
+			<controller where="61" title="Chambre Tom"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="63" title="Chambre Marius"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="64" title="Dressing Garçon"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="66" title="Chambre Loïs"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 7" id="7">
+			<controller where="71" title="Salle de Bain"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="72" title="Miroir Salle de Bain"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="73" title="WC du haut"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 8" id="8">
+			<controller where="81" title="Couloir du haut"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="82" title="Salle de jeux"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+		<group title="Group 9" id="9">
+			<controller where="91" title="Extérieur 1"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="92" title="Extérieur 2"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="93" title="Extérieur 3"
+				class="com.homesnap.engine.controller.light.Light" />
+			<controller where="94" title="Extérieur 4"
+				class="com.homesnap.engine.controller.light.Light" />
+		</group>
+	</groups>
+	<labels>
+		<label title="Chambre Tom" id="ch1">
+			<controllerLink where="61" />
+		</label>
+		<label title="Chambre Marius" id="ch2">
+			<controllerLink where="63" />
+		</label>
+		<label title="Salon" id="sal">
+			<controllerLink where="42" />
+		</label>
+	</labels>
+</house>

@@ -90,7 +90,7 @@ public enum OpenWebNetWho {
 
 		OpenWebNetWho who = null;
 		for (OpenWebNetWho ow : OpenWebNetWho.values()) {
-			if (ow.getValue() == w) {
+			if (ow.getValue().equals(w)) {
 				who = ow;
 				break;
 			}

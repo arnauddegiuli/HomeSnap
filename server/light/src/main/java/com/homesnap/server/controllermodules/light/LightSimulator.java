@@ -70,7 +70,7 @@ public class LightSimulator implements ControllerSimulator {
 				statusList.put(where, what);
 			}
 
-			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, what, where} ) + OpenWebNetConstant.ACK;
+			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} ) + OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -104,7 +104,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 				// Save address
 				sb.append("<controller where=\"");
 				if (controller.getWhere() != null) {
-					sb.append(controller.getWhere());
+					sb.append(controller.getWhere().getTo());
 				}
 				// Save title
 				sb.append("\" title=\"");

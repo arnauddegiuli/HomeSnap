@@ -215,7 +215,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			}
 			sb.setLength(sb.length() - 1);
 			return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
-					OpenWebNetWho.WHO_GATEWAY, where, dimensionStr, sb.toString() })
+					getWho(), where, dimensionStr, sb.toString() })
 					+ OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
