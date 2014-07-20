@@ -32,7 +32,7 @@ import java.util.List;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Date;
 import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.server.ControllerStateManagement;
@@ -54,8 +54,8 @@ public class GatewayCommand {
 	public String date(int day, int month, int year) {
 		Calendar c = new GregorianCalendar(year, month, day);
 		Date d = new Date();
-		d.setValueList(new DateValue(c.getTime()));
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimension.DATE, formatDimension(d.getValueList())}));
+		d.setStateValue(new DateValue(c.getTime()));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimensionConverter.DATE, formatDimension(d.getValueList())}));
 	}
 	
 	/**
@@ -73,9 +73,9 @@ public class GatewayCommand {
 
 		Calendar c = new GregorianCalendar(year, month, day, hour, min, sec);
 		Date d = new Date();
-		d.setValueList(new DateValue(c.getTime()));
+		d.setStateValue(new DateValue(c.getTime()));
 
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimension.DATETIME, formatDimension(d.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimensionConverter.DATETIME, formatDimension(d.getValueList())}));
 	}
 
 	/**
@@ -93,9 +93,9 @@ public class GatewayCommand {
 		c.set(Calendar.HOUR_OF_DAY, sec);
 		c.set(Calendar.DAY_OF_MONTH, sec);
 		Date d = new Date();
-		d.setValueList(new DateValue(c.getTime()));
+		d.setStateValue(new DateValue(c.getTime()));
 
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimension.TIME, formatDimension(d.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_GATEWAY, "", GatewayDimensionConverter.TIME, formatDimension(d.getValueList())}));
 	}
 	
 	private String formatDimension(List<DimensionValue> valueList) {

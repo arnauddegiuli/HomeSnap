@@ -27,14 +27,14 @@ package com.homesnap.engine.connector.openwebnet.automation;
 import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
 import com.homesnap.engine.controller.what.StateValue;
 
-public enum AutomationStatus {
+public enum AutomationStatusConverter {
 	AUTOMATION_UP("1", AutomationStatusValue.UP),
 	AUTOMATION_DOWN("2", AutomationStatusValue.DOWN),
 	AUTOMATION_STOP("0", AutomationStatusValue.STOP);
 	
 	private String code;
 	private StateValue value;
-	private AutomationStatus(String code, StateValue value) {
+	private AutomationStatusConverter(String code, StateValue value) {
 		this.code = code;
 		this.value = value;
 	}
@@ -47,21 +47,21 @@ public enum AutomationStatus {
 		return value;
 	}
 
-	public static AutomationStatus fromValue(String code) {
-		for (AutomationStatus automation: AutomationStatus.values()) {
+	public static StateValue fromValue(String code) {
+		for (AutomationStatusConverter automation: AutomationStatusConverter.values()) {
 			if (automation.getCode().equals(code))
-				return automation;
+				return automation.value;
 		}
 		return null;
 	}
 
-	public static AutomationStatus fromValue(StateValue name) {
+	public static String fromValue(StateValue name) {
 		if (name == null) {
 			return null;
 		}
-		for (AutomationStatus automation: AutomationStatus.values()) {
+		for (AutomationStatusConverter automation: AutomationStatusConverter.values()) {
 			if (automation.value.getValue().equals(name.getValue()))
-				return automation;
+				return automation.code;
 		}
 		return null;
 	}

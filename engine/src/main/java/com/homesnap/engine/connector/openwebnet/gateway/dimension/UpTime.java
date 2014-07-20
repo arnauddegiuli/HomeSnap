@@ -31,7 +31,8 @@ import java.util.GregorianCalendar;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.DateValue;
 
 
@@ -49,13 +50,13 @@ public class UpTime extends DimensionStatusImpl<DateValue> {
 				new DimensionValueImpl(), // Min
 				new DimensionValueImpl(), // Seconds
 				},
-			GatewayDimension.UPTIME.getCode()
+			GatewayDimensionConverter.UPTIME.getCode()
 		);
 	}
 	
 	private Date getTime() {
 		Calendar c = new GregorianCalendar();
-		c.set(Calendar.DAY_OF_MONTH, getIntValue(DAY_POS));
+		c.set(Calendar.DAY_OF_YEAR, getIntValue(DAY_POS));
 		c.set(Calendar.HOUR, getIntValue(HOURS_POS));
 		c.set(Calendar.MINUTE, getIntValue(MINUTES_POS));
 		c.set(Calendar.SECOND, getIntValue(SECONDS_POS));
@@ -69,8 +70,16 @@ public class UpTime extends DimensionStatusImpl<DateValue> {
 	}
 
 	@Override
-	public void setValueList(DateValue value) {
-		// TODO normalement impossible => lecture seule
-		
+	public void setStateValue(StateValue value) {
+		// TODO throw new ReadOnlyException(); // read only dimension
+	}
+
+	public void setTime(java.util.Date time) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(time);
+		setIntValue(c.get(Calendar.DAY_OF_YEAR), DAY_POS, 2);
+		setIntValue(c.get(Calendar.HOUR), HOURS_POS, 2);
+		setIntValue(c.get(Calendar.MINUTE), MINUTES_POS, 2);
+		setIntValue(c.get(Calendar.SECOND), SECONDS_POS, 2);
 	}
 }

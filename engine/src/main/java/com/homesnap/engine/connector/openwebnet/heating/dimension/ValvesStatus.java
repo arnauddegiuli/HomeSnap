@@ -108,7 +108,7 @@ public class ValvesStatus extends DimensionStatusImpl {
 	}
 
 	@Override
-	public void setValueList(StateValue value) {
+	public void setStateValue(StateValue value) {
 		// TODO Auto-generated method stub
 		
 	}

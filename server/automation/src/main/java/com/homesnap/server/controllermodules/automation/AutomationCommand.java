@@ -26,7 +26,7 @@ package com.homesnap.server.controllermodules.automation;
 import java.text.MessageFormat;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.automation.AutomationStatus;
+import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.server.ControllerStateManagement;
 
@@ -36,14 +36,14 @@ public class AutomationCommand {
 	static final String[] functions = { "up", "down", "stop" };
 	
 	public String up(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_UP.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatusConverter.AUTOMATION_UP.getCode(), address} ));
 	}
 	
 	public String down(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_DOWN.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatusConverter.AUTOMATION_DOWN.getCode(), address} ));
 	}
 	
 	public String stop(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatus.AUTOMATION_STOP.getCode(), address} ));	
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_AUTOMATION, AutomationStatusConverter.AUTOMATION_STOP.getCode(), address} ));	
 	}
 }

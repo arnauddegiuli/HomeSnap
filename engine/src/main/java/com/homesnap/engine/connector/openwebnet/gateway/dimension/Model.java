@@ -3,7 +3,8 @@ package com.homesnap.engine.connector.openwebnet.gateway.dimension;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.StringValue;
 
 /*
@@ -48,7 +49,7 @@ public class Model extends DimensionStatusImpl<StringValue> {
 		super(new DimensionValue[] { 
 				new DimensionValueImpl(), // Model
 				},
-			GatewayDimension.MODEL.getCode()
+			GatewayDimensionConverter.MODEL.getCode()
 		);
 	}
 
@@ -76,8 +77,11 @@ public class Model extends DimensionStatusImpl<StringValue> {
 	}
 
 	@Override
-	public void setValueList(StringValue value) {
-		// TODO normalement impossible => lecture seule
-		setIntValue(Integer.parseInt(value.getValue()), MODEL_POS, 0);
+	public void setStateValue(StateValue value) {
+		// TODO throw new ReadOnlyException(); // read only dimension
+	}
+	
+	public void setModel(int value) {
+		setIntValue(value, MODEL_POS, 0);
 	}
 }

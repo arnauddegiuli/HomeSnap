@@ -29,7 +29,7 @@ import com.homesnap.engine.controller.what.StateValue;
 
 
 // LIGHT
-public enum LightStatus {
+public enum LightStatusConverter {
 	LIGHT_OFF("0", LightStatusValue.LIGHT_OFF), // TODO manage speed 0 to 255!
 	LIGHT_ON("1", LightStatusValue.LIGHT_ON), // TODO manage speed!
 	LIGHT_ON_20_PERCENT("2", LightStatusValue.LIGHT_ON_20_PERCENT),
@@ -69,7 +69,7 @@ public enum LightStatus {
 	private String code; // OpenWebNet code
 	private StateValue value; // SnapHome code
 
-	private LightStatus(String code, StateValue value) {
+	private LightStatusConverter(String code, StateValue value) {
 		this.code = code;
 		this.value = value;
 	}
@@ -82,21 +82,21 @@ public enum LightStatus {
 		return value;
 	}
 
-	public static LightStatus fromValue(String code) {
-		for (LightStatus light: LightStatus.values()) {
+	public static StateValue convert(String code) {
+		for (LightStatusConverter light: LightStatusConverter.values()) {
 			if (light.getCode().equals(code))
-				return light;
+				return light.value;
 		}
 		return null;
 	}
 
-	public static LightStatus fromValue(StateValue name) {
+	public static String convert(StateValue name) {
 		if (name == null) {
 			return null;
 		}
-		for (LightStatus light: LightStatus.values()) {
+		for (LightStatusConverter light: LightStatusConverter.values()) {
 			if (light.value.getValue().equals(name.getValue()))
-				return light;
+				return light.code;
 		}
 		return null;
 	}

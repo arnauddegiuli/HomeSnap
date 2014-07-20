@@ -30,7 +30,8 @@ import java.util.GregorianCalendar;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.TimeValue;
 
 
@@ -48,10 +49,9 @@ public class Time extends DimensionStatusImpl<TimeValue> {
 				new DimensionValueImpl(), // Seconds
 				new DimensionValueImpl()  // Timezone
 				},
-				GatewayDimension.TIME.getCode()
+				GatewayDimensionConverter.TIME.getCode()
 		);
 	}
-	
 
 	@Override
 	public TimeValue getStateValue() {
@@ -59,9 +59,13 @@ public class Time extends DimensionStatusImpl<TimeValue> {
 	}
 
 	@Override
-	public void setValueList(TimeValue value) {
+	public void setStateValue(StateValue value) {
+		setTime(((TimeValue)value).getTime());
+	}
+
+	public void setTime(java.util.Date time) {
 		Calendar c = new GregorianCalendar();
-		c.setTime(value.getTime());
+		c.setTime(time);
 		setIntValue(c.get(Calendar.HOUR), HOURS_POS, 2);
 		setIntValue(c.get(Calendar.MINUTE), MINUTES_POS, 2);
 		setIntValue(c.get(Calendar.SECOND), SECONDS_POS, 2);

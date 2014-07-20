@@ -3,7 +3,8 @@ package com.homesnap.engine.connector.openwebnet.gateway.dimension;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.VersionValue;
 
 /*
@@ -43,7 +44,7 @@ public class KernelVersion extends DimensionStatusImpl<VersionValue> {
 				new DimensionValueImpl(), // Release
 				new DimensionValueImpl()  // Build
 				},
-			GatewayDimension.KERNEL_VERSION.getCode()
+			GatewayDimensionConverter.KERNEL_VERSION.getCode()
 		);
 	}
 
@@ -59,10 +60,13 @@ public class KernelVersion extends DimensionStatusImpl<VersionValue> {
 	}
 
 	@Override
-	public void setValueList(VersionValue value) {
-		// TODO normalement impossible => lecture seule
-		setIntValue(value.getVersion(), VERSION_POS, 2);
-		setIntValue(value.getRelease(), RELEASE_POS, 2);
-		setIntValue(value.getBuild(), BUILD_POS, 2);
+	public void setStateValue(StateValue value) {
+		// TODO throw new ReadOnlyException(); // read only dimension
+	}
+
+	public void setDistributionVersion(int version, int release, int build) {
+		setIntValue(version, VERSION_POS, 2);
+		setIntValue(release, RELEASE_POS, 2);
+		setIntValue(build, BUILD_POS, 2);
 	}
 }

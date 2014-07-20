@@ -83,7 +83,7 @@ public enum HeatingZoneDimension {
 		for (HeatingZoneDimension gd : HeatingZoneDimension.values()) {
 			if (gd.getName().getName().equals(name.getName())) {
 				DimensionStatus result = gd.createDimensionStatus();
-				result.setValueList(value.getValue());
+				result.setStateValue(value.getValue());
 			}
 		}
 		return null;

@@ -29,13 +29,13 @@ import java.util.List;
 
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.automation.AutomationStatus;
+import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
-import com.homesnap.engine.connector.openwebnet.light.LightStatus;
+import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
@@ -83,7 +83,7 @@ public class Convert {
 							new Object[] { who, where, dimensionStatus.getCode(), sb.toString() }
 					);
 				}
-			} else {
+			} else { // Statut request
 				if (StateName.STATUS.equals(what.getName())) {
 					return MessageFormat.format(OpenWebNetConstant.STATUS,
 							new Object[] { who, where });
@@ -114,9 +114,7 @@ public class Convert {
 		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
 			break;
 		case GATEWAY:
-			ds = GatewayDimension.fromValue(state.getName())
-					.createDimensionStatus();
-			// ds.setValueList(dimensionList); TODO manage values
+			ds = GatewayDimensionConverter.convert(state);
 			break;
 		case HEATING_ADJUSTMENT:
 			ds = HeatingZoneDimension.fromState(state);
@@ -136,7 +134,6 @@ public class Convert {
 		default:
 			throw new UnknownWho();
 		}
-
 		return ds;
 	}
 
@@ -145,16 +142,12 @@ public class Convert {
 		DimensionStatus<?> dimension;
 		switch (w) {
 		case AUTOMATION:
-			throw new UnknownWho();
-			// break;
+			throw new UnknownState(); // Only status manage by automation: no dimension
 		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
 			throw new UnknownWho();
 			// break;
 		case GATEWAY:
-			GatewayDimension gd = GatewayDimension.fromValue(code);
-			dimension = gd.createDimensionStatus();
-			dimension.setValueList(dimensionList);
-			return new State(gd.getName(), dimension.getStateValue());
+			return GatewayDimensionConverter.convert(code, dimensionList);
 		case HEATING_ADJUSTMENT:
 			HeatingZoneDimension hd = HeatingZoneDimension.fromValue(code);
 			dimension = hd.createDimensionStatus();
@@ -185,18 +178,18 @@ public class Convert {
 			throws UnknownState, UnknownWho {
 		switch (who) {
 		case LIGHT:
-			LightStatus ls = LightStatus.fromValue(stateValue);
+			String ls = LightStatusConverter.convert(stateValue);
 			if (ls == null) {
 				throw new UnknownState();
 			} else {
-				return ls.getCode();
+				return ls;
 			}
 		case AUTOMATION:
-			AutomationStatus as = AutomationStatus.fromValue(stateValue);
+			String as = AutomationStatusConverter.fromValue(stateValue);
 			if (as == null) {
 				throw new UnknownState();
 			} else {
-				return as.getCode();
+				return as;
 			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(stateValue).getCode();
@@ -210,20 +203,20 @@ public class Convert {
 			throws UnknownState {
 		switch (who) {
 		case LIGHT:
-			LightStatus ls = LightStatus.fromValue(code);
+			StateValue ls = LightStatusConverter.convert(code);
 			if (ls == null) {
 				throw new UnknownState();
 
 			} else {
-				return ls.getValue();
+				return ls;
 			}
 		case AUTOMATION:
-			AutomationStatus as = AutomationStatus.fromValue(code);
+			StateValue as = AutomationStatusConverter.fromValue(code);
 			if (as == null) {
 				throw new UnknownState();
 
 			} else {
-				return as.getValue();
+				return as;
 			}
 		case HEATING_ADJUSTMENT:
 			return HeatingZoneStatus.fromValue(code).getValue();

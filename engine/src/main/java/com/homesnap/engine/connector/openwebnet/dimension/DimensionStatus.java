@@ -33,6 +33,6 @@ public interface DimensionStatus<T extends StateValue> {
 	public List<DimensionValue> getValueList();
 	public T getStateValue();
 	public void setValueList(List<DimensionValue> dimensionList);
-	public void setValueList(T value);
+	public void setStateValue(StateValue stateValue);
 	public String getCode();
 }

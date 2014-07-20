@@ -69,8 +69,8 @@ public class DesiredTemperature extends DimensionStatusImpl<DoubleValue> {
 	}
 
 	@Override
-	public void setValueList(DoubleValue value) {
-		setDesiredTemperature(value.getDoubleValue());
+	public void setStateValue(StateValue value) {
+		setDesiredTemperature(((DoubleValue)value).getDoubleValue());
 	}
 	
 }

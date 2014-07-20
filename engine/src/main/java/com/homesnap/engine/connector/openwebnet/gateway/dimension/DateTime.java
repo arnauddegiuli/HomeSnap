@@ -30,7 +30,8 @@ import java.util.GregorianCalendar;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.DateValue;
 
 public class DateTime extends DimensionStatusImpl<DateValue> {
@@ -56,7 +57,7 @@ public class DateTime extends DimensionStatusImpl<DateValue> {
 				new DimensionValueImpl(), // Month
 				new DimensionValueImpl()  // Year
 				},
-			GatewayDimension.DATETIME.getCode()
+			GatewayDimensionConverter.DATETIME.getCode()
 		);
 	}
 
@@ -74,7 +75,7 @@ public class DateTime extends DimensionStatusImpl<DateValue> {
 		return c.getTime();
 	}
 
-	private void setTime(java.util.Date date) {
+	public void setDate(java.util.Date date) {
 		Calendar c = new GregorianCalendar();
 		c.setTime(date);
 		setIntValue(c.get(Calendar.DAY_OF_WEEK), DAYOFWEEK_POS, 2);
@@ -93,7 +94,7 @@ public class DateTime extends DimensionStatusImpl<DateValue> {
 	}
 
 	@Override
-	public void setValueList(DateValue value) {
-		setTime(value.getDate());
+	public void setStateValue(StateValue value) {
+		setDate(((DateValue)value).getDate());
 	}
 }

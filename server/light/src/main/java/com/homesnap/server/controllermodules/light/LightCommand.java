@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
-import com.homesnap.engine.connector.openwebnet.light.LightStatus;
+import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.server.ControllerStateManagement;
 
 public class LightCommand {
@@ -37,10 +37,10 @@ public class LightCommand {
 	static final String[] functions = { "on", "off" };
 	
 	public String on(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatus.LIGHT_ON.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatusConverter.LIGHT_ON.getCode(), address} ));
 	}
 	
 	public String off(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatus.LIGHT_OFF.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatusConverter.LIGHT_OFF.getCode(), address} ));
 	}
 }

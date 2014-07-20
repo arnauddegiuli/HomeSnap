@@ -24,7 +24,10 @@ package com.homesnap.engine.connector.openwebnet.gateway;
  * #L%
  */
 
+import java.util.List;
+
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Date;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DateTime;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DistributionVersion;
@@ -37,10 +40,11 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.NetMask;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.UpTime;
 import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
+import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 
-public enum GatewayDimension {
+public enum GatewayDimensionConverter {
 	DATE("1", GatewayStateName.DATE, Date.class),
 	DATETIME("22", GatewayStateName.DATETIME, DateTime.class),
 	DISTRIBUTION_VERSION("24", GatewayStateName.DISTRIBUTION_VERSION, DistributionVersion.class),
@@ -57,24 +61,12 @@ public enum GatewayDimension {
 	private StateName name;
 	private Class<? extends DimensionStatus<? extends StateValue>> clazz;
 
-	private GatewayDimension(String code, StateName name, Class<? extends DimensionStatus<? extends StateValue>> clazz) {
+	private GatewayDimensionConverter(String code, StateName name, Class<? extends DimensionStatus<? extends StateValue>> clazz) {
 		this.openWebNetCode = code;
 		this.name = name;
 		this.clazz = clazz;
 	}
-	
-	public DimensionStatus<? extends StateValue> createDimensionStatus() {
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			return null;
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			return null;
-		}
-	}
-	
+
 	public String getCode() {
 		return openWebNetCode;
 	}
@@ -83,8 +75,46 @@ public enum GatewayDimension {
 		return name;
 	}
 
-	public static GatewayDimension fromValue(String code) {
-		for (GatewayDimension gd : GatewayDimension.values()) {
+	public static DimensionStatus<? extends StateValue> convert(State state) {
+		try {
+			GatewayDimensionConverter gd = convert(state.getName());
+			if (gd != null) {
+			DimensionStatus<? extends StateValue> r = gd.clazz.newInstance();
+			if (state.getValue()!=null) r.setStateValue(state.getValue());
+			return r;
+			} else {
+				return null;
+			}
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			return null;
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+	}
+
+	public static State convert(String code, List<DimensionValue> value) {
+		try {
+			GatewayDimensionConverter gd = GatewayDimensionConverter.convert(code);
+			if (gd != null) {
+			DimensionStatus<? extends StateValue> r = gd.clazz.newInstance();
+			r.setValueList(value);
+			return new State(gd.getName(), r.getStateValue());
+			} else {
+				return null;
+			}
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			return null;
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+	}
+
+	public static GatewayDimensionConverter convert(String code) {
+		for (GatewayDimensionConverter gd : GatewayDimensionConverter.values()) {
 			if (gd.getCode().equals(code))
 				return gd;
 		}
@@ -92,11 +122,11 @@ public enum GatewayDimension {
 		return null;
 	}
 
-	public static GatewayDimension fromValue(StateName name) {
+	public static GatewayDimensionConverter convert(StateName name) {
 		if (name == null) {
 			return null;
 		}
-		for (GatewayDimension gd : GatewayDimension.values()) {
+		for (GatewayDimensionConverter gd : GatewayDimensionConverter.values()) {
 			if (gd.getName().getName().equals(name.getName()))
 				return gd;
 		}

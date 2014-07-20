@@ -7,7 +7,8 @@ import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatusImpl;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimension;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.IncorrectIpV4AddressException;
 import com.homesnap.engine.controller.what.impl.IpAddressValue;
 
@@ -46,7 +47,7 @@ public class NetMask extends DimensionStatusImpl<IpAddressValue> {
 				new DimensionValueImpl(),
 				new DimensionValueImpl(),
 				new DimensionValueImpl()
-				}, GatewayDimension.NETMASK.getCode());
+				}, GatewayDimensionConverter.NETMASK.getCode());
 	}
 
 	@Override
@@ -66,11 +67,14 @@ public class NetMask extends DimensionStatusImpl<IpAddressValue> {
 	}
 
 	@Override
-	public void setValueList(IpAddressValue value) {
-		byte[] address = value.getIpAddress();
-		setByteValue(address[0], 0, 0);
-		setByteValue(address[1], 1, 0);
-		setByteValue(address[2], 2, 0);
-		setByteValue(address[3], 3, 0);
+	public void setStateValue(StateValue value) {
+		// TODO throw new ReadOnlyException(); // read only dimension
+	}
+
+	public void setIpAddress(byte addr1, byte addr2, byte addr3, byte addr4) {
+		setByteValue(addr1, 0, 0);
+		setByteValue(addr2, 1, 0);
+		setByteValue(addr3, 2, 0);
+		setByteValue(addr4, 3, 0);
 	}
 }

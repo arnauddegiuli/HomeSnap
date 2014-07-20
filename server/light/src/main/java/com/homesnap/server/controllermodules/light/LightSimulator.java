@@ -29,7 +29,7 @@ import java.util.Hashtable;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
-import com.homesnap.engine.connector.openwebnet.light.LightStatus;
+import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.server.controllermodules.ControllerSimulator;
@@ -44,8 +44,8 @@ public class LightSimulator implements ControllerSimulator {
 			CommandParser parser = CommandParser.parse(command);
 			String what = parser.getWhat();
 			String where = parser.getWhere();
-			if (LightStatus.LIGHT_OFF.getCode().equals(what)
-					|| LightStatus.LIGHT_ON.getCode().equals(what)) {
+			if (LightStatusConverter.LIGHT_OFF.getCode().equals(what)
+					|| LightStatusConverter.LIGHT_ON.getCode().equals(what)) {
 				statusList.put(where, what);
 				return OpenWebNetConstant.ACK;
 			} else {
@@ -66,7 +66,7 @@ public class LightSimulator implements ControllerSimulator {
 			String where = parser.getWhere();
 			String what = statusList.get(where);
 			if (what == null) {
-				what = LightStatus.LIGHT_OFF.getCode();
+				what = LightStatusConverter.LIGHT_OFF.getCode();
 				statusList.put(where, what);
 			}
 
