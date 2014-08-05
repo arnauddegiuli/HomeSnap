@@ -1,5 +1,4 @@
 
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
@@ -50,10 +49,12 @@ public class ListenerExampleParser implements MyDomoRestAPI {
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatusValue status)
+	public void onStatus(String name, String[] value)
 			throws UnsupportedRestOperation, RestOperationException,
 			MissingParameterRestOperation {
-		System.out.println("Changement de lumière [where:" + where + "] - [status:" + status.name() + "]");
+		for (int i = 0; i < value.length; i++) {
+			System.out.println("Status [name:" + name + "] - [value_"+ i + ":" + value[i] + "]");	
+		}
 		
 	}
 }

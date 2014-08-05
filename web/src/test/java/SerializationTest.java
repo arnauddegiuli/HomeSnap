@@ -27,7 +27,6 @@ import com.homesnap.engine.controller.light.Light;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
-import com.homesnap.webserver.servlet.house.HouseServiceImpl;
 import com.homesnap.webserver.utils.JSonTools;
 
 
@@ -39,7 +38,7 @@ public class SerializationTest {
 	@Test
 	public void toJsonTest() {
 		
-		HouseServiceImpl service = new HouseServiceImpl();
+//		HouseServiceImpl service = new HouseServiceImpl();
 		System.out.print(JSonTools.toJson(getModel()));
 	}
 	

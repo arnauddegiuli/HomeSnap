@@ -13,7 +13,7 @@
 		<module>engine</module>
 		<module>scanner</module>		
 		<module>server</module>
-		<!-- <module>web</module> For the moment pb with eclipse version not found in official maven repository... -->
+		<module>web</module>
 	</modules>
 
 	<properties>

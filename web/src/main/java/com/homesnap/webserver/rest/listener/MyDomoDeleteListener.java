@@ -3,10 +3,10 @@ package com.homesnap.webserver.rest.listener;
 import java.util.Map;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
+import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
@@ -46,7 +46,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 		Label l = getLabel(labelId);
 		if (l != null) {
 			for (Controller controller : l.getControllerList()) {
-				if(controller.getWhere().equals(where)) {
+				if(controller.getWhere().getTo().equals(where)) {
 					l.remove(controller);
 					return;
 				}
@@ -77,7 +77,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 		Group g = getGroup(groupId);
 		if (g != null) {
 			for (Controller controller : g.getControllerList()) {
-				if(controller.getWhere().equals(where)) {
+				if(controller.getWhere().getTo().equals(where)) {
 					g.remove(controller);
 					return;
 				}
@@ -94,7 +94,10 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	}
 
 	@Override
-	public void onLightStatus(String where, LightStatusValue status) throws UnsupportedRestOperation {
-		throw new UnsupportedRestOperation(getUri(), Verb.DELETE);
+	public void onStatus(String name, String[] value)
+			throws UnsupportedRestOperation, RestOperationException,
+			MissingParameterRestOperation {
+		// TODO Auto-generated method stub
+		
 	}
 }

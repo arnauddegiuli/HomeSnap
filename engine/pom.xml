@@ -61,6 +61,7 @@
 							com.homesnap.engine.connector.openwebnet.parser,
 							com.homesnap.engine.connector.openwebnet.convert,
 							com.homesnap.engine.controller,
+							com.homesnap.engine.controller.where,
 							com.homesnap.engine.controller.automation,
 							com.homesnap.engine.controller.gateway,
 							com.homesnap.engine.controller.gateway.dimension,

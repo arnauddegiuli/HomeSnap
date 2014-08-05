@@ -23,7 +23,7 @@
  * #L%
  */
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
@@ -31,8 +31,8 @@ import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
-import com.homesnap.webserver.servlet.house.parser.ParseException;
-import com.homesnap.webserver.servlet.house.parser.UriParser;
+import com.homesnap.webserver.rest.parser.ParseException;
+import com.homesnap.webserver.rest.parser.UriParser;
 
 
 public class ParserTest {
@@ -140,7 +140,7 @@ public class ParserTest {
 		String uri = "/house/groups/10";
 		UriParser.parse(uri, listener);
 
-		uri = "/house/groups/group?id=10";
+		uri = "/house/groups/group?id=10&status=valeur2";
 		UriParser.parse(uri, listener);
 	}
 	
@@ -151,7 +151,7 @@ public class ParserTest {
 		String uri = "/house/groups/10/controller?id=12";
 		UriParser.parse(uri, listener);
 		
-		uri = "/house/groups/10/12";
+		uri = "/house/groups/10/12?param=parm2";
 		UriParser.parse(uri, listener);
 	}
 	
@@ -164,20 +164,26 @@ public class ParserTest {
 		uri = "/house/controllers/controller?id=12";
 		UriParser.parse(uri, listener);
 	}
+
 	
 	@Test
-	public void light() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
-//		/[on|off] || [?what=on||?what=off]
-		String uri = "/house/controllers/12/on";
-		UriParser.parse(uri, listener);
-		
-		uri = "/house/controllers/12?what=on";
-		UriParser.parse(uri, listener);
-		
-		uri = "/house/controllers/12/off";
-		UriParser.parse(uri, listener);
-		
-		uri = "/house/controllers/12?what=off";
-		UriParser.parse(uri, listener);
+	public void status() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
+		// Done by servlet and not by parser => no test with parser
 	}
+
+//	@Test
+//	public void light() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
+////		/[on|off] || [?what=on||?what=off]
+//		String uri = "/house/controllers/12/on";
+//		UriParser.parse(uri, listener);
+//		
+//		uri = "/house/controllers/12?what=on";
+//		UriParser.parse(uri, listener);
+//		
+//		uri = "/house/controllers/12/off";
+//		UriParser.parse(uri, listener);
+//		
+//		uri = "/house/controllers/12?what=off";
+//		UriParser.parse(uri, listener);
+//	}
 }
