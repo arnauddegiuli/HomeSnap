@@ -33,8 +33,8 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
-	<link rel="stylesheet" href="scripts/adgsoftware/widget/light/css/Light.css" media="screen" />
-	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css" media="screen" />
+	<link rel="stylesheet" href="scripts/snaphome/widget/light/css/Light.css" media="screen" />
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dijit/themes/claro/claro.css" media="screen" />
 
 	<!-- load Dojo -->
 	<script>
@@ -44,8 +44,8 @@
 			async: true,
 			parseOnLoad: true,
 			packages : [ {
-				name : "adgsoftware",
-				location : "adgsoftware"
+				name : "snaphome",
+				location : "snaphome"
 			} ]
 		};
 	</script>
@@ -56,14 +56,14 @@
 		<script>
 			require(["dojo/ready"],
 				function(){ 
-				require([ "adgsoftware/utils/Message" ], function(Message) {
-/* 					Message.displayError("Ceci est un msg d'erreur");
+				require([ "snaphome/utils/Message" ], function(Message) {
+ 					Message.displayError("Ceci est un msg d'erreur");
 					Message.displaySuccess("Ceci est un msg de succes");
 					Message.displayWarning("Ceci est un msg de warning");
-					Message.displayInformation("Ceci est un msg d'information"); */
+					Message.displayInformation("Ceci est un msg d'information"); 
 				});
 
-				require([ "dojo/router", "dojo/dom", "adgsoftware/widget/house/House", "adgsoftware/store/HouseStore"], function(router, dom, House, HouseStore) {
+				require([ "dojo/router", "dojo/dom", "snaphome/widget/house/House", "snaphome/store/HouseStore"], function(router, dom, House, HouseStore) {
 					// Initialize house
 					var house = new House({store: new HouseStore()});
 					var container = dom.byId("house");

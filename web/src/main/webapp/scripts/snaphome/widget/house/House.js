@@ -5,13 +5,10 @@ define([
 	"dojo/dom-construct",
 	"dojo/json",
 	"dojo/store/Cache",
-	"adgsoftware/widget/label/Label",
+	"snaphome/widget/label/Label",
 	"dojo/store/Observable",
-	"adgsoftware/utils/Message"
+	"snaphome/utils/Message"
 ], function(declare, request, dom, domcConstruct,JSON, Cache, Label, Observable, msg) {
-
-
-
 	return declare(null, {
 		baseClass: "house",
 		store: null,
@@ -25,14 +22,15 @@ define([
 		draw: function(container) {
 			if (!container)
 				container = dom.byId("house");
-			results = this.store.query();
+			var results = this.store.query();
 			var labels = this.labels = new Array();
+			var store = this.store;
 			// results object provides a forEach method for iteration
-			results.forEach(function(house){
+			results.results.forEach(function(house){
 				dojo.forEach(house.labels, function(label) {
 					domcConstruct.create("li", {innerHTML: "<a href='#/house/labels/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
 					var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
-					var widget = new Label({label: label}, div);
+					var widget = new Label({label: label, house: store}, div);
 					labels.push(widget);
 				});
 			} /*insertRow*/);

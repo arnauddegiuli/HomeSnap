@@ -32,7 +32,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/request",
 	"dojo/json",
-	"adgsoftware/utils/Message"
+	"snaphome/utils/Message"
 ], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON, msg) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {
@@ -51,7 +51,7 @@ define([
 				request.put("/house/controllers/" + this.adress + "/" + status, {sync: true, handleAs: "json"})
 					.then(function(data){
 						if (data.status == status) { 
-							if ("on" == status) {
+							if ("LIGHT_ON" == status) {
 								component.set('label', 'ON');
 								component.button.set('iconClass', 'lightOnIcon');
 								component.slider.set('value', value);
@@ -81,10 +81,10 @@ define([
 						status ? value = 100 : value = 0;
 					}
 					if (status) {
-						component.switchOnOff("on", 100);
+						component.switchOnOff("LIGHT_ON", 100);
 						console.log('on');
 					} else {
-						component.switchOnOff("off", 0);
+						component.switchOnOff("LIGHT_OFF", 0);
 						console.log('off');
 					}
 				},

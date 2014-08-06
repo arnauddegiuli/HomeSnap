@@ -15,7 +15,7 @@ define(["dojo/_base/declare",
 	return declare(null, {
 		// summary:
 		//		This is a store for House data. It implements dojo/store/api/Store.
-		baseClass: "house",
+		baseClass: "houseStore",
 		houseStore: null,
 		labels: null,
 		group: null,

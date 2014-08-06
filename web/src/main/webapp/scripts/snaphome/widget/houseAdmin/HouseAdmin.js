@@ -5,7 +5,7 @@ define([
 	"dijit/Tree",
 	"dijit/tree/ObjectStoreModel",
 	"dijit/tree/dndSource",
-	"adgsoftware/utils/Message"
+	"snaphome/utils/Message"
 ], function(declare, aspect, Observable, Tree, ObjectStoreModel, dndSource, msg) {
 	
 	return declare([Tree], {
