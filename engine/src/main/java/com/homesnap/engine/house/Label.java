@@ -34,9 +34,12 @@ import java.util.ListIterator;
 import java.util.UUID;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.controller.Controller;
 
 /**
@@ -51,7 +54,13 @@ import com.homesnap.engine.controller.Controller;
 public class Label  
 implements Serializable, JsonSerializable, List<Controller> {
 
-	protected static final String JSON_ID = "id";
+	public static final String JSON_CONTROLLERS = "controllers";
+	public static final String JSON_ICON = "icon";
+	public static final String JSON_DESCRIPTION = "description";
+	public static final String JSON_TITLE = "title";
+	public static final String JSON_ID = "id";
+
+	private static final Log log = new Log();
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
@@ -294,65 +303,83 @@ implements Serializable, JsonSerializable, List<Controller> {
 	public JSONObject toJson() {
 		JSONObject label = new JSONObject();
 		label.put(JSON_ID, getId());
-		label.put("title", getTitle());
-		label.put("description", getDescription());
+		label.put(JSON_TITLE, getTitle());
+		label.put(JSON_DESCRIPTION, getDescription());
 		String icon = getIcon() != null ? getIcon().getClassName() : getIconPath();
-		label.put("icon", icon);
+		label.put(JSON_ICON, icon);
 		JSONArray controllers = new JSONArray();
 
 		for (Controller controller : getControllerList()) {
-			controllers.put(controller.getWhere());
+			controllers.put(controller.toJson());
 		}
+		label.put(JSON_CONTROLLERS, controllers); // TODO ici on doit passer par l'id et modifier le javascript
 		return label;
 	}
 
 	@Override
 	public void fromJson(JSONObject jsonObject) {
 		setId(jsonObject.getString(JSON_ID));
-		setTitle(jsonObject.getString("title"));
-		setDescription(jsonObject.getString("description"));
-		String icon = jsonObject.getString("icon");
 		try {
-			setIcon((Icon) Class.forName(icon).newInstance());
-		} catch (Exception e) {
-			setIconPath(icon);
+			setTitle(jsonObject.getString(JSON_TITLE));
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No title for label [" + id + "] in json string.");
 		}
-		JSONArray controllers = jsonObject.getJSONArray("controllers");
-		for (int i = 0; i < controllers.length(); i++) {
-			String where = controllers.getString(i);
-			boolean found = false;
-			for (Controller controller : getControllerList()) {
-				if(where.equals(controller.getWhere())) {
-					found = true;
-				}
+		try {
+			setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No description for label [" + id + "] in json string.");
+		}
+		try {
+			String icon = jsonObject.getString(JSON_ICON);
+			try {
+				setIcon((Icon) Class.forName(icon).newInstance());
+			} catch (Exception e) {
+				setIconPath(icon);
 			}
-			// If contoller not found update the label with the controller
-			if (!found) {
-				if (house != null) {
-					for (Group group : house.getGroups()) {
-						for (Controller controller : group.getControllerList()) {
-							if (where.equals(controller.getWhere())) {
-								add(controller);
-								break;
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No icon for label [" + id + "] in json string.");
+		}
+		try {
+			JSONArray controllers = jsonObject.getJSONArray(JSON_CONTROLLERS);
+			for (int i = 0; i < controllers.length(); i++) {
+				String where = controllers.getString(i);
+				boolean found = false;
+				for (Controller controller : getControllerList()) {
+					if(where.equals(controller.getWhere())) {
+						found = true;
+					}
+				}
+				// If controller not found update the label with the controller
+				if (!found) {
+					if (house != null) {
+						for (Group group : house.getGroups()) {
+							for (Controller controller : group.getControllerList()) {
+								if (where.equals(controller.getWhere())) {
+									add(controller);
+									break;
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-		// Remove controller from label
-		for (Controller controller : getControllerList()) {
-			boolean found = false;
-			for (int i = 0; i < controllers.length(); i++) {
-				String where = controllers.getString(i);
-				if(where.equals(controller.getWhere())) {
-					found = true;
+			
+			// Remove controller from label
+			for (Controller controller : getControllerList()) {
+				boolean found = false;
+				for (int i = 0; i < controllers.length(); i++) {
+					String where = controllers.getString(i);
+					if(where.equals(controller.getWhere())) {
+						found = true;
+					}
+				}
+	
+				if (!found) {
+					getControllerList().remove(controller);
 				}
 			}
-
-			if (!found) {
-				getControllerList().remove(controller);
-			}
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No controllers for label [" + id + "] in json string.");
 		}
 	}
 }

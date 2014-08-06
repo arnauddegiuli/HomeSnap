@@ -24,6 +24,8 @@
  */
 
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import com.homesnap.engine.controller.Controller;
@@ -40,7 +42,7 @@ public class JSonTools {
 		if (house == null) {
 			return JSONObject.NULL.toString();
 		} else {
-			return house.toJson().toString();
+			return String.valueOf(house.toJson());
 		}
 	}
 	
@@ -48,24 +50,46 @@ public class JSonTools {
 		if (group == null) {
 			return JSONObject.NULL.toString();
 		} else {
-			return group.toJson().toString();
+			return String.valueOf(group.toJson());
 		}
+	}
+
+	public final static String toJsonGroups(List<Group> groups) {
+		StringBuilder sb = new StringBuilder("[");
+		for (Group group : groups) {
+			sb.append(JSonTools.toJson(group));
+			sb.append(",");
+		}
+		sb.setLength(sb.length()-1);
+		sb.append("]");
+		return sb.toString();
 	}
 
 	public final static String toJson(Label label) {
 		if (label == null) {
 			return JSONObject.NULL.toString();
 		} else {
-			return label.toJson().toString();
+			return String.valueOf(label.toJson());
 		}
 
+	}
+
+	public final static String toJson(List<Label> labels) {
+		StringBuilder sb = new StringBuilder("[");
+		for (Label label : labels) {
+			sb.append(JSonTools.toJson(label));
+			sb.append(",");
+		}
+		sb.setLength(sb.length()-1);
+		sb.append("]");
+		return sb.toString();
 	}
 
 	public final static String toJson(Controller controller) {
 		if (controller == null) {
 			return JSONObject.NULL.toString();
 		} else {
-			return controller.toJson().toString();
+			return String.valueOf(controller.toJson());
 		}
 	}
 
@@ -87,5 +111,11 @@ public class JSonTools {
 
 	public final static String formatNull() {
 		return JSONObject.NULL.toString();
+	}
+
+	public final static JSONObject fromJson(String value)  {
+		if (formatNull().equals(value))
+			return null;
+		return new JSONObject(value);
 	}
 }

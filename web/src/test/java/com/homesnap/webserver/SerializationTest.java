@@ -1,3 +1,4 @@
+package com.homesnap.webserver;
 /*
  * #%L
  * MyDomoWebServer

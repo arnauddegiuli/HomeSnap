@@ -2,6 +2,7 @@ package com.homesnap.webserver.rest.listener;
 
 import java.util.Map;
 
+import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
@@ -30,6 +31,48 @@ public class MyDomoRestListenerAbstract {
 
 	public Map<String, String[]> getParameters() {
 		return parameters;
+	}
+
+	protected Controller getControllerByLabel(String labelId, String where) {
+		Label l = getLabel(labelId);
+		if (l != null) {
+			for (Controller controller : l.getControllerList()) {
+				if (controller.getWhere().getTo().equals(where)) {
+					return controller;
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected Controller getController(String where) {
+		for (Group g : getHouse().getGroups()) {
+			for (Controller controller : g.getControllerList()) {
+				if (controller.getWhere().getTo().equals(where)) {
+					return controller;
+				}
+			}
+		}
+		for (Label l : getHouse().getLabels()) {
+			for (Controller controller : l.getControllerList()) {
+				if (controller.getWhere().getTo().equals(where)) {
+					return controller;
+				}
+			}
+		}
+		return null;
+	}
+
+	protected Controller getControllerByGroup(String groupId, String where) {
+		Group g = getGroup(groupId);
+		if (g != null) {
+			for (Controller controller : g.getControllerList()) {
+				if (controller.getWhere().getTo().equals(where)) {
+					return controller;
+				}
+			}
+		}
+		return null;
 	}
 
 	protected Label getLabel(String labelId) {

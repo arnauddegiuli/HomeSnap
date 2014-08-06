@@ -1,3 +1,4 @@
+package com.homesnap.webserver;
 
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;

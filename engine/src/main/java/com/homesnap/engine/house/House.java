@@ -38,10 +38,10 @@ import com.homesnap.engine.JsonSerializable;
 
 public class House implements Serializable, JsonSerializable {
 
-	private static final String JSON_TITLE = "title";
-	private static final String JSON_ID = "id";
-	private static final String JSON_LABELS = "labels";
-	private static final String JSON_GROUPS = "groups";
+	public static final String JSON_TITLE = "title";
+	public static final String JSON_ID = "id";
+	public static final String JSON_LABELS = "labels";
+	public static final String JSON_GROUPS = "groups";
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
 	private List<Group> groups; // Physical model

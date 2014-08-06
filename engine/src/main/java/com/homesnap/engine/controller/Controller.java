@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.xml.bind.UnmarshalException;
-
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
@@ -65,6 +63,12 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	/** List of all states with their values which represents the current status of a device */
 	private Map<StateName, StateValue> stateList = new HashMap<StateName, StateValue>();
 
+	public static final String JSON_TITLE = "title";
+	public static final String JSON_STATES = "states";
+	public static final String JSON_WHERE = "where";
+	public static final String JSON_WHO = "who";
+	public static final String JSON_DESCRIPTION = "description";
+	
 	/**
 	 * Constructor.
 	 */
@@ -314,6 +318,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		final State newStatus = new State(state, value);
 		// what = newWhat; => it will be done with changeWhat by the monitor
 		// listener
+		
 		executeAction(newStatus, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
@@ -377,12 +382,11 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	@Override
 	public JSONObject toJson() {
 		JSONObject controllerJson = new JSONObject();
-		controllerJson.put("who", getWho())
-				 .put("title", getTitle())
-				 .put("description", getDescription());
+		controllerJson.put(JSON_WHO, getWho())
+				 .put(JSON_TITLE, getTitle())
+				 .put(JSON_DESCRIPTION, getDescription());
 		if (getWhere() != null) {
-			controllerJson.put("from", getWhere().getFrom())
-				 .put("to", getWhere().getTo());
+			controllerJson.put(JSON_WHERE, getWhere().getTo());
 		}
 		JSONObject states = new JSONObject();
 		if (! stateList.isEmpty()) {
@@ -391,35 +395,30 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				states.put(entry.getKey().getName(), sv == null ? null : sv.getValue());
 			}
 		}
-		controllerJson.put("states", states);
+		controllerJson.put(JSON_STATES, states);
 		return controllerJson;
 	}
 
 	@Override
-	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
-		setTitle(jsonObject.getString("title"));
-		setDescription(jsonObject.getString("description"));
+	public void fromJson(JSONObject jsonObject) {
+		setTitle(jsonObject.getString(JSON_TITLE));
+		setDescription(jsonObject.getString(JSON_DESCRIPTION));
 
-		String from = jsonObject.getString("from");
-		String to = jsonObject.getString("to");
-		if (!"null".equals(String.valueOf(from)) && !"null".equals(String.valueOf(to)) ) {
-			setWhere(new Where(from,to));
-		} else if (!"null".equals(String.valueOf(from))) {
-			setWhere(new Where(from, from));
-		} else if (!"null".equals(String.valueOf(to))) {
+		String to = jsonObject.getString(JSON_WHERE);
+		if (!"null".equals(String.valueOf(to))) {
 			setWhere(new Where(to, to));
 		}
 
-		JSONObject states = jsonObject.getJSONObject("states");
-		for (final String name: states.keySet()) {
-			String value = states.getString(name);
-			StateName sname = new StateName() {
-				
-				@Override
-				public String getName() {
-					return name;
-				}
-			};
+//		JSONObject states = jsonObject.getJSONObject(JSON_STATES);
+//		for (final String name: states.keySet()) {
+//			String value = states.getString(name);
+//			StateName sname = new StateName() {
+//				
+//				@Override
+//				public String getName() {
+//					return name;
+//				}
+//			};
 //			StateValue svalue; Les valeurs sont en lecture seul???
 //			try {
 //				svalue = stateTypes.get(sname).newInstance();
@@ -432,7 +431,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			
-		}
+//			
+//		}
 	}
 }

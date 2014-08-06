@@ -231,7 +231,9 @@ private void parseOneLine() throws UnsupportedRestOperation, RestOperationExcept
 								parameter() {return;}
 							|	<EOF> {onControllerByLabel(labelId.toString(), where.toString());}
 							)
-					|	"/" <CONTROLLER> "?id=" where=<VALUE> {onControllerByLabel(labelId.toString(), where.toString());}
+					|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onControllerByLabel(labelId.toString(), where.toString());}
+											| "/" where=<VALUE> {onControllerByLabel(labelId.toString(), where.toString());}
+										)
 					|	<EOF> {onLabel(labelId.toString());}
 					)
 			| <EOF> {onLabelList();}
@@ -243,7 +245,9 @@ private void parseOneLine() throws UnsupportedRestOperation, RestOperationExcept
 								parameter() {return;}
 							|	<EOF>{onControllerByGroup(groupId.toString(), where.toString());}
 							)
-					|	"/" <CONTROLLER> "?id=" where=<VALUE> {onControllerByGroup(groupId.toString(), where.toString());}
+					|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onControllerByGroup(groupId.toString(), where.toString());}
+											| "/" where=<VALUE> {onControllerByGroup(groupId.toString(), where.toString());}
+										)
 					|	<EOF> {onGroup(groupId.toString());}
 					)
 			|	<EOF> {onGroupList();}
@@ -253,7 +257,9 @@ private void parseOneLine() throws UnsupportedRestOperation, RestOperationExcept
 						parameter() {return;}
 					|	<EOF> {onController(where.toString());}
 					)
-			|	"/" <CONTROLLER> "?id=" where=<VALUE> {onController(where.toString()); /* TODO manage other parameter */}
+			|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onController(where.toString()); /* TODO manage other parameter */}
+									| "/" where=<VALUE> {onController(where.toString()); /* TODO manage other parameter */}
+								)
 			)
 		)
 		| <EOF> {onHouse();}

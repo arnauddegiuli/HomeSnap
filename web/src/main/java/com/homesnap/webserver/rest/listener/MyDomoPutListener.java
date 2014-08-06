@@ -2,33 +2,37 @@ package com.homesnap.webserver.rest.listener;
 
 import java.util.Map;
 
+import org.json.JSONObject;
+
+import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
+import com.homesnap.engine.house.Label;
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
 import com.homesnap.webserver.rest.Verb;
+import com.homesnap.webserver.utils.JSonTools;
 
 
-
+// Modification
 public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyDomoRestAPI {
 
 //	private ControllerService service = new OpenWebNetControllerService("localhost", 1234, 12345);
 //	private Map<String, Light> lightList = new Hashtable<String, Light>();
 
+	public static final String JSON_PARAM = "json";
 	private String body;
-	
+
 	public MyDomoPutListener(House house, String uri, Map<String, String[]> parameters, String body) {
 		super(house, uri, parameters);
 		this.body = body;
 	}
 
 	@Override
-	public void onHouse() {
-		// TODO mettre à jour
-//		House newHouse = JSonTools.fromJson(body);
-//		getHouse().setGroups(newHouse.getGroups());
-//		getHouse().setLabels(newHouse.getLabels());
+	public void onHouse() throws UnsupportedRestOperation {
+		throw new UnsupportedRestOperation(getUri(), Verb.PUT);
 	}
 
 	@Override
@@ -37,13 +41,28 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	}
 
 	@Override
-	public void onLabel(String labelId) {
-		// TODO update label
+	public void onLabel(String labelId) throws RestOperationException {
+		Label l = getLabel(labelId);
+		String labels[]= getParameters().get(JSON_PARAM);
+		if (l != null && labels != null) {
+			for (int i = 0; i < labels.length; i++) {
+				String json = labels[i];
+				try {
+					JSONObject j = JSonTools.fromJson(json);
+					l.fromJson(j);
+				} catch (Error e) {
+					throw new RestOperationException(getUri(), Verb.PUT, "Label JSON representation is wrong ["+json+"].");
+				}
+			}
+		} else {
+			throw new RestOperationException(getUri(), Verb.PUT, "Label [id:"+labelId+"] not found.");
+		}
 	}
 
 	@Override
-	public void onControllerByLabel(String labelId, String where) {
-		// TODO update controller
+	public void onControllerByLabel(String labelId, String where) throws RestOperationException {
+		Controller c = getControllerByLabel(labelId, where);
+		updateController(c, "Controller [id:"+where+"] not found in label [" + labelId + "].");
 	}
 
 	@Override
@@ -52,82 +71,37 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	}
 
 	@Override
-	public void onGroup(String groupId) {
-		// TODO update group
+	public void onGroup(String groupId) throws RestOperationException {
+		Group g = getGroup(groupId);
+		String groups[]= getParameters().get(JSON_PARAM);
+		if (g != null && groups != null) {
+			for (int i = 0; i < groups.length; i++) {
+				String json = groups[i];
+				try {
+					JSONObject j = JSonTools.fromJson(json);
+					g.fromJson(j);
+				} catch (Error e) {
+					throw new RestOperationException(getUri(), Verb.PUT, "Group JSON representation is wrong ["+json+"].");
+				}	
+			}
+		} else {
+			throw new RestOperationException(getUri(), Verb.PUT, "Label [id:"+groupId+"] not found.");
+		}
 	}
 
 	@Override
-	public void onControllerByGroup(String groupId, String where) {
-		// TODO update controller
+	public void onControllerByGroup(String groupId, String where) throws RestOperationException {
 		System.out.println("UPDATE group=[" + groupId + "] with where=[" + where + "]");
 		System.out.println("Body=[" + body + "]");
-		
-//		Controller<?> c = JSonTools.ControllerFromJson(service, body);
-//		getGroup(groupId).add(c);
+		Controller c = getControllerByGroup(groupId, where);
+		updateController(c, "Controller [id:"+where+"] not found in group [" + groupId + "].");
 	}
 
 	@Override
-	public void onController(String where) throws UnsupportedRestOperation {
-		// TODO update controller
-//		public Light putLight(String adress, String title) {
-//			Light result = getLight(adress);
-//			
-//			if (result == null) { // creation
-//				result = service.createController(Light.class, adress);
-//			} 
-//			result.setTitle(title);
-//			return result;
-//		}
+	public void onController(String where) throws RestOperationException {
+		Controller c = getController(where);
+		updateController(c, "Controller [id:"+where+"] not found.");
 	}
-	
-//	@Override
-//	public void onLightStatus(String where, LightStatusValue status) throws RestOperationException {
-//		
-//		Light l = getLight(where);
-//		synchronized (this) {
-//			if (LightStatusValue.LIGHT_ON.equals(status)) {
-//				l.setStatus(LightStatusValue.LIGHT_ON);
-//			} else if (LightStatusValue.LIGHT_OFF.equals(status)) {
-//				l.setStatus(LightStatusValue.LIGHT_OFF);
-//			}
-//			
-//			try {
-//				this.wait(200);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			setResult(l.toJson().toString());
-//		}
-//	}
-
-//	private Light getLight(String adress) {
-//		Light result = lightList.get(adress);
-//		if(result == null) {
-//			result = service.createController(Light.class, adress);
-//			result.addControllerChangeListener(new ControllerChangeListener() {
-//				
-//				@Override
-//				public void onStateChangeError(Controller controller,
-//						State oldStatus, State newStatus, CommandResult result) {
-//					synchronized (this) {
-//						this.notify();
-//					}
-//				}
-//				
-//				@Override
-//				public void onStateChange(Controller controller,
-//						State oldStatus, State newStatus) {
-//					synchronized (this) {
-//						this.notify();
-//					}
-//				}
-//			});
-//			
-//			lightList.put(adress, result);
-//		}
-//		return result;
-//	}
 
 	@Override
 	public void onStatus(String name, String[] value)
@@ -141,4 +115,20 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 		// TODO gérer le status de tous ce qui a été sélectionné
 	}
 
+	private void updateController(Controller c, String errorMessage) throws RestOperationException {
+		String controllers[]= getParameters().get(JSON_PARAM);
+		if (c != null && controllers != null) {
+			for (int i = 0; i < controllers.length; i++) {
+				String json = controllers[i];
+				try {
+					JSONObject j = JSonTools.fromJson(json);
+					c.fromJson(j);
+				} catch (Error e) {
+					throw new RestOperationException(getUri(), Verb.PUT, "Controller JSON representation is wrong ["+json+"].");
+				}	
+			}
+		} else {
+			throw new RestOperationException(getUri(), Verb.PUT, errorMessage);
+		}
+	}
 }

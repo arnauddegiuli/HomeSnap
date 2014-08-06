@@ -119,7 +119,7 @@ public class HouseServlet extends HttpServlet {
 	}
 	
 	protected String getUri(HttpServletRequest req) {
-		return req.getPathInfo() == null ? "/house" : "/house" + req.getPathInfo();
+		return req.getQueryString() == null ? req.getRequestURI() : req.getRequestURI() +"?" + req.getQueryString(); // getQueryString()getPathInfo() == null ? "/house" : "/house" + req.getPathInfo();
 	}
 
 	private void manageStatus(MyDomoRestAPI listener, Map<String, String[]> parameters) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {

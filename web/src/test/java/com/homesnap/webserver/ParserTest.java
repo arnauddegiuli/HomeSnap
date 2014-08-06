@@ -1,3 +1,4 @@
+package com.homesnap.webserver;
 
 
 /*
@@ -108,10 +109,10 @@ public class ParserTest {
 	@Test
 	public void label() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //	/house/labels/labelId || /house/labels/label?id=id								GET/PUT/POST/DELETE
-		String uri = "/house/labels/10";
+		String uri = "/house/labels/ch1";
 		UriParser.parse(uri, listener);
 		
-		uri = "/house/labels/label?id=10";
+		uri = "/house/labels/label?id=ch1";
 		UriParser.parse(uri, listener);
 	}
 	
@@ -119,11 +120,13 @@ public class ParserTest {
 	public void controllerFromLabel() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //	/house/labels/labelId/where || /house/labels/labelId/controller?id=id			GET/PUT/POST/DELETE
 		
-		
-		String uri = "/house/labels/10/controller?id=12";
+		String uri = "/house/labels/ch1/controller/61";
 		UriParser.parse(uri, listener);
-		
-		uri = "/house/labels/10/12";
+
+		uri = "/house/labels/ch1/controller?id=61";
+		UriParser.parse(uri, listener);
+
+		uri = "/house/labels/ch1/61";
 		UriParser.parse(uri, listener);
 	}
 	
@@ -148,10 +151,13 @@ public class ParserTest {
 	public void controllerFromGroup() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house/groups/groupId/where || /house/groups/groupId/controller?id=id			GET
 		
-		String uri = "/house/groups/10/controller?id=12";
+		String uri = "/house/groups/10/controller/12";
 		UriParser.parse(uri, listener);
 		
-		uri = "/house/groups/10/12?param=parm2";
+		uri = "/house/groups/10/controller?id=12";
+		UriParser.parse(uri, listener);
+		
+		uri = "/house/groups/10/12";
 		UriParser.parse(uri, listener);
 	}
 	
@@ -162,6 +168,9 @@ public class ParserTest {
 		UriParser.parse(uri, listener);
 		
 		uri = "/house/controllers/controller?id=12";
+		UriParser.parse(uri, listener);
+		
+		uri = "/house/controllers/controller/12";
 		UriParser.parse(uri, listener);
 	}
 

@@ -33,12 +33,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
-import javax.xml.bind.UnmarshalException;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.controller.Controller;
 
 /**
@@ -48,7 +49,12 @@ import com.homesnap.engine.controller.Controller;
 public class Group
 implements Serializable, JsonSerializable {
 
-	protected static final String JSON_ID = "id";
+	public static final String JSON_CONTROLLERS = "controllers";
+	public static final String JSON_DESCRIPTION = "description";
+	public static final String JSON_TITLE = "title";
+	public static final String JSON_ID = "id";
+
+	private static final Log log = new Log();
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
@@ -215,14 +221,14 @@ implements Serializable, JsonSerializable {
 	public JSONObject toJson() {
 		JSONObject group = new JSONObject();
 		group.put(JSON_ID, getId())
-			.put("title", getTitle())
-			.put("description", getDescription());
+			.put(JSON_TITLE, getTitle())
+			.put(JSON_DESCRIPTION, getDescription());
 
 		JSONArray controllers = new JSONArray();
 		for (Controller controller : getControllerList()) {
 			controllers.put(controller.toJson());
 		}
-		group.put("controllers", controllers);
+		group.put(JSON_CONTROLLERS, controllers);
 		return group;
 	}
 
@@ -233,18 +239,31 @@ implements Serializable, JsonSerializable {
 	 * @return 
 	 */
 	@Override
-	public void fromJson(JSONObject jsonObject) throws UnmarshalException {
-		setTitle(jsonObject.getString("title"));
-		setDescription(jsonObject.getString("description"));
-		JSONArray controllers = jsonObject.getJSONArray("controllers");
-		for (int i = 0; i < controllers.length(); i++) {
-			JSONObject c = controllers.getJSONObject(i);
-			String whereString = c.getString("where");
-			for (Controller controller : getControllerList()) {
-				if (whereString.equals(controller.getWhere())) {
-					controller.fromJson(c);
+	public void fromJson(JSONObject jsonObject) {
+		try {
+			setTitle(jsonObject.getString(JSON_TITLE));
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No title for group [" + id + "] in json string.");
+		}
+		try {
+			setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No description for group [" + id + "] in json string.");
+		}
+		try {
+			JSONArray controllers = jsonObject.getJSONArray(JSON_CONTROLLERS);
+			for (int i = 0; i < controllers.length(); i++) {
+				JSONObject c = controllers.getJSONObject(i);
+				String whereString = c.getString("where");
+				for (Controller controller : getControllerList()) {
+					if (whereString.equals(controller.getWhere())) {
+						controller.fromJson(c);
+					}
 				}
 			}
+		} catch (JSONException e) {
+			log.finest(Session.Server, "No controllers for group [" + id + "] in json string.");
 		}
+		// TODO In group it is not possible to remove??? => ben si...
 	}
 }
