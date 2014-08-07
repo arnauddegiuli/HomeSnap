@@ -1,4 +1,4 @@
-MyDomo
+SnapHome
 ======
 
 Legrand/BTicino SCS BUS My Home Android management solution 
