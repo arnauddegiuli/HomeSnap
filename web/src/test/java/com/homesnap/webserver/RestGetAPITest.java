@@ -101,14 +101,60 @@ public class RestGetAPITest extends AbstractRestApi {
 
 	@Test
 	public void onController() {
-		// TODO Auto-generated method stub
-		
+		JSONObject jo = requestJSONObject("/house/controllers/12");
+		testController12(jo);
+
+		jo = requestJSONObject("/house/controllers/controller?id=12");
+		testController12(jo);
+
+		jo = requestJSONObject("/house/controllers/controller/12");
+		testController12(jo);
 	}
 
 	@Test
 	public void onStatus() {
-		// TODO Auto-generated method stub
 		
+		// Test to get a specific label
+		JSONObject label = requestJSONObject("/house/labels/ch1?param=param");
+		// Test label Ch1
+		testLabelCh1(label);
+
+		label = requestJSONObject("/house/labels/label?id=ch1&param=param");
+		// Test label Ch1
+		testLabelCh1(label);
+		
+		// Test to get a specific group
+		JSONObject group = requestJSONObject("/house/groups/1?param=param");
+		// Test group 1
+		testGroup1(group);
+
+		group = requestJSONObject("/house/groups/group?id=1&param=param");
+		// Test group 1
+		testGroup1(group);
+		
+		JSONObject jo = requestJSONObject("/house/groups/1/controller?id=11&param=param");
+		testController11(jo);
+
+		jo = requestJSONObject("/house/groups/1/controller/11?param=param");
+		testController11(jo);
+		
+		// Test to get a controller of type light!
+		jo = requestJSONObject("/house/labels/ch1/controller?id=61&param=param");
+		testController61(jo);
+		
+		jo = requestJSONObject("/house/labels/ch1/controller/61?param=param");
+		testController61(jo);
+		
+		jo = requestJSONObject("/house/controllers/12?param=param");
+		testController12(jo);
+		
+		jo = requestJSONObject("/house/controllers/controller?id=12&param=param");
+		testController12(jo);
+
+		jo = requestJSONObject("/house/controllers/controller/12?param=param");
+		testController12(jo);
+		
+
 	}
 
 	private void testController11(JSONObject jo) {

@@ -225,40 +225,54 @@ private void parseOneLine() throws UnsupportedRestOperation, RestOperationExcept
 
 	"/" <HOUSE> (
 		( "/" <LABELS> (
-				"/" <LABEL> "?id=" labelId=<VALUE> {onLabel(labelId.toString());}
+				"/" <LABEL> "?id=" labelId=<VALUE>
+							(	parameter2() {onLabel(labelId.toString());}
+								| <EOF> {onLabel(labelId.toString());}
+							)
 			|	"/" labelId=<VALUE> ( 
 						"/" where=<VALUE> (
-								parameter() {return;}
+								parameter() {onControllerByLabel(labelId.toString(), where.toString());}
 							|	<EOF> {onControllerByLabel(labelId.toString(), where.toString());}
 							)
 					|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onControllerByLabel(labelId.toString(), where.toString());}
 											| "/" where=<VALUE> {onControllerByLabel(labelId.toString(), where.toString());}
 										)
+					| parameter() {onLabel(labelId.toString());}
 					|	<EOF> {onLabel(labelId.toString());}
 					)
 			| <EOF> {onLabelList();}
 			)
 		| "/" <GROUPS> (
-				"/" <GROUP> "?id=" groupId=<VALUE> {onGroup(groupId.toString());}
+				"/" <GROUP> "?id=" groupId=<VALUE> (
+								parameter2() {onGroup(groupId.toString());}
+								| <EOF> {onGroup(groupId.toString());}
+							)
 			|	"/" groupId=<VALUE> ( 
 						"/" where=<VALUE> (
-								parameter() {return;}
+								parameter() {onControllerByGroup(groupId.toString(), where.toString());}
 							|	<EOF>{onControllerByGroup(groupId.toString(), where.toString());}
 							)
 					|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onControllerByGroup(groupId.toString(), where.toString());}
 											| "/" where=<VALUE> {onControllerByGroup(groupId.toString(), where.toString());}
 										)
+					| parameter() {onGroup(groupId.toString());}
 					|	<EOF> {onGroup(groupId.toString());}
 					)
 			|	<EOF> {onGroupList();}
 			)
 		| "/" <CONTROLLERS> (
 				"/" where=<VALUE> ( 
-						parameter() {return;}
+						parameter() {onController(where.toString());}
 					|	<EOF> {onController(where.toString());}
 					)
-			|	"/" <CONTROLLER> ( "?id=" where=<VALUE> {onController(where.toString()); /* TODO manage other parameter */}
-									| "/" where=<VALUE> {onController(where.toString()); /* TODO manage other parameter */}
+			|	"/" <CONTROLLER> ( "?id=" where=<VALUE> (
+											parameter2() {onController(where.toString());}
+											| <EOF>	{onController(where.toString());}
+										)
+									| "/" where=<VALUE> (
+											parameter() {onController(where.toString());}
+											| <EOF> {onController(where.toString());}
+									)
 								)
 			)
 		)
@@ -272,6 +286,18 @@ void parameter() throws UnsupportedRestOperation, RestOperationException, Missin
 }
 {
 	"?" (
+			<VALUE> "=" <VALUE> (
+				  "&" {/* Parameters manage by servlet */}
+				| <EOF> {/* Parameters manage by servlet */}
+			)
+		)*
+}
+
+void parameter2() throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation:
+{
+}
+{
+	"&" (
 			<VALUE> "=" <VALUE> (
 				  "&" {/* Parameters manage by servlet */}
 				| <EOF> {/* Parameters manage by servlet */}
