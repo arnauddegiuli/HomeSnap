@@ -1,4 +1,4 @@
-SnapHome
+HomeSnap
 ======
 
 Legrand/BTicino SCS BUS My Home Android management solution 
