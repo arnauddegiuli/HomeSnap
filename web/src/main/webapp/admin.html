@@ -32,7 +32,7 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
-	<link rel="stylesheet" href="scripts/snaphome/widget/openWebNetConsole/css/openWebNetConsole.css" media="screen" />
+	<link rel="stylesheet" href="scripts/homesnap/widget/openWebNetConsole/css/openWebNetConsole.css" media="screen" />
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css" media="screen" />
 
 	<!-- load Dojo -->
@@ -41,8 +41,8 @@
 			baseUrl : "scripts/",
 			tlmSiblingOfDojo : false,
 			packages : [ {
-				name : "snaphome",
-				location : "snaphome"
+				name : "homesnap",
+				location : "homesnap"
 			} ]
 		};
 	</script>
@@ -119,11 +119,11 @@
 				<article class="stats_graph">
 					<img src="http://chart.apis.google.com/chart?chxr=0,0,3000&chxt=y&chs=520x140&cht=lc&chco=76A4FB,80C65A&chd=s:Tdjpsvyvttmiihgmnrst,OTbdcfhhggcTUTTUadfk&chls=2|2&chma=40,20,20,30" width="520" height="140" alt="" />
 						<script>
-							require(["dojo/_base/window", "snaphome/widget/openWebNetConsole/OpenWebNetConsole",
-									"snaphome/widget/houseAdmin/HouseAdmin", "snaphome/widget/houseAdmin/DeviceList", 
-									"snaphome/widget/label/LabelDialog",
+							require(["dojo/_base/window", "homesnap/widget/openWebNetConsole/OpenWebNetConsole",
+									"homesnap/widget/houseAdmin/HouseAdmin", "homesnap/widget/houseAdmin/DeviceList", 
+									"homesnap/widget/label/LabelDialog",
 									"dojo/router", 
-									"dojo/when", "snaphome/store/HouseStore", "snaphome/utils/Message", "dojo/store/Observable", "dojo/domReady!"], 
+									"dojo/when", "homesnap/store/HouseStore", "homesnap/utils/Message", "dojo/store/Observable", "dojo/domReady!"], 
 									function(win, Console, HouseAdmin, DeviceList, Dialog, router, when, HouseStore, msg, Observable) {
 								new Console({}, "OpenWebNetConsole");
 

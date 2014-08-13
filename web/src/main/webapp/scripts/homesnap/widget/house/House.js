@@ -5,9 +5,9 @@ define([
 	"dojo/dom-construct",
 	"dojo/json",
 	"dojo/store/Cache",
-	"snaphome/widget/label/Label",
+	"homesnap/widget/label/Label",
 	"dojo/store/Observable",
-	"snaphome/utils/Message"
+	"homesnap/utils/Message"
 ], function(declare, request, dom, domcConstruct,JSON, Cache, Label, Observable, msg) {
 	return declare(null, {
 		baseClass: "house",

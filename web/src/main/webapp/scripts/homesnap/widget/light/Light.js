@@ -32,7 +32,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/request",
 	"dojo/json",
-	"snaphome/utils/Message"
+	"homesnap/utils/Message"
 ], function(declare, ToggleButton, HorizontalSlider, _WidgetBase, _TemplatedMixin, template, domStyle, baseFx, lang, request, JSON, msg) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {

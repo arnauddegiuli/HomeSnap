@@ -29,8 +29,8 @@ define([
 	"dojo/json",
 	"dojo/dom",
 	"dojo/dom-construct",
-	"snaphome/utils/OpenWebNetMessage",
-	"snaphome/utils/Message"
+	"homesnap/utils/OpenWebNetMessage",
+	"homesnap/utils/Message"
 ], function(declare, _WidgetBase, _TemplatedMixin, template, request, JSON, dom, domConstruct, openWebNetMsg, msg) {
 	
 	return declare([_WidgetBase, _TemplatedMixin], {

@@ -10,8 +10,8 @@ define([
 	"dojo/_base/lang",
 	"dojo/request",
 	"dojo/json",
-	"snaphome/widget/light/Light",
-	"snaphome/utils/Message"
+	"homesnap/widget/light/Light",
+	"homesnap/utils/Message"
 ], function(declare, _WidgetBase, _TemplatedMixin, template, dom, domConstruct, domStyle, baseFx, lang, request, JSON, Light, msg) {
 	return declare([_WidgetBase, _TemplatedMixin], {
 		base: "label",

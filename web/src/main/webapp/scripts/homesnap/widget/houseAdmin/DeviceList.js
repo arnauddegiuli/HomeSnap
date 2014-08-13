@@ -5,8 +5,8 @@ define([
 	"dijit/Tree",
 	"dijit/tree/ObjectStoreModel",
 	"dijit/tree/dndSource",
-	"snaphome/store/HouseStore",
-	"snaphome/utils/Message"
+	"homesnap/store/HouseStore",
+	"homesnap/utils/Message"
 ], function(declare, aspect, Observable, Tree, ObjectStoreModel, dndSource, HouseStore, msg) {
 
 	return declare([Tree], {
