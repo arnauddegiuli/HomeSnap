@@ -38,6 +38,11 @@ import com.homesnap.webserver.rest.UnsupportedRestOperation;
 
 public class JSonTools {
 
+	public final static String ERROR = "error";
+	public final static String ERROR_CLASSNAME = "className";
+	public final static String ERROR_MESSAGE = "message";
+	
+	
 	public final static String toJson(House house) {
 		if (house == null) {
 			return JSONObject.NULL.toString();
@@ -106,7 +111,7 @@ public class JSonTools {
 	}
 
 	private final static String formatException(Exception e) {
-		return "[{error:'" + JSONObject.quote(e.getClass().getSimpleName()) + "', message:'" + JSONObject.quote(e.getMessage())+ "'}]";
+		return "{" + ERROR + ": [{" + ERROR_CLASSNAME + ":'" + JSONObject.quote(e.getClass().getSimpleName()) + "', " + ERROR_MESSAGE + " :'" + JSONObject.quote(e.getMessage())+ "'}]}";
 	}
 
 	public final static String formatNull() {

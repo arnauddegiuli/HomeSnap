@@ -22,12 +22,11 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 //	private ControllerService service = new OpenWebNetControllerService("localhost", 1234, 12345);
 //	private Map<String, Light> lightList = new Hashtable<String, Light>();
 
-	public static final String JSON_PARAM = "json";
-	private String body;
+	private String json;
 
 	public MyDomoPutListener(House house, String uri, Map<String, String[]> parameters, String body) {
 		super(house, uri, parameters);
-		this.body = body;
+		this.json = body;
 	}
 
 	@Override
@@ -43,16 +42,12 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onLabel(String labelId) throws RestOperationException {
 		Label l = getLabel(labelId);
-		String labels[]= getParameters().get(JSON_PARAM);
-		if (l != null && labels != null) {
-			for (int i = 0; i < labels.length; i++) {
-				String json = labels[i];
-				try {
-					JSONObject j = JSonTools.fromJson(json);
-					l.fromJson(j);
-				} catch (Error e) {
-					throw new RestOperationException(getUri(), Verb.PUT, "Label JSON representation is wrong ["+json+"].");
-				}
+		if (l != null) {
+			try {
+				JSONObject j = JSonTools.fromJson(json);
+				l.fromJson(j);
+			} catch (Error e) {
+				throw new RestOperationException(getUri(), Verb.PUT, "Label JSON representation is wrong ["+json+"].");
 			}
 		} else {
 			throw new RestOperationException(getUri(), Verb.PUT, "Label [id:"+labelId+"] not found.");
@@ -73,17 +68,13 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onGroup(String groupId) throws RestOperationException {
 		Group g = getGroup(groupId);
-		String groups[]= getParameters().get(JSON_PARAM);
-		if (g != null && groups != null) {
-			for (int i = 0; i < groups.length; i++) {
-				String json = groups[i];
-				try {
-					JSONObject j = JSonTools.fromJson(json);
-					g.fromJson(j);
-				} catch (Error e) {
-					throw new RestOperationException(getUri(), Verb.PUT, "Group JSON representation is wrong ["+json+"].");
-				}	
-			}
+		if (g != null) {
+			try {
+				JSONObject j = JSonTools.fromJson(json);
+				g.fromJson(j);
+			} catch (Error e) {
+				throw new RestOperationException(getUri(), Verb.PUT, "Group JSON representation is wrong ["+json+"].");
+			}	
 		} else {
 			throw new RestOperationException(getUri(), Verb.PUT, "Label [id:"+groupId+"] not found.");
 		}
@@ -91,8 +82,6 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 
 	@Override
 	public void onControllerByGroup(String groupId, String where) throws RestOperationException {
-		System.out.println("UPDATE group=[" + groupId + "] with where=[" + where + "]");
-		System.out.println("Body=[" + body + "]");
 		Controller c = getControllerByGroup(groupId, where);
 		updateController(c, "Controller [id:"+where+"] not found in group [" + groupId + "].");
 	}
@@ -116,17 +105,13 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	}
 
 	private void updateController(Controller c, String errorMessage) throws RestOperationException {
-		String controllers[]= getParameters().get(JSON_PARAM);
-		if (c != null && controllers != null) {
-			for (int i = 0; i < controllers.length; i++) {
-				String json = controllers[i];
-				try {
-					JSONObject j = JSonTools.fromJson(json);
-					c.fromJson(j);
-				} catch (Error e) {
-					throw new RestOperationException(getUri(), Verb.PUT, "Controller JSON representation is wrong ["+json+"].");
-				}	
-			}
+		if (c != null) {
+			try {
+				JSONObject j = JSonTools.fromJson(json);
+				c.fromJson(j);
+			} catch (Error e) {
+				throw new RestOperationException(getUri(), Verb.PUT, "Controller JSON representation is wrong ["+json+"].");
+			}	
 		} else {
 			throw new RestOperationException(getUri(), Verb.PUT, errorMessage);
 		}

@@ -11,6 +11,7 @@ import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
 import com.homesnap.webserver.rest.Verb;
+import com.homesnap.webserver.utils.JSonTools;
 
 
 public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements MyDomoRestAPI {
@@ -36,6 +37,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 		Label l = getLabel(labelId);
 		if (l != null) {
 			getHouse().getLabels().remove(l);
+			setResult(JSonTools.toJson(l));
 		} else {
 			throw new RestOperationException(getUri(), Verb.DELETE, "Label [id:"+labelId+"] not found.");
 		}

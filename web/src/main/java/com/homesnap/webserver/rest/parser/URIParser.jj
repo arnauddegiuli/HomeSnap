@@ -6,7 +6,6 @@ options
 PARSER_BEGIN(UriParser)
 package com.homesnap.webserver.rest.parser;
 
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
@@ -276,6 +275,7 @@ private void parseOneLine() throws UnsupportedRestOperation, RestOperationExcept
 								)
 			)
 		)
+		| parameter() {onHouse();}
 		| <EOF> {onHouse();}
 	)
 	| <EOF> {return;}

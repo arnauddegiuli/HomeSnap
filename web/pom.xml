@@ -119,14 +119,15 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-		    <groupId>com.homesnap.engine</groupId>
-		    <artifactId>engine</artifactId>
-		    <version>0.0.1-SNAPSHOT</version>
+			<groupId>com.homesnap.engine</groupId>
+			<artifactId>engine</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.httpunit</groupId>
-			<artifactId>httpunit</artifactId>
-			<version>1.7.2</version>
-		</dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.8</version>
+			<scope>test</scope>
+	</dependency>
 	</dependencies>
 </project>

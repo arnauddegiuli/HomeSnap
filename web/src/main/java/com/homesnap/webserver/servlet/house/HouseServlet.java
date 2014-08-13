@@ -39,11 +39,12 @@ import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
+import com.homesnap.webserver.rest.listener.MyDomoDeleteListener;
 import com.homesnap.webserver.rest.listener.MyDomoGetListener;
+import com.homesnap.webserver.rest.listener.MyDomoPostListener;
 import com.homesnap.webserver.rest.listener.MyDomoPutListener;
 import com.homesnap.webserver.rest.parser.ParseException;
 import com.homesnap.webserver.rest.parser.UriParser;
-import com.homesnap.webserver.utils.JSonTools;
 
 
 public class HouseServlet extends HttpServlet {
@@ -54,13 +55,83 @@ public class HouseServlet extends HttpServlet {
 		System.err.println("Initializing the HouseServlet");
 	}
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.err.println("DO GET HOUSE!");
-
+		String uri = getUri(req);
+		System.err.println("DELETE :[" + uri + "]");
 		try {
 			House house = service.readHouse();
-			String uri = getUri(req);
+			MyDomoDeleteListener listener = new MyDomoDeleteListener(house, uri, req.getParameterMap());
+			UriParser.parse(uri, listener);
+			manageStatus(listener, req.getParameterMap());
+			service.saveHouse(house);
+			if (listener.getResult() == null) {
+				resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				resp.setStatus(HttpServletResponse.SC_OK);
+			}
+			resp.getWriter().write(listener.getResult());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		} catch (UnsupportedRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+		} catch (RestOperationException e) {
+			resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		} catch (MissingParameterRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_EXPECTATION_FAILED);
+		} catch (Error e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			System.out.print("Error on that URI: [" + uri + "]");
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		String uri = getUri(req);
+		System.err.println("POST :[" + uri + "]");
+		try {
+			House house = service.readHouse();
+			BufferedReader b = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			StringBuilder sb = new StringBuilder("");
+			String str = b.readLine();
+			while (str != null) {
+				sb.append(str);
+				str = b.readLine();
+			}
+			MyDomoPostListener listener = new MyDomoPostListener(house, uri, req.getParameterMap(), sb.toString());
+			resp.setContentType("application/json");
+			UriParser.parse(uri, listener);
+			manageStatus(listener, req.getParameterMap());
+			service.saveHouse(house);
+			resp.setHeader("Location", uri);
+			resp.setStatus(HttpServletResponse.SC_CREATED);
+			resp.getWriter().write(listener.getResult());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		} catch (UnsupportedRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+		} catch (RestOperationException e) {
+			resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		} catch (MissingParameterRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_EXPECTATION_FAILED);
+		} catch (Error e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			System.out.print("Error on that URI: [" + uri + "]");
+			e.printStackTrace();
+		}
+	}
+
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		String uri = getUri(req);
+		System.err.println("GET :[" + uri + "]");
+		try {
+			House house = service.readHouse();
 			MyDomoGetListener listener = new MyDomoGetListener(house, uri, req.getParameterMap());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
@@ -68,28 +139,26 @@ public class HouseServlet extends HttpServlet {
 			resp.getWriter().write(listener.getResult());
 		} catch (ParseException e) {
 			e.printStackTrace();
-			resp.getWriter().write(MyDomoGetListener.REST_API);
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		} catch (UnsupportedRestOperation e) {
-			resp.getWriter().write(JSonTools.toJson(e));
+			resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
 		} catch (RestOperationException e) {
-			resp.getWriter().write(JSonTools.toJson(e));
+			resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
 		} catch (MissingParameterRestOperation e) {
-			resp.getWriter().write(JSonTools.toJson(e));
+			resp.sendError(HttpServletResponse.SC_EXPECTATION_FAILED);
 		} catch (Error e) {
-			System.out.print("Error on that URI: [" + getUri(req) + "]");
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			System.out.print("Error on that URI: [" + uri + "]");
 			e.printStackTrace();
-			resp.getWriter().write(MyDomoGetListener.REST_API);
 		}
 	}
 
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.err.println("DO PUT HOUSE!");
-
+		String uri = getUri(req);
+		System.err.println("PUT :[" + uri + "]");
 		try {
 			House house = service.readHouse();
-			String uri = getUri(req);
-			
 			BufferedReader b = new BufferedReader(new InputStreamReader(req.getInputStream()));
 			StringBuilder sb = new StringBuilder("");
 			String str = b.readLine();
@@ -104,17 +173,18 @@ public class HouseServlet extends HttpServlet {
 			service.saveHouse(house);
 			resp.getWriter().write(listener.getResult());
 		} catch (ParseException e) {
-			resp.getWriter().write(MyDomoGetListener.REST_API);
-		} catch (UnsupportedRestOperation e) {
-			resp.getWriter().write(JSonTools.toJson(e));
-		} catch (RestOperationException e) {
-			resp.getWriter().write(JSonTools.toJson(e));
-		} catch (MissingParameterRestOperation e) {
-			resp.getWriter().write(JSonTools.toJson(e));
-		} catch (Error e) {
-			System.out.print("Error on that URI: [" + getUri(req) + "]");
 			e.printStackTrace();
-			resp.getWriter().write(MyDomoGetListener.REST_API);
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		} catch (UnsupportedRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+		} catch (RestOperationException e) {
+			resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		} catch (MissingParameterRestOperation e) {
+			resp.sendError(HttpServletResponse.SC_EXPECTATION_FAILED);
+		} catch (Error e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			System.out.print("Error on that URI: [" + uri + "]");
+			e.printStackTrace();
 		}
 	}
 	

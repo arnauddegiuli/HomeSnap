@@ -25,11 +25,9 @@ package com.homesnap.webserver;
  */
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
-import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
 import com.homesnap.webserver.rest.parser.ParseException;
@@ -37,7 +35,6 @@ import com.homesnap.webserver.rest.parser.UriParser;
 
 
 public class ParserTest {
-	private static MyDomoRestAPI listener = new ListenerExampleParser();
 	/*
 	CONTROLLER
 	[/house/labels/labelId/where || /house/groups/groupId/where || /controllers/where]
@@ -91,87 +88,118 @@ public class ParserTest {
 	@Test
 	public void house() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house																			GET/DELETE
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house";
 		UriParser.parse(uri, listener);
-		
-		Assert.assertEquals("1", "1");
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
+		uri = "/house?param=param";
+		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
 	
 	@Test
 	public void labelList() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house																			GET/DELETE
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/labels";
 		UriParser.parse(uri, listener);
-		
-		Assert.assertEquals("1", "1");
+		Assert.assertTrue(listener.success);
 	}
 	
 	@Test
 	public void label() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //	/house/labels/labelId || /house/labels/label?id=id								GET/PUT/POST/DELETE
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/labels/ch1";
 		UriParser.parse(uri, listener);
-		
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
 		uri = "/house/labels/label?id=ch1";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
-	
+
 	@Test
 	public void controllerFromLabel() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //	/house/labels/labelId/where || /house/labels/labelId/controller?id=id			GET/PUT/POST/DELETE
-		
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/labels/ch1/controller/61";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 
+		listener = new ListenerExampleParser();
 		uri = "/house/labels/ch1/controller?id=61";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 
+		listener = new ListenerExampleParser();
 		uri = "/house/labels/ch1/61";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
-	
+
 	@Test
 	public void groupList() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house/groups																	GET
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/groups";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
 	
 	@Test
 	public void group() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house/groups/groupId || /house/groups/group?id=id								GET
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/groups/10";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 
+		listener = new ListenerExampleParser();
 		uri = "/house/groups/group?id=10&status=valeur2";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
 	
 	@Test 
 	public void controllerFromGroup() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/house/groups/groupId/where || /house/groups/groupId/controller?id=id			GET
-		
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/groups/10/controller/12";
 		UriParser.parse(uri, listener);
-		
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
 		uri = "/house/groups/10/controller?id=12";
 		UriParser.parse(uri, listener);
-		
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
 		uri = "/house/groups/10/12";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
-	
+
 	@Test
 	public void controller() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 //		/controllers/where || /controllers/controller?id=id
+		ListenerExampleParser listener = new ListenerExampleParser();
 		String uri = "/house/controllers/12";
 		UriParser.parse(uri, listener);
-		
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
 		uri = "/house/controllers/controller?id=12";
 		UriParser.parse(uri, listener);
-		
+		Assert.assertTrue(listener.success);
+
+		listener = new ListenerExampleParser();
 		uri = "/house/controllers/controller/12";
 		UriParser.parse(uri, listener);
+		Assert.assertTrue(listener.success);
 	}
 
 	
@@ -179,20 +207,4 @@ public class ParserTest {
 	public void status() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
 		// Done by servlet and not by parser => no test with parser
 	}
-
-//	@Test
-//	public void light() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
-////		/[on|off] || [?what=on||?what=off]
-//		String uri = "/house/controllers/12/on";
-//		UriParser.parse(uri, listener);
-//		
-//		uri = "/house/controllers/12?what=on";
-//		UriParser.parse(uri, listener);
-//		
-//		uri = "/house/controllers/12/off";
-//		UriParser.parse(uri, listener);
-//		
-//		uri = "/house/controllers/12?what=off";
-//		UriParser.parse(uri, listener);
-//	}
 }
