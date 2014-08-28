@@ -28,7 +28,7 @@ import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 import com.adgsoftware.mydomo.engine.house.Label;
 import com.homesnap.android.ui.AbstractActivity;
 import com.homesnap.android.ui.adapters.LabelListAdapter;

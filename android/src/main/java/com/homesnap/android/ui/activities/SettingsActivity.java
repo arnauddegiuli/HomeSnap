@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 import com.adgsoftware.mydomo.engine.connector.ConnectionListener;
 import com.adgsoftware.mydomo.engine.connector.ConnectionStatusEnum;
 import com.adgsoftware.mydomo.engine.controller.Controller;

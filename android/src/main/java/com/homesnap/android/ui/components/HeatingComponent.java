@@ -14,8 +14,8 @@ import com.adgsoftware.mydomo.engine.controller.DimensionStatus;
 import com.adgsoftware.mydomo.engine.controller.DimensionStatusCallback;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.controller.heating.HeatingZone;
-import com.adgsoftware.mydomo.engine.controller.heating.dimension.DesiredTemperature;
 import com.adgsoftware.mydomo.engine.controller.heating.dimension.MeasureTemperature;
+import com.homesnap.R;
 
 public class HeatingComponent extends AbstractComponent {
 	
@@ -135,23 +135,23 @@ public class HeatingComponent extends AbstractComponent {
 	private void setTemperatureImage(double temp) {
 		// TODO manage the system (heat? cold?...  on/off ....)
 		if (temp < 2.00) {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_0);
+			heat.setImageResource(R.drawable.ic_heat_0);
 		} else if (temp < 10.00) {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_1);
+			heat.setImageResource(R.drawable.ic_heat_1);
 		} else if (temp < 15.00) {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_2);
+			heat.setImageResource(R.drawable.ic_heat_2);
 		} else if (temp < 20.00) {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_3);
+			heat.setImageResource(R.drawable.ic_heat_3);
 		} else if (temp < 30.00) {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_4);
+			heat.setImageResource(R.drawable.ic_heat_4);
 		} else {
-			heat.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat_5);
+			heat.setImageResource(R.drawable.ic_heat_5);
 		}
 	}
 
 	private void setModeImage(int mode) {
 		if (mode == 1) {
-			heatMode.setImageResource(com.adgsoftware.mydomo.R.drawable.ic_heat);
+			heatMode.setImageResource(R.drawable.ic_heat);
 		}
 	}
 }

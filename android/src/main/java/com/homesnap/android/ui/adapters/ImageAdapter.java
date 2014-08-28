@@ -1,6 +1,6 @@
 package com.homesnap.android.ui.adapters;
 
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 
 import android.content.Context;
 import android.view.View;

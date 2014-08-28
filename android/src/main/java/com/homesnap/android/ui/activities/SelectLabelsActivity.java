@@ -15,7 +15,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 import com.adgsoftware.mydomo.engine.house.Label;
 import com.homesnap.android.ui.AbstractActivity;
 

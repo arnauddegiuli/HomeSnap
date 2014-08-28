@@ -2,7 +2,7 @@ package com.homesnap.android.ui.components;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

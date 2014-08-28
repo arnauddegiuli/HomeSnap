@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
-import com.adgsoftware.mydomo.R;
+import com.homesnap.R;
 import com.adgsoftware.mydomo.engine.controller.Controller;
 import com.adgsoftware.mydomo.engine.controller.Status;
 import com.adgsoftware.mydomo.engine.house.Label;
@@ -53,7 +53,7 @@ public class ControllersActivity extends AbstractActivity {
 		setTitle(getResources().getText(R.string.title_controllers));
 		popUp = new PopupWindow(this);
 		layout = new LinearLayout(this);
-		layout.addView(findViewById(com.adgsoftware.mydomo.R.layout.list_controllers));
+		layout.addView(findViewById(R.layout.list_controllers));
 
 		setContentView(R.layout.list_controllers);
 		
