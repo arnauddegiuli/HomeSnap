@@ -56,6 +56,7 @@ implements MyDomoRestAPI {
 			throw new RestOperationException(getUri(), Verb.PUT, "Label JSON representation is wrong ["+json+"].");
 		}
 		getHouse().getLabels().add(l);
+		setResult(JSonTools.toJson(l));
 	}
 
 	@Override
@@ -101,6 +102,7 @@ implements MyDomoRestAPI {
 			throw new RestOperationException(getUri(), Verb.PUT, "Group JSON representation is wrong ["+json+"].");
 		}
 		getHouse().getGroups().add(g);
+		setResult(JSonTools.toJson(g));
 	}
 
 	@Override
@@ -125,10 +127,7 @@ implements MyDomoRestAPI {
 	}
 
 	@Override
-	public void onStatus(String name, String[] value)
-			throws UnsupportedRestOperation, RestOperationException,
-			MissingParameterRestOperation {
-		throw new UnsupportedRestOperation(getUri(), Verb.PUT);
+	public void onStatus(String name, String[] value) {
 	}
 
 	private Controller createController(JSONObject json, String where) throws RestOperationException {

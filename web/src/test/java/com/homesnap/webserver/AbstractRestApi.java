@@ -175,6 +175,15 @@ public class AbstractRestApi {
 		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
 	}
 
+	
+	protected String createController61() {
+		return "{" +
+				Controller.JSON_TITLE + ": 'Chambre Tom';" +
+				Controller.JSON_WHERE + ": '61';" +
+				Controller.JSON_WHO + ": 'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
+				"}";
+	}
+	
 	/**
 	 * Test that the json object represent the Tom chamber from the house.xml
 	 * data sample.
@@ -189,6 +198,7 @@ public class AbstractRestApi {
 		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
 	}
 
+
 	protected void testController63(JSONObject jo) {
 		Assert.assertEquals("Chambre Marius", jo.get(Controller.JSON_TITLE));
 		Assert.assertEquals("63", jo.get(Controller.JSON_WHERE));
@@ -198,6 +208,13 @@ public class AbstractRestApi {
 		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
 	}
 
+	protected String createLabelCh1() {
+		return "{" +
+		Label.JSON_TITLE + ": 'Chambre Tom';" +
+		Label.JSON_ID + ": 'ch1';" +
+		"}";
+	}
+	
 	protected void testLabelCh1(JSONObject label) {
 		Assert.assertEquals("ch1", label.get(Label.JSON_ID));
 		Assert.assertEquals("Chambre Tom", label.get(Label.JSON_TITLE));
@@ -205,7 +222,6 @@ public class AbstractRestApi {
 // TODO		Assert.assertEquals("Un icon", label.get(Label.JSON_ICON));
 		JSONArray controllers = label.getJSONArray(Label.JSON_CONTROLLERS);
 		testController61(controllers.getJSONObject(0));
-		
 	}
 	
 	protected void testLabelCh2(JSONObject label) {
@@ -218,20 +234,12 @@ public class AbstractRestApi {
 		
 	}
 
-	protected void testGroup1(JSONObject group) {
-		Assert.assertEquals("1", group.get(Group.JSON_ID));
-		Assert.assertEquals("Group 1", group.get(Group.JSON_TITLE));
-// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
-		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
-		testController11(controllers.getJSONObject(0));
-		testController12(controllers.getJSONObject(1));
-		
-	}
+
 	
 	protected String createJsonController11() {
 		return "{" +
 			Controller.JSON_TITLE + ": 'Chambre 11';" +
-			Controller.JSON_WHERE + ":11;" +
+			Controller.JSON_WHERE + ": '11';" +
 			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
 			"}";
 	}
@@ -239,7 +247,7 @@ public class AbstractRestApi {
 	protected String createJsonController6() {
 		return "{" +
 			Controller.JSON_TITLE + ": 'Chambre 6';" +
-			Controller.JSON_WHERE + ":6;" +
+			Controller.JSON_WHERE + ": '6';" +
 			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
 			"}";
 	}
@@ -247,7 +255,7 @@ public class AbstractRestApi {
 	protected String createJsonController16() {
 		return "{" +
 			Controller.JSON_TITLE + ": 'Chambre 16';" +
-			Controller.JSON_WHERE + ":16;" +
+			Controller.JSON_WHERE + ": '16';" +
 			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
 			"}";
 	}
@@ -269,7 +277,7 @@ public class AbstractRestApi {
 	protected String createJsonController17() {
 		return "{" +
 			Controller.JSON_TITLE + ": 'Chambre 17';" +
-			Controller.JSON_WHERE + ":17;" +
+			Controller.JSON_WHERE + ": '17';" +
 			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
 			"}";
 	}
@@ -280,6 +288,7 @@ public class AbstractRestApi {
 	 * @param jo
 	 */
 	protected void testController17(JSONObject jo) {
+		Assert.assertNotNull(jo);
 		Assert.assertEquals("Chambre 17", jo.get(Controller.JSON_TITLE));
 		Assert.assertEquals("17", jo.get(Controller.JSON_WHERE));
 		Assert.assertEquals("LIGHT", jo.get(Controller.JSON_WHO)); // TODO replace string light by Who.LIGHT.name()
@@ -288,10 +297,65 @@ public class AbstractRestApi {
 		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
 	}
 
+	protected void testController21(JSONObject jo) {
+		Assert.assertNotNull(jo);
+		Assert.assertEquals("Bureau", jo.get(Controller.JSON_TITLE));
+		Assert.assertEquals("21", jo.get(Controller.JSON_WHERE));
+		Assert.assertEquals("LIGHT", jo.get(Controller.JSON_WHO)); // TODO replace string light by Who.LIGHT.name()
+		
+		JSONObject status = jo.getJSONObject(Controller.JSON_STATES);
+		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
+	}
+
+	protected String createJsonController47() {
+		return "{" +
+			Controller.JSON_TITLE + ": 'Chambre 47';" +
+			Controller.JSON_WHERE + ": '47';" +
+			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
+			"}";
+	}
+
+	/**
+	 * Test that the json object represent the Tom chamber from the house.xml
+	 * data sample.
+	 * @param jo
+	 */
+	protected void testController47(JSONObject jo) {
+		Assert.assertNotNull(jo);
+		Assert.assertEquals("Chambre 47", jo.get(Controller.JSON_TITLE));
+		Assert.assertEquals("47", jo.get(Controller.JSON_WHERE));
+		Assert.assertEquals("LIGHT", jo.get(Controller.JSON_WHO)); // TODO replace string light by Who.LIGHT.name()
+		
+		JSONObject status = jo.getJSONObject(Controller.JSON_STATES);
+		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
+	}
+
+	protected String createJsonController57() {
+		return "{" +
+			Controller.JSON_TITLE + ": 'Chambre 57';" +
+			Controller.JSON_WHERE + ": '57';" +
+			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
+			"}";
+	}
+
+	/**
+	 * Test that the json object represent the Tom chamber from the house.xml
+	 * data sample.
+	 * @param jo
+	 */
+	protected void testController57(JSONObject jo) {
+		Assert.assertNotNull(jo);
+		Assert.assertEquals("Chambre 57", jo.get(Controller.JSON_TITLE));
+		Assert.assertEquals("57", jo.get(Controller.JSON_WHERE));
+		Assert.assertEquals("LIGHT", jo.get(Controller.JSON_WHO)); // TODO replace string light by Who.LIGHT.name()
+		
+		JSONObject status = jo.getJSONObject(Controller.JSON_STATES);
+		Assert.assertEquals("LIGHT_OFF", status.get(StateName.STATUS.getName()));
+	}
 	protected String createJsonController61() {
 		return "{" +
 			Controller.JSON_TITLE + ": 'Chambre Tom';" +
-			Controller.JSON_WHERE + ":61;" +
+			Controller.JSON_WHERE + ": '61';" +
 			Controller.JSON_WHO   + ":'LIGHT'" + // TODO replace string light by Who.LIGHT.name()
 			"}";
 	}
@@ -306,6 +370,7 @@ public class AbstractRestApi {
 	}
 
 	protected void testLabelCh6(JSONObject label) {
+		Assert.assertNotNull(label);
 		Assert.assertEquals("ch6", label.get(Label.JSON_ID));
 		Assert.assertEquals("Chambre 6", label.get(Label.JSON_TITLE));
 // TODO		Assert.assertEquals("Une description", label.get(Label.JSON_DESCRIPTION));
@@ -323,12 +388,74 @@ public class AbstractRestApi {
 	}
 
 	protected void testLabelCh7(JSONObject label) {
+		Assert.assertNotNull(label);
 		Assert.assertEquals("ch7", label.get(Label.JSON_ID));
 		Assert.assertEquals("Chambre 7", label.get(Label.JSON_TITLE));
 // TODO		Assert.assertEquals("Une description", label.get(Label.JSON_DESCRIPTION));
 // TODO		Assert.assertEquals("Un icon", label.get(Label.JSON_ICON));
 		JSONArray controllers = label.getJSONArray(Label.JSON_CONTROLLERS);
 		testController61(controllers.getJSONObject(0));
+	}
+
+	protected String createGroup1() {
+		return "{" + 
+				Label.JSON_TITLE + ": 'Group 1'; " +
+				Label.JSON_ID + ": '1';"+
+				Label.JSON_CONTROLLERS + ": [" + createJsonController47() + "]" + // Controller are not created... => normal
+			"}";
+	}
+
+	protected void testGroup1(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("1", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 1", group.get(Group.JSON_TITLE));
+// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
+		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
+		Assert.assertEquals(5, controllers.length());
+	}
+
+	protected void testGroup2(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("2", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 2", group.get(Group.JSON_TITLE));
+// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
+		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
+		Assert.assertEquals(1, controllers.length());
+		testController21(controllers.getJSONObject(0));
+	}
+	
+	protected String createGroup4() {
+		return "{" + 
+				Label.JSON_TITLE + ": 'Group 4'; " +
+				Label.JSON_ID + ": '4';"+
+				Label.JSON_CONTROLLERS + ": [" + createJsonController47() + "]" + // Controller are not created... => normal
+			"}";
+	}
+
+	protected void testGroup4(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("4", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 4", group.get(Group.JSON_TITLE));
+// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
+		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
+		Assert.assertEquals(4, controllers.length());
+	}
+
+	protected String createGroup5() {
+		return "{" + 
+				Label.JSON_TITLE + ": 'Group 5'; " +
+				Label.JSON_ID + ": '5';"+
+				Label.JSON_CONTROLLERS + ": [" + createJsonController57() + "]" + // Controller are not created... => normal
+			"}";
+	}
+
+	protected void testGroup5(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("5", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 5", group.get(Group.JSON_TITLE));
+// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
+		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
+		Assert.assertEquals(3, controllers.length());
 	}
 
 	protected String createGroup6() {
@@ -340,6 +467,7 @@ public class AbstractRestApi {
 	}
 
 	protected void testGroup6(JSONObject group) {
+		Assert.assertNotNull(group);
 		Assert.assertEquals("6", group.get(Group.JSON_ID));
 		Assert.assertEquals("Group 6", group.get(Group.JSON_TITLE));
 // TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
@@ -347,17 +475,26 @@ public class AbstractRestApi {
 		Assert.assertEquals(0, controllers.length());
 	}
 
-	protected String createGroup7() {
+	protected void testGroup7(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("7", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 7", group.get(Group.JSON_TITLE));
+// TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
+		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
+		Assert.assertEquals(0, controllers.length());
+	}
+	protected String createGroup10() {
 		return "{" + 
-				Label.JSON_TITLE + ": 'Group 7'; " +
-				Label.JSON_ID + ": '7';"+
+				Label.JSON_TITLE + ": 'Group 10'; " +
+				Label.JSON_ID + ": '10';"+
 				Label.JSON_CONTROLLERS + ": []" +
 			"}";
 	}
 
-	protected void testGroup7(JSONObject group) {
-		Assert.assertEquals("7", group.get(Group.JSON_ID));
-		Assert.assertEquals("Group 7", group.get(Group.JSON_TITLE));
+	protected void testGroup10(JSONObject group) {
+		Assert.assertNotNull(group);
+		Assert.assertEquals("10", group.get(Group.JSON_ID));
+		Assert.assertEquals("Group 10", group.get(Group.JSON_TITLE));
 // TODO		Assert.assertEquals("Une description", group.get(Group.JSON_DESCRIPTION));
 		JSONArray controllers = group.getJSONArray(Group.JSON_CONTROLLERS);
 		Assert.assertEquals(0, controllers.length());

@@ -37,6 +37,7 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 		Label l = getLabel(labelId);
 		if (l != null) {
 			getHouse().getLabels().remove(l);
+			l.clear();
 			setResult(JSonTools.toJson(l));
 		} else {
 			throw new RestOperationException(getUri(), Verb.DELETE, "Label [id:"+labelId+"] not found.");
@@ -69,6 +70,8 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 		Group g = getGroup(groupId);
 		if (g != null) {
 			getHouse().getGroups().remove(g);
+			g.clear();
+			setResult(JSonTools.toJson(g));
 		} else {
 			throw new RestOperationException(getUri(), Verb.DELETE, "Group [id:"+groupId+"] not found.");
 		}

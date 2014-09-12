@@ -46,6 +46,7 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 			try {
 				JSONObject j = JSonTools.fromJson(json);
 				l.fromJson(j);
+				setResult(JSonTools.toJson(l));
 			} catch (Error e) {
 				throw new RestOperationException(getUri(), Verb.PUT, "Label JSON representation is wrong ["+json+"].");
 			}
@@ -72,6 +73,7 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 			try {
 				JSONObject j = JSonTools.fromJson(json);
 				g.fromJson(j);
+				setResult(JSonTools.toJson(g));
 			} catch (Error e) {
 				throw new RestOperationException(getUri(), Verb.PUT, "Group JSON representation is wrong ["+json+"].");
 			}	

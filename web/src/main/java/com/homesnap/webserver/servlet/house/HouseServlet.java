@@ -66,7 +66,7 @@ public class HouseServlet extends HttpServlet {
 			UriParser.parse(uri, listener);
 			manageStatus(listener, req.getParameterMap());
 			service.saveHouse(house);
-			if (listener.getResult() == null) {
+			if (listener.getResult() == null || listener.getResult() == "") {
 				resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} else {
 				resp.setStatus(HttpServletResponse.SC_OK);

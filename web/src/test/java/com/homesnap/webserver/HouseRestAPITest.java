@@ -8,11 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.homesnap.engine.house.House;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HouseRestAPITest extends AbstractRestApi {
 
 	String urn = "/house";
@@ -24,9 +26,26 @@ public class HouseRestAPITest extends AbstractRestApi {
 			Assert.fail("Impossible to initialize file");
 		}
 	}
+
+	// Delete
+	@Test
+	public void test1DeleteHouse() {
+		// Test impossible to create a house
+		JSONObject jo = deleteRequestJSONObject(urn, HttpServletResponse.SC_NO_CONTENT);
+		Assert.assertNull(jo);
+		// Test to get a house with some group and label
+		jo = getRequestJSONObject(urn);
+
+		// Test labels
+		JSONArray labels = jo.getJSONArray(House.JSON_LABELS);
+		Assert.assertEquals(0, labels.length());
+		JSONArray groups = jo.getJSONArray(House.JSON_GROUPS);
+		Assert.assertEquals(0, groups.length());
+	}
+
 	// Creation
 	@Test
-	public void createHouse() {
+	public void test2CreateHouse() {
 		// Test impossible to create a house
 		JSONObject o = postRequestJSONObject(urn, "{}", HttpServletResponse.SC_NOT_IMPLEMENTED);
 		Assert.assertEquals(null, o);
@@ -34,14 +53,21 @@ public class HouseRestAPITest extends AbstractRestApi {
 
 	// Modification
 	@Test
-	public void putHouse() {
+	public void test3PutHouse() {
 		// Test impossible to create a house
 		putRequestJSONObject(urn, "{}", HttpServletResponse.SC_NOT_IMPLEMENTED);
 	}
 
 	// Get
 	@Test
-	public void getHouse() {
+	public void test4GetHouse() {
+
+		postRequestJSONObject(urn + "/labels/label/ch1", createLabelCh1(), HttpServletResponse.SC_OK);
+		
+		postRequestJSONObject(urn + "/groups/group/6", createLabelCh1(), HttpServletResponse.SC_OK);
+		postRequestJSONObject(urn + "/labels/label/ch2", createLabelCh2(), HttpServletResponse.SC_OK);
+		postRequestJSONObject(urn + "/groups/group/2", createGroup2(), HttpServletResponse.SC_OK);
+		
 		// Test to get a house with some group and label
 		JSONObject jo = getRequestJSONObject(urn);
 
@@ -52,25 +78,10 @@ public class HouseRestAPITest extends AbstractRestApi {
 
 		// Test Groups
 		JSONArray groups = jo.getJSONArray(House.JSON_GROUPS);
-		testGroup1(groups.getJSONObject(0));
-		System.out.print(jo.toString());
+		testGroup2(groups.getJSONObject(1));
 	}
 
-	// Delete
-	@Test
-	public void deleteHouse() {
-//		// Test impossible to create a house
-//		JSONObject jo = deleteRequestJSONObject(urn, HttpServletResponse.SC_NO_CONTENT);
-//		Assert.assertNull(jo);
-//		// Test to get a house with some group and label
-//		jo = getRequestJSONObject(urn);
-//
-//		// Test labels
-//		JSONArray labels = jo.getJSONArray(House.JSON_LABELS);
-//		Assert.assertEquals(0, labels.length());
-//		JSONArray groups = jo.getJSONArray(House.JSON_GROUPS);
-//		Assert.assertEquals(0, groups.length());
-	}
+
 
 	// Param
 	@Test

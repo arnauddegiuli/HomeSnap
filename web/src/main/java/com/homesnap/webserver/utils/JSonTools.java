@@ -65,7 +65,9 @@ public class JSonTools {
 			sb.append(JSonTools.toJson(group));
 			sb.append(",");
 		}
-		sb.setLength(sb.length()-1);
+		if (sb.length()>1) {
+			sb.setLength(sb.length()-1);
+		}
 		sb.append("]");
 		return sb.toString();
 	}
@@ -85,7 +87,9 @@ public class JSonTools {
 			sb.append(JSonTools.toJson(label));
 			sb.append(",");
 		}
-		sb.setLength(sb.length()-1);
+		if (sb.length()>1) {
+			sb.setLength(sb.length()-1);
+		}
 		sb.append("]");
 		return sb.toString();
 	}
