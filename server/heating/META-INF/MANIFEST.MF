@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyDomoServerGatewayModule
+Bundle-Name: HomeSnapServerGatewayModule
 Bundle-SymbolicName: com.homesnap.server.controllermodule.heating
 Bundle-Version: 0.1
 Bundle-Activator: com.homesnap.server.controllermodules.heating.HeatingModuleActivator
@@ -15,4 +15,4 @@ Import-Package: com.homesnap.engine,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.homesnap.server.controllermodules.heating
-Require-Bundle: com.homesnap.engine
+Require-Bundle: com.homesnap.engine, com.homesnap.server

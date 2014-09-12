@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyDomoServerAutomationModule
+Bundle-Name: HomeSnapServerAutomationModule
 Bundle-SymbolicName: com.homesnap.server.controllermodules.automation
 Bundle-Version: 0.1
 Bundle-Activator: com.homesnap.server.controllermodules.automation.AutomationModuleActivator

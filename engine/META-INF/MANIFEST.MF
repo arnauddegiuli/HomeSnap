@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyDomoEngine
+Bundle-Name: HomeSnapEngine
 Bundle-SymbolicName: com.homesnap.engine
 Bundle-Version: 0.1
 Export-Package: com.homesnap.engine;uses:="com.homesnap.engine.controller",

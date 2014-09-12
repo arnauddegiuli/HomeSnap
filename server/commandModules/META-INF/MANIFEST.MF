@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyDomoServerDeviceModuleInterface
+Bundle-Name: HomeSnapServerDeviceModuleInterface
 Bundle-SymbolicName: com.homesnap.server.controllermodules
 Bundle-Version: 0.1
 Export-Package: com.homesnap.server.controllermodules

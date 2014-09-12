@@ -39,7 +39,7 @@
 							 org.osgi.framework
  						</Import-Package>
 						<Export-Package>com.homesnap.server.controllermodules.heating</Export-Package>
-						<Require-Bundle>com.homesnap.engine</Require-Bundle>
+						<Require-Bundle>com.homesnap.engine, com.homesnap.server</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -51,31 +51,38 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-						<Bundle-Name>MyDomoEngine</Bundle-Name>
+						<Bundle-Name>HomeSnapEngine</Bundle-Name>
 						<Bundle-Description></Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Export-Package>com.homesnap.engine;uses:="com.homesnap.engine.controller",
-							com.homesnap.engine.connector,
-							com.homesnap.engine.connector.openwebnet,
-							com.homesnap.engine.connector.openwebnet.parser,
-							com.homesnap.engine.connector.openwebnet.convert,
-							com.homesnap.engine.controller,
-							com.homesnap.engine.controller.where,
-							com.homesnap.engine.controller.automation,
-							com.homesnap.engine.controller.gateway,
-							com.homesnap.engine.controller.gateway.dimension,
-							com.homesnap.engine.controller.heating,
-							com.homesnap.engine.controller.heating.dimension,
-							com.homesnap.engine.controller.light;uses:="com.homesnap.engine.controller",
-							com.homesnap.engine.controller.outlet,
-
-							com.homesnap.engine.house,
-							com.homesnap.engine.script,
-							com.homesnap.engine.services,
-							com.homesnap.engine.services.impl,
-							org.json,
-							org.json.zip
+						<Export-Package> com.homesnap.engine;uses:="com.homesnap.engine.controller",
+							 com.homesnap.engine.connector,
+							 com.homesnap.engine.connector.openwebnet,
+							 com.homesnap.engine.connector.openwebnet.automation,
+							 com.homesnap.engine.connector.openwebnet.convert,
+							 com.homesnap.engine.connector.openwebnet.dimension,
+							 com.homesnap.engine.connector.openwebnet.gateway,
+							 com.homesnap.engine.connector.openwebnet.gateway.dimension,
+							 com.homesnap.engine.connector.openwebnet.heating,
+							 com.homesnap.engine.connector.openwebnet.heating.dimension,
+							 com.homesnap.engine.connector.openwebnet.light,
+							 com.homesnap.engine.connector.openwebnet.parser,
+							 com.homesnap.engine.controller,
+							 com.homesnap.engine.controller.automation,
+							 com.homesnap.engine.controller.gateway,
+							 com.homesnap.engine.controller.heating,
+							 com.homesnap.engine.controller.heating.stateValue,
+							 com.homesnap.engine.controller.light;uses:="com.homesnap.engine.controller",
+							 com.homesnap.engine.controller.light.stateValue,
+							 com.homesnap.engine.controller.what,
+							 com.homesnap.engine.controller.what.impl,
+							 com.homesnap.engine.controller.where,
+							 com.homesnap.engine.house,
+							 com.homesnap.engine.script,
+							 com.homesnap.engine.services,
+							 com.homesnap.engine.services.impl,
+							 org.json,
+							 org.json.zip
 						</Export-Package>
 					</instructions>
 				</configuration>

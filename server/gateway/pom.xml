@@ -29,14 +29,15 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.homesnap.server.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
-						<Import-Package>com.homesnap.engine,
+						<Import-Package> com.homesnap.engine,
 							 com.homesnap.engine.connector.openwebnet,
+							 com.homesnap.engine.controller.what.impl,
 							 com.homesnap.server,
 							 com.homesnap.server.controllermodules,
 							 org.osgi.framework
  						</Import-Package>
 						<Export-Package>com.homesnap.server.controllermodules.gateway</Export-Package>
-						<Require-Bundle>com.homesnap.engine</Require-Bundle>
+						<Require-Bundle>com.homesnap.engine, com.homesnap.server</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

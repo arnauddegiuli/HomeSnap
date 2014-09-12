@@ -32,10 +32,9 @@
 						<Import-Package>com.homesnap.engine,
 							 com.homesnap.engine.connector.openwebnet,
 							 com.homesnap.engine.connector.openwebnet.parser,
-							 com.homesnap.engine.controller,
-							 com.homesnap.engine.controller.light,
 							 com.homesnap.server,
 							 com.homesnap.server.controllermodules,
+							 com.homesnap.engine.connector.openwebnet.light,
 							 org.osgi.framework
  						</Import-Package>
 						<Export-Package>com.homesnap.server.controllermodules.light</Export-Package>

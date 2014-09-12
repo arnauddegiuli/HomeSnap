@@ -29,15 +29,17 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.homesnap.server.controllermodules.automation.AutomationModuleActivator</Bundle-Activator>
-						<Import-Package>com.homesnap.engine.controller,
-							com.homesnap.engine.connector.openwebnet,
-							com.homesnap.engine.connector.openwebnet.parser,
-							com.homesnap.server.controllermodules,
-							com.homesnap.engine,
-							com.homesnap.engine.controller.automation,
-							com.homesnap.server, org.osgi.framework</Import-Package>
-						<Export-Package></Export-Package>
-						<Require-Bundle>com.homesnap.engine</Require-Bundle>
+						<Import-Package> com.homesnap.engine,
+							 com.homesnap.engine.controller,
+							 com.homesnap.engine.connector.openwebnet,
+							 com.homesnap.engine.connector.openwebnet.parser,
+							 com.homesnap.engine.controller.automation,
+							 com.homesnap.server.controllermodules,
+							 com.homesnap.server,
+							 org.osgi.framework
+						</Import-Package>
+						<Export-Package> com.homesnap.server.controllermodules.automation</Export-Package>
+						<Require-Bundle>com.homesnap.engine,com.homesnap.server</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
