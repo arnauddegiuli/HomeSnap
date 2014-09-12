@@ -26,7 +26,7 @@ package com.homesnap.engine.controller.heating;
 
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.heating.statevalue.Offset;
+import com.homesnap.engine.controller.heating.stateValue.Offset;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.DoubleValue;

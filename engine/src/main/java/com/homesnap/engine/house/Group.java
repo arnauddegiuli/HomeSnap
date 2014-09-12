@@ -252,12 +252,15 @@ implements Serializable, JsonSerializable {
 		}
 		try {
 			JSONArray controllers = jsonObject.getJSONArray(JSON_CONTROLLERS);
+
+			// Update controller already existing in group
 			for (int i = 0; i < controllers.length(); i++) {
 				JSONObject c = controllers.getJSONObject(i);
-				String whereString = c.getString("where");
+				String whereString = c.getString(Controller.JSON_WHERE);
 				for (Controller controller : getControllerList()) {
 					if (whereString.equals(controller.getWhere())) {
 						controller.fromJson(c);
+						break;
 					}
 				}
 			}
