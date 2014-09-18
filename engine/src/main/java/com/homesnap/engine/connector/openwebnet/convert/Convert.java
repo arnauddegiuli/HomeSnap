@@ -37,7 +37,6 @@ import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.who.Who;
 
@@ -60,7 +59,7 @@ public class Convert {
 			String where = command.getWhere().getTo();
 			State what = command.getWhat();
 			if (command.isActionCommand()) {
-				if (StateName.STATUS.equals(what.getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.equals(what.getName())) {
 					return MessageFormat.format(
 						OpenWebNetConstant.COMMAND,
 						new Object[] {
@@ -84,7 +83,7 @@ public class Convert {
 					);
 				}
 			} else { // Statut request
-				if (StateName.STATUS.equals(what.getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.equals(what.getName())) {
 					return MessageFormat.format(OpenWebNetConstant.STATUS,
 							new Object[] { who, where });
 				} else {

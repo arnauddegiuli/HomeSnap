@@ -24,24 +24,18 @@ package com.homesnap.engine.controller.what;
  * #L%
  */
 
-
-
 /**
- * A tpye of Value. This interface can be implemented by two ways:
- * <ul>
- * <li>An enumeration of limited values. Example: ON/OFF or STOP/UP/DOWN, etc..</li>
- * <li>A classe reprensenting a large or infinites possible values Example: a temperature, a time, etc..</li>
- * </ul>
- * @see States
+ * The state value of a controller.
  * 
+ * @author DRIESBACH Olivier
  * @version 1.0
  * @since 1.0
  */
 public interface StateValue {
 
 	/**
-	 * Return a string representation of the value from this type.
-	 * @return a value.
+	 * Returns the string representation of the value.
+	 * @return the string representation of the value
 	 */
 	public String getValue();
 }

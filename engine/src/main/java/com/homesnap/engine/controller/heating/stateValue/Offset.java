@@ -1,4 +1,6 @@
-package com.homesnap.engine.connector.openwebnet.heating;
+package com.homesnap.engine.controller.heating.stateValue;
+
+import com.homesnap.engine.controller.what.StateValue;
 
 /*
  * #%L
@@ -24,7 +26,7 @@ package com.homesnap.engine.connector.openwebnet.heating;
  * #L%
  */
 
-public class Offset {
+public class Offset implements StateValue{
 
 	public enum Mode {
 		ON, OFF, PROTECTION;
@@ -44,5 +46,10 @@ public class Offset {
 	
 	public int getDegree() {
 		return degree;
+	}
+
+	@Override
+	public String getValue() {
+		return mode.name() + " - " + getDegree();
 	}
 }

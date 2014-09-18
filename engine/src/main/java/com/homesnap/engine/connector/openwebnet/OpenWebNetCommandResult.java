@@ -73,8 +73,7 @@ public class OpenWebNetCommandResult implements CommandResult {
 	@Override
 	public State getWhat(StateName name) {
 		if (command != null) {
-			
-			if (StateName.STATUS.equals(name)) {
+			if (OpenWebNetCommand.DEFAULT_ACTION.equals(name)) {
 				return command.getWhat();
 			} else {
 				try {

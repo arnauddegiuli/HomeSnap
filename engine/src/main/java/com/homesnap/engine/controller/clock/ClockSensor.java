@@ -27,7 +27,6 @@ package com.homesnap.engine.controller.clock;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.who.Who;
 
 /**
@@ -38,36 +37,26 @@ import com.homesnap.engine.controller.who.Who;
  */
 public class ClockSensor extends Controller  {
 	
+	/** */
+	private static final long serialVersionUID = 8844793620351122559L;
+
 	public enum ClockSensorStateName implements StateName {
 		
-		ALARM("alarm"),
-		DATE("date"),
-		TIME("time"),
-		DATE_TIME("date-time");
+		ALARM, DATE, TIME, DATE_TIME;
 		
-		private String name;
-		
-		private ClockSensorStateName(String name) {
-			this.name = name;
-		}
-
 		@Override
 		public String getName() {
-			return name;
+			return name().toLowerCase();
 		}
-	}
-
-	@Override
-	protected void initStateTypes() {
-		declareState(ClockSensorStateName.ALARM, DateValue.class);
-		declareState(ClockSensorStateName.DATE, DateValue.class);
-		declareState(ClockSensorStateName.TIME, DateValue.class);
-		declareState(ClockSensorStateName.DATE_TIME, DateValue.class);
 	}
 
 	@Override
 	public Who getWho() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected StateName initStateName(String name) {
+		return ClockSensorStateName.valueOf(name.toUpperCase());
 	}
 }

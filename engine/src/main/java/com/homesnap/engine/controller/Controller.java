@@ -24,12 +24,16 @@ package com.homesnap.engine.controller;
  * #L%
  */
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.json.JSONObject;
 
@@ -41,9 +45,17 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.DefaultCommandResult;
+import com.homesnap.engine.controller.types.DateTimeType;
+import com.homesnap.engine.controller.types.DateType;
+import com.homesnap.engine.controller.types.LabelType;
+import com.homesnap.engine.controller.types.ListOfValuesType;
+import com.homesnap.engine.controller.types.NumberType;
+import com.homesnap.engine.controller.types.PercentageType;
+import com.homesnap.engine.controller.types.TimeType;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.StateValueType;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -58,10 +70,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	protected transient Commander server;
 	private List<ControllerChangeListener> controllerChangeListenerList = new ArrayList<ControllerChangeListener>();
 	private LabelList labelList = new LabelList(this);
-	/** List of all states with their class types to prevent from set a state with an invalid value */
-	private Map<StateName, Class<? extends StateValue>> stateTypes = new HashMap<StateName, Class<? extends StateValue>>();
-	/** List of all states with their values which represents the current status of a device */
+	
+	/** List of all state names with their current values of the controller. This map repesents the complete status of the controller. */
 	private Map<StateName, StateValue> stateList = new HashMap<StateName, StateValue>();
+	/** List of all states names with their class value type. This map is used to prevent from set a state with an invalid value. */
+	private Map<StateName, StateValueType> stateTypes;
+	/** Cache of all controller classes with their state types */
+	private static Map<Class<?>, Map<StateName, StateValueType>> classTypes = new Hashtable<Class<?>, Map<StateName, StateValueType>>();
 
 	public static final String JSON_TITLE = "title";
 	public static final String JSON_STATES = "states";
@@ -73,48 +88,85 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * Constructor.
 	 */
 	protected Controller() {
-		initStateTypes();
-	}
-
-	/**
-	 * Initialises the state names withtypes in order to prevent from a wrong assigment when the {@link #set(String, StateValue)} method is called.
-	 * @return A map of all the states types supported by this controller, where the key is the state name and the value associated is a {@link StateValue} class
-	 */
-	protected abstract void initStateTypes();
-	
-	/**
-	 * Declares one state that the controller instance manages.
-	 * This method must be called during the {@link #initStateTypes()} phase
-	 * All declared states will prevent from a wrong assigment when the {@link #set(String, StateValue)} method is called.
-	 * @param state The state name
-	 * @param stateClass The {@link StateValue} class of that state
-	 */
-	protected void declareState(StateName state, Class<? extends StateValue> stateClass) {
-		stateTypes.put(state, stateClass);
+		initStateTypes(getClass(), new Properties());
 	}
 	
 	/**
-	 * Return true if controller is waiting information from gateway
-	 * @return
+	 * Initializes the state names with their class types in order to prevent from a wrong assigment when the {@link #set(StateName, StateValue)} method is called.
+	 */
+	private void initStateTypes(Class<?> clazz, Properties stateNames) {
+		// Check if the controller class is known
+		stateTypes = classTypes.get(clazz);
+		if (stateTypes == null) {
+			
+			stateTypes = new HashMap<StateName, StateValueType>();
+			Class<?> superClass = clazz.getSuperclass();
+			while (!Controller.class.equals(superClass)) {
+				initStateTypes(superClass, stateNames);
+				break;
+			}
+			// Search the ".states" resource which defines the state types of the controller
+			String pkgName = clazz.getPackage().getName().replace('.', '/');
+			URL url = clazz.getClassLoader().getResource(pkgName +"/"+ clazz.getSimpleName() +".states");
+			if (url == null) {
+				throw new RuntimeException("Unable to find states definition file for "+ clazz.getName());
+			}
+			// Load the definition file
+			Properties props = new Properties();
+			try {
+				props.load(url.openStream());
+			} catch (IOException e) {
+				throw new RuntimeException("Unable to load states definition file for "+ getClass().getName(), e);
+			}
+			// Load each key/value pair (key=state name, value=state class name)
+			for (Entry<Object, Object> states : props.entrySet()) {
+				
+				String name = (String) states.getKey();
+				StateName stateName = initStateName(name); // The state name read
+				if (stateName == null) {
+					throw new ControllerStateException("State name "+ name +" is not a valid state name for class "+ getClass().getName());
+				}
+				
+				String type = (String) states.getValue();
+				StateValueType stateType = null;
+				Throwable cause = null;
+				try {
+					stateType = parseStateValueType(name, type); // Determine the class type used to store the value of the state name
+				} catch (UnknowStateValueTypeException e) {
+					cause = e;
+					stateType = initStateType(stateName, type); // User defined types
+				}
+				if (stateType == null) {
+					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), cause);
+				}
+				stateTypes.put(stateName, stateType);
+			}
+			classTypes.put(clazz, stateTypes);
+		}
+	}
+	
+	/**
+	 * Indicates if the controller is waiting information from the gateway.
+	 * 
+	 * @return <code>true</code> if controller is waiting information and <code>false</code> otherwise
 	 */
 	public boolean isWaitingResult() {
 		return waitingResult;
 	}
 
 	/**
-	 * Return the address of the targeted device
+	 * Returns the address of the targeted device
 	 * 
-	 * @return address of the targeted device
+	 * @return the address of the targeted device
 	 */
 	public Where getWhere() {
 		return where;
 	}
 
 	/**
-	 * Define the address of the targeted device to control
+	 * Defines the address of the targeted device to control
 	 * 
-	 * @param newValue
-	 *            address of the targeted device
+	 * @param newValue the address of the targeted device to control
 	 */
 	public void setWhere(Where newValue) {
 		this.where = newValue;
@@ -129,14 +181,14 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			for (StateName stateName : stateTypes.keySet()) {
 				get(stateName);
 			}
-			
 		}
 	}
 
 	/**
-	 * Execute an action
+	 * Executes an action. The result is wait by a command listener.
 	 * 
-	 * @return result of action execution.
+	 * @param what The state to update
+	 * @param commandListener The listener which will wait for action result
 	 */
 	protected void executeAction(final State what, final CommandListener commandListener) {
 		if (server == null || what == null || what.getName() == null) {
@@ -159,9 +211,11 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 
 	/**
-	 * Get the status of the controller.
+	 * Executes a read operation on a state name of the controller.
+	 * The result is wait by a status listener.
 	 * 
-	 * @return status of the controller.
+	 * @param stateName The state name to read
+	 * @param statusListener The listener which will wait for result
 	 */
 	protected void executeStatus(final StateName stateName, final StatusListener statusListener) {
 		if (server == null || stateName == null) {
@@ -205,12 +259,12 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 
 	/**
-	 * @param l
+	 * @param listener
 	 *            the new change listener.
 	 */
-	public void addControllerChangeListener(ControllerChangeListener l) {
+	public void addControllerChangeListener(ControllerChangeListener listener) {
 		synchronized (controllerChangeListenerList) {
-			controllerChangeListenerList.add(l);
+			controllerChangeListenerList.add(listener);
 		}
 	}
 
@@ -222,8 +276,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 	}
 
-	private void notifyStateChangeError(State oldStatus, State newStatus,
-			CommandResult result) {
+	private void notifyStateChangeError(State oldStatus, State newStatus, CommandResult result) {
 		synchronized (controllerChangeListenerList) {
 			for (ControllerChangeListener listener : controllerChangeListenerList) {
 				listener.onStateChangeError(this, oldStatus, newStatus, result);
@@ -250,6 +303,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 
 	/**
 	 * Return the description of the controller
+	 * 
 	 * @return description of the controller
 	 */
 	public String getDescription() {
@@ -258,6 +312,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 
 	/**
 	 * Define the description of the controller.
+	 * 
 	 * @param description of the controller
 	 */
 	public void setDescription(String description) {
@@ -265,13 +320,14 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 
 	/**
-	 * Return the value of a state of the status.
+	 * Returns the current value of a state name.
+	 * 
 	 * @param state The state name
-	 * @return The current value of the state into the current status.
+	 * @return The current value of a state name
 	 */
 	protected StateValue get(StateName stateName) {
-		StateValue val = stateList.get(stateName);
-		if (val == null) {
+		StateValue value = stateList.get(stateName);
+		if (value == null) {
 			executeStatus(stateName, new StatusListener() {
 				@Override
 				public void onStatus(State status, CommandResult result) {
@@ -282,31 +338,35 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				}
 			});	
 		}
-		return val;
+		return value;
 	}
 
 	/**
-	 * Return the value of a state of the status.
-	 * If the state is not yet defined into the status, the default value is returned.
-	 * @param state The state name
+	 * Returns the current value of a state name and a default one if this state name has not been set.
+	 * 
+	 * @param stateName The state name to read
 	 * @param defaultValue The default value
-	 * @return The current value of the state into the current status or <code>defaultValue</code>
+	 * @return the current value of the state name if exists and the default otherwise
 	 */
-	protected StateValue get(StateName state, StateValue defaultValue) {
-		StateValue result = get(state);
+	protected StateValue get(StateName stateName, StateValue defaultValue) {
+		StateValue result = get(stateName);
 		return result == null ? defaultValue : result;
 	}
 
 	/**
 	 * Create/update a value of the status.
-	 * @param state The state name
-	 * @param value The value of the state to set into the status
+	 * @param stateName The state name
+	 * @param stateValue The value of the state to set into the status
 	 */
-	protected void set(StateName state, StateValue value) {
-		if (!checkStateValue(state, value)) {
-			// TODO Create a StateValueException
-			throw new IllegalArgumentException("Unable to set ["+ state.getName() +"] state to "+ value.getValue()
-					+", the state value must be an instance of "+ stateTypes.get(state).getName());
+	protected void set(StateName stateName, StateValue stateValue) {
+		if (stateName == null || stateName.getName() == null) {
+			throw new NullPointerException("Could not set null state name.");
+		}
+		StateValueType stateType = stateTypes.get(stateName);
+		try {
+			stateType.setValue(stateValue);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Unable to set "+ stateName.getName() +", "+ e.getMessage());
 		}
 
 		// The command is sent to the gateway. Gateway transmits it to the
@@ -314,8 +374,8 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		// If everything is fine, Gateway provides through the monitor session
 		// the new status => not need to set it here since it will be set by the
 		// monitor way.
-		final State oldStatus = new State(state, get(state));
-		final State newStatus = new State(state, value);
+		final State oldStatus = new State(stateName, get(stateName));
+		final State newStatus = new State(stateName, stateValue);
 		// what = newWhat; => it will be done with changeWhat by the monitor
 		// listener
 		
@@ -350,28 +410,64 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		stateList.put(newWhat.getName(), newWhat.getValue());
 		notifyStateChange(oldWhat, newWhat);
 	}
-
+	
 	/**
-	 * Check that a class value is compatible with a state.
-	 * For state names which are not defined by this controller, the result is always <true>.
-	 * @param state The state name to check
-	 * @param value The value of the state
-	 * @return <code>true</code> if the instance of the state value's class is assignable from the one which is defined by this controller and <code>false</code> otherwise
-	 * @throws NullPointerException if the state and/or the value is null
+	 * 
+	 * @param name
+	 * @param value
+	 * @return
+	 * @throws UnknowStateValueTypeException 
 	 */
-	private boolean checkStateValue(StateName state, StateValue value) {
-		if (state == null) {
-			throw new NullPointerException("Could not set null state.");
+	public StateValueType parseStateValueType(String name, String value) throws UnknowStateValueTypeException {
+		if (value == null || value.length() == 0) {
+			// TODO ConfigurationException
+			throw new NullPointerException("Value is empty for state name "+ name);
 		}
-		if (value == null) {
-			throw new NullPointerException("Could not set null value to a state.");
+		int length = value.length();
+		char firstChar = value.charAt(0);
+		if (firstChar == '#' && length > 2) { // Class type
+			if (length > 2) {
+				String keyword = value.substring(1);
+//				firstChar = value.charAt(2);
+				if ("Date".equals(keyword)) {
+					return new DateType();
+				}
+				else if ("Datetime".equals(keyword)) {
+					return new DateTimeType();
+				}
+				else if ("Label".equals(keyword)) {
+					return new LabelType();
+				}
+				else if ("Number".equals(keyword)) {
+					return new NumberType();
+				}
+				else if ("Percentage".equals(keyword)) {
+					return new PercentageType();
+				}
+				else if ("Time".equals(keyword)) {
+					return new TimeType();
+				}
+				throw new UnknowStateValueTypeException("Unknown state value type "+ keyword +" for state name "+ name);
+			}
+			// TODO ConfigurationException
+			throw new NullPointerException("Missing value after class definition character '#' for state name "+ name);
 		}
-		
-		Class<? extends StateValue> stateValueClass = stateTypes.get(state);
-		if (stateValueClass == null) { // The state is not defined by this controller, consider this is a user defined state
-			return true;
+		else if (firstChar == '{') { // List of values
+			if (length > 2 && (value.charAt(length-1) == '}')) {
+				String values = value.substring(1, length-1);
+				return new ListOfValuesType(values.split(","));
+			}
+			// TODO ConfigurationException
+			throw new NullPointerException("Missing end character '}' of list of values for state name "+ name);
 		}
-		return value.getClass().isAssignableFrom(stateValueClass); 
+		else if (firstChar == '[') { // MinMaxType
+			if (length > 2 && (value.charAt(length-1) == ']')) {
+				
+			}
+			// TODO ConfigurationException
+			throw new NullPointerException("Missing end character ']' of number interval for state name "+ name);
+		}
+		throw new IllegalStateException("Unsupported value "+ value +" for state name "+ name);
 	}
 
 	@Override
@@ -433,5 +529,22 @@ public abstract class Controller implements JsonSerializable, Serializable {
 //			}
 //			
 //		}
+	}
+	
+	/**
+	 * Create the {@link StateName} instance corresponding to the key name of one state managed by this controller.
+	 * @param name The name of the state
+	 * @return
+	 */
+	protected abstract StateName initStateName(String name);
+	
+	/**
+	 * Create the {@link StateValueType} instance corresponding to a state name managed by this controller.
+	 * @param stateName The state name
+	 * @param value The string representation of the state value type red in the configuration file of this controller class.
+	 * @return
+	 */
+	protected StateValueType initStateType(StateName stateName, String value) {
+		return null;
 	}
 }

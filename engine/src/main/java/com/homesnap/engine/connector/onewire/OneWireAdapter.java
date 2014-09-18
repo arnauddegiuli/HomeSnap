@@ -52,7 +52,7 @@ import com.homesnap.engine.connector.Monitor;
 import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.clock.ClockSensor.ClockSensorStateName;
-import com.homesnap.engine.controller.temperature.TemperatureSensor.TemperatureSensorStateName;
+import com.homesnap.engine.controller.temperature.TemperatureSensorStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;

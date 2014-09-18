@@ -33,9 +33,7 @@ import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
-import com.homesnap.engine.connector.openwebnet.heating.Offset;
 import com.homesnap.engine.connector.openwebnet.heating.ValveStatusEnum;
-import com.homesnap.engine.connector.openwebnet.heating.Offset.Mode;
 import com.homesnap.engine.connector.openwebnet.heating.dimension.DesiredTemperature;
 import com.homesnap.engine.connector.openwebnet.heating.dimension.MeasureTemperature;
 import com.homesnap.engine.connector.openwebnet.heating.dimension.ProbeStatus;
@@ -43,6 +41,8 @@ import com.homesnap.engine.connector.openwebnet.heating.dimension.SetOffset;
 import com.homesnap.engine.connector.openwebnet.heating.dimension.ValvesStatus;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.heating.stateValue.Offset;
+import com.homesnap.engine.controller.heating.stateValue.Offset.Mode;
 import com.homesnap.server.controllermodules.ControllerDimensionSimulator;
 
 public class HeatingSimulator implements ControllerDimensionSimulator {

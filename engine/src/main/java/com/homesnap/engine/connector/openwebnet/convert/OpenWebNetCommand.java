@@ -35,6 +35,14 @@ import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
 public class OpenWebNetCommand {
+	
+	// TODO Improve way to differenciate single action from dimension action commands
+	public static StateName DEFAULT_ACTION = new StateName() {
+		@Override
+		public String getName() {
+			return "status";
+		}
+	};
 
 	private String command;
 	private CommandParser parser;
@@ -75,7 +83,7 @@ public class OpenWebNetCommand {
 
 	public State getWhat() { // TODO change name => remove command
 		try {
-			return new State(StateName.STATUS, Convert.convertStatus(getWho(), parser.getWhat()));
+			return new State(DEFAULT_ACTION, Convert.convertStatus(getWho(), parser.getWhat()));
 		} catch (UnknownState e) {
 			// TODO log
 			return null;

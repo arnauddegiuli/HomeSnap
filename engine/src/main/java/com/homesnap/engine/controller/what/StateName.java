@@ -1,5 +1,7 @@
 package com.homesnap.engine.controller.what;
 
+import com.homesnap.engine.controller.Controller;
+
 /*
  * #%L
  * HomeSnapEngine
@@ -24,17 +26,18 @@ package com.homesnap.engine.controller.what;
  * #L%
  */
 
-
-
+/**
+ * The name of a state which is the base identifier to update a state of a controller.
+ * 
+ * @see Controller
+ * @see State
+ * 
+ * @author DRIESBACH Olivier
+ * @version 1.0
+ * @since 1.0
+ */
 public interface StateName {
 
-	public StateName STATUS = new StateName() {
-		@Override
-		public String getName() {
-			return "status";
-		}
-	};
-	
 	/**
 	 * Return a string representation of the name of state.
 	 * @return a name.

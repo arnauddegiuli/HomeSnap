@@ -1,0 +1,11 @@
+date=#Date
+datetime=#Date
+distribution_version, VersionValue.class);
+firmware_version, VersionValue.class);
+ip_address, IpAddressValue.class);
+kernel_version, VersionValue.class);
+mac_address, IpAddressValue.class);
+model=#Label
+netmask, IpAddressValue.class);
+time=#Date
+uptime=#Date

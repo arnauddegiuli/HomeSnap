@@ -24,12 +24,18 @@ package com.homesnap.engine.controller.light;
  * #L%
  */
 
-
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.impl.StringValue;
 import com.homesnap.engine.controller.who.Who;
 
+/**
+ * 
+ * @author DRIESBACH Olivier
+ * @version 1.0
+ * @since 1.0
+ */
 public class Light extends Controller {
 
 	/** uuid */
@@ -43,16 +49,16 @@ public class Light extends Controller {
 		return Who.LIGHT;
 	}
 
-	@Override
-	protected void initStateTypes() {
-		declareState(StateName.STATUS, LightStatusValue.class);
-	}
-
 	public LightStatusValue getStatus() {
-		return (LightStatusValue) get(StateName.STATUS);
+		return (LightStatusValue) get(LightStateName.STATUS);
 	}
 
-	public void setStatus(LightStatusValue status) {
-		set(StateName.STATUS, status);
+	public void setStatus(String status) {
+		set(LightStateName.STATUS, new StringValue(status));
+	}
+
+	@Override
+	protected StateName initStateName(String name) {
+		return LightStateName.valueOf(name.toUpperCase());
 	}
 }

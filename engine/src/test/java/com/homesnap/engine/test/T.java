@@ -42,8 +42,7 @@ public class T {
 		
 		final Light light = s.createController(Light.class, "42");
 		
-		light.setStatus(LightStatusValue.LIGHT_OFF);
-
-		
+//		light.setStatus(LightStatusValue.LIGHT_OFF);
+		light.setStatus("LIGHT_OFF");
 	}
 }

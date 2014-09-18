@@ -1,0 +1,6 @@
+status={Heating mode, Thermal protection, Off}
+local_offset={On, Off, Protection}
+measure_temperature=#Number
+set_temperature_conditional=#Number
+set_temperature_generic=#Number
+set_temperature_heating=#Number
