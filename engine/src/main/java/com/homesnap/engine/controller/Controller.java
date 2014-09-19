@@ -51,11 +51,13 @@ import com.homesnap.engine.controller.types.LabelType;
 import com.homesnap.engine.controller.types.ListOfValuesType;
 import com.homesnap.engine.controller.types.NumberType;
 import com.homesnap.engine.controller.types.PercentageType;
+import com.homesnap.engine.controller.types.RGBType;
 import com.homesnap.engine.controller.types.TimeType;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
+import com.homesnap.engine.controller.what.Status;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -443,6 +445,9 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				}
 				else if ("Percentage".equals(keyword)) {
 					return new PercentageType();
+				}
+				else if ("RGBType".equals(keyword)) {
+					return new RGBType();
 				}
 				else if ("Time".equals(keyword)) {
 					return new TimeType();

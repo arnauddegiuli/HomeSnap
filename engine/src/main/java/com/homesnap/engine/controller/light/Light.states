@@ -1,2 +1,4 @@
 status={On, Off}
 level=#Percentage
+blink_time=#Number
+color=#RGBType

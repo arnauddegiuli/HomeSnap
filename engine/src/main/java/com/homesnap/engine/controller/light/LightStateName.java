@@ -17,6 +17,9 @@ public enum LightStateName implements StateName {
 	/** Contains the current level of light for dimmable devices. */
 	LEVEL,
 	
+	/** Defines how long the light stays on before being off when status is set to blinking and has no effect otherwise. */
+	BLINK_TIME,
+	
 	/** Contains the hexadecimal color code for RGB devices. */
 	COLOR;
 	
