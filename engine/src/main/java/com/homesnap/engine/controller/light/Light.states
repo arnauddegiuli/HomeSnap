@@ -1,4 +1,11 @@
-status={On, Off}
+#[Controller]
+status={On, Off, Blinking}
 level=#Percentage
 blink_time=#Number
 color=#RGBType
+
+#[Widget_1]
+#onClick=status
+
+#[Widget_2::Widget_1]
+#onMove=level

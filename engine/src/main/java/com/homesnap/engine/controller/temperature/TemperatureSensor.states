@@ -1,7 +1,7 @@
 alarm_high=#Number
 alarm_low=#Number
-highest-temp=#Number
-lowest-temp=#Number
+highest_temp=#Number
+lowest_temp=#Number
 precision=#Number
 value=#Number
 unit={C,F}

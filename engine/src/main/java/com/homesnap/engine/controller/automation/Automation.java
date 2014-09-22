@@ -35,41 +35,21 @@ public class Automation extends Controller {
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
-	public enum AutomationStatusName implements StateName {
-		STATUS("status");
-		
-		private String name;
-		
-		private AutomationStatusName(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-	}
-	
 	@Override
 	public Who getWho() {
 		return Who.AUTOMATION;
 	}
 
 	public AutomationStatusValue getStatus() {
-		return (AutomationStatusValue) get(AutomationStatusName.STATUS);	
+		return (AutomationStatusValue) get(AutomationStateName.STATUS);	
 	}
 
 	public void setStatus(AutomationStatusValue status) {
-		set(AutomationStatusName.STATUS, status);	
+		set(AutomationStateName.STATUS, status);	
 	}
 
 	@Override
 	protected StateName initStateName(String name) {
-		return AutomationStatusName.valueOf(name.toUpperCase());
+		return AutomationStateName.valueOf(name.toUpperCase());
 	}
-
-//	@Override
-//	protected void initStateTypes() {
-//		declareState(StateName.STATUS, AutomationStatusValue.class);
-//	}
 }

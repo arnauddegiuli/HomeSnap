@@ -65,6 +65,9 @@ public abstract class Controller implements JsonSerializable, Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String STATES_EXTENSION = ".states";
+	
 	private boolean waitingResult = false;
 	protected Where where; // Represent the address of the controller
 	private String title; // string representing the controller

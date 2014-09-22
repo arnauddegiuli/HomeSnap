@@ -40,16 +40,6 @@ public class ClockSensor extends Controller  {
 	/** */
 	private static final long serialVersionUID = 8844793620351122559L;
 
-	public enum ClockSensorStateName implements StateName {
-		
-		ALARM, DATE, TIME, DATE_TIME;
-		
-		@Override
-		public String getName() {
-			return name().toLowerCase();
-		}
-	}
-
 	@Override
 	public Who getWho() {
 		return null;
