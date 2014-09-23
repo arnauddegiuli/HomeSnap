@@ -1,3 +1,8 @@
+[Engine]
+generate_once=true
+version=1.0
+
+[Controller]
 date=#Date
 datetime=#Date
 distribution_version=#VersionValue

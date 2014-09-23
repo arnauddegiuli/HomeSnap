@@ -9,12 +9,12 @@ import com.homesnap.engine.controller.what.StateName;
  */
 public enum HeatingZoneStateName implements StateName {
 	
-	STATUS,
-	SET_TEMPERATURE_HEATING,
+	LOCAL_OFFSET,
+	MEASURE_TEMPERATURE,
 	SET_TEMPERATURE_CONDITIONAL,
 	SET_TEMPERATURE_GENERIC,
-	MEASURE_TEMPERATURE,
-	LOCAL_OFFSET;
+	SET_TEMPERATURE_HEATING,
+	STATUS;
 	
 	@Override
 	public String getName() {

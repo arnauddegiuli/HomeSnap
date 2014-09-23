@@ -54,6 +54,7 @@ import com.homesnap.engine.controller.types.PercentageType;
 import com.homesnap.engine.controller.types.RGBType;
 import com.homesnap.engine.controller.types.TimeType;
 import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.StateDefinition;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
@@ -117,14 +118,14 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				throw new RuntimeException("Unable to find states definition file for "+ clazz.getName());
 			}
 			// Load the definition file
-			Properties props = new Properties();
+			StateDefinition stateDefinition = new StateDefinition();
 			try {
-				props.load(url.openStream());
+				stateDefinition.load(url.openStream());
 			} catch (IOException e) {
 				throw new RuntimeException("Unable to load states definition file for "+ getClass().getName(), e);
 			}
 			// Load each key/value pair (key=state name, value=state class name)
-			for (Entry<Object, Object> states : props.entrySet()) {
+			for (Entry<String, String> states : stateDefinition.getSectionProperties(StateDefinition.CONTROLLER_SECTION).entrySet()) {
 				
 				String name = (String) states.getKey();
 				StateName stateName = initStateName(name); // The state name read
@@ -371,7 +372,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		try {
 			stateType.setValue(stateValue);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Unable to set "+ stateName.getName() +", "+ e.getMessage());
+			throw new IllegalArgumentException("Unable to set "+ stateName.getName() +": "+ e.getMessage());
 		}
 
 		// The command is sent to the gateway. Gateway transmits it to the

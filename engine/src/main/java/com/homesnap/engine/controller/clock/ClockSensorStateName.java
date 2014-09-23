@@ -9,10 +9,10 @@ import com.homesnap.engine.controller.what.StateName;
  */
 public enum ClockSensorStateName implements StateName {
 	
+	ALARM,
 	DATE,
 	DATE_TIME,
-	TIME,
-	ALARM;
+	TIME;
 	
 	@Override
 	public String getName() {

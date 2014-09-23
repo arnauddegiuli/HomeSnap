@@ -9,17 +9,17 @@ import com.homesnap.engine.controller.what.StateName;
  */
 public enum GatewayStateName implements StateName {
 	
-	TIME,
 	DATE,
-	IP_ADDRESS,
+	DATETIME,
 	DISTRIBUTION_VERSION,
-	UPTIME,
+	FIRMWARE_VERSION,
+	IP_ADDRESS,
+	KERNEL_VERSION,
+	MAC_ADDRESS,
 	MODEL,
 	NETMASK,
-	KERNEL_VERSION,
-	DATETIME,
-	FIRMWARE_VERSION,
-	MAC_ADDRESS;
+	TIME,
+	UPTIME;
 	
 	@Override
 	public String getName() {

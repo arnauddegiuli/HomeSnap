@@ -3,15 +3,15 @@ package com.homesnap.engine.controller.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map.Entry;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.what.StateDefinition;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 
@@ -24,19 +24,19 @@ import com.homesnap.engine.controller.what.StateValue;
  */
 public class ControllerStateGenerator {
 	
-	/** */
+	/** Location of the HomeSnap source files */
 	private String sourcePath;
 	
-	/** */
+	/** Location of the HomeSnap binaries */
 	private String classPath;
 	
-	/** */
+	/** Location of the java enumeration state name template */
 	private String templatePath;
 	
-	/** */
+	/** Content of the state name template */
 	private String templateContent;
 	
-	/** */
+	/** Indicates if the java enumeration state files must be overwritten */
 	private boolean forceUpdate;
 	
 	/**
@@ -117,32 +117,36 @@ public class ControllerStateGenerator {
 		if (!forceUpdate && javaSourceFile.exists() && javaSourceFile.lastModified() > sourceStateFile.lastModified()) {
 			return;
 		}
-		
 		// Load the definition file
-		Properties props = new Properties();
+		StateDefinition stateDefinition = new StateDefinition();
 		try {
-			props.load(new FileInputStream(sourceStateFile));
+			stateDefinition.load(sourceStateFile);
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to load states definition file "+ sourceStateFile.getAbsolutePath(), e);
 		}
-		
-		// Load each key/value pair (key=state name, value=state class name)
-		StringBuilder enumValues = new StringBuilder();
-		for (Entry<Object, Object> states : props.entrySet()) {
-			
-			String stateName = (String) states.getKey();
-			enumValues.append("\t").append(stateName.toUpperCase()).append(",\r\n");
+		// Checks if the "generate_once" property is set to "true" to not overwrite java enum class if exists
+		if (stateDefinition.mustBeGeneratedOnce() && javaSourceFile.exists()) {
+			return;
 		}
-		enumValues.setLength(enumValues.length() - 3);
+		// Initialize the java constants
+		List<String> stateNames = new ArrayList<String>(stateDefinition.getSectionProperties(StateDefinition.CONTROLLER_SECTION).keySet());
+		stateNames.sort(null);
+		StringBuilder enumValues = new StringBuilder();
+		String separator = ",\r\n";
+		for (Object stateName : stateNames) {
+			enumValues.append("\t").append(stateName.toString().toUpperCase()).append(separator);
+		}
+		enumValues.setLength(enumValues.length() - separator.length());
 		enumValues = enumValues.append(";");
 		
 		// Generates the java enumeration class file which defines all state names of the controller.
 		String javaContent = getTemplateContent();
 		javaContent = javaContent.replace("@PACKAGE_NAME@", packagePath.replace(File.separatorChar, '.'));
-		javaContent = javaContent.replace("@STATE_NAME_CLASS_NAME@", StateName.class.getName());
+		javaContent = javaContent.replace("@STATE_NAME_CLASS@", StateName.class.getName());
 		javaContent = javaContent.replace("@CONTROLER_NAME@", controllerClassName);
 		javaContent = javaContent.replace("@GENERATOR_NAME@", getClass().getSimpleName());
 		javaContent = javaContent.replace("@ENUMERATION_NAME@", stateNameClass);
+		javaContent = javaContent.replace("@STATE_NAME_CLASSNAME@", StateName.class.getSimpleName());
 		javaContent = javaContent.replace("@STATE_NAME_VALUES@", enumValues.toString());
 		writeEnumFile(javaSourceFile, javaContent);
 	}
