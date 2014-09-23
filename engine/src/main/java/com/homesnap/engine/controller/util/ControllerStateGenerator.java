@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.what.StateDefinition;
+import com.homesnap.engine.controller.what.StateProperties;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 
@@ -38,6 +38,8 @@ public class ControllerStateGenerator {
 	
 	/** Indicates if the java enumeration state files must be overwritten */
 	private boolean forceUpdate;
+	
+	private static final String EOL = "\r\n";
 	
 	/**
 	 * 
@@ -118,7 +120,7 @@ public class ControllerStateGenerator {
 			return;
 		}
 		// Load the definition file
-		StateDefinition stateDefinition = new StateDefinition();
+		StateProperties stateDefinition = new StateProperties();
 		try {
 			stateDefinition.load(sourceStateFile);
 		} catch (IOException e) {
@@ -129,12 +131,13 @@ public class ControllerStateGenerator {
 			return;
 		}
 		// Initialize the java constants
-		List<String> stateNames = new ArrayList<String>(stateDefinition.getSectionProperties(StateDefinition.CONTROLLER_SECTION).keySet());
+		List<String> stateNames = new ArrayList<String>(stateDefinition.getSectionProperties(StateProperties.CONTROLLER_SECTION).keySet());
 		stateNames.sort(null);
 		StringBuilder enumValues = new StringBuilder();
-		String separator = ",\r\n";
-		for (Object stateName : stateNames) {
-			enumValues.append("\t").append(stateName.toString().toUpperCase()).append(separator);
+		String separator = ","+ EOL;
+		for (String stateName : stateNames) {
+			enumValues.append("\t").append(generateJavadoc(stateDefinition, stateName)).append(EOL)
+				.append("\t").append(stateName.toUpperCase()).append(separator);
 		}
 		enumValues.setLength(enumValues.length() - separator.length());
 		enumValues = enumValues.append(";");
@@ -149,6 +152,22 @@ public class ControllerStateGenerator {
 		javaContent = javaContent.replace("@STATE_NAME_CLASSNAME@", StateName.class.getSimpleName());
 		javaContent = javaContent.replace("@STATE_NAME_VALUES@", enumValues.toString());
 		writeEnumFile(javaSourceFile, javaContent);
+	}
+	
+	/**
+	 * 
+	 * @param stateDefinition
+	 * @param stateName
+	 * @return
+	 */
+	private String generateJavadoc(StateProperties stateDefinition, String stateName) {
+		
+		String javadoc = stateDefinition.getSectionProperty(StateProperties.DOCUMENTATION_SECTION, stateName);
+		StringBuilder result = new StringBuilder("/** ");
+		if (javadoc == null) {
+			javadoc = "State name "+ stateName;
+		}
+		return result.append(javadoc).append(" */").toString();
 	}
 	
 	/**

@@ -54,8 +54,8 @@ import com.homesnap.engine.controller.types.PercentageType;
 import com.homesnap.engine.controller.types.RGBType;
 import com.homesnap.engine.controller.types.TimeType;
 import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateDefinition;
 import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.StateProperties;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
 import com.homesnap.engine.controller.what.Status;
@@ -118,14 +118,14 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				throw new RuntimeException("Unable to find states definition file for "+ clazz.getName());
 			}
 			// Load the definition file
-			StateDefinition stateDefinition = new StateDefinition();
+			StateProperties properties = new StateProperties();
 			try {
-				stateDefinition.load(url.openStream());
+				properties.load(url.openStream());
 			} catch (IOException e) {
 				throw new RuntimeException("Unable to load states definition file for "+ getClass().getName(), e);
 			}
 			// Load each key/value pair (key=state name, value=state class name)
-			for (Entry<String, String> states : stateDefinition.getSectionProperties(StateDefinition.CONTROLLER_SECTION).entrySet()) {
+			for (Entry<String, String> states : properties.getSectionProperties(StateProperties.CONTROLLER_SECTION).entrySet()) {
 				
 				String name = (String) states.getKey();
 				StateName stateName = initStateName(name); // The state name read
