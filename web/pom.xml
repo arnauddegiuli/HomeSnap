@@ -36,6 +36,7 @@
 							 com.homesnap.engine.controller.light,
 							 com.homesnap.engine.controller.automation,
 							 com.homesnap.engine.controller.where,
+							 com.homesnap.engine.controller.who,
 							 com.homesnap.engine.house,
 							 com.homesnap.engine.services,
 							 com.homesnap.engine.services.impl,

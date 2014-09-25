@@ -17,9 +17,9 @@ import com.homesnap.engine.services.impl.PersistenceServiceImpl;
 
 /*
  * #%L
- * MyDomoWebServer
+ * HomeSnapWebServer
  * %%
- * Copyright (C) 2011 - 2013 A. de Giuli
+ * Copyright (C) 2011 - 2014 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
