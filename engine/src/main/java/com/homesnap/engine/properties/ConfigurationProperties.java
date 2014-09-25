@@ -138,7 +138,10 @@ public abstract class ConfigurationProperties {
 				}
 				
 				String property = line.substring(0, separator);
-				String value = line.substring(separator+1);
+				String value = "";
+				if (separator < (line.length()-1)) {
+					value = line.substring(separator+1);
+				}
 				synchronized (sections) {
 					Map<String, String> result = sections.get(sectionName);
 					if (result == null) {

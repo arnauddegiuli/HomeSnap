@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
@@ -133,11 +134,11 @@ public abstract class Controller implements JsonSerializable, Serializable {
 					throw new ControllerStateException("State name "+ name +" is not a valid state name for class "+ getClass().getName());
 				}
 				
-				String type = (String) states.getValue();
 				StateValueType stateType = null;
+				String type = properties.getSectionProperty(StateProperties.CONTROLLER_SECTION, name);
 				Throwable cause = null;
 				try {
-					stateType = parseStateValueType(name, type); // Determine the class type used to store the value of the state name
+					stateType = properties.getStateValueType(name); // Determine the class type used to store the value of the state name
 				} catch (UnknowStateValueTypeException e) {
 					cause = e;
 					stateType = initStateType(stateName, type); // User defined types
@@ -507,7 +508,12 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	@Override
 	public void fromJson(JSONObject jsonObject) {
 		setTitle(jsonObject.getString(JSON_TITLE));
-		setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		try {
+			setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		String to = jsonObject.getString(JSON_WHERE);
 		if (!"null".equals(String.valueOf(to))) {
