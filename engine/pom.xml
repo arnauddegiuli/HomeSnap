@@ -77,6 +77,7 @@
 							 com.homesnap.engine.controller.what,
 							 com.homesnap.engine.controller.what.impl,
 							 com.homesnap.engine.controller.where,
+							 com.homesnap.engine.controller.who,
 							 com.homesnap.engine.house,
 							 com.homesnap.engine.script,
 							 com.homesnap.engine.services,

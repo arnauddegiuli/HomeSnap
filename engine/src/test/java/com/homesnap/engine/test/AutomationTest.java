@@ -31,7 +31,7 @@
 //import com.homesnap.engine.controller.Controller;
 //import com.homesnap.engine.controller.ControllerChangeListener;
 //import com.homesnap.engine.controller.automation.Automation;
-//import com.homesnap.engine.controller.automation.Automation.AutomationState;
+//import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
 //import com.homesnap.engine.controller.what.State;
 //import com.homesnap.engine.services.ControllerService;
 //import com.homesnap.engine.services.impl.OpenWebNetControllerService;
@@ -50,7 +50,7 @@
 //		automation.addControllerChangeListener(new ControllerChangeListener() {
 //
 //			@Override
-//			public void onWhatChangeError(Controller controller,
+//			public void onStateChangeError(Controller controller,
 //					State oldStatus, State newStatus, CommandResult result) {
 //				synchronized (lock) {
 //					// When response from server is here we unlock the thread
@@ -60,7 +60,7 @@
 //			}
 //			
 //			@Override
-//			public void onWhatChange(Controller controller,
+//			public void onStateChange(Controller controller,
 //					State oldStatus, State newStatus) {
 //				synchronized (lock) {
 //					// When response from server is here we unlock the thread
@@ -83,10 +83,10 @@
 //		
 //		// By default server send back a OFF status. If value == null, it is a bug or just server have not enough time (1 second) to respond
 //		Assert.assertNotNull(automation.getStatus());
-//		Assert.assertEquals(AutomationState.AUTOMATION_STOP , automation.getStatus());
+//		Assert.assertEquals(AutomationStatusValue.STOP, automation.getStatus());
 //		
 //		// Now set the value to AUTOMATION_DOWN
-//		automation.setStatus(AutomationState.AUTOMATION_DOWN);
+//		automation.setStatus(AutomationStatusValue.DOWN);
 //		System.out.println("Wait...");
 //		
 //		// Wait the response from the server
@@ -101,10 +101,10 @@
 //		
 //		// Check that after the server response now the status is ON
 //		Assert.assertNotNull(automation.getStatus());
-//		Assert.assertEquals(AutomationState.AUTOMATION_DOWN , automation.getStatus());
+//		Assert.assertEquals(AutomationStatusValue.DOWN , automation.getStatus());
 //		
 //		// Switch UP now again
-//		automation.setStatus(AutomationState.AUTOMATION_UP);
+//		automation.setStatus(AutomationStatusValue.UP);
 //		System.out.println("Wait...");
 //		
 //		try {
@@ -117,10 +117,10 @@
 //		}
 //		
 //		Assert.assertNotNull(automation.getStatus());
-//		Assert.assertEquals(AutomationState.AUTOMATION_UP , automation.getStatus());
+//		Assert.assertEquals(AutomationStatusValue.UP , automation.getStatus());
 //
 //		// Switch OFF now again
-//		automation.setStatus(AutomationState.AUTOMATION_STOP);
+//		automation.setStatus(AutomationStatusValue.STOP);
 //		System.out.println("Wait...");
 //		
 //		try {
@@ -133,7 +133,7 @@
 //		}
 //		
 //		Assert.assertNotNull(automation.getStatus());
-//		Assert.assertEquals(AutomationState.AUTOMATION_STOP , automation.getStatus());
+//		Assert.assertEquals(AutomationStatusValue.STOP , automation.getStatus());
 //
 //		
 //		System.out.println("Finish...");
