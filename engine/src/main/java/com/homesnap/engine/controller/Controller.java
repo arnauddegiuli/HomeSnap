@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
@@ -402,7 +403,12 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	@Override
 	public void fromJson(JSONObject jsonObject) {
 		setTitle(jsonObject.getString(JSON_TITLE));
-		setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		try {
+			setDescription(jsonObject.getString(JSON_DESCRIPTION));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		String to = jsonObject.getString(JSON_WHERE);
 		if (!"null".equals(String.valueOf(to))) {
