@@ -29,6 +29,7 @@ import java.util.Date;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
+import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.impl.DateValue;
 import com.homesnap.engine.controller.what.impl.IpAddressValue;
 import com.homesnap.engine.controller.what.impl.StringValue;
@@ -45,20 +46,20 @@ public class Gateway extends Controller {
 	public Gateway() {
 	}
 
-	@Override
-	protected void initStateTypes() {
-		declareState(GatewayStateName.DATE, DateValue.class);
-		declareState(GatewayStateName.DATETIME, DateValue.class);
-		declareState(GatewayStateName.DISTRIBUTION_VERSION, VersionValue.class);
-		declareState(GatewayStateName.FIRMWARE_VERSION, VersionValue.class);
-		declareState(GatewayStateName.IP_ADDRESS, IpAddressValue.class);
-		declareState(GatewayStateName.KERNEL_VERSION, VersionValue.class);
-		declareState(GatewayStateName.MAC_ADDRESS, IpAddressValue.class);
-		declareState(GatewayStateName.MODEL, StringValue.class);
-		declareState(GatewayStateName.NETMASK, IpAddressValue.class);
-		declareState(GatewayStateName.TIME, DateValue.class);
-		declareState(GatewayStateName.UPTIME, DateValue.class);
-	}
+//	@Override
+//	protected void initStateTypes() {
+//		declareState(GatewayStateName.DATE, DateValue.class);
+//		declareState(GatewayStateName.DATETIME, DateValue.class);
+//		declareState(GatewayStateName.DISTRIBUTION_VERSION, VersionValue.class);
+//		declareState(GatewayStateName.FIRMWARE_VERSION, VersionValue.class);
+//		declareState(GatewayStateName.IP_ADDRESS, IpAddressValue.class);
+//		declareState(GatewayStateName.KERNEL_VERSION, VersionValue.class);
+//		declareState(GatewayStateName.MAC_ADDRESS, IpAddressValue.class);
+//		declareState(GatewayStateName.MODEL, StringValue.class);
+//		declareState(GatewayStateName.NETMASK, IpAddressValue.class);
+//		declareState(GatewayStateName.TIME, DateValue.class);
+//		declareState(GatewayStateName.UPTIME, DateValue.class);
+//	}
 
 	@Override
 	public Who getWho() {
@@ -105,5 +106,10 @@ public class Gateway extends Controller {
 
 	public VersionValue getDistributionVersion() {
 		return (VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION);
+	}
+
+	@Override
+	protected StateName initStateName(String name) {
+		return GatewayStateName.valueOf(name.toUpperCase());
 	}
 }

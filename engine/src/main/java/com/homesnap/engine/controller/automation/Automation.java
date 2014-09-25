@@ -30,7 +30,6 @@ import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValu
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.who.Who;
 
-
 public class Automation extends Controller {
 
 	/** uuid */
@@ -42,15 +41,15 @@ public class Automation extends Controller {
 	}
 
 	public AutomationStatusValue getStatus() {
-		return (AutomationStatusValue) get(StateName.STATUS);	
+		return (AutomationStatusValue) get(AutomationStateName.STATUS);	
 	}
 
 	public void setStatus(AutomationStatusValue status) {
-		set(StateName.STATUS, status);	
+		set(AutomationStateName.STATUS, status);	
 	}
 
 	@Override
-	protected void initStateTypes() {
-		declareState(StateName.STATUS, AutomationStatusValue.class);
+	protected StateName initStateName(String name) {
+		return AutomationStateName.valueOf(name.toUpperCase());
 	}
 }

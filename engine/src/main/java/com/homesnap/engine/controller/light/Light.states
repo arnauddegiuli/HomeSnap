@@ -1,0 +1,15 @@
+[Engine]
+generate_once=true
+version=1.0
+
+[Controller]
+status={On, Off, Blinking}
+level=#Percentage
+blink_time=#Number
+color=#RGBType
+
+[Documentation]
+status=Contains the current status of the light (ie: on, off, blinking ...) depending on vendor capabilities.
+level=Contains the current level of light for dimmable devices.
+blink_time=Defines how long the light stays on before being off when status is set to blinking and has no effect otherwise.
+color=Contains the hexadecimal color code for RGB devices.

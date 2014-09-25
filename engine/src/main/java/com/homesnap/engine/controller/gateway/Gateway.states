@@ -1,0 +1,16 @@
+[Engine]
+generate_once=true
+version=1.0
+
+[Controller]
+date=#Date
+datetime=#Date
+distribution_version=#VersionValue
+firmware_version=#VersionValue
+kernel_version=#VersionValue
+ip_address=#IpAddressValue
+mac_address=#IpAddressValue
+netmask=#IpAddressValue
+model=#Label
+time=#Date
+uptime=#Date

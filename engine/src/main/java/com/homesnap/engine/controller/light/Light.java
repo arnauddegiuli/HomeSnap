@@ -24,17 +24,28 @@ package com.homesnap.engine.controller.light;
  * #L%
  */
 
-
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
+import com.homesnap.engine.controller.types.NumberType;
+import com.homesnap.engine.controller.types.RGBType;
 import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.impl.StringValue;
 import com.homesnap.engine.controller.who.Who;
 
+/**
+ * 
+ * @author DRIESBACH Olivier
+ * @version 1.0
+ * @since 1.0
+ */
 public class Light extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * 
+	 */
 	public Light() {
 	}
 
@@ -43,16 +54,64 @@ public class Light extends Controller {
 		return Who.LIGHT;
 	}
 
-	@Override
-	protected void initStateTypes() {
-		declareState(StateName.STATUS, LightStatusValue.class);
-	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public LightStatusValue getStatus() {
-		return (LightStatusValue) get(StateName.STATUS);
+		return (LightStatusValue) get(LightStateName.STATUS);
 	}
 
-	public void setStatus(LightStatusValue status) {
-		set(StateName.STATUS, status);
+	/**
+	 * 
+	 * @param status
+	 */
+	public void setStatus(String status) {
+		set(LightStateName.STATUS, new StringValue(status));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public NumberType getLevel() {
+		return (NumberType) get(LightStateName.LEVEL);
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 */
+	public void setLevel(String value) {
+		set(LightStateName.LEVEL, new StringValue(value));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public NumberType getBlinkTime() {
+		return (NumberType) get(LightStateName.BLINK_TIME);
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 */
+	public void setBlinkTime(String value) {
+		set(LightStateName.BLINK_TIME, new StringValue(value));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public RGBType getColor() {
+		return (RGBType) get(LightStateName.COLOR);
+	}
+
+	@Override
+	protected StateName initStateName(String name) {
+		return LightStateName.valueOf(name.toUpperCase());
 	}
 }
