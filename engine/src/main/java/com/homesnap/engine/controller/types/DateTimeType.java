@@ -37,14 +37,14 @@ public class DateTimeType extends StateValueType {
 		this.pattern = pattern;
 		value = new Date();
 	}
-
+	
 	@Override
 	public String getValue() {
 		return new SimpleDateFormat(pattern, locale).format(value);
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		try {
 			this.value = new SimpleDateFormat(pattern, locale).parse(value);
 		} catch (ParseException e) {

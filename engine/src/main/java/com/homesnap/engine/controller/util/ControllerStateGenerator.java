@@ -275,7 +275,7 @@ public class ControllerStateGenerator {
 	private String splitValues(String[] values, String separator) {
 		StringBuilder result = new StringBuilder();
 		for (String value : values) {
-			result.append("\t").append(value).append(separator);
+			result.append("\t").append(value.toUpperCase()).append(separator);
 		}
 		result.setLength(result.length() - separator.length());
 		return result.append(";").toString();

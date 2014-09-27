@@ -28,7 +28,7 @@ package com.homesnap.engine.connector.knxnetip;
 import tuwien.auto.calimero.dptxlator.DPT;
 import tuwien.auto.calimero.dptxlator.DPTXlatorBoolean;
 
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
+import com.homesnap.engine.controller.light.LightStatusStateValue;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.who.Who;
 
@@ -93,7 +93,7 @@ public class KNXUtil {
 			}
 				
 			case LIGHT: {
-				result = LightStatusValue.LIGHT_ON.equals(stateValue) ? "on" : LightStatusValue.LIGHT_OFF.equals(stateValue) ? "off" : null;
+				result = LightStatusStateValue.ON.equals(stateValue) ? "on" : LightStatusStateValue.OFF.equals(stateValue) ? "off" : null;
 				break;
 			}
 			default: {
@@ -124,7 +124,7 @@ public class KNXUtil {
 			}
 				
 			case LIGHT: {
-				result = DPTXlatorBoolean.DPT_SWITCH.getLowerValue().equals(value) ? LightStatusValue.LIGHT_ON : DPTXlatorBoolean.DPT_SWITCH.getUpperValue().equals(value) ? LightStatusValue.LIGHT_OFF : null;
+				result = DPTXlatorBoolean.DPT_SWITCH.getLowerValue().equals(value) ? LightStatusStateValue.ON : DPTXlatorBoolean.DPT_SWITCH.getUpperValue().equals(value) ? LightStatusStateValue.OFF : null;
 				break;
 			}
 			default: {

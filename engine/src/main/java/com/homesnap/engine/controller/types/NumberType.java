@@ -25,7 +25,7 @@ public class NumberType extends StateValueType {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		try {
 			this.value = Double.parseDouble(value);
 		} catch (NumberFormatException e) {

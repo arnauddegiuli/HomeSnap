@@ -26,7 +26,7 @@ public class PercentageType extends MinMaxType<Integer> {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		try {
 			int number = Integer.parseInt(value);
 			if (MIN <= this.value && this.value <= MAX) {

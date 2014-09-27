@@ -1,5 +1,5 @@
 [Engine]
-generate_once=false
+generate_once=true
 version=1.0
 
 [Controller]

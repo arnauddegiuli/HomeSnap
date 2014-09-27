@@ -24,7 +24,7 @@ public class RGBType extends StateValueType {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		if (value.length() > 0) {
 			String hexCode = value;
 			if (value.charAt(0) == '#') {

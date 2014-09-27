@@ -25,7 +25,6 @@ package com.homesnap.engine.connector.openwebnet.counter;
  */
 
 import com.homesnap.engine.controller.counter.stateValue.CounterStatusValue;
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
 import com.homesnap.engine.controller.what.StateValue;
 
 

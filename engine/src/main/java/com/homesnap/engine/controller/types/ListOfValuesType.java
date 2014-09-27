@@ -41,7 +41,7 @@ public class ListOfValuesType extends StateValueType {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		for (String s : values) {
 			if (s.equals(value)) {
 				this.value = value;

@@ -25,11 +25,9 @@ package com.homesnap.engine.controller.light;
  */
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.light.stateValue.LightStatusValue;
-import com.homesnap.engine.controller.types.NumberType;
 import com.homesnap.engine.controller.types.RGBType;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.impl.StringValue;
+import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.who.Who;
 
 /**
@@ -58,48 +56,48 @@ public class Light extends Controller {
 	 * 
 	 * @return
 	 */
-	public LightStatusValue getStatus() {
-		return (LightStatusValue) get(LightStateName.STATUS);
+	public StateValue getStatus() {
+		return get(LightStateName.STATUS);
 	}
 
 	/**
 	 * 
 	 * @param status
 	 */
-	public void setStatus(String status) {
-		set(LightStateName.STATUS, new StringValue(status));
+	public void setStatus(StateValue status) {
+		set(LightStateName.STATUS, status);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public NumberType getLevel() {
-		return (NumberType) get(LightStateName.LEVEL);
+	public StateValue getLevel() {
+		return get(LightStateName.LEVEL);
 	}
 	
 	/**
 	 * 
 	 * @param value
 	 */
-	public void setLevel(String value) {
-		set(LightStateName.LEVEL, new StringValue(value));
+	public void setLevel(StateValue value) {
+		set(LightStateName.LEVEL, value);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public NumberType getBlinkTime() {
-		return (NumberType) get(LightStateName.BLINK_TIME);
+	public StateValue getBlinkTime() {
+		return get(LightStateName.BLINK_TIME);
 	}
 	
 	/**
 	 * 
 	 * @param value
 	 */
-	public void setBlinkTime(String value) {
-		set(LightStateName.BLINK_TIME, new StringValue(value));
+	public void setBlinkTime(StateValue value) {
+		set(LightStateName.BLINK_TIME, value);
 	}
 	
 	/**

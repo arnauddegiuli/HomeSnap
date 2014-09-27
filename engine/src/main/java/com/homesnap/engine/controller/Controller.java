@@ -136,15 +136,10 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				
 				StateValueType stateType = null;
 				String type = properties.getSectionProperty(StateProperties.CONTROLLER_SECTION, name);
-				Throwable cause = null;
 				try {
 					stateType = properties.getStateValueType(name); // Determine the class type used to store the value of the state name
 				} catch (UnknowStateValueTypeException e) {
-					cause = e;
-					stateType = initStateType(stateName, type); // User defined types
-				}
-				if (stateType == null) {
-					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), cause);
+					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), e);
 				}
 				stateTypes.put(stateName, stateType);
 			}
@@ -359,33 +354,51 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		StateValue result = get(stateName);
 		return result == null ? defaultValue : result;
 	}
-
+	
 	/**
 	 * Create/update a value of the status.
-	 * @param stateName The state name
-	 * @param stateValue The value of the state to set into the status
+	 * @param stateName The state name to update
+	 * @param stateValue The new value of the state name
 	 */
-	protected void set(StateName stateName, StateValue stateValue) {
-		if (stateName == null || stateName.getName() == null) {
+	public void set(String stateName, String stateValue) {
+		if (stateName == null) {
 			throw new NullPointerException("Could not set null state name.");
+		}
+		StateName name = initStateName(stateName);
+		if (name == null) {
+			throw new IllegalArgumentException("Invalid state name "+ stateName);
 		}
 		StateValueType stateType = stateTypes.get(stateName);
 		try {
 			stateType.setValue(stateValue);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Unable to set "+ stateName.getName() +": "+ e.getMessage());
+			throw new IllegalArgumentException("Unable to set "+ stateName +": "+ e.getMessage());
 		}
+		set(name, stateType);
+	}
 
-		// The command is sent to the gateway. Gateway transmits it to the
-		// actuator.
+	/**
+	 * Create/update a value of the status.
+	 * @param stateName The state name to update
+	 * @param stateValue The new value of the state name
+	 */
+	protected void set(StateName stateName, StateValue stateValue) {
+		set(stateName.getName(), stateValue.getValue());
+	}
+	
+	/**
+	 * Create/update a value of the status.
+	 * @param stateName The state name to update
+	 * @param stateValue The new value of the state name
+	 */
+	private void setState(StateName stateName, StateValue stateValue) {
+		// The command is sent to the gateway. Gateway transmits it to the actuator.
 		// If everything is fine, Gateway provides through the monitor session
 		// the new status => not need to set it here since it will be set by the
 		// monitor way.
 		final State oldStatus = new State(stateName, get(stateName));
 		final State newStatus = new State(stateName, stateValue);
-		// what = newWhat; => it will be done with changeWhat by the monitor
-		// listener
-		
+		// what = newWhat; => it will be done with changeWhat by the monitor listener
 		executeAction(newStatus, new CommandListener() {
 			@Override
 			public void onCommand(CommandResult result) {
@@ -552,14 +565,4 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * @return
 	 */
 	protected abstract StateName initStateName(String name);
-	
-	/**
-	 * Create the {@link StateValueType} instance corresponding to a state name managed by this controller.
-	 * @param stateName The state name
-	 * @param value The string representation of the state value type red in the configuration file of this controller class.
-	 * @return
-	 */
-	protected StateValueType initStateType(StateName stateName, String value) {
-		return null;
-	}
 }

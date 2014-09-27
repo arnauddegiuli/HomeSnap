@@ -19,7 +19,7 @@ public class LabelType extends StateValueType {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 

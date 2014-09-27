@@ -14,21 +14,9 @@ import com.homesnap.engine.controller.Controller;
 public abstract class StateValueType implements StateValue {
 	
 	/**
-	 * Indicates if a state value can be set into this type.
-	 * @param stateValue The state value to test
-	 * @return <code>true</code> if the value is compatible with this type and <code>false</code> otherwise.
+	 * Updates the value which is defined by this type.
+	 * @param value The value to update
+	 * @throws IllegalArgumentException if the value is not compatible with this type
 	 */
-	public void setValue(StateValue stateValue) {
-		if (stateValue == null) {
-			throw new NullPointerException("Could not set null value.");
-		}
-		setValue(stateValue.getValue());
-	}
-	
-	/**
-	 * Indicates if a state value can be set into this type.
-	 * @param value The value to test
-	 * @return <code>true</code> if the value is compatible with this type and <code>false</code> otherwise.
-	 */
-	protected abstract void setValue(String value);
+	public abstract void setValue(String value);
 }

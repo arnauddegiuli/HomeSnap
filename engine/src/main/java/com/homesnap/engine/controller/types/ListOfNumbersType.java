@@ -18,7 +18,7 @@ public class ListOfNumbersType extends ListOfValuesType {
 	}
 
 	@Override
-	protected void setValue(String value) {
+	public void setValue(String value) {
 		try {
 			Integer.parseInt(value);
 			super.setValue(value);
