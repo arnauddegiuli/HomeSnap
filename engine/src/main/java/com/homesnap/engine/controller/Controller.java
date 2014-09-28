@@ -59,7 +59,6 @@ import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateProperties;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
-import com.homesnap.engine.controller.what.Status;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -324,7 +323,31 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	/**
 	 * Returns the current value of a state name.
 	 * 
-	 * @param state The state name
+	 * @param stateName The state name
+	 * @return The current value of a state name
+	 */
+	public String get(String stateName) {
+		if (stateName == null) {
+			throw new NullPointerException("Could not set null state name.");
+		}
+		StateName name = initStateName(stateName);
+		if (name == null) {
+			throw new IllegalArgumentException("Invalid state name "+ stateName);
+		}
+		StateValue value = get(name);
+		
+		if (value != null) {
+			return value.toString();
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the current value of a state name.
+	 * 
+	 * @param stateName The state name
 	 * @return The current value of a state name
 	 */
 	protected StateValue get(StateName stateName) {
@@ -341,18 +364,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			});	
 		}
 		return value;
-	}
-
-	/**
-	 * Returns the current value of a state name and a default one if this state name has not been set.
-	 * 
-	 * @param stateName The state name to read
-	 * @param defaultValue The default value
-	 * @return the current value of the state name if exists and the default otherwise
-	 */
-	protected StateValue get(StateName stateName, StateValue defaultValue) {
-		StateValue result = get(stateName);
-		return result == null ? defaultValue : result;
 	}
 	
 	/**
@@ -376,22 +387,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 		set(name, stateType);
 	}
-
-	/**
-	 * Create/update a value of the status.
-	 * @param stateName The state name to update
-	 * @param stateValue The new value of the state name
-	 */
-	protected void set(StateName stateName, StateValue stateValue) {
-		set(stateName.getName(), stateValue.getValue());
-	}
 	
 	/**
 	 * Create/update a value of the status.
 	 * @param stateName The state name to update
 	 * @param stateValue The new value of the state name
 	 */
-	private void setState(StateName stateName, StateValue stateValue) {
+	protected void set(StateName stateName, StateValue stateValue) {
 		// The command is sent to the gateway. Gateway transmits it to the actuator.
 		// If everything is fine, Gateway provides through the monitor session
 		// the new status => not need to set it here since it will be set by the

@@ -36,6 +36,7 @@ import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverte
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
+import com.homesnap.engine.controller.light.LightStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.who.Who;
@@ -59,7 +60,7 @@ public class Convert {
 			String where = command.getWhere().getTo();
 			State what = command.getWhat();
 			if (command.isActionCommand()) {
-				if (OpenWebNetCommand.DEFAULT_ACTION.equals(what.getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.getName().equalsIgnoreCase(what.getName().getName())) {
 					return MessageFormat.format(
 						OpenWebNetConstant.COMMAND,
 						new Object[] {
@@ -83,7 +84,7 @@ public class Convert {
 					);
 				}
 			} else { // Statut request
-				if (OpenWebNetCommand.DEFAULT_ACTION.equals(what.getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.getName().equalsIgnoreCase(what.getName().getName())) {
 					return MessageFormat.format(OpenWebNetConstant.STATUS,
 							new Object[] { who, where });
 				} else {
@@ -97,6 +98,8 @@ public class Convert {
 			throw new IllegalArgumentException("Controller status unsupported [" + command.getWhat().getName() + "]");
 		} catch (UnknownWho e) {
 			throw new IllegalArgumentException("Controller Who unsupported. [" + command.getWho() + "]");
+		} catch (UnSupportedState e) {
+			return null;
 		}
 	}
 
@@ -105,7 +108,7 @@ public class Convert {
 	// }
 
 	private static DimensionStatus<?> convertDimension(Who w, State state)
-			throws UnknownState, UnknownWho {
+			throws UnknownState, UnknownWho, UnSupportedState {
 		DimensionStatus<?> ds = null;
 		switch (w) {
 		case AUTOMATION:
@@ -119,7 +122,15 @@ public class Convert {
 			ds = HeatingZoneDimension.fromState(state);
 			break;
 		case LIGHT:
-			throw new UnknownState(); // Only status manage by light: no dimension
+			if(LightStateName.COLOR.getName().equalsIgnoreCase(state.getName().getName())){
+				throw new UnSupportedState();
+			} else if(LightStateName.BLINK_TIME.getName().equalsIgnoreCase(state.getName().getName())){
+				throw new UnSupportedState();
+			} else if(LightStateName.LEVEL.getName().equalsIgnoreCase(state.getName().getName())){
+				throw new UnSupportedState();
+			} else {
+				throw new UnknownState(); // Only status manage by light: no dimension
+			}
 		case MULTIMEDIA:
 			break;
 		case POWER_MANAGEMENT:

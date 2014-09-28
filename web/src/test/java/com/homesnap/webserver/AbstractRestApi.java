@@ -195,7 +195,7 @@ public class AbstractRestApi {
 		Assert.assertEquals(who, jo.get(Controller.JSON_WHO));
 		
 		JSONObject status = jo.getJSONObject(Controller.JSON_STATES);
-		Assert.assertEquals(statusValue, status.get(StateName.STATUS.getName()));
+		Assert.assertEquals(statusValue, status.get("status"/*StateName.STATUS.getName()*/));
 	}
 
 	protected String createJsonGroup(String title, String where, String controllersList) {

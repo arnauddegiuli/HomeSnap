@@ -53,6 +53,10 @@ public class OpenWebCommandThread implements Runnable {
 	}
 
 	public void sendCommand(String command, CommandListener resultListener) { 
+		if (command == null) {
+			log.severe(Log.Session.Command, "Command unsupported (null)."); // TODO il faudrait récupérer le status non supporté ou mettre une log en amnt...
+			return;
+		}
 		synchronized (commander) { // mutex on the main thread: only one connection or send message at the same time!
 			if (commander.isConnected()) { // Test again since with the lock, maybe a previous thread has closed the connection!
 				commander.writeMessage(command);
@@ -61,7 +65,7 @@ public class OpenWebCommandThread implements Runnable {
 				if(msg == null){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new OpenWebNetCommandResult(null, CommandResultStatus.error));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.error));
 					}
 					return;
 				}

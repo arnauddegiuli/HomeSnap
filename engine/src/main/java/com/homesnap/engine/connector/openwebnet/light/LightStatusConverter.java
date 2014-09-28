@@ -24,12 +24,21 @@ package com.homesnap.engine.connector.openwebnet.light;
  * #L%
  */
 
+import com.homesnap.engine.controller.light.LightStatusStateValue;
 import com.homesnap.engine.controller.light.legrand.LightLegrandStatusStateValue;
 import com.homesnap.engine.controller.what.StateValue;
 
 
 // LIGHT
 public enum LightStatusConverter {
+
+	// Basic LightStatus
+	ON("1", LightStatusStateValue.ON),
+	OFF("0", LightStatusStateValue.OFF),
+	BLINKING("21", LightStatusStateValue.BLINKING),
+	
+	// LEgrand Light Status
+	
 	LIGHT_OFF("0", LightLegrandStatusStateValue.LIGHT_OFF), // TODO manage speed 0 to 255!
 	LIGHT_ON("1", LightLegrandStatusStateValue.LIGHT_ON), // TODO manage speed!
 	LIGHT_ON_20_PERCENT("2", LightLegrandStatusStateValue.LIGHT_ON_20_PERCENT),
@@ -66,10 +75,17 @@ public enum LightStatusConverter {
 	LIGHT_FORCE_ON("1000#1", LightLegrandStatusStateValue.LIGHT_FORCE_ON),
 	LIGHT_FORCE_OFF("1000#0", LightLegrandStatusStateValue.LIGHT_FORCE_OFF);
 
+
+	
 	private String code; // OpenWebNet code
-	private LightLegrandStatusStateValue value; // SnapHome code
+	private StateValue value; // SnapHome code
 
 	private LightStatusConverter(String code, LightLegrandStatusStateValue value) {
+		this.code = code;
+		this.value = value;
+	}
+	
+	private LightStatusConverter(String code, LightStatusStateValue value) {
 		this.code = code;
 		this.value = value;
 	}
@@ -78,11 +94,11 @@ public enum LightStatusConverter {
 		return code;
 	}
 	
-	public LightLegrandStatusStateValue getValue() {
+	public StateValue getValue() {
 		return value;
 	}
 
-	public static LightLegrandStatusStateValue convert(String code) {
+	public static StateValue convert(String code) {
 		for (LightStatusConverter light: LightStatusConverter.values()) {
 			if (light.getCode().equals(code))
 				return light.value;
