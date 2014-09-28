@@ -33,7 +33,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,19 +45,12 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.DefaultCommandResult;
-import com.homesnap.engine.controller.types.DateTimeType;
-import com.homesnap.engine.controller.types.DateType;
-import com.homesnap.engine.controller.types.LabelType;
-import com.homesnap.engine.controller.types.ListOfValuesType;
-import com.homesnap.engine.controller.types.NumberType;
-import com.homesnap.engine.controller.types.PercentageType;
-import com.homesnap.engine.controller.types.RGBType;
-import com.homesnap.engine.controller.types.TimeType;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateProperties;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
+import com.homesnap.engine.controller.what.Status;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -94,13 +86,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * Constructor.
 	 */
 	protected Controller() {
-		initStateTypes(getClass(), new Properties());
+		initStateTypes(getClass());
 	}
 	
 	/**
 	 * Initializes the state names with their class types in order to prevent from a wrong assigment when the {@link #set(StateName, StateValue)} method is called.
 	 */
-	private void initStateTypes(Class<?> clazz, Properties stateNames) {
+	private void initStateTypes(Class<?> clazz) {
 		// Check if the controller class is known
 		stateTypes = classTypes.get(clazz);
 		if (stateTypes == null) {
@@ -108,7 +100,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			stateTypes = new HashMap<StateName, StateValueType>();
 			Class<?> superClass = clazz.getSuperclass();
 			while (!Controller.class.equals(superClass)) {
-				initStateTypes(superClass, stateNames);
+				initStateTypes(superClass);
 				break;
 			}
 			// Search the ".states" resource which defines the state types of the controller
@@ -127,20 +119,15 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			// Load each key/value pair (key=state name, value=state class name)
 			for (Entry<String, String> states : properties.getSectionProperties(StateProperties.CONTROLLER_SECTION).entrySet()) {
 				
-				String name = (String) states.getKey();
-				StateName stateName = initStateName(name); // The state name read
-				if (stateName == null) {
-					throw new ControllerStateException("State name "+ name +" is not a valid state name for class "+ getClass().getName());
-				}
-				
+				String stateName = (String) states.getKey();
 				StateValueType stateType = null;
-				String type = properties.getSectionProperty(StateProperties.CONTROLLER_SECTION, name);
+				String type = properties.getSectionProperty(StateProperties.CONTROLLER_SECTION, stateName);
 				try {
-					stateType = properties.getStateValueType(name); // Determine the class type used to store the value of the state name
+					stateType = properties.getStateValueType(stateName); // Determine the class type used to store the value of the state name
 				} catch (UnknowStateValueTypeException e) {
 					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), e);
 				}
-				stateTypes.put(stateName, stateType);
+				stateTypes.put(new ControllerStateName(stateName), stateType);
 			}
 			classTypes.put(clazz, stateTypes);
 		}
@@ -330,14 +317,9 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		if (stateName == null) {
 			throw new NullPointerException("Could not set null state name.");
 		}
-		StateName name = initStateName(stateName);
-		if (name == null) {
-			throw new IllegalArgumentException("Invalid state name "+ stateName);
-		}
-		StateValue value = get(name);
-		
+		StateValue value = get(new ControllerStateName(stateName));
 		if (value != null) {
-			return value.toString();
+			return value.getValue();
 		}
 		else {
 			return null;
@@ -375,17 +357,14 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		if (stateName == null) {
 			throw new NullPointerException("Could not set null state name.");
 		}
-		StateName name = initStateName(stateName);
-		if (name == null) {
-			throw new IllegalArgumentException("Invalid state name "+ stateName);
-		}
+		StateName key = new ControllerStateName(stateName);
 		StateValueType stateType = stateTypes.get(stateName);
 		try {
 			stateType.setValue(stateValue);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Unable to set "+ stateName +": "+ e.getMessage());
 		}
-		set(name, stateType);
+		set(key, stateType);
 	}
 	
 	/**
@@ -433,68 +412,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		notifyStateChange(oldWhat, newWhat);
 	}
 	
-	/**
-	 * 
-	 * @param name
-	 * @param value
-	 * @return
-	 * @throws UnknowStateValueTypeException 
-	 */
-	public StateValueType parseStateValueType(String name, String value) throws UnknowStateValueTypeException {
-		if (value == null || value.length() == 0) {
-			// TODO ConfigurationException
-			throw new NullPointerException("Value is empty for state name "+ name);
-		}
-		int length = value.length();
-		char firstChar = value.charAt(0);
-		if (firstChar == '#' && length > 2) { // Class type
-			if (length > 2) {
-				String keyword = value.substring(1);
-//				firstChar = value.charAt(2);
-				if ("Date".equals(keyword)) {
-					return new DateType();
-				}
-				else if ("Datetime".equals(keyword)) {
-					return new DateTimeType();
-				}
-				else if ("Label".equals(keyword)) {
-					return new LabelType();
-				}
-				else if ("Number".equals(keyword)) {
-					return new NumberType();
-				}
-				else if ("Percentage".equals(keyword)) {
-					return new PercentageType();
-				}
-				else if ("RGBType".equals(keyword)) {
-					return new RGBType();
-				}
-				else if ("Time".equals(keyword)) {
-					return new TimeType();
-				}
-				throw new UnknowStateValueTypeException("Unknown state value type "+ keyword +" for state name "+ name);
-			}
-			// TODO ConfigurationException
-			throw new NullPointerException("Missing value after class definition character '#' for state name "+ name);
-		}
-		else if (firstChar == '{') { // List of values
-			if (length > 2 && (value.charAt(length-1) == '}')) {
-				String values = value.substring(1, length-1);
-				return new ListOfValuesType(values.split(","));
-			}
-			// TODO ConfigurationException
-			throw new NullPointerException("Missing end character '}' of list of values for state name "+ name);
-		}
-		else if (firstChar == '[') { // MinMaxType
-			if (length > 2 && (value.charAt(length-1) == ']')) {
-				
-			}
-			// TODO ConfigurationException
-			throw new NullPointerException("Missing end character ']' of number interval for state name "+ name);
-		}
-		throw new IllegalStateException("Unsupported value "+ value +" for state name "+ name);
-	}
-
 	@Override
 	public String toString() {
 		return toJson().toString();
@@ -562,9 +479,22 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 	
 	/**
-	 * Create the {@link StateName} instance corresponding to the key name of one state managed by this controller.
-	 * @param name The name of the state
-	 * @return
+	 * 
+	 * @author DRIESBACH Olivier
+	 * @version 1.0
+	 * @since 1.0
 	 */
-	protected abstract StateName initStateName(String name);
+	private class ControllerStateName implements StateName {
+		
+		private String stateName;
+		
+		private ControllerStateName(String stateName) {
+			this.stateName = stateName.toLowerCase();			
+		}
+
+		@Override
+		public String getName() {
+			return stateName;
+		}
+	}
 }

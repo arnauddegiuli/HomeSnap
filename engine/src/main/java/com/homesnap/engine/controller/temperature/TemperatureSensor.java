@@ -26,7 +26,6 @@ package com.homesnap.engine.controller.temperature;
 
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.who.Who;
 
 /**
@@ -43,10 +42,5 @@ public class TemperatureSensor extends Controller {
 	@Override
 	public Who getWho() {
 		return Who.TEMPERATURE_SENSOR;
-	}
-
-	@Override
-	protected StateName initStateName(String name) {
-		return TemperatureSensorStateName.valueOf(name.toUpperCase());
 	}
 }

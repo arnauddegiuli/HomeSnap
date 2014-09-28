@@ -26,7 +26,6 @@ package com.homesnap.engine.controller.clock;
 
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.who.Who;
 
 /**
@@ -43,10 +42,5 @@ public class ClockSensor extends Controller  {
 	@Override
 	public Who getWho() {
 		return null;
-	}
-
-	@Override
-	protected StateName initStateName(String name) {
-		return ClockSensorStateName.valueOf(name.toUpperCase());
 	}
 }

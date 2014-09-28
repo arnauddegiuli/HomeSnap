@@ -104,23 +104,4 @@ public class HeatingZone extends Controller {
 	public DoubleValue getMeasureTemperature() {
 		return (DoubleValue) get(ZoneStateName.MEASURE_TEMPERATURE);
 	}
-
-	@Override
-	protected StateName initStateName(String name) {
-		return ZoneStateName.valueOf(name.toUpperCase());
-	}
-
-//	@Override
-//	protected void initStateTypes() {
-//		declareState(ZoneStateName.STATUS, HeatingZoneStatus.class);
-//		declareState(ZoneStateName.ACTUATOR_STATUS, stateClass);
-//		declareState(ZoneStateName.FAN_COIL_SPEED, );
-//		declareState(ZoneStateName.LOCAL_OFFSET, Offset.class);
-//		declareState(ZoneStateName.MEASURE_TEMPERATURE, DoubleValue.class);
-//		declareState(ZoneStateName.PROBE_STATUS, );
-//		declareState(ZoneStateName.SET_TEMPERATURE_CONDITIONAL, DoubleValue.class);
-//		declareState(ZoneStateName.SET_TEMPERATURE_GENERIC, DoubleValue.class);
-//		declareState(ZoneStateName.SET_TEMPERATURE_HEATING, DoubleValue.class);
-//		declareState(ZoneStateName.VALVE_STATUS, );
-//	}
 }

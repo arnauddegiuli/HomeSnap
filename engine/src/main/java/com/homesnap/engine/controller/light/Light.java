@@ -26,7 +26,6 @@ package com.homesnap.engine.controller.light;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.types.RGBType;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.who.Who;
 
@@ -106,10 +105,5 @@ public class Light extends Controller {
 	 */
 	public RGBType getColor() {
 		return (RGBType) get(LightStateName.COLOR);
-	}
-
-	@Override
-	protected StateName initStateName(String name) {
-		return LightStateName.valueOf(name.toUpperCase());
 	}
 }

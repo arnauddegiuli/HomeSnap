@@ -27,7 +27,6 @@ package com.homesnap.engine.controller.automation;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.who.Who;
 
 public class Automation extends Controller {
@@ -46,10 +45,5 @@ public class Automation extends Controller {
 
 	public void setStatus(AutomationStatusValue status) {
 		set(AutomationStateName.STATUS, status);	
-	}
-
-	@Override
-	protected StateName initStateName(String name) {
-		return AutomationStateName.valueOf(name.toUpperCase());
 	}
 }
