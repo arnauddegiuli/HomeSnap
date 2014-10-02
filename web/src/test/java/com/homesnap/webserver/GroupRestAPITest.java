@@ -180,7 +180,7 @@ public class GroupRestAPITest extends AbstractRestApi {
 	}
 	
 	private void testController21(JSONObject jo) {
-		testController(jo, "Bureau", "21", Who.LIGHT.name(), LightStatusStateValue.OFF.name());
+		testController(jo, "Bureau", "21", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
 	}
 	
 	private String createGroup1() {
