@@ -23,10 +23,7 @@ package com.homesnap.webserver;
  * #L%
  */
 
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
-import com.homesnap.webserver.rest.RestOperationException;
-import com.homesnap.webserver.rest.UnsupportedRestOperation;
 
 
 public class ListenerExampleParser implements MyDomoRestAPI {
@@ -78,16 +75,6 @@ public class ListenerExampleParser implements MyDomoRestAPI {
 	@Override
 	public void onController(String where) {
 		System.out.println("Demande le controller [where:" + where + "]");
-		success = true;
-	}
-
-	@Override
-	public void onStatus(String name, String[] value)
-			throws UnsupportedRestOperation, RestOperationException,
-			MissingParameterRestOperation {
-		for (int i = 0; i < value.length; i++) {
-			System.out.println("Status [name:" + name + "] - [value_"+ i + ":" + value[i] + "]");	
-		}
 		success = true;
 	}
 }

@@ -234,33 +234,33 @@ public class ControllerRestAPITest extends AbstractRestApi {
 		testController12(jo);
 
 		// Modification
-		putRequestJSONObject("/house/controllers/12", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject("/house/controllers/controller?id=12", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject("/house/controllers/12?status=On", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject("/house/controllers/controller?id=12&status=Off", createJsonController12(), HttpServletResponse.SC_OK);
 		
-		putRequestJSONObject(urn_groups + "/1/controller?id=12&param=param", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject(urn_groups + "/1/12?param=param", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject(urn_labels + "/ch1/controller?id=12&param=param", createJsonController12(), HttpServletResponse.SC_OK); 
-		putRequestJSONObject(urn_labels + "/ch1/12?param=param", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject("/house/controllers/12?param=param", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject("/house/controllers/controller?id=12&param=param", createJsonController12(), HttpServletResponse.SC_OK);
-		putRequestJSONObject("/house/controllers/12?param=param", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject(urn_groups + "/1/controller?id=12&param=param", createJsonController12(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		putRequestJSONObject(urn_groups + "/1/12?status=Off", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject(urn_labels + "/ch1/controller?id=12&status=Off", createJsonController12(), HttpServletResponse.SC_OK); 
+		putRequestJSONObject(urn_labels + "/ch1/12?status=Off", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject("/house/controllers/12?param=param", createJsonController12(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		putRequestJSONObject("/house/controllers/controller?id=12&status=Off", createJsonController12(), HttpServletResponse.SC_OK);
+		putRequestJSONObject("/house/controllers/12?status=Off", createJsonController12(), HttpServletResponse.SC_OK);
 
 		// creation
-		postRequestJSONObject(urn_groups + "/1/controller?id=17&param=param", createJsonController17(), HttpServletResponse.SC_CREATED);
-		postRequestJSONObject(urn_groups + "/1/12?param=param", createJsonController12(), HttpServletResponse.SC_NOT_ACCEPTABLE);
-		postRequestJSONObject(urn_labels + "/ch1/controller?id=17&param=param", createJsonController17(), HttpServletResponse.SC_CREATED);
-		postRequestJSONObject(urn_labels + "/ch1/17?param=param", createJsonController17(), HttpServletResponse.SC_NOT_ACCEPTABLE);
-		postRequestJSONObject("/house/17?param=param", createJsonController17(), HttpServletResponse.SC_BAD_REQUEST);
-		postRequestJSONObject("/house/controllers/controller?id=12&param=param", createJsonController17(), HttpServletResponse.SC_NOT_IMPLEMENTED);
-		postRequestJSONObject("/house/controllers/12?param=param", createJsonController17(), HttpServletResponse.SC_NOT_IMPLEMENTED);
+		postRequestJSONObject(urn_groups + "/1/controller?id=17&status=Off", createJsonController17(), HttpServletResponse.SC_CREATED);
+		postRequestJSONObject(urn_groups + "/1/12?status=Off", createJsonController12(), HttpServletResponse.SC_NOT_ACCEPTABLE);
+		postRequestJSONObject(urn_labels + "/ch1/controller?id=17&status=Off", createJsonController17(), HttpServletResponse.SC_CREATED);
+		postRequestJSONObject(urn_labels + "/ch1/17?status=Off", createJsonController17(), HttpServletResponse.SC_NOT_ACCEPTABLE);
+		postRequestJSONObject("/house/17?status=Off", createJsonController17(), HttpServletResponse.SC_BAD_REQUEST);
+		postRequestJSONObject("/house/controllers/controller?id=12&status=Off", createJsonController17(), HttpServletResponse.SC_NOT_IMPLEMENTED);
+		postRequestJSONObject("/house/controllers/12?status=Off", createJsonController17(), HttpServletResponse.SC_NOT_IMPLEMENTED);
 
 		// Deletion
-		deleteRequestJSONObject(urn_groups + "/1/controller?id=11&param=param", HttpServletResponse.SC_NOT_ACCEPTABLE);
-		deleteRequestJSONObject(urn_groups + "/1/11?param=param", HttpServletResponse.SC_NOT_ACCEPTABLE);
-		deleteRequestJSONObject(urn_labels + "/ch1/controller?id=12&param=param", HttpServletResponse.SC_OK);
-		deleteRequestJSONObject(urn_labels + "/ch1/12?param=param", HttpServletResponse.SC_NOT_ACCEPTABLE);
-		deleteRequestJSONObject("/house/controllers/12?param=param", HttpServletResponse.SC_NOT_IMPLEMENTED);
-		deleteRequestJSONObject("/house/controllers/controller?id=12&param=param", HttpServletResponse.SC_NOT_IMPLEMENTED);
+		deleteRequestJSONObject(urn_groups + "/1/controller?id=11&status=Off", HttpServletResponse.SC_NOT_ACCEPTABLE);
+		deleteRequestJSONObject(urn_groups + "/1/11?status=Off", HttpServletResponse.SC_NOT_ACCEPTABLE);
+		deleteRequestJSONObject(urn_labels + "/ch1/controller?id=12&status=Off", HttpServletResponse.SC_OK);
+		deleteRequestJSONObject(urn_labels + "/ch1/12?status=Off", HttpServletResponse.SC_NOT_ACCEPTABLE);
+		deleteRequestJSONObject("/house/controllers/12?status=Off", HttpServletResponse.SC_NOT_IMPLEMENTED);
+		deleteRequestJSONObject("/house/controllers/controller?id=12&status=Off", HttpServletResponse.SC_NOT_IMPLEMENTED);
 	}
 	
 	private String createJsonController6() {

@@ -36,7 +36,6 @@ import org.json.JSONObject;
 import org.junit.Assert;
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.Label;
 import com.homesnap.webserver.utils.JSonTools;
@@ -160,7 +159,7 @@ public class AbstractRestApi {
 			ClientResponse response = webResource.accept("application/json")
 					.put(ClientResponse.class, body);
 			Assert.assertEquals(returnCodeExpected, response.getStatus());
-			if (returnCodeExpected == HttpServletResponse.SC_NOT_IMPLEMENTED || returnCodeExpected == HttpServletResponse.SC_NOT_ACCEPTABLE) {
+			if (returnCodeExpected == HttpServletResponse.SC_NOT_IMPLEMENTED || returnCodeExpected == HttpServletResponse.SC_NOT_ACCEPTABLE || returnCodeExpected == HttpServletResponse.SC_INTERNAL_SERVER_ERROR) {
 				return null;
 			}
 			json = response.getEntity(String.class);

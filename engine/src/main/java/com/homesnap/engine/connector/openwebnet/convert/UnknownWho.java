@@ -31,5 +31,9 @@ public class UnknownWho extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// TODO add information
+	@Override
+	public String getMessage() {
+		return "Controller unknown.";
+	}
+
 }

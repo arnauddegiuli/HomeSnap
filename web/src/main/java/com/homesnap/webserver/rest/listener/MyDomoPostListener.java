@@ -154,10 +154,6 @@ implements MyDomoRestAPI {
 		throw new UnsupportedRestOperation(getUri(), Verb.POST);
 	}
 
-	@Override
-	public void onStatus(String name, String[] value) {
-	}
-
 	private Controller createController(JSONObject json, String where) throws RestOperationException {
 		Controller c = null;
 		try {

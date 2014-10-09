@@ -24,7 +24,7 @@ package com.homesnap.engine.connector.openwebnet.convert;
  * #L%
  */
 
-public class UnknownState extends Exception {
+public class UnknownStateValue extends Exception {
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class UnknownState extends Exception {
 
 	@Override
 	public String getMessage() {
-		return "State unknown.";
+		return "State Value unknown.";
 	}
 
 }

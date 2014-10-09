@@ -31,7 +31,6 @@ import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
@@ -115,18 +114,7 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 	public void onController(String where) throws RestOperationException {
 		Controller c = getController(where);
 		updateController(c, "Controller [id:"+where+"] not found.");
-	}
-
-	@Override
-	public void onStatus(String name, String[] value)
-			throws UnsupportedRestOperation, RestOperationException,
-			MissingParameterRestOperation {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < value.length; i++) {
-			System.out.println("Status [name:" + name + "] - [value_"+ i + ":" + value[i] + "]");	
-		}
 		
-		// TODO gérer le status de tous ce qui a été sélectionné
 	}
 
 	private void updateController(Controller c, String errorMessage) throws RestOperationException {
@@ -134,6 +122,22 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 			try {
 				JSONObject j = JSonTools.fromJson(json);
 				c.fromJson(j);
+				
+				for (String name : getParameters().keySet()) {
+					if (!"id".equalsIgnoreCase(name)) { // "id" is a special case manage by parser.
+						String[] params = getParameters().get(name);
+						if (params.length == 0) {
+							System.err.println("Parameter [" + name + "] has no value... Nothing done.");
+						} else {
+							String param = params[0];
+							if (params.length > 1) {
+								System.err.println("Parameter [" + name + "] has more than one value... First one [" + param + "] used.");	
+							}
+							c.set(name, param);
+						}
+					}
+				}
+				
 				setResult(JSonTools.toJson(c));
 			} catch (Error e) {
 				throw new RestOperationException(getUri(), Verb.PUT, "Controller JSON representation is wrong ["+json+"].");

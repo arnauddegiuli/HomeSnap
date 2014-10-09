@@ -95,11 +95,14 @@ public class Convert {
 				}
 			}
 		} catch (UnknownState e) {
-			throw new IllegalArgumentException("Controller status unsupported [" + command.getWhat().getName() + "]");
+			throw new IllegalArgumentException("Controller status unknown [" + command.getWhat().getName() + "]");
 		} catch (UnknownWho e) {
-			throw new IllegalArgumentException("Controller Who unsupported. [" + command.getWho() + "]");
+			throw new IllegalArgumentException("Controller Who unknown. [" + command.getWho() + "]");
 		} catch (UnSupportedState e) {
+//			TODO Log. ("Controller status unsupported. [" + command.getWhat().getName() + "]");
 			return null;
+		} catch (UnknownStateValue e) {
+			throw new IllegalArgumentException("Controller status value unknown [" + command.getWhat().getValue() != null ? command.getWhat().getValue().getValue() : "null" + "]");
 		}
 	}
 
@@ -185,19 +188,19 @@ public class Convert {
 	}
 
 	private static String convertStatus(Who who, StateValue stateValue)
-			throws UnknownState, UnknownWho {
+			throws UnknownStateValue, UnknownWho {
 		switch (who) {
 		case LIGHT:
 			String ls = LightStatusConverter.convert(stateValue);
 			if (ls == null) {
-				throw new UnknownState();
+				throw new UnknownStateValue();
 			} else {
 				return ls;
 			}
 		case AUTOMATION:
 			String as = AutomationStatusConverter.fromValue(stateValue);
 			if (as == null) {
-				throw new UnknownState();
+				throw new UnknownStateValue();
 			} else {
 				return as;
 			}
@@ -210,12 +213,12 @@ public class Convert {
 	}
 
 	protected static StateValue convertStatus(Who who, String code)
-			throws UnknownState {
+			throws UnknownStateValue {
 		switch (who) {
 		case LIGHT:
 			StateValue ls = LightStatusConverter.convert(code);
 			if (ls == null) {
-				throw new UnknownState();
+				throw new UnknownStateValue();
 
 			} else {
 				return ls;
@@ -223,7 +226,7 @@ public class Convert {
 		case AUTOMATION:
 			StateValue as = AutomationStatusConverter.fromValue(code);
 			if (as == null) {
-				throw new UnknownState();
+				throw new UnknownStateValue();
 
 			} else {
 				return as;

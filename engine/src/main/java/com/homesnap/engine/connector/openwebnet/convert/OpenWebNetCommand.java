@@ -84,7 +84,7 @@ public class OpenWebNetCommand {
 	public State getWhat() { // TODO change name => remove command
 		try {
 			return new State(DEFAULT_ACTION, Convert.convertStatus(getWho(), parser.getWhat()));
-		} catch (UnknownState e) {
+		} catch (UnknownStateValue e) {
 			// TODO log
 			return null;
 		}

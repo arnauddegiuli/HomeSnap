@@ -111,7 +111,7 @@ public enum LightStatusConverter {
 			return null;
 		}
 		for (LightStatusConverter light: LightStatusConverter.values()) {
-			if (light.value.getValue().equals(name.getValue()))
+			if (light.value.getValue().equalsIgnoreCase(name.getValue()))
 				return light.code;
 		}
 		return null;

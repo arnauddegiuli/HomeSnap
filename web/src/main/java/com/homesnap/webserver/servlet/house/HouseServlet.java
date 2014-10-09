@@ -26,7 +26,6 @@ package com.homesnap.webserver.servlet.house;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -36,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.homesnap.engine.house.House;
 import com.homesnap.webserver.rest.MissingParameterRestOperation;
-import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
 import com.homesnap.webserver.rest.listener.MyDomoDeleteListener;
@@ -64,7 +62,6 @@ public class HouseServlet extends HttpServlet {
 			House house = service.readHouse();
 			MyDomoDeleteListener listener = new MyDomoDeleteListener(house, uri, req.getParameterMap());
 			UriParser.parse(uri, listener);
-			manageStatus(listener, req.getParameterMap());
 			service.saveHouse(house);
 			if (listener.getResult() == null || listener.getResult() == "") {
 				resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
@@ -105,7 +102,6 @@ public class HouseServlet extends HttpServlet {
 			MyDomoPostListener listener = new MyDomoPostListener(house, uri, req.getParameterMap(), sb.toString());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
-			manageStatus(listener, req.getParameterMap());
 			service.saveHouse(house);
 			resp.setHeader("Location", uri);
 			resp.setStatus(HttpServletResponse.SC_CREATED);
@@ -135,7 +131,6 @@ public class HouseServlet extends HttpServlet {
 			MyDomoGetListener listener = new MyDomoGetListener(house, uri, req.getParameterMap());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
-			manageStatus(listener, req.getParameterMap());
 			resp.getWriter().write(listener.getResult());
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -169,7 +164,6 @@ public class HouseServlet extends HttpServlet {
 			MyDomoPutListener listener = new MyDomoPutListener(house, uri, req.getParameterMap(), sb.toString());
 			resp.setContentType("application/json");
 			UriParser.parse(uri, listener);
-			manageStatus(listener, req.getParameterMap());
 			service.saveHouse(house);
 			resp.getWriter().write(listener.getResult());
 		} catch (ParseException e) {
@@ -190,12 +184,6 @@ public class HouseServlet extends HttpServlet {
 	
 	protected String getUri(HttpServletRequest req) {
 		return req.getQueryString() == null ? req.getRequestURI() : req.getRequestURI() +"?" + req.getQueryString(); // getQueryString()getPathInfo() == null ? "/house" : "/house" + req.getPathInfo();
-	}
-
-	private void manageStatus(MyDomoRestAPI listener, Map<String, String[]> parameters) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
-		for (String name : parameters.keySet()) {
-			listener.onStatus(name, parameters.get(name));
-		}
 	}
 }
 

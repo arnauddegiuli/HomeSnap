@@ -26,10 +26,7 @@ package com.homesnap.webserver.rest.listener;
 import java.util.Map;
 
 import com.homesnap.engine.house.House;
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
-import com.homesnap.webserver.rest.RestOperationException;
-import com.homesnap.webserver.rest.UnsupportedRestOperation;
 import com.homesnap.webserver.utils.JSonTools;
 
 
@@ -99,15 +96,5 @@ public class MyDomoGetListener extends MyDomoRestListenerAbstract implements MyD
 	@Override
 	public void onController(String where) {
 		setResult(JSonTools.toJson(getController(where)));
-	}
-
-	@Override
-	public void onStatus(String name, String[] value)
-			throws UnsupportedRestOperation, RestOperationException,
-			MissingParameterRestOperation {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < value.length; i++) {
-			System.out.println("Status [name:" + name + "] - [value_"+ i + ":" + value[i] + "]");	
-		}
 	}
 }

@@ -71,9 +71,9 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	/** List of all state names with their current values of the controller. This map repesents the complete status of the controller. */
 	private Map<StateName, StateValue> stateList = new HashMap<StateName, StateValue>();
 	/** List of all states names with their class value type. This map is used to prevent from set a state with an invalid value. */
-	private Map<StateName, StateValueType> stateTypes;
+	private Map<String, StateValueType> stateTypes;
 	/** Cache of all controller classes with their state types */
-	private static Map<Class<?>, Map<StateName, StateValueType>> classTypes = new Hashtable<Class<?>, Map<StateName, StateValueType>>();
+	private static Map<Class<?>, Map<String, StateValueType>> classTypes = new Hashtable<Class<?>, Map<String, StateValueType>>();
 
 	public static final String JSON_TITLE = "title";
 	public static final String JSON_STATES = "states";
@@ -96,7 +96,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		stateTypes = classTypes.get(clazz);
 		if (stateTypes == null) {
 			
-			stateTypes = new HashMap<StateName, StateValueType>();
+			stateTypes = new HashMap<String, StateValueType>();
 			Class<?> superClass = clazz.getSuperclass();
 			while (!Controller.class.equals(superClass)) {
 				initStateTypes(superClass);
@@ -126,7 +126,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				} catch (UnknowStateValueTypeException e) {
 					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), e);
 				}
-				stateTypes.put(new ControllerStateName(stateName), stateType);
+				stateTypes.put(stateName, stateType);
 			}
 			classTypes.put(clazz, stateTypes);
 		}
@@ -160,13 +160,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		if (newValue == null) { // Manage null value because we create some
 								// controller with no address (Gateway or
 								// Heating central with MyHOME Bus)
-			for (StateName stateName : stateTypes.keySet()) {
-				stateList.put(stateName, null);
+			for (String stateName : stateTypes.keySet()) {
+				stateList.put(new ControllerStateName(stateName), null);
 			}
 		} else {
 			// Récupérer les status
-			for (StateName stateName : stateTypes.keySet()) {
-				get(stateName);
+			for (String stateName : stateTypes.keySet()) {
+				get(new ControllerStateName(stateName));
 			}
 		}
 	}
@@ -361,7 +361,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		try {
 			stateType.setValue(stateValue);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Unable to set "+ stateName +": "+ e.getMessage());
+			throw new IllegalArgumentException("Unable to set "+ stateName + "/" + stateValue + ": "+ e.getMessage());
 		}
 		set(key, stateType);
 	}

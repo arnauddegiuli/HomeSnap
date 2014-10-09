@@ -29,7 +29,6 @@ import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.MyDomoRestAPI;
 import com.homesnap.webserver.rest.RestOperationException;
 import com.homesnap.webserver.rest.UnsupportedRestOperation;
@@ -121,13 +120,5 @@ public class MyDomoDeleteListener extends MyDomoRestListenerAbstract implements 
 	@Override
 	public void onController(String where) throws UnsupportedRestOperation {
 		throw new UnsupportedRestOperation(getUri(), Verb.DELETE);
-	}
-
-	@Override
-	public void onStatus(String name, String[] value)
-			throws UnsupportedRestOperation, RestOperationException,
-			MissingParameterRestOperation {
-		// TODO Auto-generated method stub
-		
 	}
 }

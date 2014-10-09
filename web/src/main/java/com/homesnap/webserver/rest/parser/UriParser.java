@@ -108,11 +108,6 @@ DELETE
                 listener.onController(where);
         }
 
-        @Override
-        public void onStatus(String name, String[] value) throws UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
-                // Call by the servlet with parameters = no need to parse again
-        }
-
   final private void parseOneLine() throws ParseException, UnsupportedRestOperation, RestOperationException, MissingParameterRestOperation {
         Token labelId;
         Token groupId;
