@@ -7,10 +7,10 @@ define(["dojo/_base/declare",
 ], function(declare, Memory, Cache, JsonRest, Observable){
 
 	
-	masterStore = new JsonRest({
+	var masterStore = new JsonRest({
 		target: "/house"
 	});
-	cacheStore = new Memory();
+	var cacheStore = new Memory();
 
 	return declare(null, {
 		// summary:
