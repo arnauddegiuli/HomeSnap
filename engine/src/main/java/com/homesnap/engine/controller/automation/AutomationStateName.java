@@ -9,6 +9,7 @@ import com.homesnap.engine.controller.what.StateName;
  */
 public enum AutomationStateName implements StateName {
 	
+	/** State name status */
 	STATUS;
 	
 	@Override

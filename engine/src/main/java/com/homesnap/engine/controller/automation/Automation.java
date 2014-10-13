@@ -26,7 +26,6 @@ package com.homesnap.engine.controller.automation;
 
 
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.automation.stateValue.AutomationStatusValue;
 import com.homesnap.engine.controller.who.Who;
 
 public class Automation extends Controller {
@@ -39,11 +38,11 @@ public class Automation extends Controller {
 		return Who.AUTOMATION;
 	}
 
-	public AutomationStatusValue getStatus() {
-		return (AutomationStatusValue) get(AutomationStateName.STATUS);	
+	public AutomationStatusStateValue getStatus() {
+		return (AutomationStatusStateValue) get(AutomationStateNameold.STATUS);	
 	}
 
-	public void setStatus(AutomationStatusValue status) {
-		set(AutomationStateName.STATUS, status);	
+	public void setStatus(AutomationStatusStateValue status) {
+		set(AutomationStateNameold.STATUS, status);	
 	}
 }
