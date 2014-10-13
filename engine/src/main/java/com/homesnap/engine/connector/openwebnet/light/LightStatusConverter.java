@@ -100,7 +100,7 @@ public enum LightStatusConverter {
 
 	public static StateValue convert(String code) {
 		for (LightStatusConverter light: LightStatusConverter.values()) {
-			if (light.getCode().equals(code))
+			if (light.getCode().equalsIgnoreCase(code))
 				return light.value;
 		}
 		return null;

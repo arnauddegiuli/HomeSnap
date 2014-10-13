@@ -49,6 +49,31 @@
 							 org.osgi.service.log;version="1.3.0",
 							 org.osgi.util.tracker;version="1.3.1"
 						</Import-Package>
+						<Export-Package> .,
+							 com.homesnap.webserver,
+							 com.homesnap.webserver.rest,
+							 com.homesnap.webserver.rest.listener,
+							 com.homesnap.webserver.servlet.house,
+							 com.homesnap.webserver.rest.parser,
+							 com.homesnap.webserver.utils
+						 </Export-Package>
+						 <Bundle-RequiredExecutionEnvironment>
+													 JavaSE-1.6,
+							 JavaSE-1.7
+						 </Bundle-RequiredExecutionEnvironment>
+						 <Bundle-ClassPath>
+						 ../../src/main/webapp/,
+ 								.
+						 </Bundle-ClassPath>
+						 <Require-Bundle>
+						 		com.homesnap.engine,
+							 javax.servlet;bundle-version="3.0.0",
+							 org.eclipse.osgi;bundle-version="3.8.2",
+							 org.eclipse.osgi.services;bundle-version="3.3.100",
+							 org.eclipse.jetty.osgi.httpservice;bundle-version="8.1.3",
+							 org.eclipse.jetty.http;bundle-version="8.1.3",
+							 org.eclipse.jetty.servlet;bundle-version="8.1.3"
+ 						</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

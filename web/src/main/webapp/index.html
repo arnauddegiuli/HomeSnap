@@ -25,7 +25,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
-	<title>My Domo</title>
+	<title>HomeSnap</title>
 
 	<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" />
 	<!--[if lt IE 9]>
@@ -65,7 +65,8 @@
 
 				require([ "dojo/router", "dojo/dom", "homesnap/widget/house/House", "homesnap/store/HouseStore"], function(router, dom, House, HouseStore) {
 					// Initialize house
-					var house = new House({store: new HouseStore()});
+					var store = new HouseStore();
+					var house = new House({store: store});
 					var container = dom.byId("house");
 					house.draw(container);
 					// Register route
@@ -82,9 +83,9 @@
 
 	<header id="header">
 		<hgroup>#
-			<h1 class="site_title"><a href="index.html">My Domo</a></h1>
+			<h1 class="site_title"><a href="index.html">Home Snap</a></h1>
 			<h2 class="section_title">Dashboard</h2>
-			<div class="btn_view_site"><a href="http://arnauddegiuli.github.io/MyDomo/">View Site</a></div>
+			<div class="btn_view_site"><a href="http://arnauddegiuli.github.io/HomeSnap/">View Site</a></div>
 		</hgroup>
 	</header> <!-- end of header bar -->
 
@@ -94,7 +95,7 @@
 			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
 		</div>
 		<div class="breadcrumbs_container">
-			<article class="breadcrumbs"><a href="index.html">My Domo</a></article>
+			<article class="breadcrumbs"><a href="index.html">Home Snap</a></article>
 		</div>
 	</section><!-- end of secondary bar -->
 
@@ -116,7 +117,7 @@
 
 		<footer>
 			<hr />
-			<p><strong>Copyright &copy; 2013 My Domo</strong></p>
+			<p><strong>Copyright &copy; 2010-14 SnapHome</strong></p>
 			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
 		</footer>
 	</aside>

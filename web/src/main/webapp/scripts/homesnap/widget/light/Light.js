@@ -48,10 +48,10 @@ define([
 			if (!component.lock) {
 				component.lock = true;
 				// Call REST API to change light
-				request.put("/house/controllers/" + this.adress + "/" + status, {sync: true, handleAs: "json"})
+				request.put("/house/controllers/" + this.adress + "?status=" + status, {sync: true, handleAs: "json"})
 					.then(function(data){
-						if (data.status == status) { 
-							if ("LIGHT_ON" == status) {
+						if (data.states.status.toLowerCase() == status.toLowerCase()) { 
+							if ("on" == status.toLowerCase()) {
 								component.set('label', 'ON');
 								component.button.set('iconClass', 'lightOnIcon');
 								component.slider.set('value', value);
@@ -81,10 +81,10 @@ define([
 						status ? value = 100 : value = 0;
 					}
 					if (status) {
-						component.switchOnOff("LIGHT_ON", 100);
+						component.switchOnOff("On", 100);
 						console.log('on');
 					} else {
-						component.switchOnOff("LIGHT_OFF", 0);
+						component.switchOnOff("Off", 0);
 						console.log('off');
 					}
 				},

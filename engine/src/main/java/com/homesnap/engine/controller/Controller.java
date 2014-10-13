@@ -255,6 +255,16 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 	}
 
+	/**
+	 * @param listener
+	 *            the change listener to remove.
+	 */
+	public void removeControllerChangeListener(ControllerChangeListener listener) {
+		synchronized (controllerChangeListenerList) {
+			controllerChangeListenerList.remove(listener);
+		}
+	}
+	
 	private void notifyStateChange(State oldStatus, State newStatus) {
 		synchronized (controllerChangeListenerList) {
 			for (ControllerChangeListener listener : controllerChangeListenerList) {

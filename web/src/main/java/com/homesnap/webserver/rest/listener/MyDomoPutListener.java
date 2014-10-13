@@ -25,9 +25,14 @@ package com.homesnap.webserver.rest.listener;
 
 import java.util.Map;
 
+import javax.print.attribute.standard.MediaSize.Engineering;
+
 import org.json.JSONObject;
 
+import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.ControllerChangeListener;
+import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
@@ -117,12 +122,34 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 		
 	}
 
+	private boolean wait = true;
+	
 	private void updateController(Controller c, String errorMessage) throws RestOperationException {
 		if (c != null) {
 			try {
-				JSONObject j = JSonTools.fromJson(json);
-				c.fromJson(j);
+				// Update with json
+				if (json != null && !"".equals(json)) {
+					JSONObject j = JSonTools.fromJson(json);
+					c.fromJson(j);
+				}
 				
+				com.homesnap.engine.controller.ControllerChangeListener l = new ControllerChangeListener() {
+					
+					@Override
+					public void onStateChangeError(Controller controller, State oldStatus,
+							State newStatus, CommandResult result) {
+						wait = false;
+					}
+					
+					@Override
+					public void onStateChange(Controller controller, State oldStatus,
+							State newStatus) {
+						wait = false;
+					}
+				};
+				
+				c.addControllerChangeListener(l);
+				// Update with param
 				for (String name : getParameters().keySet()) {
 					if (!"id".equalsIgnoreCase(name)) { // "id" is a special case manage by parser.
 						String[] params = getParameters().get(name);
@@ -138,6 +165,11 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 					}
 				}
 				
+				while(wait) {
+					// TODO for the moment only wait for one change...
+				}
+				c.removeControllerChangeListener(l);
+		
 				setResult(JSonTools.toJson(c));
 			} catch (Error e) {
 				throw new RestOperationException(getUri(), Verb.PUT, "Controller JSON representation is wrong ["+json+"].");
