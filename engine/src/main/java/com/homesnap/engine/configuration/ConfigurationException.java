@@ -1,4 +1,4 @@
-package com.homesnap.engine.properties;
+package com.homesnap.engine.configuration;
 
 /**
  * 
@@ -6,7 +6,7 @@ package com.homesnap.engine.properties;
  * @version 1.0
  * @since 1.0
  */
-public class PropertyLoadException extends RuntimeException {
+public class ConfigurationException extends RuntimeException {
 
 	/** */
 	private static final long serialVersionUID = -5911184766690148642L;
@@ -18,7 +18,7 @@ public class PropertyLoadException extends RuntimeException {
 	 * 
 	 * @param message
 	 */
-	public PropertyLoadException(int lineNumer, String message) {
+	public ConfigurationException(int lineNumer, String message) {
 		super(message);
 		this.lineNumer = lineNumer;
 	}
@@ -28,7 +28,7 @@ public class PropertyLoadException extends RuntimeException {
 	 * @param message
 	 * @param cause
 	 */
-	public PropertyLoadException(int lineNumer, String message, Throwable cause) {
+	public ConfigurationException(int lineNumer, String message, Throwable cause) {
 		super(message, cause);
 		this.lineNumer = lineNumer;
 	}

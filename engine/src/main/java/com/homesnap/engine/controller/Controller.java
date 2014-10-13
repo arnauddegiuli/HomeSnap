@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.homesnap.engine.JsonSerializable;
+import com.homesnap.engine.configuration.Property;
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.Command.Type;
 import com.homesnap.engine.connector.CommandListener;
@@ -45,11 +46,13 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.connector.CommandResultStatus;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.DefaultCommandResult;
+import com.homesnap.engine.controller.properties.StateSection;
+import com.homesnap.engine.controller.properties.StatesReader;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.StateProperties;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.StateValueType;
+import com.homesnap.engine.controller.what.Status;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -70,10 +73,10 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	
 	/** List of all state names with their current values of the controller. This map repesents the complete status of the controller. */
 	private Map<StateName, StateValue> stateList = new HashMap<StateName, StateValue>();
-	/** List of all states names with their class value type. This map is used to prevent from set a state with an invalid value. */
-	private Map<String, StateValueType> stateTypes;
+	/** The state section of the configuration file which contains all states names that the controller can implements. */
+	private StateSection stateTypes;
 	/** Cache of all controller classes with their state types */
-	private static Map<Class<?>, Map<String, StateValueType>> classTypes = new Hashtable<Class<?>, Map<String, StateValueType>>();
+	private static Map<Class<?>, StateSection> classTypes = new Hashtable<Class<?>, StateSection>();
 
 	public static final String JSON_TITLE = "title";
 	public static final String JSON_STATES = "states";
@@ -95,8 +98,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		// Check if the controller class is known
 		stateTypes = classTypes.get(clazz);
 		if (stateTypes == null) {
-			
-			stateTypes = new HashMap<String, StateValueType>();
 			Class<?> superClass = clazz.getSuperclass();
 			while (!Controller.class.equals(superClass)) {
 				initStateTypes(superClass);
@@ -109,25 +110,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 				throw new RuntimeException("Unable to find states definition file for "+ clazz.getName());
 			}
 			// Load the definition file
-			StateProperties properties = new StateProperties();
+			StatesReader reader = new StatesReader();
 			try {
-				properties.load(url.openStream());
+				reader.load(url.openStream());
 			} catch (IOException e) {
 				throw new RuntimeException("Unable to load states definition file for "+ getClass().getName(), e);
 			}
-			// Load each key/value pair (key=state name, value=state class name)
-			for (Entry<String, String> states : properties.getSectionProperties(StateProperties.CONTROLLER_SECTION).entrySet()) {
-				
-				String stateName = (String) states.getKey();
-				StateValueType stateType = null;
-				String type = properties.getSectionProperty(StateProperties.CONTROLLER_SECTION, stateName);
-				try {
-					stateType = properties.getStateValueType(stateName); // Determine the class type used to store the value of the state name
-				} catch (UnknowStateValueTypeException e) {
-					throw new ControllerStateException("State type "+ type +" is not valid for controller class "+ getClass().getName(), e);
-				}
-				stateTypes.put(stateName, stateType);
-			}
+			stateTypes = (StateSection) reader.getControllerSection();
 			classTypes.put(clazz, stateTypes);
 		}
 	}
@@ -160,13 +149,13 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		if (newValue == null) { // Manage null value because we create some
 								// controller with no address (Gateway or
 								// Heating central with MyHOME Bus)
-			for (String stateName : stateTypes.keySet()) {
-				stateList.put(new ControllerStateName(stateName), null);
+			for (Property state : stateTypes.getProperties()) {
+				stateList.put(new ControllerStateName(state.getName()), null);
 			}
 		} else {
 			// Récupérer les status
-			for (String stateName : stateTypes.keySet()) {
-				get(new ControllerStateName(stateName));
+			for (Property state : stateTypes.getProperties()) {
+				get(new ControllerStateName(state.getName()));
 			}
 		}
 	}
@@ -255,6 +244,16 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		}
 	}
 
+	/**
+	 * @param listener
+	 *            the change listener to remove.
+	 */
+	public void removeControllerChangeListener(ControllerChangeListener listener) {
+		synchronized (controllerChangeListenerList) {
+			controllerChangeListenerList.remove(listener);
+		}
+	}
+	
 	private void notifyStateChange(State oldStatus, State newStatus) {
 		synchronized (controllerChangeListenerList) {
 			for (ControllerChangeListener listener : controllerChangeListenerList) {
@@ -348,6 +347,15 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 	
 	/**
+	 * 
+	 * @param stateName
+	 * @return
+	 */
+	public StateValueType getType(String stateName) {
+		return stateTypes.getProperty(stateName).getType();
+	}
+	
+	/**
 	 * Create/update a value of the status.
 	 * @param stateName The state name to update
 	 * @param stateValue The new value of the state name
@@ -357,7 +365,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 			throw new NullPointerException("Could not set null state name.");
 		}
 		StateName key = new ControllerStateName(stateName);
-		StateValueType stateType = stateTypes.get(stateName);
+		StateValueType stateType = stateTypes.getProperty(stateName).getType();
 		try {
 			stateType.setValue(stateValue);
 		} catch (Exception e) {
