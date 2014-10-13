@@ -25,8 +25,6 @@ package com.homesnap.webserver.rest.listener;
 
 import java.util.Map;
 
-import javax.print.attribute.standard.MediaSize.Engineering;
-
 import org.json.JSONObject;
 
 import com.homesnap.engine.connector.CommandResult;
@@ -121,10 +119,10 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 		updateController(c, "Controller [id:"+where+"] not found.");
 		
 	}
-
-	private boolean wait = true;
 	
-	private void updateController(Controller c, String errorMessage) throws RestOperationException {
+	private int stateTreated = 0;
+
+	private void updateController(final Controller c, String errorMessage) throws RestOperationException {
 		if (c != null) {
 			try {
 				// Update with json
@@ -138,13 +136,21 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 					@Override
 					public void onStateChangeError(Controller controller, State oldStatus,
 							State newStatus, CommandResult result) {
-						wait = false;
+						synchronized (c) {
+							if (++stateTreated >= getParameters().size()) {
+								c.notify();
+							}
+						}
 					}
 					
 					@Override
 					public void onStateChange(Controller controller, State oldStatus,
 							State newStatus) {
-						wait = false;
+						synchronized (c) {
+							if (++stateTreated >= getParameters().size()) {
+								c.notify();
+							}
+						}
 					}
 				};
 				
@@ -165,9 +171,16 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 					}
 				}
 				
-				while(wait) {
-					// TODO for the moment only wait for one change...
+				synchronized (c) {
+						// TODO for the moment only wait for one change...
+						try {
+							c.wait(5000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				}
+				
 				c.removeControllerChangeListener(l);
 		
 				setResult(JSonTools.toJson(c));
