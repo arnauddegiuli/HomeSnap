@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.homesnap.webserver</groupId>
-	<artifactId>webserver</artifactId>
-	<packaging>bundle</packaging>
-
+	
 	<parent>
 		<groupId>com.homesnap</groupId>
 		<artifactId>homesnapSolution</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	
+	<artifactId>webserver</artifactId>
+	<packaging>bundle</packaging>
 
 	<name>HomeSnapWebServer</name>
-	<description>Homes Snap Web Server to pilot domotic</description>
+	<description>HomeSnap Web Server to pilot domotic using HomeSnap engine</description>
 
 	<!-- Build Configuration -->
 	<build>
@@ -24,8 +24,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
-						<Bundle-Name>${project.name}</Bundle-Name>
+						<Bundle-SymbolicName>HomeSnapWebServer</Bundle-SymbolicName>
+						<Bundle-Name>HomeSnapWebServer</Bundle-Name>
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
@@ -49,7 +49,7 @@
 							 org.osgi.service.log;version="1.3.0",
 							 org.osgi.util.tracker;version="1.3.1"
 						</Import-Package>
-						<Export-Package> .,
+						<Export-Package> 
 							 com.homesnap.webserver,
 							 com.homesnap.webserver.rest,
 							 com.homesnap.webserver.rest.listener,
@@ -62,8 +62,7 @@
 							 JavaSE-1.7
 						 </Bundle-RequiredExecutionEnvironment>
 						 <Bundle-ClassPath>
-						 ../../src/main/webapp/,
- 								.
+						 	./src/main/webapp, .
 						 </Bundle-ClassPath>
 						 <Require-Bundle>
 						 		com.homesnap.engine,
@@ -145,7 +144,7 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.homesnap.engine</groupId>
+			<groupId>com.homesnap</groupId>
 			<artifactId>engine</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
@@ -154,6 +153,41 @@
 			<artifactId>jersey-client</artifactId>
 			<version>1.8</version>
 			<scope>test</scope>
-	</dependency>
+		</dependency>
+		<dependency>
+        	<groupId>javax.servlet</groupId>
+        	<artifactId>javax.servlet-api</artifactId>
+        	<version>3.0.1</version>
+        	<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
+			<version>3.10.0-v20140606-1445</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.osgi</groupId>
+			<artifactId>services</artifactId>
+			<version>3.1.200-v20070605</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.eclipse.jetty</groupId>
+		  <artifactId>jetty-servlet</artifactId>
+		  <version>9.2.3.v20140905</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.eclipse.jetty.osgi</groupId>
+		  <artifactId>jetty-httpservice</artifactId>
+		  <version>9.2.3.v20140905</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 </project>

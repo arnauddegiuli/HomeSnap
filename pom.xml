@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<groupId>com.homesnap</groupId>
-	<artifactId>homesnapSolution</artifactId>
-	<name>HomeSnapSolution</name>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.homesnap</groupId>
+  <artifactId>homesnapSolution</artifactId>
 
-	<modules>
-		<module>engine</module>
-		<module>scanner</module>		
-		<module>server</module>
-		<module>web</module>
-	</modules>
+  <name>HomeSnapSolution</name>
+  <version>0.0.1-SNAPSHOT</version>
 
-	<properties>
-		<licence.plugin.version>1.7</licence.plugin.version>
-		<file.encoding>UTF-8</file.encoding>
-	</properties>
-	<dependencyManagement>
-		<dependencies>
-		</dependencies>
-	</dependencyManagement>
+  <packaging>pom</packaging>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>${licence.plugin.version}</version>
-				<configuration>
-					<licenseName>gpl_v2</licenseName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	
-	<inceptionYear>2011</inceptionYear>
-	<organization>
-	    <name>A. de Giuli</name>
-	    <url>http://jeeasy.org</url>
-	</organization>
-	<developers>
-	    <developer>
-	        <name>Arnaud de Giuli</name>
-	        <email>arnaud.degiuli@free.fr</email>
-	    </developer>
-	    <developer>
-	        <name>Olivier Driesbach</name>
-	        <email></email>
-	    </developer>
-	</developers>
+  <modules>
+    <module>engine</module>
+    <module>scanner</module>
+    <module>web</module>
+  </modules>
+
+  <properties>
+    <licence.plugin.version>1.7</licence.plugin.version>
+    <file.encoding>UTF-8</file.encoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies></dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${licence.plugin.version}</version>
+        <configuration>
+          <licenseName>gpl_v2</licenseName>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <inceptionYear>2011</inceptionYear>
+
+  <organization>
+    <name>A. de Giuli</name>
+    <url>http://jeeasy.org</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <name>Arnaud de Giuli</name>
+      <email>arnaud.degiuli@free.fr</email>
+    </developer>
+    <developer>
+      <name>Olivier Driesbach</name>
+      <email></email>
+    </developer>
+  </developers>
+
 </project>
-
