@@ -35,11 +35,13 @@ import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.homesnap.webserver.servlet.house.HouseServlet;
+import com.homesnap.webserver.servlet.recorder.RecorderServlet;
 
 public class Activator implements BundleActivator {
 
 	private static final String MAIN_RESOURCES_URI = "/server";
 	private static final String HOUSE_URI = "/house";
+	private static final String RECORDER_URI = "/recorder";
 	private HttpService httpService = null;
 	private static final Logger logger = Logger.getLogger(Activator.class
 			.getName());
@@ -108,6 +110,9 @@ public class Activator implements BundleActivator {
 			httpService.registerServlet(HOUSE_URI, new HouseServlet(), null,
 					httpService.createDefaultHttpContext());
 			
+			httpService.registerServlet(RECORDER_URI, new RecorderServlet(), null,
+					httpService.createDefaultHttpContext());
+			
 		} catch (ServletException se) {
 			throw new RuntimeException(se);
 		} catch (NamespaceException se) {
@@ -116,8 +121,8 @@ public class Activator implements BundleActivator {
 	}
 
 	private void unregisterServlets() {
-//		httpService.unregister(LIGHT_URI);
 		httpService.unregister(HOUSE_URI);
+		httpService.unregister(RECORDER_URI);
 	}
 
 	private void registerResources() {

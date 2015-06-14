@@ -38,7 +38,7 @@ import org.junit.Assert;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.Label;
-import com.homesnap.webserver.utils.JSonTools;
+import com.homesnap.webserver.rest.house.utils.JSonTools;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;

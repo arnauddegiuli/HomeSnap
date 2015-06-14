@@ -28,7 +28,7 @@ import com.homesnap.engine.controller.light.Light;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
-import com.homesnap.webserver.utils.JSonTools;
+import com.homesnap.webserver.rest.house.utils.JSonTools;
 
 
 public class SerializationTest {

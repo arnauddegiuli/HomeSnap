@@ -40,6 +40,7 @@
 							 com.homesnap.engine.house,
 							 com.homesnap.engine.services,
 							 com.homesnap.engine.services.impl,
+							 com.homesnap.recorder,
 							 org.json,
 							 org.json.zip,
 							 javax.servlet;version="2.6.0",
@@ -189,5 +190,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.homesnap</groupId>
+			<artifactId>recorder</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>bundle</type>
+		</dependency>
 	</dependencies>
 </project>

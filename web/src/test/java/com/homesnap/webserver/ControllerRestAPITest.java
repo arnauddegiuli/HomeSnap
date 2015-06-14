@@ -36,10 +36,10 @@ import org.junit.runners.MethodSorters;
 
 import com.homesnap.engine.controller.light.LightStatusStateValue;
 import com.homesnap.engine.controller.who.Who;
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
-import com.homesnap.webserver.rest.RestOperationException;
-import com.homesnap.webserver.rest.UnsupportedRestOperation;
-import com.homesnap.webserver.rest.parser.ParseException;
+import com.homesnap.webserver.rest.house.MissingParameterRestOperation;
+import com.homesnap.webserver.rest.house.RestOperationException;
+import com.homesnap.webserver.rest.house.UnsupportedRestOperation;
+import com.homesnap.webserver.rest.house.parser.ParseException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ControllerRestAPITest extends AbstractRestApi {

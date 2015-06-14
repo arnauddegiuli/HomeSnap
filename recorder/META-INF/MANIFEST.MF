@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: HomeSnapRecorder
+Bundle-SymbolicName: HomeSnapRecorder;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.homesnap.recorder.Activator
+Export-Package: .,
+ com.homesnap.recorder
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
+Import-Package: com.homesnap.engine.connector,
+ org.apache.derby.jdbc,
+ org.osgi.framework;version="1.3.0",
+ org.osgi.service.log;version="1.3.0"
+Bundle-ClassPath: .
+Require-Bundle: com.homesnap.engine,
+ derby,
+ org.eclipse.osgi;bundle-version="3.8.2",
+ org.eclipse.osgi.services;bundle-version="3.3.100"
+

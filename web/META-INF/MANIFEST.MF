@@ -6,10 +6,10 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.homesnap.webserver.Activator
 Export-Package: .,
  com.homesnap.webserver,
- com.homesnap.webserver.rest,
- com.homesnap.webserver.rest.listener,
+ com.homesnap.webserver.rest.house,
+ com.homesnap.webserver.rest.house.listener,
+ com.homesnap.webserver.rest.house.parser,
  com.homesnap.webserver.servlet.house,
- com.homesnap.webserver.rest.parser,
  com.homesnap.webserver.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
@@ -24,6 +24,7 @@ Import-Package: com.homesnap.engine.connector,
  com.homesnap.engine.house,
  com.homesnap.engine.services,
  com.homesnap.engine.services.impl,
+ com.homesnap.recorder,
  javax.servlet,
  javax.servlet.http,
  org.json,

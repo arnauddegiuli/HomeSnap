@@ -13,6 +13,7 @@
   <modules>
     <module>engine</module>
     <module>scanner</module>
+    <module>recorder</module>
     <module>web</module>
   </modules>
 

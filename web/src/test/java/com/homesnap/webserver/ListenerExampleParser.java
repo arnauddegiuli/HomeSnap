@@ -23,7 +23,7 @@ package com.homesnap.webserver;
  * #L%
  */
 
-import com.homesnap.webserver.rest.MyDomoRestAPI;
+import com.homesnap.webserver.rest.house.MyDomoRestAPI;
 
 
 public class ListenerExampleParser implements MyDomoRestAPI {

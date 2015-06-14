@@ -68,6 +68,7 @@
 					var store = new HouseStore();
 					var house = new House({store: store});
 					var container = dom.byId("house");
+				
 					house.draw(container);
 					// Register route
 					router.register("/house/labels/:id", function (event) {

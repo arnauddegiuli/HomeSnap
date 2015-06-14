@@ -1,25 +1,3 @@
-/*
- * #%L
- * HomeSnapWebServer
- * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
- * %%
- * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
- * 
- *     MyDomo is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- * 
- *     MyDomo is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License
- *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
- * #L%
- */
 define([
 	"dojo/_base/declare",
 	"dojo/request",
@@ -48,15 +26,19 @@ define([
 			
 			var labels = this.labels = new Array();
 			var store = this.store;
+			
+			var value = this.store.query(); 
 			// results object provides a forEach method for iteration
-			when (this.store.query(), function (house) {
+			dojo.forEach(value, function (house) {
+				alert(house);
 					dojo.forEach(house.labels, function(label) {
 						domcConstruct.create("li", {innerHTML: "<a href='#/house/labels/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
 						var div = domcConstruct.create("div", {id: "labelContainer_" + label.id}, "main");
 						var widget = new Label({label: label, house: store}, div);
+						
 						labels.push(widget);
 					});
-			}/*insertRow*/);
+			} /*insertRow*/);
 
 //		    results.observe(function(item, removedIndex, insertedIndex){
 //		        // this will be called any time a item is added, removed, and updated

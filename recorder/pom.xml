@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>com.homesnap</groupId>
+		<artifactId>homesnapSolution</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>recorder</artifactId>
+	<packaging>bundle</packaging>
+
+	<name>HomeSnapRecorder</name>
+	<description>HomeSnap recorder to record information</description>
+
+	<!-- Build Configuration -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.4.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>HomeSnapRecorder</Bundle-SymbolicName>
+						<Bundle-Name>HomeSnapRecorder</Bundle-Name>
+						<Bundle-Description>${project.description}</Bundle-Description>
+						<Bundle-Vendor>ADG Software</Bundle-Vendor>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Bundle-Activator>com.homesnap.recorder.Activator</Bundle-Activator>
+						<Import-Package>org.osgi.framework;version="1.3.0",
+						     org.apache.derby.jdbc,
+							 org.osgi.service.log;version="1.3.0",
+							 org.osgi.util.tracker;version="1.3.1"
+						</Import-Package>
+						<Export-Package>.,
+ 							com.homesnap.recorder
+						 </Export-Package>
+						 <Bundle-RequiredExecutionEnvironment>
+													 JavaSE-1.6,
+							 JavaSE-1.7
+						 </Bundle-RequiredExecutionEnvironment>
+						 <Bundle-ClassPath>
+						 	.
+						 </Bundle-ClassPath>
+						 <Require-Bundle>
+						 	com.homesnap.engine,
+						 	 derby,
+							 org.eclipse.osgi;bundle-version="3.8.2",
+							 org.eclipse.osgi.services;bundle-version="3.3.100"
+ 						</Require-Bundle>
+					</instructions>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${licence.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>gpl</licenseName>
+							<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+							<canUpdateCopyright>true</canUpdateCopyright>
+							<canUpdateDescription>true</canUpdateDescription>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.5,)</versionRange>
+										<goals>
+											<goal>
+												update-file-header
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<!-- Dependecies Management -->
+	<dependencies>
+		<dependency>
+			<groupId>com.homesnap</groupId>
+			<artifactId>engine</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
+			<version>3.10.0-v20140606-1445</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.osgi</groupId>
+			<artifactId>services</artifactId>
+			<version>3.1.200-v20070605</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.11.1.1</version>
+		</dependency>
+	</dependencies>
+</project>

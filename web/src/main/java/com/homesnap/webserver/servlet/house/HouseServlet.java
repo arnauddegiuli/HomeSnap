@@ -34,15 +34,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.homesnap.engine.house.House;
-import com.homesnap.webserver.rest.MissingParameterRestOperation;
-import com.homesnap.webserver.rest.RestOperationException;
-import com.homesnap.webserver.rest.UnsupportedRestOperation;
-import com.homesnap.webserver.rest.listener.MyDomoDeleteListener;
-import com.homesnap.webserver.rest.listener.MyDomoGetListener;
-import com.homesnap.webserver.rest.listener.MyDomoPostListener;
-import com.homesnap.webserver.rest.listener.MyDomoPutListener;
-import com.homesnap.webserver.rest.parser.ParseException;
-import com.homesnap.webserver.rest.parser.UriParser;
+import com.homesnap.webserver.rest.house.MissingParameterRestOperation;
+import com.homesnap.webserver.rest.house.RestOperationException;
+import com.homesnap.webserver.rest.house.UnsupportedRestOperation;
+import com.homesnap.webserver.rest.house.listener.MyDomoDeleteListener;
+import com.homesnap.webserver.rest.house.listener.MyDomoGetListener;
+import com.homesnap.webserver.rest.house.listener.MyDomoPostListener;
+import com.homesnap.webserver.rest.house.listener.MyDomoPutListener;
+import com.homesnap.webserver.rest.house.parser.ParseException;
+import com.homesnap.webserver.rest.house.parser.UriParser;
 
 
 public class HouseServlet extends HttpServlet {
