@@ -39,10 +39,10 @@ public class Automation extends Controller {
 	}
 
 	public AutomationStatusStateValue getStatus() {
-		return (AutomationStatusStateValue) get(AutomationStateNameold.STATUS);	
+		return (AutomationStatusStateValue) get(AutomationStateName.STATUS);	
 	}
 
 	public void setStatus(AutomationStatusStateValue status) {
-		set(AutomationStateNameold.STATUS, status);	
+		set(AutomationStateName.STATUS, status);	
 	}
 }
