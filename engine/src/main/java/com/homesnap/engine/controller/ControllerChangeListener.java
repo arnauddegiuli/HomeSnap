@@ -25,7 +25,7 @@ package com.homesnap.engine.controller;
  */
 
 import com.homesnap.engine.connector.CommandResult;
-import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 
 
 /** ControllerChangeListener. */
@@ -35,8 +35,8 @@ public interface ControllerChangeListener {
 	 *            the controller that changed.
 	 */
 	void onStateChange(Controller controller,
-			State oldStatus, State newStatus);
+			What oldStatus, What newStatus);
 
 	void onStateChangeError(Controller controller,
-			State oldStatus, State newStatus, CommandResult result);
+			What oldStatus, What newStatus, CommandResult result);
 }

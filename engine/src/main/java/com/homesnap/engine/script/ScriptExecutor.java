@@ -31,7 +31,7 @@ public class ScriptExecutor {
 
 	public void executeScript(Script script) {
 		for (Action action : script.getActionList()) {	
-			changeWhat(action.getController(), action.getStatus().getValue().getValue());
+			changeWhat(action.getController(), action.getStatus().toString());
 		}
 	}
 	

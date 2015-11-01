@@ -31,6 +31,7 @@ import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.ControllerChangeListener;
 import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
@@ -134,8 +135,8 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 				com.homesnap.engine.controller.ControllerChangeListener l = new ControllerChangeListener() {
 					
 					@Override
-					public void onStateChangeError(Controller controller, State oldStatus,
-							State newStatus, CommandResult result) {
+					public void onStateChangeError(Controller controller, What oldStatus,
+							What newStatus, CommandResult result) {
 						synchronized (c) {
 							if (++stateTreated >= getParameters().size()) {
 								c.notify();
@@ -144,8 +145,8 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 					}
 					
 					@Override
-					public void onStateChange(Controller controller, State oldStatus,
-							State newStatus) {
+					public void onStateChange(Controller controller, What oldStatus,
+							What newStatus) {
 						synchronized (c) {
 							if (++stateTreated >= getParameters().size()) {
 								c.notify();

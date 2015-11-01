@@ -1,7 +1,6 @@
 package com.homesnap.engine.connector;
 
-import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -48,7 +47,8 @@ public class DefaultCommandResult implements CommandResult {
 	}
 
 	@Override
-	public State getWhat(StateName name) {
+	public What getWhat(String name) {
+		// TODO return a what empty with just the name!
 		return null;
 	}
 

@@ -5,7 +5,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.StringValue;
+import com.homesnap.engine.controller.what.impl.StringState;
 
 /*
  * #%L
@@ -32,7 +32,7 @@ import com.homesnap.engine.controller.what.impl.StringValue;
  */
 
 
-public class Model extends DimensionStatusImpl<StringValue> {
+public class Model extends DimensionStatusImpl<StringState> {
 	
 	private int MODEL_POS = 0;
 	
@@ -54,25 +54,25 @@ public class Model extends DimensionStatusImpl<StringValue> {
 	}
 
 	@Override
-	public StringValue getStateValue() {
+	public StringState getStateValue() {
 		int model = getIntValue(MODEL_POS);
 		switch (model) {
 		case MHSERVER:
-			return new StringValue("MHServer");
+			return new StringState("MHServer");
 		case MH200:
-			return new StringValue("MH200");
+			return new StringState("MH200");
 		case F452:
-			return new StringValue("F452");
+			return new StringState("F452");
 		case F452V:
-			return new StringValue("F452V");
+			return new StringState("F452V");
 		case MHServer2:
-			return new StringValue("MHServer2");
+			return new StringState("MHServer2");
 		case H4684:
-			return new StringValue("H4684");
+			return new StringState("H4684");
 		case ADGTESTSERVER:
-			return new StringValue("ADG test Server");
+			return new StringState("ADG test Server");
 		default:
-			return new StringValue("Unknown");
+			return new StringState("Unknown");
 		}
 	}
 

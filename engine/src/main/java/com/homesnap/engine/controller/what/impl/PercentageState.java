@@ -1,4 +1,5 @@
-package com.homesnap.engine.controller.types;
+package com.homesnap.engine.controller.what.impl;
+
 
 /*
  * #%L
@@ -24,14 +25,7 @@ package com.homesnap.engine.controller.types;
  * #L%
  */
 
-
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
-public class PercentageType extends MinMaxType<Integer> {
+public class PercentageState extends MinMaxState<Integer> {
 	
 	public static final int MIN = 0;
 	public static final int MAX = 100;
@@ -41,23 +35,20 @@ public class PercentageType extends MinMaxType<Integer> {
 	/**
 	 * 
 	 */
-	public PercentageType() {
+	public PercentageState() {
 		super(MIN, MAX);
 	}
 	
-	@Override
-	public String getValue() {
-		return String.valueOf(this.value);
+	public Integer getValue() {
+		return this.value;
 	}
 
-	@Override
-	public void setValue(String value) {
+	public void setValue(Integer value) {
 		try {
-			int number = Integer.parseInt(value);
-			if (MIN <= this.value && this.value <= MAX) {
-				this.value = number;
+			if (MIN <= value && value <= MAX) {
+				this.value = value;
 			} else {
-				throwInvalidValueException(value);
+				throwInvalidValueException(String.valueOf(value));
 			}
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Value "+ value +" is not a valid number.");
@@ -66,6 +57,12 @@ public class PercentageType extends MinMaxType<Integer> {
 
 	@Override
 	public String toString() {
-		return super.toString() +" %";
+		return String.valueOf(value) +" %";
+	}
+
+	@Override
+	public void fromString(String value) {
+		Integer.parseInt(value.substring(0, value.length()-2)); // remove the " %"
+		
 	}
 }

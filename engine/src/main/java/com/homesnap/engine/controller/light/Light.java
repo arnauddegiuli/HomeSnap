@@ -24,86 +24,60 @@ package com.homesnap.engine.controller.light;
  * #L%
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.homesnap.engine.controller.Controller;
-import com.homesnap.engine.controller.types.RGBType;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.impl.OnOffState;
+import com.homesnap.engine.controller.what.impl.PercentageState;
+import com.homesnap.engine.controller.what.impl.RGBState;
 import com.homesnap.engine.controller.who.Who;
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
 public class Light extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * 
-	 */
-	public Light() {
-	}
-
 	@Override
 	public Who getWho() {
 		return Who.LIGHT;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public StateValue getStatus() {
-		return get(LightStateName.STATUS);
+	public OnOffState getStatus() {
+		return (OnOffState) get(LightStateName.status.name().toLowerCase());
 	}
 
-	/**
-	 * 
-	 * @param status
-	 */
-	public void setStatus(StateValue status) {
-		set(LightStateName.STATUS, status);
+	public void setStatus(OnOffState status) {
+		set(LightStateName.status.name().toLowerCase(), status);
+	}
+
+	public PercentageState getLevel() {
+		return (PercentageState) get(LightStateName.level.name());
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public StateValue getLevel() {
-		return get(LightStateName.LEVEL);
+	public void setLevel(PercentageState value) {
+		set(LightStateName.level.name(), value);
 	}
 	
-	/**
-	 * 
-	 * @param value
-	 */
-	public void setLevel(StateValue value) {
-		set(LightStateName.LEVEL, value);
+	public OnOffState getBlinkTime() {
+		return (OnOffState) get(LightStateName.blink_time.name());
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public StateValue getBlinkTime() {
-		return get(LightStateName.BLINK_TIME);
+	public void setBlinkTime(OnOffState value) {
+		set(LightStateName.blink_time.name(), value);
 	}
 	
-	/**
-	 * 
-	 * @param value
-	 */
-	public void setBlinkTime(StateValue value) {
-		set(LightStateName.BLINK_TIME, value);
+	public RGBState getColor() {
+		return (RGBState) get(LightStateName.color.name());
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public RGBType getColor() {
-		return (RGBType) get(LightStateName.COLOR);
+
+	@Override
+	public List<String> getStateList() {
+		List<String> result = new ArrayList<String>();
+		LightStateName[] list = LightStateName.values();
+		for (int i = 0; i < list.length; i++) {
+			result.add(list[i].name());
+		};
+		return result;
 	}
 }

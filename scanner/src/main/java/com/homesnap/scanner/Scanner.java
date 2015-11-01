@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 import com.homesnap.engine.connector.Monitor;
 import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.connector.openwebnet.OpenWebMonitorImpl;
-import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -42,10 +42,10 @@ public class Scanner {
 		monitor.addUnknownControllerListener(new UnknownControllerListener() {
 
 			@Override
-			public void foundUnknownController(Who who, Where where, State what) {
+			public void foundUnknownController(Who who, Where where, What what) {
 				String whereStr = where != null ? where.getTo() : "null";
-				String whatStr = what == null ? "null": what.getName() == null ? "null" : what.getName().getName();
-				String valueStr = what == null ? "null": what.getValue() == null ? "null" : what.getValue().getValue();
+				String whatStr = what == null ? "null": what.getName();
+				String valueStr = what == null ? "null": what.getValue() == null ? "null" : what.getValue().toString();
 				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}]\n", who, whereStr, whatStr, valueStr));
 			}
 		});

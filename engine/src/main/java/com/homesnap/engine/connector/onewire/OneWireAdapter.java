@@ -56,8 +56,8 @@ import com.homesnap.engine.controller.temperature.TemperatureSensorStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.DateValue;
-import com.homesnap.engine.controller.what.impl.DoubleValue;
+import com.homesnap.engine.controller.what.impl.DateState;
+import com.homesnap.engine.controller.what.impl.DoubleState;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -298,7 +298,7 @@ class OneWireAdapter implements Monitor, Commander {
 						case ALARM: {
 							// TODO Faire un DateUtil
 							long time = sensor.getClockAlarm(deviceState);
-							result = new DateValue(new Date(time));
+							result = new DateState(new Date(time));
 							break;
 						}
 						
@@ -320,7 +320,7 @@ class OneWireAdapter implements Monitor, Commander {
 //							}
 							
 							long time = sensor.getClock(deviceState);
-							result = new DateValue(new Date(time));
+							result = new DateState(new Date(time));
 //							result = new StringValue(new SimpleDateFormat(pattern).format(new Date(time)));
 							break;
 						}
@@ -386,19 +386,19 @@ class OneWireAdapter implements Monitor, Commander {
 					TemperatureSensorStateName stateName = (TemperatureSensorStateName) state.getName();
 					switch (stateName) {
 						case ALARM_HIGH: {
-							result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_HIGH, deviceState));
+							result = new DoubleState(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_HIGH, deviceState));
 							break;
 						}
 						case ALARM_LOW: {
-							result = new DoubleValue(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_LOW, deviceState));
+							result = new DoubleState(sensor.getTemperatureAlarm(TemperatureContainer.ALARM_LOW, deviceState));
 							break;
 						}
 						case HIGHEST_TEMP: {
-							result = new DoubleValue(sensor.getMaxTemperature());
+							result = new DoubleState(sensor.getMaxTemperature());
 							break;
 						}
 						case LOWEST_TEMP: {
-							result = new DoubleValue(sensor.getMinTemperature());
+							result = new DoubleState(sensor.getMinTemperature());
 							break;
 						}
 						default: {
@@ -418,12 +418,12 @@ class OneWireAdapter implements Monitor, Commander {
 					switch (stateName) {
 						case ALARM_HIGH: {
 							sensor.setTemperatureAlarm(TemperatureContainer.ALARM_HIGH,
-									((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
+									((DoubleState) state.getValue()).getDoubleValue(), deviceState);
 							break;
 						}
 						case ALARM_LOW: {
 							sensor.setTemperatureAlarm(TemperatureContainer.ALARM_LOW,
-									((DoubleValue) state.getValue()).getDoubleValue(), deviceState);
+									((DoubleState) state.getValue()).getDoubleValue(), deviceState);
 							break;
 						}
 						default: {

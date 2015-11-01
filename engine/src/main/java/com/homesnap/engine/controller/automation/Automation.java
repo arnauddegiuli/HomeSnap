@@ -25,7 +25,11 @@ package com.homesnap.engine.controller.automation;
  */
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.what.impl.UpDownState;
 import com.homesnap.engine.controller.who.Who;
 
 public class Automation extends Controller {
@@ -38,11 +42,25 @@ public class Automation extends Controller {
 		return Who.AUTOMATION;
 	}
 
-	public AutomationStatusStateValue getStatus() {
-		return (AutomationStatusStateValue) get(AutomationStateName.STATUS);	
+	public UpDownState getStatus() {
+		return (UpDownState) get(StateNameEnum.status.name());	
 	}
 
-	public void setStatus(AutomationStatusStateValue status) {
-		set(AutomationStateName.STATUS, status);	
+	public void setStatus(UpDownState status) {
+		set(StateNameEnum.status.name(), status);	
+	}
+
+	@Override
+	public List<String> getStateList() {
+		List<String> result = new ArrayList<String>();
+		StateNameEnum[] list = StateNameEnum.values();
+		for (int i = 0; i < list.length; i++) {
+			result.add(list[i].name());
+		};
+		return result;
+	}
+	
+	private enum StateNameEnum {
+		status;
 	}
 }

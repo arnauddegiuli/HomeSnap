@@ -46,6 +46,7 @@ import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownWho;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.house.Label;
 
@@ -196,7 +197,7 @@ implements Monitor {
 
 	private boolean updateController(Where where, OpenWebNetCommand command) throws UnknownState, UnknownWho {
 		boolean known = false;
-		com.homesnap.engine.controller.what.State what;
+		What what;
 		
 		if (command.isStandardCommand()) {
 			 what = command.getWhat();

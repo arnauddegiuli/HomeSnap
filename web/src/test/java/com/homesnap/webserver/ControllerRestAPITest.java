@@ -34,7 +34,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.homesnap.engine.controller.light.LightStatusStateValue;
 import com.homesnap.engine.controller.who.Who;
 import com.homesnap.webserver.rest.house.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.house.RestOperationException;

@@ -1,4 +1,9 @@
-package com.homesnap.engine.controller.light.legrand;
+package com.homesnap.engine.controller.what.impl;
+
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
+import com.homesnap.engine.controller.what.State;
 
 /*
  * #%L
@@ -25,33 +30,41 @@ package com.homesnap.engine.controller.light.legrand;
  */
 
 
-import com.homesnap.engine.controller.light.Light;
-import com.homesnap.engine.controller.light.LightStateName;
-import com.homesnap.engine.controller.light.LightStatusStateValue;
+public class IpAddressState implements State<Inet4Address> {
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
-public class LightLegrand extends Light {
-	
-	/** */
-	private static final long serialVersionUID = 751528707497249180L;
+	private Inet4Address ipAdress;
 
-	public static void main(String[] args) {
-		
-		Light l = new Light();
-		l.setStatus(LightStatusStateValue.ON);
+	public IpAddressState(Inet4Address address) {
+		setValue(address);
+	}
+
+
+	@Override
+	public Inet4Address getValue() {
+		return ipAdress;
+	}
+
+	@Override
+	public void setValue(Inet4Address value) {
+		this.ipAdress = value;
+	}
+
+	@Override
+	public void fromString(String value) {
 		try {
-			l.set(LightStateName.STATUS.name(), "LIGHT_ON");
-		} catch (Exception e) {
+			Inet4Address.getByAddress(host, addr)ByName(value);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		LightLegrand lg = new LightLegrand();
-		lg.setStatus(LightLegrandStatusStateValue.LIGHT_ON);
-		lg.setStatus(LightLegrandStatusStateValue.LIGHT_ON_50_PERCENT);
+	}
+	
+	@Override
+	public String toString() {
+		return ipAdress.getHostAddress();
+//		return "".concat(String.valueOf(address[0]))
+//				.concat(".").concat(String.valueOf(address[1]))
+//				.concat(".").concat(String.valueOf(address[2]))
+//				.concat(".").concat(String.valueOf(address[3]));
 	}
 }

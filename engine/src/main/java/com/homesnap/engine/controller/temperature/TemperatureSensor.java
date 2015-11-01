@@ -25,14 +25,13 @@ package com.homesnap.engine.controller.temperature;
  */
 
 
+import java.util.List;
+
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.who.Who;
 
 /**
  * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
  */
 public class TemperatureSensor extends Controller {
 	
@@ -42,5 +41,11 @@ public class TemperatureSensor extends Controller {
 	@Override
 	public Who getWho() {
 		return Who.TEMPERATURE_SENSOR;
+	}
+
+	@Override
+	public List<String> getStateList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

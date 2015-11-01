@@ -26,7 +26,8 @@ package com.homesnap.engine.connector.openwebnet.light;
 
 import com.homesnap.engine.controller.light.LightStatusStateValue;
 import com.homesnap.engine.controller.light.legrand.LightLegrandStatusStateValue;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 
 
 // LIGHT
@@ -78,7 +79,7 @@ public enum LightStatusConverter {
 
 	
 	private String code; // OpenWebNet code
-	private StateValue value; // SnapHome code
+	private State value; // SnapHome code
 
 	private LightStatusConverter(String code, LightLegrandStatusStateValue value) {
 		this.code = code;
@@ -98,7 +99,7 @@ public enum LightStatusConverter {
 		return value;
 	}
 
-	public static StateValue convert(String code) {
+	public static What convert(String code) {
 		for (LightStatusConverter light: LightStatusConverter.values()) {
 			if (light.getCode().equalsIgnoreCase(code))
 				return light.value;
@@ -106,7 +107,7 @@ public enum LightStatusConverter {
 		return null;
 	}
 
-	public static String convert(StateValue name) {
+	public static String convert(What name) {
 		if (name == null) {
 			return null;
 		}

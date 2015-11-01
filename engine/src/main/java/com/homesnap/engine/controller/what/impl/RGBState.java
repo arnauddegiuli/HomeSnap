@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.types;
+package com.homesnap.engine.controller.what.impl;
 
 /*
  * #%L
@@ -25,41 +25,47 @@ package com.homesnap.engine.controller.types;
  */
 
 
-import com.homesnap.engine.controller.what.StateValueType;
+import java.util.regex.Pattern;
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
-public class NumberType extends StateValueType {
+import com.homesnap.engine.controller.what.State;
+
+public class RGBState implements State<String> {
 	
 	/** */
-	private double value;
+	private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
 	
-	/**
-	 * 
-	 */
-	public NumberType() {
-	}
+	/** */
+	private int[] color = new int[] {0, 0, 0};
 
-	@Override
 	public String getValue() {
-		return String.valueOf(this.value);
+		return String.format("#%02x%02x%02x", color[0], color[1], color[2]);
 	}
 
 	@Override
 	public void setValue(String value) {
-		try {
-			this.value = Double.parseDouble(value);
-		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException("Value "+ value +" is not a valid number.");
+		if (value.length() > 0) {
+			String hexCode = value;
+			if (value.charAt(0) == '#') {
+				hexCode = value.substring(1);
+			}
+			if (HEX_COLOR_PATTERN.matcher(hexCode).matches()) {
+				int rgb = Integer.parseInt(hexCode, 16);
+			    color[0] = (rgb & 0xFF0000) >> 16;
+			    color[1] = (rgb & 0xFF00) >> 8;
+			    color[2] = (rgb & 0xFF);
+			    return;
+			}
 		}
+		throw new IllegalArgumentException("Value "+ value +" is not a valid hexadecimal color code.");
+	}
+	
+	public String toString() {
+		return getValue();
 	}
 
 	@Override
-	public String toString() {
-		return getValue();
+	public void fromString(String value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

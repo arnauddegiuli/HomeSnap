@@ -10,7 +10,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.controller.what.StateValue;
 import com.homesnap.engine.controller.what.impl.IncorrectIpV4AddressException;
-import com.homesnap.engine.controller.what.impl.IpAddressValue;
+import com.homesnap.engine.controller.what.impl.IpAddressState;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ import com.homesnap.engine.controller.what.impl.IpAddressValue;
  */
 
 
-public class IpAddress extends DimensionStatusImpl<IpAddressValue> {
+public class IpAddress extends DimensionStatusImpl<IpAddressState> {
 
 	private Log log = new Log();
 
@@ -51,8 +51,8 @@ public class IpAddress extends DimensionStatusImpl<IpAddressValue> {
 	}
 
 	@Override
-	public IpAddressValue getStateValue() {
-		IpAddressValue ip = new IpAddressValue();
+	public IpAddressState getStateValue() {
+		IpAddressState ip = new IpAddressState();
 		try {
 			ip.setIpAddress(
 				new byte[] {

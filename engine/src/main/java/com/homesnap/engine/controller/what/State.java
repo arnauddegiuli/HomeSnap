@@ -24,41 +24,26 @@ package com.homesnap.engine.controller.what;
  * #L%
  */
 
-public final class State {
+/**
+ * State represents an instance of a status which is define by a key/value pair.
+ *
+ */
+public interface State<T> {
+	
+	
+	public T getValue();
+	
+	public void setValue(T value);
+
+	/**
+	 * Define the value of the status.
+	 * Override it to manage different type.
+	 */
+	public abstract void fromString(String value);
 	
 	/**
-	 * The name of the state  
+	 * The value of the status
+	 * @return the value of the status
 	 */
-	private StateName name;
-	
-	/**
-	 * The value of the state
-	 */
-	private StateValue value;
-
-	/**
-	 * 
-	 * @param state
-	 * @param value
-	 */
-	public State(StateName state, StateValue value) {
-		this.name = state;
-		this.value = value;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public StateName getName() {
-		return name;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public StateValue getValue() {
-		return value;
-	}
+	public abstract String toString();
 }

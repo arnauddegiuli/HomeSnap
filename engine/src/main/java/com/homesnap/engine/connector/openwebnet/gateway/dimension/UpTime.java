@@ -33,10 +33,10 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.DateValue;
+import com.homesnap.engine.controller.what.impl.DateState;
 
 
-public class UpTime extends DimensionStatusImpl<DateValue> {
+public class UpTime extends DimensionStatusImpl<DateState> {
 	
 	private int DAY_POS = 0;
 	private int HOURS_POS = 1;
@@ -65,8 +65,8 @@ public class UpTime extends DimensionStatusImpl<DateValue> {
 	}
 
 	@Override
-	public DateValue getStateValue() {
-		return new DateValue(getTime());
+	public DateState getStateValue() {
+		return new DateState(getTime());
 	}
 
 	@Override

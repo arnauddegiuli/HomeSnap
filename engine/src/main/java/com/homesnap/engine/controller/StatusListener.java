@@ -1,7 +1,7 @@
 package com.homesnap.engine.controller;
 
 import com.homesnap.engine.connector.CommandResult;
-import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 
 /*
  * #%L
@@ -30,5 +30,5 @@ import com.homesnap.engine.controller.what.State;
 
 public interface StatusListener {
 
-	public void onStatus(State status, CommandResult result);
+	public void onStatus(What status, CommandResult result);
 }

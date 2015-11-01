@@ -26,6 +26,7 @@ package com.homesnap.engine.connector.openwebnet.convert;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
@@ -38,7 +39,7 @@ import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneStatus;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.controller.light.LightStateName;
 import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.who.Who;
 
 public class Convert {
@@ -48,7 +49,7 @@ public class Convert {
 	 * 
 	 * @return open web net message.
 	 */
-	protected final static String createMessage(Command command) {
+	protected final static List<String> createMessage(Command command) {
 		if (command.getWhere() == null || command.getWhere().getTo() == null) {
 			if (command.getWho() != Who.GATEWAY) {
 				throw new IllegalArgumentException("Command must contain a where");
@@ -58,9 +59,9 @@ public class Convert {
 		try {
 			String who = OpenWebNetWho.convert(command.getWho()).getValue();
 			String where = command.getWhere().getTo();
-			State what = command.getWhat();
+			What what = command.getWhat();
 			if (command.isActionCommand()) {
-				if (OpenWebNetCommand.DEFAULT_ACTION.getName().equalsIgnoreCase(what.getName().getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.equalsIgnoreCase(what.getName())) {
 					return MessageFormat.format(
 						OpenWebNetConstant.COMMAND,
 						new Object[] {
@@ -84,7 +85,7 @@ public class Convert {
 					);
 				}
 			} else { // Statut request
-				if (OpenWebNetCommand.DEFAULT_ACTION.getName().equalsIgnoreCase(what.getName().getName())) {
+				if (OpenWebNetCommand.DEFAULT_ACTION.equalsIgnoreCase(what.getName())) {
 					return MessageFormat.format(OpenWebNetConstant.STATUS,
 							new Object[] { who, where });
 				} else {
@@ -102,7 +103,7 @@ public class Convert {
 //			TODO Log. ("Controller status unsupported. [" + command.getWhat().getName() + "]");
 			return null;
 		} catch (UnknownStateValue e) {
-			throw new IllegalArgumentException("Controller status value unknown [" + command.getWhat().getValue() != null ? command.getWhat().getValue().getValue() : "null" + "]");
+			throw new IllegalArgumentException("Controller status value unknown [" + command.getWhat().getValue() != null ? command.getWhat().getValue().toString() : "null" + "]");
 		}
 	}
 
@@ -110,7 +111,7 @@ public class Convert {
 	// TODO plus tard mettre l'inverse ici (actuellement dans monitor)
 	// }
 
-	private static DimensionStatus<?> convertDimension(Who w, State state)
+	private static List<DimensionStatus<?>> convertDimension(Who w, What what, Map<String, State<?>> controllerStateList)
 			throws UnknownState, UnknownWho, UnSupportedState {
 		DimensionStatus<?> ds = null;
 		switch (w) {
@@ -119,17 +120,17 @@ public class Convert {
 		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
 			break;
 		case GATEWAY:
-			ds = GatewayDimensionConverter.convert(state);
+			ds = GatewayDimensionConverter.convert(what);
 			break;
 		case HEATING_ADJUSTMENT:
-			ds = HeatingZoneDimension.fromState(state);
+			ds = HeatingZoneDimension.fromState(what);
 			break;
 		case LIGHT:
-			if(LightStateName.COLOR.getName().equalsIgnoreCase(state.getName().getName())){
+			if(LightStateName.COLOR.getName().equalsIgnoreCase(what.getName())){
 				throw new UnSupportedState();
-			} else if(LightStateName.BLINK_TIME.getName().equalsIgnoreCase(state.getName().getName())){
+			} else if(LightStateName.BLINK_TIME.getName().equalsIgnoreCase(what.getName())){
 				throw new UnSupportedState();
-			} else if(LightStateName.LEVEL.getName().equalsIgnoreCase(state.getName().getName())){
+			} else if(LightStateName.LEVEL.getName().equalsIgnoreCase(what.getName())){
 				throw new UnSupportedState();
 			} else {
 				throw new UnknownState(); // Only status manage by light: no dimension
@@ -150,8 +151,8 @@ public class Convert {
 		return ds;
 	}
 
-	protected static State convertDimension(Who w, String code,
-			List<DimensionValue> dimensionList) throws UnknownState, UnknownWho {
+	private static List<What> convertDimension(Who w, String code,
+			List<DimensionValue> dimensionList, Map<String, State<?>> controllerStateList) throws UnknownState, UnknownWho {
 		DimensionStatus<?> dimension;
 		switch (w) {
 		case AUTOMATION:
@@ -187,36 +188,36 @@ public class Convert {
 		}
 	}
 
-	private static String convertStatus(Who who, StateValue stateValue)
+	private static List<String> convertStatus(Who who, What what, Map<String, State<?>> controllerStateList)
 			throws UnknownStateValue, UnknownWho {
 		switch (who) {
 		case LIGHT:
-			String ls = LightStatusConverter.convert(stateValue);
+			String ls = LightStatusConverter.convert(what);
 			if (ls == null) {
 				throw new UnknownStateValue();
 			} else {
 				return ls;
 			}
 		case AUTOMATION:
-			String as = AutomationStatusConverter.fromValue(stateValue);
+			String as = AutomationStatusConverter.fromValue(what);
 			if (as == null) {
 				throw new UnknownStateValue();
 			} else {
 				return as;
 			}
 		case HEATING_ADJUSTMENT:
-			return HeatingZoneStatus.fromValue(stateValue).getCode();
+			return HeatingZoneStatus.fromValue(what).getCode();
 		case ENERGY_MANAGEMENT:
 		default:
 			throw new UnknownWho();
 		}
 	}
 
-	protected static StateValue convertStatus(Who who, String code)
+	private static List<What> convertStatus(Who who, String code, Map<String, State<?>> controllerStateList)
 			throws UnknownStateValue {
 		switch (who) {
 		case LIGHT:
-			StateValue ls = LightStatusConverter.convert(code);
+			What ls = LightStatusConverter.convert(code);
 			if (ls == null) {
 				throw new UnknownStateValue();
 
@@ -224,7 +225,7 @@ public class Convert {
 				return ls;
 			}
 		case AUTOMATION:
-			StateValue as = AutomationStatusConverter.fromValue(code);
+			What as = AutomationStatusConverter.fromValue(code);
 			if (as == null) {
 				throw new UnknownStateValue();
 

@@ -5,7 +5,7 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.DoubleValue;
+import com.homesnap.engine.controller.what.impl.DoubleState;
 
 /*
  * #%L
@@ -32,7 +32,7 @@ import com.homesnap.engine.controller.what.impl.DoubleValue;
  */
 
 
-public class MeasureTemperature extends DimensionStatusImpl<DoubleValue> {
+public class MeasureTemperature extends DimensionStatusImpl<DoubleState> {
 
 	private int TEMPERATURE_POS = 0;
 	
@@ -53,12 +53,12 @@ public class MeasureTemperature extends DimensionStatusImpl<DoubleValue> {
 	}
 
 	@Override
-	public DoubleValue getStateValue() {
-		return new DoubleValue(getMeasuredTemperature());
+	public DoubleState getStateValue() {
+		return new DoubleState(getMeasuredTemperature());
 	}
 
 	@Override
 	public void setStateValue(StateValue value) {
-		setMeasuredTemperature(((DoubleValue)value).getDoubleValue());
+		setMeasuredTemperature(((DoubleState)value).getDoubleValue());
 	}
 }

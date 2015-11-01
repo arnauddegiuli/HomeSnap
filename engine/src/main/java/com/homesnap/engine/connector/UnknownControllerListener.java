@@ -26,7 +26,7 @@ package com.homesnap.engine.connector;
 
 import java.util.List;
 
-import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -38,5 +38,5 @@ import com.homesnap.engine.controller.who.Who;
  */
 public interface UnknownControllerListener {
 
-	public void foundUnknownController(Who who, Where where, State what);
+	public void foundUnknownController(Who who, Where where, What what);
 }

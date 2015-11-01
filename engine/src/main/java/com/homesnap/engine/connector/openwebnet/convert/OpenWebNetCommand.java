@@ -24,25 +24,21 @@ package com.homesnap.engine.connector.openwebnet.convert;
  * #L%
  */
 
+import java.util.List;
+
 import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
 public class OpenWebNetCommand {
 	
 	// TODO Improve way to differenciate single action from dimension action commands
-	public static StateName DEFAULT_ACTION = new StateName() {
-		@Override
-		public String getName() {
-			return "status";
-		}
-	};
+	public static String DEFAULT_ACTION = "status";
 
 	private String command;
 	private CommandParser parser;
@@ -81,9 +77,9 @@ public class OpenWebNetCommand {
 		return WhereType.ENVIRONMENT.equals(parser.getWho());
 	}
 
-	public State getWhat() { // TODO change name => remove command
+	public What getWhat() { // TODO change name => remove command
 		try {
-			return new State(DEFAULT_ACTION, Convert.convertStatus(getWho(), parser.getWhat()));
+			return Convert.convertStatus(getWho(), parser.getWhat());
 		} catch (UnknownStateValue e) {
 			// TODO log
 			return null;
@@ -112,7 +108,7 @@ public class OpenWebNetCommand {
 		return new SpecialCommand(parser);
 	}
 
-	public State getDimension() throws UnknownState, UnknownWho {
+	public What getDimension() throws UnknownState, UnknownWho {
 		return Convert.convertDimension(getWho(),  parser.getDimension(), parser.getDimensionList());
 	}
 

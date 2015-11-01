@@ -25,15 +25,10 @@ package com.homesnap.engine.controller.temperature;
  */
 
 
-import com.homesnap.engine.controller.what.StateName;
 
 /**
- * 	
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
  */
-public enum TemperatureSensorStateName implements StateName {
+public enum TemperatureSensorStateName {
 	
 	/** Defines the maximum temperature value beyond which the sensor is alarming */
 	ALARM_HIGH,
@@ -55,9 +50,4 @@ public enum TemperatureSensorStateName implements StateName {
 	
 	/** Defines the unit of temperature of the values read on this sensor */
 	UNIT;
-	
-	@Override
-	public String getName() {
-		return name().toLowerCase();
-	}
 }

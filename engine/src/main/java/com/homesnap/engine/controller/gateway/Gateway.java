@@ -25,12 +25,16 @@ package com.homesnap.engine.controller.gateway;
  */
 
 
+import java.net.Inet4Address;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
-import com.homesnap.engine.controller.what.impl.DateValue;
-import com.homesnap.engine.controller.what.impl.IpAddressValue;
+import com.homesnap.engine.controller.what.impl.DateState;
+import com.homesnap.engine.controller.what.impl.IpAddressState;
+import com.homesnap.engine.controller.what.impl.StringState;
 import com.homesnap.engine.controller.what.impl.VersionValue;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
@@ -40,9 +44,6 @@ public class Gateway extends Controller {
 
 	/** uuid */
 	private static final long serialVersionUID = 1L;
-
-	public Gateway() {
-	}
 
 	@Override
 	public Who getWho() {
@@ -55,39 +56,48 @@ public class Gateway extends Controller {
 	}
 
 	public Date getDate() {
-		return ((DateValue) get(GatewayStateName.DATE)).getDate();
+		return ((DateState) get(GatewayStateName.date.name())).getValue();
 	}
 
 	public void setDate(Date newDate) {
-		DateValue dv = new DateValue(newDate);
-		set(GatewayStateName.DATE, dv);
+		set(GatewayStateName.date.name(), new DateState(newDate));
 	}
 	
-	public byte[] getIpAddress() {
-		return ((IpAddressValue) get(GatewayStateName.IP_ADDRESS)).getIpAddress();
+	public Inet4Address getIpAddress() {
+		return ((IpAddressState) get(GatewayStateName.ip_address.name())).getValue();
 	}
 
-	public byte[] getNetMask() {
-		return ((IpAddressValue) get(GatewayStateName.NETMASK)).getIpAddress();
+	public Inet4Address getNetMask() {
+		return ((IpAddressState) get(GatewayStateName.netmask.name())).getValue();
 	}
 
 	public String getDeviceType() {
-		return get(GatewayStateName.MODEL).getValue();
+		return ((StringState) get(GatewayStateName.MODEL.name())).getValue();
 	}
 
 	public VersionValue getFirmwareVersion() {
-		return (VersionValue) get(GatewayStateName.FIRMWARE_VERSION);
+		return (VersionValue) get(GatewayStateName.FIRMWARE_VERSION.name());
 	}
 
-	public DateValue getUpTime() {
-		return (DateValue) get(GatewayStateName.UPTIME);
+	public DateState getUpTime() {
+		return (DateState) get(GatewayStateName.UPTIME.name());
 	}
 
 	public VersionValue getKernelVersion() {
-		return (VersionValue) get(GatewayStateName.KERNEL_VERSION);
+		return (VersionValue) get(GatewayStateName.KERNEL_VERSION.name());
 	}
 
 	public VersionValue getDistributionVersion() {
-		return (VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION);
+		return (VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION.name());
+	}
+
+	@Override
+	public List<String> getStateList() {
+		List<String> result = new ArrayList<String>();
+		GatewayStateName[] list = GatewayStateName.values();
+		for (int i = 0; i < list.length; i++) {
+			result.add(list[i].name());
+		};
+		return result;
 	}
 }

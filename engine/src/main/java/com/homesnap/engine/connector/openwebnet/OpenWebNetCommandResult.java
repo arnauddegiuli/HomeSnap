@@ -10,8 +10,7 @@ import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownWho;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.engine.controller.what.State;
-import com.homesnap.engine.controller.what.StateName;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -71,9 +70,9 @@ public class OpenWebNetCommandResult implements CommandResult {
 	}
 
 	@Override
-	public State getWhat(StateName name) {
+	public What getWhat(String name) {
 		if (command != null) {
-			if (OpenWebNetCommand.DEFAULT_ACTION.getName().equalsIgnoreCase(name.getName())) {
+			if (OpenWebNetCommand.DEFAULT_ACTION.equalsIgnoreCase(name)) {
 				return command.getWhat();
 			} else {
 				try {

@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.types;
+package com.homesnap.engine.controller.what.impl;
 
 /*
  * #%L
@@ -25,31 +25,45 @@ package com.homesnap.engine.controller.types;
  */
 
 
-import java.util.Locale;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
-public class DateType extends DateTimeType {
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
+import com.homesnap.engine.controller.what.State;
+
+public class DateState implements State<Date> {
+
+	public static String DATE_PATTERN = "dd-MM-yyyy";
+	private Date value;
 	
-	/** */
-	public static final String DEFAULT_PATTERN = "yyyy-mm-dd";
-	
-	/**
-	 * 
-	 */
-	public DateType() {
-		super(Locale.getDefault(), DEFAULT_PATTERN);
+	public DateState(Date value) {
+		setValue(value);		
 	}
-	
-	/**
-	 * 
-	 * @param locale
-	 */
-	public DateType(Locale locale, String pattern) {
-		super(locale, pattern);
+
+	@Override
+	public void setValue(Date value) {
+		this.value = value;
 	}
+
+	@Override
+	public Date getValue() {
+		return value;
+	}
+
+	@Override
+	public void fromString(String value) {
+		try {
+			this.value = new SimpleDateFormat(DATE_PATTERN).parse(value);
+		} catch (ParseException e) {
+			new Log().fine(Session.Monitor, e.getMessage());
+		}
+	}
+
+	@Override
+	public String toString() {
+		return new SimpleDateFormat(DATE_PATTERN).format(value);
+	}
+
 }

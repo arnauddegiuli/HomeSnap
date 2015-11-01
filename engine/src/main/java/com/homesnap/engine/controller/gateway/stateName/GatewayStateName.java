@@ -24,34 +24,18 @@ package com.homesnap.engine.controller.gateway.stateName;
  * #L%
  */
 
-import com.homesnap.engine.controller.what.StateName;
 
-public enum GatewayStateName implements StateName {
-	DATE,
+public enum GatewayStateName {
+	date,
 	DATETIME,
 	DISTRIBUTION_VERSION,
 	FIRMWARE_VERSION,
-	IP_ADDRESS,
+	ip_address,
 	KERNEL_VERSION,
 	MAC_ADDRESS,
 	MODEL,
-	NETMASK,
+	netmask,
 	TIME,
 	UPTIME;
 	
-	private GatewayStateName() {
-	}
-	
-	@Override
-	public String getName() {
-		return name();
-	}
-	
-	public static GatewayStateName fromValue(String code) {
-		for (GatewayStateName gd : GatewayStateName.values()) {
-			if (gd.getName().equals(code))
-				return gd;
-		}
-		return null;
-	}
 }

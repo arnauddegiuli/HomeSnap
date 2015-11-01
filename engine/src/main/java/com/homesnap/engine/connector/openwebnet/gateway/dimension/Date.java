@@ -32,10 +32,10 @@ import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValueImpl;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.DateValue;
+import com.homesnap.engine.controller.what.impl.DateState;
 
 
-public class Date extends DimensionStatusImpl<DateValue> {
+public class Date extends DimensionStatusImpl<DateState> {
 	
 	private int DAYOFWEEK_POS = 0;
 	private int DAY_POS = 1;
@@ -76,12 +76,12 @@ public class Date extends DimensionStatusImpl<DateValue> {
 	}
 
 	@Override
-	public DateValue getStateValue() {
-		return new DateValue(getDate());
+	public DateState getStateValue() {
+		return new DateState(getDate());
 	}
 
 	@Override
 	public void setStateValue(StateValue value) {
-		setDate(((DateValue)value).getDate());
+		setDate(((DateState)value).getDate());
 	}
 }

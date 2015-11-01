@@ -29,7 +29,7 @@ import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.heating.stateValue.Offset;
 import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
-import com.homesnap.engine.controller.what.impl.DoubleValue;
+import com.homesnap.engine.controller.what.impl.DoubleState;
 import com.homesnap.engine.controller.who.Who;
 
 public class HeatingZone extends Controller {
@@ -81,16 +81,16 @@ public class HeatingZone extends Controller {
 		set(ZoneStateName.STATUS, value);
 	}
 
-	public DoubleValue getHeatingDesiredTemperature() {
-		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_HEATING);
+	public DoubleState getHeatingDesiredTemperature() {
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_HEATING);
 	}
 
-	public DoubleValue getConditionalDesiredTemperature() {
-		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_CONDITIONAL);
+	public DoubleState getConditionalDesiredTemperature() {
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_CONDITIONAL);
 	}
 
-	public DoubleValue getGenericDesiredTemperature() {
-		return (DoubleValue) get(ZoneStateName.SET_TEMPERATURE_GENERIC);
+	public DoubleState getGenericDesiredTemperature() {
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_GENERIC);
 	}
 
 	public void setOffset(Offset offset) {
@@ -101,7 +101,7 @@ public class HeatingZone extends Controller {
 		return (Offset) get(ZoneStateName.LOCAL_OFFSET);
 	}
 
-	public DoubleValue getMeasureTemperature() {
-		return (DoubleValue) get(ZoneStateName.MEASURE_TEMPERATURE);
+	public DoubleState getMeasureTemperature() {
+		return (DoubleState) get(ZoneStateName.MEASURE_TEMPERATURE);
 	}
 }

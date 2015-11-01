@@ -1,4 +1,4 @@
-package com.homesnap.engine.controller.properties;
+package com.homesnap.engine.controller.what.impl;
 
 /*
  * #%L
@@ -24,23 +24,38 @@ package com.homesnap.engine.controller.properties;
  * #L%
  */
 
+import com.homesnap.engine.controller.what.State;
 
-/**
- * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- */
-public class UnknowStateValueTypeException extends RuntimeException {
+public class OnOffState implements State<Boolean> {
 
-	/** */
-	private static final long serialVersionUID = -443695062796116205L;
+	private Boolean value;
 	
-	/**
-	 * 
-	 * @param msg
-	 */
-	public UnknowStateValueTypeException(String msg) {
-		super(msg);
+	private OnOffState(Boolean value) {
+		this.value = value;
+	}
+
+	public Boolean getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(Boolean value) {
+		this.value = value;
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fromString(String value) {
+		this.value = Boolean.valueOf(value);
+	}
+	
+	@Override
+	public String toString() {
+		return value ? "1" : "0"; 
 	}
 }

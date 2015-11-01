@@ -1,4 +1,6 @@
-package com.homesnap.engine.controller.types;
+package com.homesnap.engine.controller.what.impl;
+
+import com.homesnap.engine.controller.what.State;
 
 /*
  * #%L
@@ -25,17 +27,12 @@ package com.homesnap.engine.controller.types;
  */
 
 
-import com.homesnap.engine.controller.what.StateValueType;
 
 /**
  * Class representing an interval of numeric values defined by a minimum and a maximum value.
  * 
- * @author DRIESBACH Olivier
- * @version 1.0
- * @since 1.0
- * @param <T>
  */
-public abstract class MinMaxType<T extends Number> extends StateValueType {
+public abstract class MinMaxState<T extends Number> implements State<T> {
 	
 	/** */
 	private T minValue;
@@ -48,7 +45,7 @@ public abstract class MinMaxType<T extends Number> extends StateValueType {
 	 * @param minValue
 	 * @param maxValue
 	 */
-	MinMaxType(T minValue, T maxValue) {
+	MinMaxState(T minValue, T maxValue) {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}

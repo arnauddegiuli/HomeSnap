@@ -24,33 +24,32 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
+import com.homesnap.engine.controller.what.State;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class StringState implements State<String> {
 
-import com.homesnap.engine.controller.what.StateValue;
-
-public class DateValue implements StateValue {
-
-	private String DATE_PATTERN = "dd-MM-yyyy";
+	private String value;
 	
-	/** */
-	private Date value;
+	public StringState(String value) {
+		setValue(value);
+	}
 	
-	/**
-	 * 
-	 * @param value
-	 */
-	public DateValue(Date value) {
+	public String getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(String value) {
 		this.value = value;
 	}
 
 	@Override
-	public String getValue() {
-		return new SimpleDateFormat(DATE_PATTERN).format(value);
+	public void fromString(String value) {
+		this.value = value;
 	}
-
-	public Date getDate() {
+	
+	@Override
+	public String toString() {
 		return value;
 	}
 }

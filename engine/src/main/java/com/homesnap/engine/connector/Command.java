@@ -24,7 +24,11 @@ package com.homesnap.engine.connector;
  * #L%
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.homesnap.engine.controller.what.State;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -35,27 +39,34 @@ public class Command {
 	}
 
 	private Who who;
-	private State what;
+	private What what;
 	private Where where;
 	private Type type;
+	/** List of all state names with their current values of the controller. This map repesents the complete status of the controller. */
+	private Map<String, State<?>> whatList = new HashMap<String, State<?>>();
 	
-	public Command(Who who, State what, Where where, Type type) {
+	public Command(Who who, What what, Where where, Type type, Map<String, State<?>> whatList) {
 		this.what = what;
 		this.who = who;
 		this.where = where;
 		this.type = type;
+		this.whatList = whatList;
 	}
 
 	public Who getWho() {
 		return who;
 	}
 
-	public State getWhat() {
+	public What getWhat() {
 		return what;
 	}
 
 	public Where getWhere() {
 		return where;
+	}
+	
+	public Map<String, State<?>> getControllerStateList() {
+		return whatList;
 	}
 
 	public boolean isStatusCommand() {

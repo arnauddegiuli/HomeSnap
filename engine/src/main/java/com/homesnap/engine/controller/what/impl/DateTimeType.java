@@ -24,28 +24,52 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
-import com.homesnap.engine.controller.what.StateValue;
 
-public class PercentValue implements StateValue{
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-	public int value;
+public class DateTimeType {
 	
-	public PercentValue(int value) {
-		if (value < 0) {
-			this.value = 0;
-		} else if (value > 100) {
-			this.value =100;
-		} else {
-			this.value = value;
-		}
+	/** */
+	public static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	
+	/** */
+	private Locale locale;
+	
+	/** */
+	private String pattern;
+	
+	/** */
+	private Date value;
+	
+	/**
+	 * 
+	 */
+	public DateTimeType() {
+		this(Locale.getDefault(), DEFAULT_PATTERN);
 	}
-
-	@Override
+	
+	/**
+	 * 
+	 * @param locale
+	 */
+	public DateTimeType(Locale locale, String pattern) {
+		this.locale = locale;
+		this.pattern = pattern;
+		value = new Date();
+	}
+	
 	public String getValue() {
-		return String.valueOf(value);
+		return new SimpleDateFormat(pattern, locale).format(value);
 	}
 
-	public int getPercentValue() {
-		return value;
+	public void setValue(String value) {
+		try {
+			this.value = new SimpleDateFormat(pattern, locale).parse(value);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException("Date "+ value +" has wrong format, must be : "+ pattern);
+		}
 	}
 }

@@ -45,15 +45,15 @@ import com.homesnap.engine.controller.what.StateName;
 import com.homesnap.engine.controller.what.StateValue;
 
 public enum GatewayDimensionConverter {
-	DATE("1", GatewayStateName.DATE, Date.class),
+	DATE("1", GatewayStateName.date, Date.class),
 	DATETIME("22", GatewayStateName.DATETIME, DateTime.class),
 	DISTRIBUTION_VERSION("24", GatewayStateName.DISTRIBUTION_VERSION, DistributionVersion.class),
 	FIRMWARE_VERSION("16", GatewayStateName.FIRMWARE_VERSION, FirmwareVersion.class),
-	IP_ADDRESS("10", GatewayStateName.IP_ADDRESS, IpAddress.class),
+	IP_ADDRESS("10", GatewayStateName.ip_address, IpAddress.class),
 	KERNEL_VERSION("23", GatewayStateName.KERNEL_VERSION, KernelVersion.class),
 	MAC_ADDRESS("12", GatewayStateName.MAC_ADDRESS, MacAddress.class),
 	MODEL("15", GatewayStateName.MODEL, Model.class),
-	NETMASK("11", GatewayStateName.NETMASK, NetMask.class),
+	NETMASK("11", GatewayStateName.netmask, NetMask.class),
 	TIME("0", GatewayStateName.TIME, Time.class),
 	UPTIME("19", GatewayStateName.UPTIME, UpTime.class);
 	
