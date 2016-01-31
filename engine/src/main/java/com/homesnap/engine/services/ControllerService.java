@@ -95,7 +95,7 @@ public interface ControllerService {
 	 */
 	public void connect();
 	
-	public void scan();
-	public void addScanListener();
+//	public void scan();
+//	public void addScanListener();
 	
 }
