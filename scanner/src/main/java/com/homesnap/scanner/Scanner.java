@@ -24,6 +24,7 @@ package com.homesnap.scanner;
  */
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import com.homesnap.engine.connector.Monitor;
 import com.homesnap.engine.connector.UnknownControllerListener;
@@ -42,11 +43,13 @@ public class Scanner {
 		monitor.addUnknownControllerListener(new UnknownControllerListener() {
 
 			@Override
-			public void foundUnknownController(Who who, Where where, What what) {
-				String whereStr = where != null ? where.getTo() : "null";
-				String whatStr = what == null ? "null": what.getName();
-				String valueStr = what == null ? "null": what.getValue() == null ? "null" : what.getValue().toString();
-				System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}]\n", who, whereStr, whatStr, valueStr));
+			public void foundUnknownController(Who who, Where where, List<What> whatList) {
+				for(What what : whatList) {
+					String whereStr = where != null ? where.getTo() : "null";
+					String whatStr = what == null ? "null": what.getName();
+					String valueStr = what == null ? "null": what.getValue() == null ? "null" : what.getValue().toString();
+					System.out.println(MessageFormat.format("Who [{0}] : Where [{1}] : what [{2}] : value [{3}]\n", who, whereStr, whatStr, valueStr));
+				}
 			}
 		});
 	}

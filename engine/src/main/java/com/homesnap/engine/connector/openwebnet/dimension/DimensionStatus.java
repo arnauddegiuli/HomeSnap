@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet.dimension;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -27,12 +27,12 @@ package com.homesnap.engine.connector.openwebnet.dimension;
 
 import java.util.List;
 
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.What;
 
-public interface DimensionStatus<T extends StateValue> {
+public interface DimensionStatus<T extends What> {
 	public List<DimensionValue> getValueList();
 	public T getStateValue();
 	public void setValueList(List<DimensionValue> dimensionList);
-	public void setStateValue(StateValue stateValue);
+	public void setStateValue(What stateValue);
 	public String getCode();
 }

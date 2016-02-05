@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet.convert;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -25,12 +25,16 @@ package com.homesnap.engine.connector.openwebnet.convert;
  */
 
 import java.util.List;
+import java.util.Map;
 
-import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
+import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
+import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
@@ -53,10 +57,6 @@ public class OpenWebNetCommand {
 		}
 	}
 
-	public OpenWebNetCommand(Command command) {
-		this.command = Convert.createMessage(command);
-	}
-
 	public boolean isStandardCommand() {
 		return CommandEnum.STANDARD_COMMAND.equals(parser.getType());
 	}
@@ -77,9 +77,9 @@ public class OpenWebNetCommand {
 		return WhereType.ENVIRONMENT.equals(parser.getWho());
 	}
 
-	public What getWhat() { // TODO change name => remove command
+	public List<What> getWhat(Map<String, State<?>> controllerStateList) { // TODO change name => remove command
 		try {
-			return Convert.convertStatus(getWho(), parser.getWhat());
+			return convertStatus(getWho(), parser.getWhat(), controllerStateList);
 		} catch (UnknownStateValue e) {
 			// TODO log
 			return null;
@@ -108,11 +108,78 @@ public class OpenWebNetCommand {
 		return new SpecialCommand(parser);
 	}
 
-	public What getDimension() throws UnknownState, UnknownWho {
-		return Convert.convertDimension(getWho(),  parser.getDimension(), parser.getDimensionList());
+	public List<What> getDimension(Map<String, State<?>> controllerStateList) throws UnknownState, UnknownWho {
+		return convertDimension(getWho(),  parser.getDimension(), parser.getDimensionList(), controllerStateList);
 	}
 
 	public String toString() {
 		return command;
+	}
+	
+	private static List<What> convertStatus(Who who, String code, Map<String, State<?>> controllerStateList)
+			throws UnknownStateValue {
+		switch (who) {
+		case LIGHT:
+			List<What> ls = LightStatusConverter.convert(code, controllerStateList);
+			if (ls == null || ls.isEmpty()) {
+				throw new UnknownStateValue();
+
+			} else {
+				return ls;
+			}
+		case AUTOMATION:
+//			List<What> as = AutomationStatusConverter.fromValue(code);
+//			if (as == null) {
+				throw new UnknownStateValue();
+
+//			} else {
+//				return as;
+//			}
+		case HEATING_ADJUSTMENT:
+//			return HeatingZoneStatus.fromValue(code).getValue();
+		case ENERGY_MANAGEMENT:
+			
+		default:
+			return null;
+		}
+
+	}
+	
+	
+	private static List<What> convertDimension(Who w, String code,
+			List<DimensionValue> dimensionList, Map<String, State<?>> controllerStateList) throws UnknownState, UnknownWho {
+		DimensionStatus<?> dimension;
+		switch (w) {
+		case AUTOMATION:
+			throw new UnknownState(); // Only status manage by automation: no dimension
+		case DIAGNOSTIC_OF_HEATING_ADJUSTMENT:
+			throw new UnknownWho();
+			// break;
+		case GATEWAY:
+//			return GatewayDimensionConverter.convert(code, dimensionList);
+		case HEATING_ADJUSTMENT:
+//			HeatingZoneDimension hd = HeatingZoneDimension.fromValue(code);
+//			dimension = hd.createDimensionStatus();
+//			dimension.setValueList(dimensionList);
+//			return new State(hd.getName(), dimension.getStateValue());
+		case LIGHT:
+			throw new UnknownState(); // Only status manage by light: no dimension
+		case MULTIMEDIA:
+			throw new UnknownWho();
+			// break;
+		case POWER_MANAGEMENT:
+			throw new UnknownWho();
+			// break;
+		case SCENARIO:
+			throw new UnknownWho();
+			// break;
+		case SOUND_SYSTEM:
+			throw new UnknownWho();
+			// break;
+		case ENERGY_MANAGEMENT:
+			throw new UnknownWho();
+		default:
+			throw new UnknownWho();
+		}
 	}
 }

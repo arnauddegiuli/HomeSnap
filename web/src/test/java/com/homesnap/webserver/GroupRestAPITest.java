@@ -31,7 +31,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.homesnap.engine.controller.light.LightStatusStateValue;
+import com.homesnap.engine.controller.what.impl.OnOffState;
 import com.homesnap.engine.controller.who.Who;
 
 
@@ -180,7 +180,7 @@ public class GroupRestAPITest extends AbstractRestApi {
 	}
 	
 	private void testController21(JSONObject jo) {
-		testController(jo, "Bureau", "21", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Bureau", "21", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 	
 	private String createGroup1() {

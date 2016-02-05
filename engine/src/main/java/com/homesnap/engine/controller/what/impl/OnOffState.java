@@ -4,7 +4,7 @@ package com.homesnap.engine.controller.what.impl;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -30,6 +30,10 @@ public class OnOffState implements State<Boolean> {
 
 	private Boolean value;
 	
+	public static OnOffState On = new OnOffState(true);
+	public static OnOffState Off = new OnOffState(false);
+	
+	
 	private OnOffState(Boolean value) {
 		this.value = value;
 	}
@@ -41,12 +45,6 @@ public class OnOffState implements State<Boolean> {
 	@Override
 	public void setValue(Boolean value) {
 		this.value = value;
-	}
-
-	@Override
-	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

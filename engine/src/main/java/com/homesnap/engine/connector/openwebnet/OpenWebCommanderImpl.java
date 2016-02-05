@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -37,7 +37,7 @@ import com.homesnap.engine.connector.Command;
 import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.Commander;
 import com.homesnap.engine.connector.ConnectionListener;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
+import com.homesnap.engine.connector.openwebnet.convert.HomeSnapCommand;
 import com.homesnap.engine.controller.Controller;
 
 public class OpenWebCommanderImpl implements Commander {
@@ -129,7 +129,17 @@ public class OpenWebCommanderImpl implements Commander {
 
 	@Override
 	public void sendCommand(Command command, CommandListener resultListener){
-		sendCommand(new OpenWebNetCommand(command).toString(), resultListener);
+		log.fine(Log.Session.Command, "Prepare to send command");
+		List<String> homeSnapCommand = new HomeSnapCommand(command).getCommand();
+		if (homeSnapCommand != null) {
+			for (String c : homeSnapCommand) {
+				log.fine(Log.Session.Command, "Begin to send command: " + c);
+				sendCommand(c, resultListener);
+			}
+		} else {
+			log.fine(Log.Session.Command, "No translation command for : " + command.toString());
+		}
+		log.fine(Log.Session.Command, "End to send command: " + command.toString());
 	}
 
 	public void sendCommand(String command,  CommandListener resultListener) {

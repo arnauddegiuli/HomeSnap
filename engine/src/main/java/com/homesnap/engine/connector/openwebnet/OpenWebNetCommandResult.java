@@ -1,5 +1,7 @@
 package com.homesnap.engine.connector.openwebnet;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import com.homesnap.engine.Log;
@@ -10,6 +12,7 @@ import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownState;
 import com.homesnap.engine.connector.openwebnet.convert.UnknownWho;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
@@ -18,7 +21,7 @@ import com.homesnap.engine.controller.who.Who;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -47,8 +50,9 @@ public class OpenWebNetCommandResult implements CommandResult {
 	private OpenWebNetCommand command;
 	private CommandResultStatus status;
 	private Log log = new Log();
+	private Map<String, State<?>> whatList;
 	
-	public OpenWebNetCommandResult(String commandResult, CommandResultStatus status) {
+	public OpenWebNetCommandResult(String commandResult, CommandResultStatus status, Map<String, State<?>> whatList) {
 		this.commandResult = commandResult;
 		if (! (OpenWebNetConstant.ACK.equals(commandResult) ||
 				OpenWebNetConstant.NACK.equals(commandResult))) {
@@ -59,6 +63,7 @@ public class OpenWebNetCommandResult implements CommandResult {
 			}
 		}
 		this.status = status;
+		this.whatList = whatList;
 	}
 
 	public String getResult() {
@@ -72,20 +77,27 @@ public class OpenWebNetCommandResult implements CommandResult {
 	@Override
 	public What getWhat(String name) {
 		if (command != null) {
-			if (OpenWebNetCommand.DEFAULT_ACTION.equalsIgnoreCase(name)) {
-				return command.getWhat();
-			} else {
-				try {
-					return command.getDimension();
-				} catch (UnknownState e) {
-					return null;
-				} catch (UnknownWho e) {
-					return null;
+			List<What> what;
+			try {
+				if (OpenWebNetCommand.DEFAULT_ACTION.equalsIgnoreCase(name)) {
+					what = command.getWhat(whatList);
+				} else {		
+					what = command.getDimension(whatList);
 				}
-			}
-		} else {
-			return null;
+				for (What w : what) {
+					if (name == w.getName()) {
+						return w;
+					}
+				}
+			} catch (UnknownState e) {
+				return null;
+			} catch (UnknownWho e) {
+				return null;
+			}			
+			
 		}
+		return null;
+		
 	}
 
 	@Override

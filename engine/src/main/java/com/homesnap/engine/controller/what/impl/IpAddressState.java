@@ -9,7 +9,7 @@ import com.homesnap.engine.controller.what.State;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -52,7 +52,7 @@ public class IpAddressState implements State<Inet4Address> {
 	@Override
 	public void fromString(String value) {
 		try {
-			Inet4Address.getByAddress(host, addr)ByName(value);
+			Inet4Address.getByName(value);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

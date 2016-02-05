@@ -4,7 +4,7 @@ package com.homesnap.engine.controller;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -57,8 +57,6 @@ public abstract class Controller implements JsonSerializable, Serializable {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
-	
-	public static final String STATES_EXTENSION = ".states";
 	
 	private boolean waitingResult = false;
 	protected Where where; // Represent the address of the controller
@@ -134,6 +132,10 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	}
 
 	public abstract List<String> getStateList();
+	
+	public Map<String, State<?>> getStateMap() {
+		return whatList;
+	}
 	
 	/**
 	 * If current value of a state name is known, provide it directly 
@@ -213,7 +215,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 	 * @param newWhat
 	 *            {@link Status} of the device.
 	 */
-	public void changeState(What newWhat) {
+	public void receivedAction(What newWhat) {
 		State<?> oldState = whatList.get(newWhat.getName());
 		whatList.put(newWhat.getName(), newWhat.getValue());
 		notifyStateChange(new What(newWhat.getName(),oldState), newWhat);
@@ -243,7 +245,7 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		} else {
 			waitingResult = true;
 			server.sendCommand(
-					new Command(getWho(), what, where, Type.ACTION, whatList),
+					new Command(getWho(), what, where, Type.ACTION, this),
 					new CommandListener() {
 						@Override
 						public void onCommand(CommandResult commandResult) {
@@ -270,12 +272,11 @@ public abstract class Controller implements JsonSerializable, Serializable {
 		} else {
 			waitingResult = true;
 			server.sendCommand(
-				new Command(getWho(), new What(name, null), where, Type.STATUS, whatList),
+				new Command(getWho(), new What(name, null), where, Type.STATUS, this),
 				new CommandListener() {
 					@Override
 					public void onCommand(CommandResult result) {
 						waitingResult = false;
-						// TODO tester que le type du status match avec ceux supporté!
 						if (CommandResultStatus.ok.equals(result.getStatus())) {
 							// Return the status of the controller from the server
 							statusListener.onStatus(

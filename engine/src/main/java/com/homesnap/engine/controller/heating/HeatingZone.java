@@ -1,10 +1,12 @@
 package com.homesnap.engine.controller.heating;
 
+import java.util.List;
+
 /*
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -27,8 +29,7 @@ package com.homesnap.engine.controller.heating;
 
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.heating.stateValue.Offset;
-import com.homesnap.engine.controller.what.StateName;
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.impl.DoubleState;
 import com.homesnap.engine.controller.who.Who;
 
@@ -38,20 +39,32 @@ public class HeatingZone extends Controller {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public enum HeatingZoneStatus implements StateValue {
+	public enum HeatingZoneStatus implements State<HeatingZoneStatus> {
 		HEATING_MODE,
 		THERMAL_PROTECTION,
 		OFF
 		; 
 
 		@Override
-		public String getValue() {
-			return name();
+		public HeatingZoneStatus getValue() {
+			return this;
+		}
+
+		@Override
+		public void setValue(HeatingZoneStatus value) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void fromString(String value) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
 	
-	public enum ZoneStateName implements StateName {
+	public enum ZoneStateName {
 		STATUS,
 		MEASURE_TEMPERATURE, 
 // TODO		FAN_COIL_SPEED,
@@ -62,10 +75,6 @@ public class HeatingZone extends Controller {
 		SET_TEMPERATURE_GENERIC;
 // TODO		VALVE_STATUS,
 // TODO		ACTUATOR_STATUS;
-		
-		public String getName() {
-			return name();
-		}
 	}
 
 	@Override
@@ -74,34 +83,40 @@ public class HeatingZone extends Controller {
 	}
 
 	public HeatingZoneStatus getStatus() {
-		return (HeatingZoneStatus) get(ZoneStateName.STATUS);
+		return (HeatingZoneStatus) get(ZoneStateName.STATUS.name());
 	}
 
 	public void setStatus(HeatingZoneStatus value) {
-		set(ZoneStateName.STATUS, value);
+		set(ZoneStateName.STATUS.name(), value);
 	}
 
 	public DoubleState getHeatingDesiredTemperature() {
-		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_HEATING);
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_HEATING.name());
 	}
 
 	public DoubleState getConditionalDesiredTemperature() {
-		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_CONDITIONAL);
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_CONDITIONAL.name());
 	}
 
 	public DoubleState getGenericDesiredTemperature() {
-		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_GENERIC);
+		return (DoubleState) get(ZoneStateName.SET_TEMPERATURE_GENERIC.name());
 	}
 
 	public void setOffset(Offset offset) {
-		set(ZoneStateName.LOCAL_OFFSET, offset);
+		set(ZoneStateName.LOCAL_OFFSET.name(), offset);
 	}
 
 	public Offset getOffset() {
-		return (Offset) get(ZoneStateName.LOCAL_OFFSET);
+		return (Offset) get(ZoneStateName.LOCAL_OFFSET.name());
 	}
 
 	public DoubleState getMeasureTemperature() {
-		return (DoubleState) get(ZoneStateName.MEASURE_TEMPERATURE);
+		return (DoubleState) get(ZoneStateName.MEASURE_TEMPERATURE.name());
+	}
+
+	@Override
+	public List<String> getStateList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

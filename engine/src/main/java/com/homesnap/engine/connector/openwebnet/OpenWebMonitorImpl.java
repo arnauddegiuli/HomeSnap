@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -155,9 +155,13 @@ implements Monitor {
 								controller.getWho().equals(command.getWho())) {
 							known = true;
 							if (command.isStandardCommand()) {
-								controller.changeState(command.getWhat());
+								for(What what : command.getWhat(controller.getStateMap())) {
+									controller.receivedAction(what);
+								}
 							} else {
-								controller.changeState(command.getDimension());
+								for(What what : command.getDimension(controller.getStateMap())) {
+									controller.receivedAction(what);
+								}
 							}
 						}
 					}
@@ -178,9 +182,9 @@ implements Monitor {
 				synchronized (unknownControllerListenerList) {
 					for (UnknownControllerListener listener : unknownControllerListenerList) {
 						if (command.isStandardCommand()) {
-							listener.foundUnknownController(command.getWho(), command.getWhere(), command.getWhat());
+							listener.foundUnknownController(command.getWho(), command.getWhere(), command.getWhat(null));
 						} else {
-							listener.foundUnknownController(command.getWho(), command.getWhere(), command.getDimension());
+							listener.foundUnknownController(command.getWho(), command.getWhere(), command.getDimension(null));
 						} 
 					
 					}
@@ -197,19 +201,20 @@ implements Monitor {
 
 	private boolean updateController(Where where, OpenWebNetCommand command) throws UnknownState, UnknownWho {
 		boolean known = false;
-		What what;
-		
-		if (command.isStandardCommand()) {
-			 what = command.getWhat();
-		} else {
-			what = command.getDimension();
-		}
 
 		// Manage what command
 		for (Controller controller : controllerList) {
 			if (command.getWho().equals(controller.getWho()) && where.getTo().equals(controller.getWhere().getTo())) {
 				known = true;
-				controller.changeState(what);
+				if (command.isStandardCommand()) {
+					for(What what : command.getWhat(controller.getStateMap())) {
+						controller.receivedAction(what);
+					}
+				} else {
+					for(What what : command.getDimension(controller.getStateMap())) {
+						controller.receivedAction(what);
+					}
+				}
 				break;
 			}
 		}

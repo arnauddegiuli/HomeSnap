@@ -4,7 +4,7 @@ package com.homesnap.engine.controller.light;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -35,6 +35,8 @@ public enum LightStateName {
 	color,
 	/** Contains the current level of light for dimmable devices. */
 	level,
+	/** Defines the light to blink when it is on */
+	blink,
 	/** Defines how long the light stays on before being off when status is set to blinking and has no effect otherwise. */
 	blink_time,
 	/** Contains the current status of the light (ie: on, off, blinking ...) depending on vendor capabilities. */

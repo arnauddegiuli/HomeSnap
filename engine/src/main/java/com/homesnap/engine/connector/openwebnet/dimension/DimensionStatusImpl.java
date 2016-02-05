@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet.dimension;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -29,9 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.what.What;
 
-public abstract class DimensionStatusImpl<T extends StateValue> implements DimensionStatus<T> {
+public abstract class DimensionStatusImpl<T extends What> implements DimensionStatus<T> {
 
 	private List<DimensionValue> dimensionList;
 	private String what;

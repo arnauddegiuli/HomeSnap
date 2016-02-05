@@ -4,7 +4,7 @@ package com.homesnap.engine.controller.light;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.what.impl.IntegerState;
 import com.homesnap.engine.controller.what.impl.OnOffState;
 import com.homesnap.engine.controller.what.impl.PercentageState;
 import com.homesnap.engine.controller.what.impl.RGBState;
@@ -59,12 +60,22 @@ public class Light extends Controller {
 		set(LightStateName.level.name(), value);
 	}
 	
-	public OnOffState getBlinkTime() {
+	public OnOffState getBlink() {
 		return (OnOffState) get(LightStateName.blink_time.name());
 	}
 	
-	public void setBlinkTime(OnOffState value) {
+	public void setBlink(OnOffState value) {
 		set(LightStateName.blink_time.name(), value);
+	}
+	
+	public IntegerState getBlinkTime() {
+		// in millisecond
+		return (IntegerState) get(LightStateName.blink.name());
+	}
+	
+	public void setBlinkTime(IntegerState value) {
+		// in millisecond
+		set(LightStateName.blink.name(), value);
 	}
 	
 	public RGBState getColor() {

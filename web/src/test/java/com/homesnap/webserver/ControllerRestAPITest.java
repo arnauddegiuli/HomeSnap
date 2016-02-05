@@ -34,6 +34,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.homesnap.engine.controller.what.impl.OnOffState;
 import com.homesnap.engine.controller.who.Who;
 import com.homesnap.webserver.rest.house.MissingParameterRestOperation;
 import com.homesnap.webserver.rest.house.RestOperationException;
@@ -275,7 +276,7 @@ public class ControllerRestAPITest extends AbstractRestApi {
 	}
 	
 	private void testController12(JSONObject jo) {
-		testController(jo, "Chambre Tom", "12", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Chambre Tom", "12", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 	
 	private String createJsonController16() {
@@ -283,7 +284,7 @@ public class ControllerRestAPITest extends AbstractRestApi {
 	}
 
 	private void testController16(JSONObject jo) {
-		testController(jo, "Chambre 16", "16", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Chambre 16", "16", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 	
 	private String createJsonController17() {
@@ -291,7 +292,7 @@ public class ControllerRestAPITest extends AbstractRestApi {
 	}
 
 	private void testController17(JSONObject jo) {
-		testController(jo, "Chambre 17", "17", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Chambre 17", "17", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 	
 	private String createJsonController17Bis() {
@@ -299,7 +300,7 @@ public class ControllerRestAPITest extends AbstractRestApi {
 	}
 
 	private void testController17Bis(JSONObject jo) {
-		testController(jo, "Chambre 17 Bis", "17", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Chambre 17 Bis", "17", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 	
 	private String createJsonController11() {
@@ -311,7 +312,7 @@ public class ControllerRestAPITest extends AbstractRestApi {
 	}
 	
 	private void testController11(JSONObject jo) {
-		testController(jo, "Chambre 11", "11", Who.LIGHT.name(), LightStatusStateValue.OFF.getValue());
+		testController(jo, "Chambre 11", "11", Who.LIGHT.name(), OnOffState.Off.toString());
 	}
 
 	private String createGroup1() {

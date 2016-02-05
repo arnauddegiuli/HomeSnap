@@ -1,12 +1,13 @@
 package com.homesnap.engine.controller.heating.stateValue;
 
-import com.homesnap.engine.controller.what.StateValue;
+import com.homesnap.engine.controller.heating.stateValue.Offset.Mode;
+import com.homesnap.engine.controller.what.State;
 
 /*
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -26,7 +27,7 @@ import com.homesnap.engine.controller.what.StateValue;
  * #L%
  */
 
-public class Offset implements StateValue{
+public class Offset implements State<Mode>{
 
 	public enum Mode {
 		ON, OFF, PROTECTION;
@@ -49,7 +50,24 @@ public class Offset implements StateValue{
 	}
 
 	@Override
-	public String getValue() {
+	public String toString() {
 		return mode.name() + " - " + getDegree();
+	}
+
+	@Override
+	public Mode getValue() {
+		return mode;
+	}
+
+	@Override
+	public void setValue(Mode value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fromString(String value) {
+		// TODO Auto-generated method stub
+		
 	}
 }

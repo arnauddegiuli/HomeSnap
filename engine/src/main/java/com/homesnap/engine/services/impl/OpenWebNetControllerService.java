@@ -1,10 +1,22 @@
 package com.homesnap.engine.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.omg.CORBA.WCharSeqHelper;
+
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
+import com.homesnap.engine.connector.Command;
+import com.homesnap.engine.connector.CommandListener;
+import com.homesnap.engine.connector.CommandResult;
+import com.homesnap.engine.connector.Command.Type;
+
 /*
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -32,16 +44,22 @@ import com.homesnap.engine.connector.UnknownControllerListener;
 import com.homesnap.engine.connector.openwebnet.OpenWebCommanderImpl;
 import com.homesnap.engine.connector.openwebnet.OpenWebMonitorImpl;
 import com.homesnap.engine.controller.Controller;
+import com.homesnap.engine.controller.light.Light;
+import com.homesnap.engine.controller.what.What;
 import com.homesnap.engine.controller.where.Where;
+import com.homesnap.engine.controller.who.Who;
 import com.homesnap.engine.services.ControllerService;
+import com.homesnap.engine.services.ScanListener;
 
 public class OpenWebNetControllerService implements ControllerService {
 
+	private Log log = new Log();
 	private Monitor monitor;
 	private Commander commander;
 	private String host;
 	private int port;
 	private Integer passwordOpen;
+	private List<ScanListener> scanListenerList = new ArrayList<ScanListener>();
 	
 	
 	/**
@@ -164,5 +182,49 @@ public class OpenWebNetControllerService implements ControllerService {
 		if (!isMonitorConnected()) {
 			this.getOpenWebMonitor().connect();
 		}
+	}
+
+	@Override
+	public void addScanListener(ScanListener listener) {
+		scanListenerList.add(listener);
+	}
+
+	@Override
+	public void scan() {
+		monitor = new OpenWebMonitorImpl(host, port, passwordOpen);
+		commander = new OpenWebCommanderImpl(host, port, passwordOpen);
+		monitor.addUnknownControllerListener(new UnknownControllerListener() {
+			
+			@Override
+			public void foundUnknownController(Who who, Where where, List<What> what) {
+				for(ScanListener listener : scanListenerList) {
+					if (Who.LIGHT.equals(who)) {
+						listener.foundController(who, where, createController(Light.class, where.getFrom()));
+					} else {
+						listener.foundController(who, where, null);
+					}
+				}	
+			}
+		});
+		
+		// scan lum de 0 a 100
+		for (int i= 1; i < 100; i++) {
+			for(ScanListener listener : scanListenerList) {
+				listener.progess(i);
+			}
+			
+			// command i
+			Command command = new Command(Who.LIGHT, new What("status", null), new Where(""+i, ""+i), Type.STATUS, null);
+			commander.sendCommand(command, new CommandListener() {
+				
+				@Override
+				public void onCommand(CommandResult commandResult) {
+					log.finest(Session.Command, "Send status command to address[" + commandResult.getWhere().getFrom() + ":" + commandResult.getStatus().name() +"]");
+					
+				}
+			});
+			
+		}
+		
 	}
 }

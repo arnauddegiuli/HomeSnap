@@ -8,7 +8,7 @@ import com.homesnap.engine.controller.Controller;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -94,4 +94,15 @@ public interface ControllerService {
 	 * Force connection for Commander and Monitor if there is no connection.
 	 */
 	public void connect();
+	
+	/**
+	 * Add a listener on scan.
+	 * @param listener
+	 */
+	public void addScanListener(ScanListener listener);
+	
+	/**
+	 * Lunch a scan.
+	 */
+	public void scan();
 }

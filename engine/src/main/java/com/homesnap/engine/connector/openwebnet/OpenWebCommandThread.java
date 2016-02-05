@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -65,7 +65,7 @@ public class OpenWebCommandThread implements Runnable {
 				if(msg == null){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.error));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.error, null));
 					}
 					return;
 				}
@@ -73,13 +73,13 @@ public class OpenWebCommandThread implements Runnable {
 				if (OpenWebNetConstant.ACK.equals(msg)){
 					log.finest(Log.Session.Command, "Command sent.");
 					if (resultListener != null) {
-						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.ACK, CommandResultStatus.ok));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.ACK, CommandResultStatus.ok, null));
 					}
 					return;
 				} else if (OpenWebNetConstant.NACK.equals(msg)){
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok));
+						resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok, null));
 					}
 					return;
 				} else { // First return was information. The next should be acknowledgment
@@ -88,21 +88,21 @@ public class OpenWebCommandThread implements Runnable {
 					if(OpenWebNetConstant.ACK.equals(msg)){
 						log.finest(Log.Session.Command, "Command sent.");
 						if (resultListener != null) {
-							resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.ok));
+							resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.ok, null));
 						}
 						return;
 					}
 
 					log.severe(Log.Session.Command, "Command failed.");
 					if (resultListener != null) {
-						resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.error));
+						resultListener.onCommand(new OpenWebNetCommandResult(actionReturn, CommandResultStatus.error, null));
 					}
 					return;
 				}
 			} else { // connection closed...
 				log.severe(Log.Session.Command, "Command failed (Connection closed).");
 				if (resultListener != null) {
-					resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok));
+					resultListener.onCommand(new OpenWebNetCommandResult(OpenWebNetConstant.NACK, CommandResultStatus.nok, null));
 				}
 				return;
 			}

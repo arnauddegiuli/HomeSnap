@@ -4,7 +4,7 @@ package com.homesnap.engine.controller.gateway;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -35,7 +35,7 @@ import com.homesnap.engine.controller.gateway.stateName.GatewayStateName;
 import com.homesnap.engine.controller.what.impl.DateState;
 import com.homesnap.engine.controller.what.impl.IpAddressState;
 import com.homesnap.engine.controller.what.impl.StringState;
-import com.homesnap.engine.controller.what.impl.VersionValue;
+import com.homesnap.engine.controller.what.impl.VersionState;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -75,20 +75,20 @@ public class Gateway extends Controller {
 		return ((StringState) get(GatewayStateName.MODEL.name())).getValue();
 	}
 
-	public VersionValue getFirmwareVersion() {
-		return (VersionValue) get(GatewayStateName.FIRMWARE_VERSION.name());
+	public VersionState getFirmwareVersion() {
+		return (VersionState) get(GatewayStateName.FIRMWARE_VERSION.name());
 	}
 
 	public DateState getUpTime() {
 		return (DateState) get(GatewayStateName.UPTIME.name());
 	}
 
-	public VersionValue getKernelVersion() {
-		return (VersionValue) get(GatewayStateName.KERNEL_VERSION.name());
+	public VersionState getKernelVersion() {
+		return (VersionState) get(GatewayStateName.KERNEL_VERSION.name());
 	}
 
-	public VersionValue getDistributionVersion() {
-		return (VersionValue) get(GatewayStateName.DISTRIBUTION_VERSION.name());
+	public VersionState getDistributionVersion() {
+		return (VersionState) get(GatewayStateName.DISTRIBUTION_VERSION.name());
 	}
 
 	@Override

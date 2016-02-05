@@ -4,7 +4,7 @@ package com.homesnap.engine.controller.what.impl;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2015 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -24,7 +24,7 @@ package com.homesnap.engine.controller.what.impl;
  * #L%
  */
 
-public class IncorrectMacAddressException extends Exception {
+public class IncorrectMacAddressException extends RuntimeException {
 
 	/** serial uid */
 	private static final long serialVersionUID = 1L;
