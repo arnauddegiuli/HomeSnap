@@ -3,14 +3,12 @@ package com.homesnap.engine.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.omg.CORBA.WCharSeqHelper;
-
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.Command;
+import com.homesnap.engine.connector.Command.Type;
 import com.homesnap.engine.connector.CommandListener;
 import com.homesnap.engine.connector.CommandResult;
-import com.homesnap.engine.connector.Command.Type;
 
 /*
  * #%L
@@ -164,14 +162,31 @@ public class OpenWebNetControllerService implements ControllerService {
 	}
 
 	@Override
+	public void removeCommanderConnectionListener(ConnectionListener listener) {
+		this.getOpenWebCommand().removeConnectionListener(listener);
+		
+	}
+	
+	@Override
 	public void addMonitorConnectionListener(ConnectionListener listener) {
 		this.getOpenWebMonitor().addConnectionListener(listener);
 		
 	}
 
 	@Override
+	public void removeMonitorConnectionListener(ConnectionListener listener) {
+		this.getOpenWebMonitor().removeConnectionListener(listener);
+		
+	}
+
+	@Override
 	public void addUnknowControllerListener(UnknownControllerListener arg0) {
 		this.getOpenWebMonitor().addUnknownControllerListener(arg0);
+	}
+	
+	@Override
+	public void removeUnknowControllerListener(UnknownControllerListener arg0) {
+		this.getOpenWebMonitor().removeUnknownControllerListener(arg0);
 	}
 	
 	@Override
@@ -188,7 +203,12 @@ public class OpenWebNetControllerService implements ControllerService {
 	public void addScanListener(ScanListener listener) {
 		scanListenerList.add(listener);
 	}
-
+	
+	@Override
+	public void removeScanListener(ScanListener listener) {
+		scanListenerList.remove(listener);
+	}
+	
 	@Override
 	public void scan() {
 		monitor = new OpenWebMonitorImpl(host, port, passwordOpen);

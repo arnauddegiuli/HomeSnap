@@ -76,12 +76,26 @@ public interface ControllerService {
 	 * @param listener
 	 */
 	public void addMonitorConnectionListener(ConnectionListener listener);
+
+	/**
+	 * Remove a listener on new monitor session connection
+	 * @param listener
+	 */
+	public void removeMonitorConnectionListener(ConnectionListener listener);
+
 	
 	/**
 	 * Add a listener on new command session connection
 	 * @param listener
 	 */
 	public void addCommanderConnectionListener(ConnectionListener listener);
+
+	/**
+	 * Remove a listener on new command session connection
+	 * @param listener
+	 */
+	public void removeCommanderConnectionListener(ConnectionListener listener);
+
 	
 	/**
 	 * Add a listener on new controller detected. A new controller is detected
@@ -89,6 +103,13 @@ public interface ControllerService {
 	 * @param listener
 	 */
 	public void addUnknowControllerListener(UnknownControllerListener listener);
+
+	/**
+	 * Remove a listener on new controller detected. A new controller is detected
+	 * when monitor session get a message and doesn't know the where.
+	 * @param listener
+	 */
+	public void removeUnknowControllerListener(UnknownControllerListener listener);
 	
 	/**
 	 * Force connection for Commander and Monitor if there is no connection.
@@ -100,6 +121,13 @@ public interface ControllerService {
 	 * @param listener
 	 */
 	public void addScanListener(ScanListener listener);
+
+	/**
+	 * Remove a listener on scan.
+	 * @param listener
+	 */
+	public void removeScanListener(ScanListener listener);
+
 	
 	/**
 	 * Lunch a scan.
