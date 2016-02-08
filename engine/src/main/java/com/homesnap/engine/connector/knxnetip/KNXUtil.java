@@ -1,7 +1,7 @@
 //package com.homesnap.engine.connector.knxnetip;
 //
-///*
-// * #%L
+/*
+ * #%L
  * HomeSnapEngine
  * %%
  * Copyright (C) 2011 - 2016 A. de Giuli
@@ -22,7 +22,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with HomeSnap. If not, see <http://www.gnu.org/licenses/>.
  * #L%
-// */
+ */
 //
 //
 //import tuwien.auto.calimero.dptxlator.DPT;

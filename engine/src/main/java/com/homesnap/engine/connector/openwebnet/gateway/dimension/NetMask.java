@@ -12,8 +12,8 @@
 //import com.homesnap.engine.controller.what.impl.IncorrectIpV4AddressException;
 //import com.homesnap.engine.controller.what.impl.IpAddressState;
 //
-///*
-// * #%L
+/*
+ * #%L
  * HomeSnapEngine
  * %%
  * Copyright (C) 2011 - 2016 A. de Giuli
@@ -34,7 +34,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with HomeSnap. If not, see <http://www.gnu.org/licenses/>.
  * #L%
-// */
+ */
 //
 //
 //public class NetMask extends DimensionStatusImpl<IpAddressState> {
