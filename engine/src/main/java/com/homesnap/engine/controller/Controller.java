@@ -4,7 +4,7 @@ package com.homesnap.engine.controller;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2015 A. de Giuli
+ * Copyright (C) 2011 - 2016 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -163,7 +163,9 @@ public abstract class Controller implements JsonSerializable, Serializable {
 					// before initial response (done when setWhere call get the first time)
 					// we get null and nothing is done to be
 					// advertise of the change when value arrive...
-					whatList.put(what.getName(), what.getValue());
+					if (what != null)  { // what can be null since sometime only acknowledgement is return...
+						whatList.put(what.getName(), what.getValue());
+					}
 				}
 			});	
 		}

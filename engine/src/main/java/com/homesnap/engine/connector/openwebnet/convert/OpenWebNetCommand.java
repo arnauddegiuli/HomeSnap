@@ -4,7 +4,7 @@ package com.homesnap.engine.connector.openwebnet.convert;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2015 A. de Giuli
+ * Copyright (C) 2011 - 2016 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -27,6 +27,8 @@ package com.homesnap.engine.connector.openwebnet.convert;
 import java.util.List;
 import java.util.Map;
 
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
@@ -41,6 +43,7 @@ import com.homesnap.engine.controller.who.Who;
 
 public class OpenWebNetCommand {
 	
+	private Log log = new Log();
 	// TODO Improve way to differenciate single action from dimension action commands
 	public static String DEFAULT_ACTION = "status";
 
@@ -77,11 +80,11 @@ public class OpenWebNetCommand {
 		return WhereType.ENVIRONMENT.equals(parser.getWho());
 	}
 
-	public List<What> getWhat(Map<String, State<?>> controllerStateList) { // TODO change name => remove command
+	public List<What> getWhat(Map<String, State<?>> controllerStateList) {
 		try {
 			return convertStatus(getWho(), parser.getWhat(), controllerStateList);
 		} catch (UnknownStateValue e) {
-			// TODO log
+			log.fine(Session.Monitor, "UnknowStateValue ["+ parser.getWhat() + "]");
 			return null;
 		}
 	}

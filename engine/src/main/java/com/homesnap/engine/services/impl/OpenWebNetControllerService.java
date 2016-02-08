@@ -14,7 +14,7 @@ import com.homesnap.engine.connector.CommandResult;
  * #%L
  * HomeSnapEngine
  * %%
- * Copyright (C) 2011 - 2015 A. de Giuli
+ * Copyright (C) 2011 - 2016 A. de Giuli
  * %%
  * This file is part of HomeSnap done by Arnaud de Giuli (arnaud.degiuli(at)free.fr)
  *     helped by Olivier Driesbach (olivier.driesbach(at)gmail.com).
@@ -227,23 +227,27 @@ public class OpenWebNetControllerService implements ControllerService {
 			}
 		});
 		
-		// scan lum de 0 a 100
-		for (int i= 1; i < 100; i++) {
+		for (int i= 1; i < 9; i++) {
 			for(ScanListener listener : scanListenerList) {
-				listener.progess(i);
+				listener.progess(i*10);
 			}
 			
 			// command i
 			Command command = new Command(Who.LIGHT, new What("status", null), new Where(""+i, ""+i), Type.STATUS, null);
+			final int where = i;
 			commander.sendCommand(command, new CommandListener() {
 				
 				@Override
 				public void onCommand(CommandResult commandResult) {
-					log.finest(Session.Command, "Send status command to address[" + commandResult.getWhere().getFrom() + ":" + commandResult.getStatus().name() +"]");
+					log.finest(Session.Command, "Send status command to address[" + where + ":" + commandResult.getStatus().name() +"]");
 					
 				}
 			});
 			
+		}
+		
+		for(ScanListener listener : scanListenerList) {
+			listener.progess(100);
 		}
 		
 	}
