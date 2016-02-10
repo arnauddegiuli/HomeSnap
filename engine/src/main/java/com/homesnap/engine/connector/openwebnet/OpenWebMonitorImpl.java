@@ -142,7 +142,7 @@ implements Monitor {
 			// TODO manage message on other bus
 			if (command.isGeneralCommand()) {
 				// We send command to all correct address
-				for (int i = 11; i < 99; i++) {
+				for (int i = 11; i < 100; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
 						known |= updateController(new Where(""+i, ""+i), command);
 					}
@@ -169,7 +169,7 @@ implements Monitor {
 			} else if (command.isEnvironmentCommand()) {
 				String environment = command.getEnvironment();
 				// We send ambiance command to address
-				for (int i = 1; i < 9; i++) {
+				for (int i = 1; i < 10; i++) {
 					known |= updateController(new Where(environment + i, environment + i), command);
 				}
 			} else {
