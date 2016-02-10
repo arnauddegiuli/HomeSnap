@@ -213,7 +213,7 @@ public class OpenWebNetControllerService implements ControllerService {
 	public void scan() {
 		monitor = new OpenWebMonitorImpl(host, port, passwordOpen);
 		commander = new OpenWebCommanderImpl(host, port, passwordOpen);
-		monitor.addUnknownControllerListener(new UnknownControllerListener() {
+		UnknownControllerListener l = new UnknownControllerListener() {
 			
 			@Override
 			public void foundUnknownController(Who who, Where where, List<What> what) {
@@ -225,9 +225,10 @@ public class OpenWebNetControllerService implements ControllerService {
 					}
 				}	
 			}
-		});
+		};
+		monitor.addUnknownControllerListener(l);
 		
-		for (int i= 1; i < 9; i++) {
+		for (int i= 1; i < 10; i++) {
 			for(ScanListener listener : scanListenerList) {
 				listener.progess(i*10);
 			}
@@ -245,7 +246,7 @@ public class OpenWebNetControllerService implements ControllerService {
 			});
 			
 		}
-		
+		monitor.removeUnknownControllerListener(l);
 		for(ScanListener listener : scanListenerList) {
 			listener.progess(100);
 		}
