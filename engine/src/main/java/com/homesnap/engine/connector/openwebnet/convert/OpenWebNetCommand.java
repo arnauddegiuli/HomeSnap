@@ -77,7 +77,7 @@ public class OpenWebNetCommand {
 	}
 
 	public boolean isEnvironmentCommand() {
-		return WhereType.ENVIRONMENT.equals(parser.getWho());
+		return WhereType.ENVIRONMENT.equals(parser.getWhereType());
 	}
 
 	public List<What> getWhat(Map<String, State<?>> controllerStateList) {
