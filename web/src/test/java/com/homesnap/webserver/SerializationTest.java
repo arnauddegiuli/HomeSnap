@@ -3,9 +3,9 @@ package com.homesnap.webserver;
  * #%L
  * HomeSnapWebServer
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2016 A. de Giuli
  * %%
- * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+ * This file is part of HomeSnap done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
  *     MyDomo is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
