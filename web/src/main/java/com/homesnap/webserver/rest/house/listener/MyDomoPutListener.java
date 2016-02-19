@@ -4,9 +4,9 @@ package com.homesnap.webserver.rest.house.listener;
  * #%L
  * HomeSnapWebServer
  * %%
- * Copyright (C) 2011 - 2014 A. de Giuli
+ * Copyright (C) 2011 - 2016 A. de Giuli
  * %%
- * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
+ * This file is part of HomeSnap done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
  *     MyDomo is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -30,8 +30,10 @@ import org.json.JSONObject;
 import com.homesnap.engine.connector.CommandResult;
 import com.homesnap.engine.controller.Controller;
 import com.homesnap.engine.controller.ControllerChangeListener;
+import com.homesnap.engine.controller.ControllerHelper;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.What;
+import com.homesnap.engine.controller.what.impl.StringState;
 import com.homesnap.engine.house.Group;
 import com.homesnap.engine.house.House;
 import com.homesnap.engine.house.Label;
@@ -167,7 +169,8 @@ public class MyDomoPutListener extends MyDomoRestListenerAbstract implements MyD
 							if (params.length > 1) {
 								System.err.println("Parameter [" + name + "] has more than one value... First one [" + param + "] used.");	
 							}
-							c.set(name, param);
+							
+							new ControllerHelper(c).set(name, new StringState(param)); // FIXME actually only support String paramater...
 						}
 					}
 				}
