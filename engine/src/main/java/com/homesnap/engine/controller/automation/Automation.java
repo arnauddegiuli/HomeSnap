@@ -43,24 +43,20 @@ public class Automation extends Controller {
 	}
 
 	public UpDownState getStatus() {
-		return (UpDownState) get(StateNameEnum.status.name());	
+		return (UpDownState) get(AutomationStateName.status.name());	
 	}
 
 	public void setStatus(UpDownState status) {
-		set(StateNameEnum.status.name(), status);	
+		set(AutomationStateName.status.name(), status);	
 	}
 
 	@Override
 	public List<String> getStateList() {
 		List<String> result = new ArrayList<String>();
-		StateNameEnum[] list = StateNameEnum.values();
+		AutomationStateName[] list = AutomationStateName.values();
 		for (int i = 0; i < list.length; i++) {
 			result.add(list[i].name());
 		};
 		return result;
-	}
-	
-	private enum StateNameEnum {
-		status;
 	}
 }
