@@ -1,5 +1,7 @@
 package com.homesnap.engine.connector.openwebnet.convert;
 
+import java.util.ArrayList;
+
 /*
  * #%L
  * HomeSnapEngine
@@ -31,13 +33,18 @@ import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.CommandEnum;
 import com.homesnap.engine.connector.openwebnet.WhereType;
+import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionStatus;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.automation.Automation;
+import com.homesnap.engine.controller.automation.AutomationStateName;
 import com.homesnap.engine.controller.what.State;
 import com.homesnap.engine.controller.what.What;
+import com.homesnap.engine.controller.what.impl.UpDownState;
+import com.homesnap.engine.controller.what.impl.UpDownState.UpDownValue;
 import com.homesnap.engine.controller.where.Where;
 import com.homesnap.engine.controller.who.Who;
 
@@ -131,13 +138,15 @@ public class OpenWebNetCommand {
 				return ls;
 			}
 		case AUTOMATION:
-//			List<What> as = AutomationStatusConverter.fromValue(code);
-//			if (as == null) {
+			UpDownValue value = AutomationStatusConverter.fromValue(code);
+			if (value == null) {
 				throw new UnknownStateValue();
 
-//			} else {
-//				return as;
-//			}
+			} else {
+				List<What> as = new ArrayList<What>();
+				as.add(new What(AutomationStateName.status.name(), new UpDownState(value)));
+				return as;
+			}
 		case HEATING_ADJUSTMENT:
 //			return HeatingZoneStatus.fromValue(code).getValue();
 		case ENERGY_MANAGEMENT:
