@@ -133,7 +133,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 				sb.append("<controllerLink where=\"");
 				
 				if (controller.getWhere() != null) {
-					sb.append(controller.getWhere());
+					sb.append(controller.getWhere().getTo());
 				}
 								
 				sb.append("\"/>");
