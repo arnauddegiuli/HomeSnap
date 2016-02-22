@@ -52,12 +52,19 @@ public class AbstractRestApi {
 	protected void copyFileUsingFileChannels(File source, File dest) throws IOException {
 		FileChannel inputChannel = null;
 		FileChannel outputChannel = null;
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		
 		try {
-			inputChannel = new FileInputStream(source).getChannel();
-			outputChannel = new FileOutputStream(dest).getChannel();
+			fis = new FileInputStream(source);
+			fos = new FileOutputStream(dest);
+			inputChannel = fis.getChannel();
+			outputChannel = fos.getChannel();
 			outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
 		}
 		finally {
+			fis.close();
+			fos.close();
 			inputChannel.close();
 			outputChannel.close();
 		}
