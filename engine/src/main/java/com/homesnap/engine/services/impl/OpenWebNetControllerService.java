@@ -53,6 +53,7 @@ public class OpenWebNetControllerService implements ControllerService {
 
 	private Log log = new Log();
 	private Monitor monitor;
+	private Monitor monitorScan;
 	private Commander commander;
 	private String host;
 	private int port;
@@ -209,24 +210,33 @@ public class OpenWebNetControllerService implements ControllerService {
 		scanListenerList.remove(listener);
 	}
 	
+	private Monitor getOpenWebMonitorScan() {
+		if (monitorScan == null) {
+			monitorScan = new OpenWebMonitorImpl(host, port, passwordOpen);
+			UnknownControllerListener l = new UnknownControllerListener() {
+				
+				@Override
+				public void foundUnknownController(Who who, Where where, List<What> what) {
+					for(ScanListener listener : scanListenerList) {
+						if (Who.LIGHT.equals(who)) {
+							listener.foundController(who, where, createController(Light.class, where.getFrom()));
+						} else {
+							listener.foundController(who, where, null);
+						}
+					}	
+				}
+			};
+			monitorScan.addUnknownControllerListener(l);
+		}
+		
+		return monitorScan;
+	}
+	
 	@Override
 	public void scan() {
-		monitor = new OpenWebMonitorImpl(host, port, passwordOpen);
-		commander = new OpenWebCommanderImpl(host, port, passwordOpen);
-		UnknownControllerListener l = new UnknownControllerListener() {
-			
-			@Override
-			public void foundUnknownController(Who who, Where where, List<What> what) {
-				for(ScanListener listener : scanListenerList) {
-					if (Who.LIGHT.equals(who)) {
-						listener.foundController(who, where, createController(Light.class, where.getFrom()));
-					} else {
-						listener.foundController(who, where, null);
-					}
-				}	
-			}
-		};
-		monitor.addUnknownControllerListener(l);
+		monitor = getOpenWebMonitorScan();
+		commander = getOpenWebCommand();
+		
 		
 		for (int i= 1; i < 10; i++) {
 			for(ScanListener listener : scanListenerList) {
@@ -246,7 +256,7 @@ public class OpenWebNetControllerService implements ControllerService {
 			});
 			
 		}
-		monitor.removeUnknownControllerListener(l);
+		
 		for(ScanListener listener : scanListenerList) {
 			listener.progess(100);
 		}
