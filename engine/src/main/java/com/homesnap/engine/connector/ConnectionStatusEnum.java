@@ -28,5 +28,9 @@ public enum ConnectionStatusEnum {
 
 	Connected, 
 	WrongAcknowledgement,
-	NoSocket;
+	NoSocket,
+	Timeout,
+	InvalidAddress,
+	UnkownError
+	;
 }

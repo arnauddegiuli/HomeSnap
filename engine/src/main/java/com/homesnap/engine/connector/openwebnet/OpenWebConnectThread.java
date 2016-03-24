@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.connector.ConnectionListener;
@@ -77,12 +78,25 @@ public class OpenWebConnectThread implements Runnable {
 					commander.output = new PrintWriter(commander.socket.getOutputStream(),true);
 					log.finest(Log.Session.Command, "PrintWriter created.");
 				} catch (Exception e){
-					log.severe(Log.Session.Command, "Impossible to connect to the server ["+ commander.getIp() +":"+ commander.getPort()+"]:" + e.getMessage());
-					if (commander.socket!=null && commander.socket.isConnected()) {
-						commander.disconnect();
+					try {
+						log.severe(Log.Session.Command, "Impossible to connect to the server ["+ commander.getIp() +":"+ commander.getPort()+"]:" + e.getMessage());
+						if (commander.socket!=null && commander.socket.isConnected()) {
+							commander.disconnect();
+						}						
+						throw(e);
 					}
-					return false;
+					catch (SocketTimeoutException b) {
+						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.Timeout);
+						return false;
+					} catch (IllegalArgumentException b){
+						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.InvalidAddress);
+						return false;
+					} catch (Exception b){
+						callOpenWebConnectionListenerConnect(ConnectionStatusEnum.UnkownError);
+						return false;
+					} 
 				}
+					
 
 				if(commander.socket != null) {
 						
