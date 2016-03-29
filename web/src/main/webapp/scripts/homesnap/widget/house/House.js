@@ -51,7 +51,7 @@ define([
 			
 			var value = this.store.query(); 
 			// results object provides a forEach method for iteration
-			dojo.forEach(value, function (house) {
+			value.results.forEach(function (house) {
 				alert(house);
 					dojo.forEach(house.labels, function(label) {
 						domcConstruct.create("li", {innerHTML: "<a href='#/house/labels/" + label.id + "'>" + label.title + "</a>", class: label.icon}, container);
@@ -59,7 +59,7 @@ define([
 						var widget = new Label({label: label, house: store}, div);
 						
 						labels.push(widget);
-					});
+					}, this);
 			} /*insertRow*/);
 
 //		    results.observe(function(item, removedIndex, insertedIndex){
