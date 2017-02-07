@@ -1,6 +1,8 @@
 HomeSnap
 ======
 
+PROJECT MOVE TO BITBUCKET.... LET ME KNOW IF U R INTERESTED.
+
 Legrand/BTicino SCS BUS My Home Android management solution 
 
 The goal of the project is to provide a full solution to provide domotic management.
@@ -18,3 +20,5 @@ are provided as sub project.
 
 Even if today only SCS protocole (by the way of open web net) is supported, in the backlog,
 there is the wish to support in the engine different protocle (KNX, XPL, ...)... 
+
+
